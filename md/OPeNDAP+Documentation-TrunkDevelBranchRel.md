@@ -1,0 +1,168 @@
+## Using SVN trunk branches and tags to manage development and releases
+
+### Requirements
+
+1.  Our group needs to be able to work on the software, including doing
+    things that 'break' it to a certain degree.
+2.  Other groups need access to stable versions of the current
+    development software.
+3.  Releases of the software need to be stable WRT features.
+4.  A full release should be something like a quarterly event because it
+    requires binaries and those are complex to make.
+5.  We need to differentiate between beta versions, release candidates
+    and releases
+
+### Parts
+
+1.  Modules: One of the components of hyrax.
+2.  Hyrax project: A SVN thing that contains pointers to various
+    versions of Modules.
+3.  Trunk: Development takes place here.
+    1.  Trunk Tags: Places on the trunk that are *stable* (can be
+        checked out as a set and will build)
+    2.  Trunk tags look like European dates (year.month.day)
+4.  Branch: Releases are each on their own branch. Each release of Hyrax
+    is denoted by *major*.*minor* and for any release we might have
+    several beta versions, several release candidates and then several
+    final versions. Ideally, there would be just one version, but
+    reality often has other ideas...
+    1.  Branch tags: Places on the branch that mark beta versions,
+        release candidates and the final version(s)
+    2.  Branch tags look like software version numbers of the form
+        *major*.*minor*.*change* *\[modifier\]* where *modifier* is *b*
+        for beta or *rc<digit>* for a release candidate.
+
+<figure>
+<img src="Release_branching.png" title="Release_branching.png" />
+<figcaption>Release_branching.png</figcaption>
+</figure>
+
+### Process
+
+#### The Hyrax/shrew project
+
+For each of the tagged trunk versions and branches, we will tag the
+individual components of shrew and then assemble them into a shrew
+project using svn links. This way we can check out 'shrew' for a given
+trunk tag, branch, or one of the branch versions instead of making
+individual check outs for the different components.
+
+The README file in the shrew project contains an explanation of just how
+to create the *<svn:externals>* needed for a particular instantiation of
+the shrew project.
+
+#### The BES and libdap: Special cases
+
+Because all of server's modules depends on the BES and libdap, these two
+pieces of software are singled out for special attention. The following
+development rules apply to them:
+
+- A change in libdap or BES should be tested against the complete
+  'hyrax' build
+- No changes should be checked in unless the compilation succeeds.
+- Changes that break tests should be checked in only if the new feature
+  is expected to break the tests and more time will be needed to modify
+  the tests - that is, there's a flaw in the tests and not in the code
+  being tested. In this case, a 'defect' ticket should be added for
+  libdap/BES to fix the tests.
+- Once the change is checked in, test to make sure all new files have
+  been added to SVN. There are two ways to do this:
+  - Use *svn status -v* which will show a '?' for uncontrolled files
+  - perform a fresh checkout and test the build. For libdap and BES,
+    this means running 'make' and 'make install' and seeing that the
+    modules build (because if the 'install' target does not install a
+    required header, then the downstream modules will fail even if
+    libdap or BES built without error. Thus, if there are changes needed
+    in other modules as a result of changes in libdap or BES, this is
+    best method to test the stability of the software checked in to SVN.
+
+#### Management of the Trunk
+
+We develop on the Trunk and while everyone should try to keep the trunk
+clean and building well, it will often break. However, other groups
+outside ours also need access to the trunk software to build and test
+their modules against the latest set of features. To facilitate this we
+will tag the trunk approximately every two weeks at places where all of
+the modules that currently make up Hyrax are thought to build together
+as a unit. These tags will be given the date as the name of the tag, for
+example *2009.09.02*. These should use this form of the date since it
+sorts well in listings. Groups that want a stable version of Hyrax
+without either using the most recent release branch or waiting for the
+next release should use one of these trunk tags.
+
+#### Release management
+
+When a certain feature set is complete, the software is ready for
+release. A branch should be formed by tagging the software under the svn
+*branch* directory. Each branch for a particular release should be named
+*major*.*minor* using the major and minor release numbers.
+
+We will use tickets in Trac to sort out when the features for release
+are complete. Each release will have a milestone (e.g, Hyrax 1.6) and
+tickets for features that are to be part of that release will be added
+and marked as *task*, *enhancement* or *feature*. When there are no more
+of those types of tickets left for a particular release milestone, we
+are likely ready for the first of several *beta* versions. Beta versions
+are denoted by the suffix *b*. Once the number of *defect* tickets is
+low, we should start the *release candidate* versions. Release candidate
+versions are denoted by the suffix *rc1*, *rc2*, et cetera. Finally,
+once there are no known defects (or the known defects are truly
+obscure), we move on to *final* versions.
+
+Each of versions (beta, release candidate and final) are marked by a tag
+of the same name as the version identifier.
+
+#### Updates to a single module in Hyrax After a Release is 'final'
+
+When we are working on Hyrax, it's often the case that the server is
+ready except for some lingering issue in one module. We can make a final
+version of the release and get that out and then make a subsequent final
+version (1.5.2, 1.5.3, et c.) for just the updated handler. Thus, when
+any component of the server changes and we feel those are important
+enough to send out to people, a new final version needs to be made for
+Hyrax (which means that a new entry in the /tags/hyrax directory needs
+to be made and then the various versions of components that make up that
+version need to be linked in there.
+
+#### A different approach to fixing bugs in a release candidate
+
+(The following is from a [stack overflow
+post](http://stackoverflow.com/questions/5759822/i-kept-working-in-trunk-when-i-should-have-created-a-branch-for-some-major-chang)).
+
+I recommend creating a release branch each time you start doing release
+candidates. Trunk stays live for work on things not going in the release
+(version .next as we say). The release branch is reserved only for bug
+fixes and stuff that must go in the release. It is good practice to
+always commit those to trunk first, then cherry pick merge them over to
+the release branch. Always try to merge FROM trunk into other branches
+because that keeps things easier. Reintegrating "feature branches" into
+trunk is fine, but fixing a bug in a release branch then merging it back
+into trunk should be avoided.
+
+After a release is in the wild, the release branch is kept around for
+fixing additional bugs and eventually doing minor point releases. You
+should still fix the bugs in trunk first (no point shipping them in the
+.next release) and merging them to each release branch you are still
+actively maintaining.
+
+The good news is you can start this methodology after the fact. Go back
+to the revision of trunk your current release was built from and create
+a release branch from that. TortoiseSVN has a handy menu for creating
+tags and branches from specific revisions when you right click on the
+revision in the log viewer.
+
+Once you have your release branch you need to check it out and start
+merging over the bug fixes you want to release. All of your new work in
+trunk stays right where it is. If trunk and the release branch have
+diverged significantly then you might need to just make the fixes
+directly on the release branch, but try to make them in trunk and merge
+to the release branch when you can.
+
+One more thing. Each time you ship a release from the release branch you
+should make a copy to tags with the version label of the release. It can
+be handy later to figure out what changed between releases or to rebuild
+an old release if you need to. We go as far as doing a complete build
+from the tag when we ship the release because we embed the SVN revision
+number in our product version so that if a customer reports a bug we
+know exactly what code they are running (since SVN revisions are unique
+across the repository).

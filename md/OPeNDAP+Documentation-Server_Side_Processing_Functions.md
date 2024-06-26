@@ -1,0 +1,566 @@
+## Server functions, invocation and composition
+
+##### Calling Syntax
+
+To run a server function, you call the function with its arguments in
+the 'query string' part of a URL. The server function call is a kind of
+DAP Constraint Expression. Here are some examples:
+
+Get the U and V components of the fnoc1 dataset, but apply the dataset's scale_factor attribute (the 'm' in y=mx+b; for these variables, 'b' is zero). Compare the values returned by the linear_scale() server function to those returned by accessing the variables without using the function
+<http://test.opendap.org/dap/data/nc/fnoc1.nc.ascii?linear_scale(u),linear_scale(v)>
+
+<http://test.opendap.org/dap/data/nc/fnoc1.nc.ascii?u,v>
+
+##### Function Composition
+
+Server-side functions provide a way to access the processing power of
+the data server and perform operations that fall outside the scope of
+the DAP constraint mechanism of projection and selection. Each server
+can load functions at run-time, so the set of functions supported may be
+different than those documented here. Use the *version()* function to
+get a list of functions supported by a particular server. To get
+information about a particular function, call that function with no
+arguments. The 'help' response from both *version()* and a function such
+as *linear_scale()* is a simple XML document listing the function's
+name, version and URL to more complete documentation.
+
+All the functions here are included in the Hyrax server, version 1.6 and
+later. Other servers may also support these.
+
+All of these functions can be composed. Thus, the values from the
+geogrid() function can be used by the linear_scale() function. Here's an
+example:
+
+``` c
+ linear_scale(geogrid(SST, 45, -82, 40, -78))  // spaces added for clarity; in reality spaces in server function arg lists are a syntax error
+```
+
+This first subsets the variable *SST* so only those values in latitude
+45 to 40 and longitude -82 to -78 are returned and then passes those
+values to the linear_scale() function, which will scale them and return
+those new values to the caller.
+
+## Server Functions in the *BES functions* Module
+
+For Hyrax 1.9, the server functions listed here were moved from libdap,
+where they were 'hard coded' into the constraint evaluator, to a module
+that is loaded like the other BES modules. Currently this 'functions'
+module is part of the BES source code while we decide where it should
+reside. Also note that *make_array()*, the *\#Type* special form,
+*bind_name()* and *bind_shape()* are new functions designed to pass
+large arrays filled with constant values into custom server functions.
+We will expand on these as part of an NSF-sponsored project in the
+coming two years.
+
+### geogrid()
+
+*Version 1.3*
+
+The geogrid() function has been updated with DAP4 support. For DAP4, the
+geogrid() function applies a constraint given in latitude and longitude
+coordinates to a DAP4 Array variable that contains Maps referencing the
+shared dimensions for those coordinate variables. The geogrid() function
+will only operate on DAP4 Array variables that contain single dimension
+Maps, multi dimensional maps are not yet supported. DAP4 Arrays
+containing single dimension Maps are equivalent to DAP2 Grid variables;
+the geogrid() function description provided for versions 1.2 and 1.1
+(below) continue to be applicable to this version.
+
+Return: The DAP4 invocation of geogrid() function returns a D4Group
+variable containing the constrained Array and its constrained Maps
+
+The geogrid() function DAP-4 request syntax is:
+
+`dap4.function=geogrid(array variable, top, left, bottom, right[, expression …])`
+
+Example using data/nc/coads_climatology.nc
+
+`dap4.function=geogrid(/SST,51,179,31,-179)`
+
+Note
+DAP4 constraint expressions require fully-qualified variable names.
+
+------------------------------------------------------------------------
+
+*Version 1.2*
+
+The geogrid() function applies a constraint given in latitude and
+longitude to a DAP Grid variable. The arguments to the function are:
+
+``` c
+geogrid(grid variable, top, left, bottom, right[, expression ...])
+geogrid(grid variable, latitude map, longitude map, top, left, bottom, right[, expression ...])
+```
+
+The *grid variable* is the data to be sub-sampled and must be a Grid.
+The optional latitude and longitude maps must be Maps in the named Grid
+and specifying these overrides the *geogrid* heuristics for choosing the
+lat/lon maps. The Top, left, bottom, right are the latitude and
+longitude coordinates of the northwesterm and southeastern corners of
+the selection box. The expressions consist of one or more quoted
+relational expressions. See grid() for more information about the
+expressions.
+
+The function will always return a single Grid variable whose values
+completely cover the given region, although there may be cases when some
+additional data are also returned. If the longitude values 'wrap around'
+the right edge of the data, then the function will make two requests and
+return those joined together as a single Grid. If the data are stored
+with the southern latitudes at the top of the array, the return result
+will be flipped so that the northern latitudes are at the top. If the
+Longitude values are offset, the function will correct for that, as
+well.
+
+------------------------------------------------------------------------
+
+*Version 1.1*
+
+The geogrid() function applies a constraint given in latitude and
+longitude to a DAP Grid variable. The arguments to the function are:
+
+``` c
+ geogrid(variable, top, left, bottom, right[, expression ...])
+```
+
+The *variable* is the data to be sub-sampled. The Top, left, bottom,
+right are the latitude and longitude coordinates of the northwesterm and
+southeastern corners of the selection box. The expressions consist of
+one or more quoted relational expressions. See grid() for more
+information about the expressions.
+
+The function will always return a single Grid variable whose values
+completely cover the given region, although there may be cases when some
+additional data are also returned. If the longitude values 'wrap around'
+the right edge of the data, then the function will make two requests and
+return those joined together as a single Grid. If the data are stored
+with the southern latitudes at the top of the array, the return result
+will be flipped so that the northern latitudes are at the top.
+
+### grid()
+
+*Version 1.1*
+
+The grid() function has been updated for DAP4 support. For DAP4, the
+grid() function takes a DAP4 Array variable that contains Maps
+referencing shared dimensions to coordinate variables, and will only
+operate on DAP4 Array variables that contain single dimension Maps.
+Multidimensional Maps are not currently supported.
+
+For DAP4, The grid() function takes a DAP4 Array and zero or more
+relational expressions. The relational expressions are applied to the
+Array’s Maps. Note that DAP4 Arrays containing single dimension Maps are
+equivalent to DAP2 Grid variables; the grid() function description
+provided for version 1.0 (below) continues to be applicable to this
+version.
+
+Return: The DAP4 invocation of grid() function returns a D4Group
+variable containing the constrained Array and its constrained Maps
+
+The grid() function DAP4 request syntax is:
+
+`dap4.function=grid(array variable, const relop map-variable[, expression …])`
+
+`dap4.function=grid(array variable, const relop map-variable relop const[, expression …])`
+
+Example using data/nc/coads_climatology.nc
+
+`dap4.function=grid(/SST,”51>/COADSY>31”,”182>/COADSX>178”)`
+
+Note: DAP4 constraint expressions require fully-qualified variable
+names.
+
+*Version 1.0*
+
+The grid() function takes a DAP Grid variable and zero or more
+relational expressions. Each relational expression is applied to the
+grid using the server's constraint evaluator and the resulting grid is
+returned. The expressions may use constants and the grid's map vectors
+but may not use any other variables. In particular, you cannot use the
+grid values themselves
+
+Two forms of expression are provided:
+
+1.  "var relop const"
+2.  "const relop var relop const"
+
+Where *relop* stands for one of the relational operators, like `=` and
+`>`
+
+For example: grid(sst,"20\>TIME\>=10") and
+grid(sst,"20\>TIME","TIME\>=10") are both legal and, in this case, also
+equivalent.
+
+### linear_scale
+
+Version documented: 1.0b1
+
+The linear_scale() function applies the familiar y = mx + b equation to
+data. It has three forms:
+
+1.  linear_scale(var)
+2.  linear_scale(var,scale_factor,add_offset)
+3.  linear_scale(var,scale_factor,add_offset,missing_value)
+
+If only the name of a variable is given, the function looks for the
+COARDS/CF-1.0 *scale_factor*, *add_offset* and *missing_value*
+attributes. In the equation, 'm' is scale_factor, 'b' is add_offset and
+data values that match missing_value are not scaled.
+
+If add_offset cannot be found, it defaults to zero; if missing_value
+cannot be found, the test for it is not performed.
+
+In the second and third form, if the given values conflict with the
+dataset's attributes, the given values override.
+
+### The make_array() function
+
+The *make_array()* function takes three or more arguments and returns a
+DAP2 Array with the values passed to the function.
+
+make_array(\<*type*\>, \<*shape*\>, \<*values*\>, ...): \<*type*\> is any of the DAP2 numeric types (Byte, Int16, UInt16, Int32, UInt32, Float32, Float64); \<*shape*\> is a string that indicates the size and number of the array's dimensions. Following those two arguments are N arguments that are the values of the array. The number of values must equal the product of the dimension sizes.
+
+Example: make_array(Byte,"\[4\]\[4\]",2,3,4,5,2,3,4,5,2,3,4,5,2,3,4,5)
+will return a DAP2 four by four Array of Bytes with the values 2, 3, ...
+. The Array will be named *g<int>* where <int> is 1, 2, ..., such that
+the name does not conflict with any existing variable in the dataset.
+Use *bind_name()* to change the name.
+
+This function can build an array with 1024 X 1024 Int32 elements in
+about 4 seconds.
+
+### The 'make array' special forms
+
+These special forms can build vectors with specific values and return
+them as DAP2 Arrays. The Array variables can be named using the
+*bind_name()* function and have their shape set using *bind_shape()*.
+
+\$<type>(*size hint*,: *values*, ...): The *\$<type>* (*\$Byte*, *\$Int32*, ...) literal starts the special form. The first argument *size hint* provides a way to preallocate the memory needed to hold the vector of values. Following that, the values are listed. Unlike *make_array()*, it is not necessary to provide the exact size of the vector; the size hint is just that, a hint. If a size hint of zero is supplied, it will be ignored. Any of the DAP2 numeric types can be used with this special form. This is called a 'special form' because it invokes a custom parser that can process values very efficiently.
+
+Example: \$Byte(16:2,3,4,5,2,3,4,5,2,3,4,5,2,3,4,5) will return a one
+dimensional (i.e., a vector) Array of Bytes with values 2, 3, ... . The
+vector is named *g<int>* just like the array returned by make_array().
+The vector can be turned in to a N-dimensional Array using
+*bind_shape()* using
+''bind_shape("\[4\]\[4\]",\$Byte(16:2,3,4,5,2,3,4,5,2,3,4,5,2,3,4,5)).
+
+The special forms can make a 1,047,572 element vector on Int32 in 0.4
+seconds, including the time required to parse the million plus values.
+
+#### Performance measurements
+
+Time to make 1,000,000 (actually 1,048,576) element Int32 array using
+the special form, where the argument vector<int> was preset to 1,048,576
+elements. Times are for 50 repeats.
+
+Summary: Using the special for \$Int32(size_hint, values...) is about 10
+times faster for a 1 million element vector than
+make_array(Int32,\[1048576\],values...). As part of the performance
+testing, the scanner and parser were run under a sampling runtime
+analyzer ('Instruments' on OS/X) and the code was optimized so that long
+sequences of numbers would scan and parse more efficiently. This
+benefited both the make_array() function and \$type() special form.
+
+#### Raw timing data
+
+In all cases, a 1,048,576 element vector of Int32 was built 50 times.
+The values were serialized and written to /dev/null using the command
+*time besstandalone -c bes.conf -i bescmd/fast_array_test_3.dods.bescmd
+-r 50 \> /dev/null* where the *.bescmd* file lists a massive constraint
+expression (a million values). The same values were used.
+
+NB: The DAP2 consraint expression scanner was improved based on info
+from 'instruments', an OS/X profiling tool. Copying values and applying
+www2id escaping was moved from the scanner, where it was applied it to
+every token that matched SCAN_WORD, to the parser, where it was used
+only for non-numeric tokens. This performance tweak makes a big
+difference in this case since there are a million SCAN_WORD tokens that
+are not symbols.
+
+|                   | Time in seconds |
+|-------------------|-----------------|
+| What              | Real (s)        |
+| \$type, with hint | 19.844          |
+| \$type, with hint | 19.817          |
+| \$type, no hint   | 19.912          |
+| \$type, no hint   | 19.988          |
+| make_array()      | 195.332         |
+| make_array()      | 197.900         |
+
+Runtimes for make_array() and \$type, scanner/parser optimized, two
+trials
+
+### bind_name() and bind_shape()
+
+These functions take a BaseType\* object and bind a name or shape to it
+(in the latter case the BaseType\* must be an Array\*). They are
+intended to be used with *make_array()* and the *\$type* special forms,
+but they can be used with any variable in a dataset.
+
+bind_name(*name*,*variable*): The *name* must not exist in the dataset; *variable* may be the name of a variable in the dataset (so this function can rename an existing variable) or it can be a variable returned by another function or special form.
+bind_shape(*shape expression*,*variable*): The *shape expression* is a string that gives the number and size of the array's dimensions; the *variable* may be the name of a variable in the dataset (so this function can rename an existing variable) or it can be a variable returned by another function or special form.
+
+Here's an example showing how to combine *bind_name*, *bind_shape* and
+*\$Byte* to build an array of constants:
+*bind_shape("\[4\]\[4\]",bind_name("bob",\$Byte(0:2,3,4,5,2,3,4,5,2,3,4,5,2,3,4,5)))*.
+The result, in a browser, is:
+
+``` bash
+Dataset: function_result_coads_climatology.nc
+bob[0], 2, 3, 4, 5
+bob[1], 2, 3, 4, 5
+bob[2], 2, 3, 4, 5
+bob[3], 2, 3, 4, 5
+```
+
+### Unstructured Grid subsetting
+
+The **ugr5()** function subsets an Unstructured Grid (aka flexible mesh)
+if it conforms to the [Ugrid
+Conventions](https://github.com/ugrid-conventions/ugrid-conventions/blob/master/ugrid-conventions.md)
+built around netCDf and CF. More information on subsetting files that
+conform to this convention can be found
+[here](https://github.com/ugrid-conventions/ugrid-conventions/blob/master/ugrid-subsetting.md).
+
+See [ugr5 documentation](OPULS:_UGrid_Subsetting "wikilink") for more
+information.
+
+This function is optional with Hyrax and is provided by the
+ugrid_functions module.
+
+### version()
+
+The *version* function provides a list of the server-side processing
+functions available on a given server along with their versions. For
+information on a specific function, call it with no arguments or look at
+this page.
+
+### tabular()
+
+Brief: Transform one or more arrays to a sequence.
+
+This function will transform one or more arrays into a sequence, where
+each array becomes a column in the sequence, with one exception. If each
+array has the same shape, then the number of columns in the resulting
+table is the same as the number of arrays. If one or more arrays has
+more dimensions than the others, an extra column is added for each of
+those extra dimensions. Arrays are enumerated in row-major order (the
+right-most dimension varies fastest).
+
+It's assumed that for each of the arrays, elements (i0, i1, ..., in) are
+all related. The function makes no test to ensure that, however.
+
+Note: While this version of tabular() will work when some arrays have
+more dimensions than others, the collection of arrays must have shapes
+that 'fit together'. This is case the arrays are limited in two ways.
+First the function is limited to *N* and *N+1* dimension arrays, nothing
+else, regardless of the value of *N*. Second, the arrays with *N+1*
+dimensions must all share the same named dimension for the 'additional
+dimension' and that named shred dimension will appear in the output
+Sequence as a new column.
+
+tabular(*array1*, *array2*, ..., *arrayN*)
+Returns a Sequence with N or N+1 columns
+
+### roi()
+
+Brief: Subset N arrays using index slicing information
+
+This function should be called with a series of array variables, each of
+which are N-dimensions or greater, where the N common dimensions should
+all be the same size. The intent of this function is that a
+N-dimensional bounding box, provided in indicial space, will be used to
+subset each of the arrays. There are other functions that can be used to
+build these bounding boxes using values of dataset variables - see
+bbox() and bbox_union(). Taken together, the roi(), bbox() and
+bbox_union() functions can be used to subset a collection of Arrays
+where some arrays are taken to be dependent variables and others
+independent variables. The result is a subset of 'discrete coverage' the
+collection of independent and dependent variables define.
+
+roi(*array1*, *array2*, ..., *arrayN*, bbox(...))
+roi(*array1*, *array2*, ..., *arrayN*, bbox_union(bbox(...), bbox(...), ..., "union"))
+Subset *array1*, ..., using the bound box given as the last argument.
+Teh assumption is that the arrays will be the range variables of a
+coverage and that the bounding boxes will be computed using the range
+variables. See the *bbox()* and *bbox_union()* function descriptions.
+
+### bbox()
+
+Brief: Return the bounding box for an array
+
+Given an N-dimensional Array of simple numeric types and two minimum and
+maximum values, return the indices of a N-dimensional bounding box. The
+indices are returned using an Array of Structure, where each element of
+the array holds the name, start index and stop index in fields with
+those names.
+
+It is up to the caller to make use of the returned values; the array is
+not modified in any way other than to read in it's values (and set the
+variable's read_p property).
+
+The returned Structure Array has the same name as the variable it
+applies to, so that error messages can reference the source variable.
+
+bbox(*array*, *min-value*, *max-value*)
+Given that *array* is an N-dimensional array, return a DAP Array with N
+elements. Each element is a DAP Structure with two fields, the indices
+corresponding to the first and last occurrence of the values *min-value*
+and *max-value*.
+
+### bbox_union()
+
+Brief: Combine several bounding boxes, forming their union.
+
+This combines N BBox variables (Array of Structure) forming either their
+union or intersection, depending on the last parameter's value ("union"
+or "inter\[section\]").
+
+If the function is passed bboxes that have no intersection, an exception
+is thrown. This is so that callers will know why no data were returned.
+Otherwise, an empty response, while correct, could be baffling to the
+client.
+
+bbox_union(bbox(*a1*, *min-value-1*, *max-value-1*), bbox(*a2*, *min-2*, *max-2*), ..., "union"\|"intersection")
+Given 1 or more bounding box Array of Structures (as returned by the
+*bbox()* function) form their union or intersection and return that
+bounding box (using the same Array of Structures representation).
+
+## STARE Server Functions in the *BES functions* Module
+
+The BES ships with server functions that enable the Hyrax server to
+subset level 2 satellite data using
+[STARE](https://earthdata.nasa.gov/esds/competitive-programs/access/stare)
+(SpatioTemporal Adaptive Resolution Encoding). The advantage of these
+functions is that they enable subsetting level 2 (aka swath) data
+without regridding the data. For these functions to work, data providers
+must build STARE 'sidecar' files that provide the STARE indices these
+functions need.
+
+To use these functions, you must make DAP4 requests because STARE
+indices are 64-bit integer values. This means requesting metadata using
+the DMR response (*.dmr*) and the DAP data response (*.dap*).
+
+Note that all Hyrax server functions support [functional
+composition](Server_Side_Processing_Functions#Server_functions.2C_invocation_and_composition "wikilink")
+so while STARE indices can be a little intimidating, you can use the
+*stare_box()* get a set of STARE using a set of points described using
+Latitude and Longitude, such a call looks like:
+
+stare_subset_array(*var*, stare_box(*top_left_lat*, *top_left_lon*, *bottom_right_lat*, *bottom_right_lon*))
+
+and provides a way to subset *var* which can be 'satellite swath data'
+(i.e., what NASA calls 'level 2' data) *without regridding* those data.
+
+Note: Since some regions can have thousands of STARE indices, the number
+of arguments to the server functions can be quite large. Most OPeNDAP
+requests use URLs that are small and can be sent to a server use HTTP's
+GET verb. But large requests - ones with 1,000s of arguments to a server
+function - will need to use the POST verb that HTTP provides. Different
+toolkits provide different support for POST. See the *stare_box()*
+function below for one nifty work-around.
+
+### stare_intersection()
+
+Brief: Returns 1 if the coverage of the current dataset includes any of
+the given STARE indices, 0 otherwise.
+
+The *stare_intersection()* returns *true* (1) if any of the set of STARE
+passed to the function intersect the variable passed to the function.
+This function can be used to quickly assess intersection of a variable
+and a region. It is faster than the *stare_count* function.
+
+stare_intersection(*var*, *STARE index* \[, *STARE index* ...\])
+stare_intersection(*var*, \$UInt64(*size hint* : *STARE index* \[, *STARE index* ...\]))
+
+### stare_count()
+
+Brief: Returns the number of the STARE indices that are included in the
+coverage of this dataset.
+
+The *stare_count()* function is applied to a variable in the dataset.
+The function is called with a list of STARE indices, which are 64-bit
+integer values. These can be passed into the function several ways.
+There can be a list of value, including using the *\$UInt64()* special
+form, and it can be provided using the *stare_box()* function described
+below. This function is useful if you want to know *how much* of a
+region specified by a set of STARE indices overlaps the spatial extent
+of a given variable in a dataset.
+
+stare_count(*var*, *STARE index* \[, *STARE index* ...\])
+stare_count(*var*, \$UInt64(*size hint* : *STARE index* \[, *STARE index* ...\]))
+
+### stare_subset()
+
+Brief: Returns the set of the STARE indices that are included in the
+coverage of this dataset.
+
+This function takes a variable and a set of STARE indices and returns
+the intersection of the two sets of STARE indices – the one that
+represents the variable's geospatial extent and the one you passed to
+the function. The STARE indices can be used on their own (e.g., by
+PyStare, to plot the region of overlap) or as input to yet another
+subsetting function.
+
+stare_subset(*var*, *STARE index* \[, *STARE index* ...\]))
+stare_subset(*var*, \$UInt64(*size hint* : *STARE index* \[, *STARE index* ...\]))
+
+### stare_subset_array()
+
+Brief: Returns a masked copy of 'var' for the subset given the set of
+STARE indices that are included in the coverage of this dataset.
+
+This function effectively does what *stare_subset()* does but returns
+the masked array in toto instead of returning the STARE indices of the
+intersection operation. The data values for the geospatial region
+described by the STARE indices are present in the response but all other
+values are set to *mask-val*. This function thus enables region-based
+subsetting of swath (i.e., level 2) data but retains the original
+variable's format. Combining this function with the *identity()*
+functions and a request to return data in a netCDF file is an easy way
+to subset swath data and get the result in a package that any program
+that can work with netCDF files can use. (NB: most programs that can
+read netCDF files can work with OPeNDAP servers directly, but they don't
+necessarily know about using POST for URLs with large constraint
+expressions (see the note at the start of this section).
+
+stare_subset_array(*var*, *mask-val*, *STARE index* \[, *STARE index* ...\]))
+stare_subset_array(*var*, *mask-val*, \$UInt64(*size hint* : *STARE index* \[, *STARE index* ...\]))
+
+### stare_box()
+
+Brief: Returns a STARE cover for the region within the four lat/lon
+corner points.
+
+This function is a great way to pass in STARE indices for a Region of
+Interest (ROI) without having to enumerate them. For example the ROI for
+Tasmania has about 1,000 STARE indices. Listinh all those indices is
+tedious and require use of POST for the request. Using the *stare_box()*
+a small set of lat/lon points can be used (and a regular GET request
+will work) for the request.
+
+stare_box(*tl_lat*, *tl_lon*, *br_lat*, *br_lon*)
+stare_box(*p1_lat*, *p1_lon*, ..., *pn_lat*, *pn_lon*)
+
+### identity()
+
+Brief: Returns its argument without modification
+
+This function is used to include variables in a response when a function
+expression needs to include multiple variables, particularly variables
+that provide geolocation information. This function is not specific to
+the STARE operations, but is documented here because of its use with the
+*stare_array_subset* function when it is used to return netCDF files
+that need conventional geolocation information.
+
+identity(*var*)
+
+## Functions Included *FreeForm Module*
+
+There are a number of date and time functions supported by the FreeForm
+server.
+
+@TODO Add documentation for the functions
+
+### Projection functions
+
+### Selection functions

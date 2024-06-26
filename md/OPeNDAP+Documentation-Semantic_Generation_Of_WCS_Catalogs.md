@@ -1,0 +1,528 @@
+## Introduction
+
+A WCS service must maintain a catalog of *Coverages* that will be used
+to generate the wcs:Capabilities and wcs:Coverages documents. In the
+Hyrax WCS service the implementation of this catalog is identified at
+server start-up from the DispatchHandler's configuration element in the
+olfs.xml file. This page documents the work on the development and usage
+of a catalog implementation that utilizes semantic web technologies to
+generate the WCS catalog content from existing (and probably
+supplemented) metadata from within the existing OPeNDAP data framework.
+
+## Technologies
+
+The semantic activities rely on a number of software technologies that
+may or may not be familiar to the reader. Here is a brief overview of
+the core concepts.
+
+### [RDF](http://www.w3.org/RDF/)
+
+The Resource Description Framework (RDF) is a W3C standard for
+describing Web resources, such as the title, author, modification date,
+content, and copyright information of a Web page. RDF documents can be
+written in XML (RDF/XML). RDF is intended to be read by machines, not by
+people (which means that reading it with your eyes is a pain)
+
+RDF is comprised of a simple statement syntax call a *triple* that could
+be expressed in english as: *The **property** of the **resource** is the
+the **property's value***. (ex: The **color** of the **flower** is
+**red**.)
+
+All of the working bits of the WCS catalog are stored as RDF statements.
+
+There is much more to know about RDF. These pages can provide a starting
+point:
+
+- [W3C RDFWorking Group Summary Page](http://www.w3.org/RDF/)
+- [The w3cschools RDF
+  tutorial](http://www.w3schools.com/RDF/default.asp)
+- [ZVON RDF
+  tutorial](http://www.zvon.org/xxl/RDFTutorial/General/contents.html)
+- [Pierre-Antoine Champin's RDF
+  tutorial](http://bat710.univ-lyon1.fr/~champin/rdf-tutorial/)
+
+### [OWL](http://www.w3.org/2004/OWL/)
+
+The OWL Web Ontology Language is designed for use by applications that
+need to process the content of information instead of just presenting
+information to humans. OWL facilitates greater machine interpretability
+of Web content than that supported by XML, RDF, and RDF Schema (RDF-S)
+by providing additional vocabulary along with a formal semantics. OWL
+has three increasingly-expressive sublanguages: OWL Lite, OWL DL, and
+OWL Full. [1](http://www.w3.org/TR/owl-features/) OWL adds vocabulary
+for describing properties and classes: among others, relations between
+classes (e.g. disjointness), cardinality (e.g. "exactly one"), equality,
+richer typing of properties, characteristics of properties (e.g.
+symmetry), and enumerated classes.
+
+For our work OWL is used to express ontologies of various metadata
+conventions/standards found within the DAP community, and to define
+crosswalks between these ontologies that allow us to "migrate" metadata
+from one convention to another.
+
+As with RDF, there is much more to know about OWL. These pages can
+provide a starting point:
+
+- [W3C OWL Page](http://www.w3.org/2004/OWL/)
+- [The w3cschool's OWL
+  tutorial](http://www.w3schools.com/RDF/rdf_owl.asp)
+- [Bechhofer et al. OWL
+  tutorial](http://www.cs.man.ac.uk/~horrocks/ISWC2003/Tutorial/)
+
+### [SWRL](http://www.w3.org/Submission/SWRL/), [SeQRL](http://www.openrdf.org/doc/sesame2/2.2.4/users/ch09.html), & [SPARQL](http://www.w3.org/TR/rdf-sparql-query/)
+
+These languages are used to express the rules and queries used in the
+semantic processing to encode the crosswalk information used to create
+(*migrate? a better word is needed here... [ndp](User:Ndp "wikilink")*)
+metadata from one convention/standard to another.
+
+#### SWRL: A Semantic Web Rule Language
+
+SWRL is based on a combination of the OWL DL and OWL Lite sublanguages
+of the OWL Web Ontology Language with the Unary/Binary Datalog RuleML
+sublanguages of the Rule Markup Language. SWRL includes a high-level
+abstract syntax for Horn-like rules in both the OWL DL and OWL Lite
+sublanguages of OWL.
+
+
+
+*Let's fill in more information about these technologies please.*
+
+More information regarding SWRL can be found here:
+
+- [W3C SWRL Page](http://www.w3.org/Submission/SWRL/)
+
+#### SeQRL: A Semantic Web Rule Language
+
+SeQRL is an SQL-based language which works with ontologies in RDF(S).
+
+
+
+*Let's fill in more information about these technologies please.*
+
+More information regarding SeQRL can be found here:
+
+- [SeQRL Query Language Version
+  3.0](http://www.openrdf.org/doc/sesame2/2.2.4/users/ch09.html)
+
+#### SPARQL Query Language for RDF
+
+The SPARQL Protocol and RDF Query Language (SPARQL) is a query language
+and protocol for RDF. SPARQL is expressed in an XML syntax.
+
+
+
+*Let's fill in more information about these technologies please.*
+
+More information regarding SPARQL can be found here:
+
+- [W3C SPARQL Page](http://www.w3.org/TR/rdf-sparql-query/)
+
+## Implementations
+
+For each of the technologies listed above an actual piece of software
+(an implementation) that manifests the behaviors/requirements of the
+technology is required.
+
+### [Sesame RDF Repository](http://www.openrdf.org/)
+
+Sesame is an open source framework (written in Java) for storage,
+inferencing and querying of RDF data. Sesame provides a common API for
+RDF parsers, writers, and RDF stores.
+
+Since OWl is an extension of RDF, all things OWL may be stored in a
+Sesame repository.
+
+### [Swift OWLIM](http://www.ontotext.com/owlim/index.html)
+
+OWLIM is a high-performance semantic repository developed in Java. It is
+packaged as a Storage and Inference Layer (SAIL) for the Sesame RDF
+database. OWLIM is based on TRREE – a native RDF rule-entailment engine.
+
+The supported semantics can be configured through rule-set definition
+and selection. The most expressive pre-defined rule-set combines
+unconstrained RDFS with most of OWL Lite (as indicated on the OWL
+fragments map).
+
+What does that mean? In more accessible language OWLIM is a (forward
+chaining) inferencing engine that can be coupled to a Sesame repository.
+The resulting software (A Sesame RDF repository with SwiftOWLIM
+installed) is capable of holding a collection of ontologies (OWL) and
+rules (SWRL) such that as new instance statements (RDF) are added to the
+repository all of the rules are applied (inferencing on ingest). The end
+result should be a repository in which all of the crosswalk functions
+have been completed, and new information (metadata) can be extracted
+using various query languages (SeQRL & SPARQL) to discover the new
+information.
+
+## Ontologies
+
+
+
+*My understanding is that once tuned the ontologies will be fairly
+static. They should get checked in to the subversion repository
+<http://scm.opendap.org/svn> in the (as yet to be determined)
+appropriate spot and then discussed and linked to them from here.
+[ndp](User:Ndp "wikilink")*
+
+## Processing Scheme
+
+
+
+*Currently the processing steps are described on Benno's test page:
+**<http://iri.columbia.edu/~benno/opendaptest/>***
+
+<!-- -->
+
+
+
+*As this project moves forward and the RDF processing activities are
+integrated into the OLFS/Hyrax application they should be documented
+here.*
+
+## Catalog Implementation
+
+
+
+*The specifics of the catalog implementation should be discussed here.
+Design/architecture diagrams, components etc.*
+
+Information needed for the WCS server is specified by the API
+[WcsCatalog.java](http://scm.opendap.org/trac/browser/branch/ioos/src/olfs/src/opendap/wcs/v1_1_2/WcsCatalog.java),
+which includes methods that can be grouped into a number of categories:
+
+- No argument functions that return XML elements:
+  getSupportedCrsElements, getCoverageDescriptionElements,
+  getCoverageOfferingBriefElements
+- functions of coverageID that return XML elements:
+  getCoverageDescriptionElement, getCoverageOfferingBriefElement
+- functions of coverageID that return simple datatypes: hasCoverage,
+  getLongitudeCoordinateDapId, getLatitudeCoordinateDapId,
+  getElevationCoordinateDapId, getTimeCoordinateDapId, getlast_modified
+- other function of coverageID: getCoverageDescription (which returns an
+  OpenDAP-defined class).
+
+The project software is available via the opendap svn server here:
+<http://scm.opendap.org/svn/branch/ioos/>
+
+Currently the entry point for the semantically generated WCS catalog is
+the class ***opendap.semantics.IRISail.StaticRDFCatalog***
+
+## Java-based framework for extracting information from RDF store as if it were XML.
+
+will probably be implemented by using the inference network to map into
+a simple XML data model, having XMLelements and getChild, getChildren,
+getContent, getAttributes, getAttribute, getAttributeValue methods,
+along with namespace declaration methods. The returned elements would be
+taken from the RDF store either restricted to the declared namespaces or
+some more-efficient restriction to find the relevant subset of available
+properties that should be presented as XML.
+
+What makes this problem different from being isomorphic to a simple XML
+retrieval is that our RDF store contains characterizations of our
+elements in multiple representations, and we want the XML interface to
+only extract the pertinent subproperties of our elements, i.e. the
+properties in this XML context. To address this issue, we will take
+advantage of getChildren being the primary access point for XMLelements
+to use the rdfs:range or owl:allValuesFrom to find the corresponding
+range Class for the property being used to find the elements, and use
+that class to restrict the child properties of the returned elements. In
+other words, corresponding to an XML element will be an RDF object and a
+context class. A property can have multiple domains but only one range,
+which works for this, when we convert an XML schema into RDF, we insure
+that all the properties have explicit rdfs:domain (whereever the
+property is used) and rdfs:range (where the property is defined).
+
+### Mapping from RDF objects to XMLelements
+
+In the sense that we are doing things, mapping for RDF objects to
+XMLelements is a profound worldview change. Structurally, XML is all
+about things in context. Via the JDOM API, for example, the primary way
+one finds elements is via the name that the parent element gives it, and
+there is no concept of a node belonging to two parts of the tree. There
+are, of course, conventions to make up for this, i.e. xlink. On the
+other hand, RDF gives every node an id, and it decontextualizes all the
+information. This too, is a bit of an exaggeration, since blank nodes in
+RDF mostly can be extracted only by their properties, mainly because
+dumping and restoring a triple-store changes all the blank-node ids,
+i.e. the ids cannot be used externally under many circumstances.
+
+So this mapping means we are going to an extraction with context from a
+RDF triple-store that does not natively have context. This is not
+completely psychotic, because what we want is to store multiple XML
+versions of the same thing, and map between them in the RDF context
+(mapping between requires decontextualization). This means that our RDF
+store will have many more properties than are relevant for any
+particular XML extraction.
+
+Because XML requests information by how the element is connected to its
+parent, we are going to code this context in the RDF triple, i.e. all
+the XML element names are mapped to RDF properties, and our initial
+extraction is by namespace/name. So from the XML perspective, making a
+request by name is clean, and the way we process the RDF information we
+will preserve that initial context to extract the relevant sub-nodes of
+the top-most nodes returned.
+
+The way we figure out how the context gets carried along is by ingesting
+the XMLSchema, and using that given structure to structure and restrict
+our response.
+
+Consequently, the RDF equivalent of an XML element consists of three
+parts: nameproperty, object, and valueclass (nameproperty and valueclass
+are URIs, object can be an URI or a literal). The nameproperty maps to
+the XML namespace/name pair, the object is tagged by the internal RDF
+id, and the valueclass is used to restrict the properties considered to
+the ones connected to the parent property.
+
+#### Initial Query
+
+We find the XMLelements corresponding to a topElement with the following
+query,
+
+`SELECT DISTINCT topprop:, obj, valueclass`
+`FROM`
+`{topprop:} rdfs:range {valueclass},`
+`{subject} topprop: {obj} rdf:type {valueclass}`
+`using namespace`
+`  xsd2owl = <`[`http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#`](http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#)`>,`
+`  owl = <`[`http://www.w3.org/2002/07/owl#`](http://www.w3.org/2002/07/owl#)`>,`
+`  xsd = <`[`http://www.w3.org/2001/XMLSchema#`](http://www.w3.org/2001/XMLSchema#)`>,`
+`  topprop = <`[`http://www.opengis.net/wcs/1.1#CoverageDescription`](http://www.opengis.net/wcs/1.1#CoverageDescription)`>`
+
+`SELECT DISTINCT topprop:, obj, valueclass, schema`
+`FROM {} owl:onProperty {topprop:}; owl:allValuesFrom {valueclass},`
+`{subject} topprop: {obj} rdf:type {valueclass},`
+`{topprop:} rdfs:isDefinedBy {schema}`
+`using namespace`
+` xsd2owl = <`[`http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#`](http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#)`>,`
+` owl = <`[`http://www.w3.org/2002/07/owl#`](http://www.w3.org/2002/07/owl#)`>,`
+` xsd = <`[`http://www.w3.org/2001/XMLSchema#`](http://www.w3.org/2001/XMLSchema#)`>,`
+` topprop = <`[`http://www.opengis.net/wcs/1.1#CoverageDescription`](http://www.opengis.net/wcs/1.1#CoverageDescription)`>`
+
+where topprop is the only input (the property in question): in this case
+we looked for wcs:CoverageDescription elements. In our test framework,
+this returns
+
+| nameprop                                             | obj                                                                                              | valueclass                                               |
+|------------------------------------------------------|--------------------------------------------------------------------------------------------------|----------------------------------------------------------|
+| <http://www.opengis.net/wcs/1.1#CoverageDescription> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc>                    | <http://www.opengis.net/wcs/1.1#CoverageDescriptionType> |
+| <http://www.opengis.net/wcs/1.1#CoverageDescription> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc> | <http://www.opengis.net/wcs/1.1#CoverageDescriptionType> |
+
+We could actually use a slightly more sophisticated query that would
+return the schema as well, e.g.
+
+`SELECT DISTINCT topprop:, obj, valueclass, schema`
+`FROM`
+`{topprop:} rdfs:range {valueclass},`
+`{subject} topprop: {obj} rdf:type {valueclass},`
+`{topprop:} rdfs:isDefinedBy {schema}`
+`using namespace`
+`  xsd2owl = <`[`http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#`](http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#)`>,`
+`  owl = <`[`http://www.w3.org/2002/07/owl#`](http://www.w3.org/2002/07/owl#)`>,`
+`  xsd = <`[`http://www.w3.org/2001/XMLSchema#`](http://www.w3.org/2001/XMLSchema#)`>,`
+`  topprop = <`[`http://www.opengis.net/wcs/1.1#CoverageDescription`](http://www.opengis.net/wcs/1.1#CoverageDescription)`>`
+
+which returns
+
+| nameprop                                             | obj                                                                                              | valueclass                                               | schema                                                       |
+|------------------------------------------------------|--------------------------------------------------------------------------------------------------|----------------------------------------------------------|--------------------------------------------------------------|
+| <http://www.opengis.net/wcs/1.1#CoverageDescription> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc> | <http://www.opengis.net/wcs/1.1#CoverageDescriptionType> | <http://schemas.opengis.net/wcs/1.1/wcsDescribeCoverage.xsd> |
+| <http://www.opengis.net/wcs/1.1#CoverageDescription> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc>                    | <http://www.opengis.net/wcs/1.1#CoverageDescriptionType> | <http://schemas.opengis.net/wcs/1.1/wcsDescribeCoverage.xsd> |
+
+though we could also do a simple query with the topproperty to get the
+schema separately. Anyway, the information is there.
+
+#### Subsequent Queries: CoverageDescriptionType
+
+To find the children of an XML element, we use both the obj and the
+valueclass, essentially the valueclass restricts the properties returned
+to be with the rangeClass of the parent, though in both owl and
+XMLSchema that rangeclass depends on the parent whim; i.e. it could be a
+subclass of the actual range of the property.
+
+`SELECT DISTINCT nameprop, obj, valueclass`
+`FROM`
+`{parent:} nameprop {obj},`
+`{parentclass:} xsd2owl:isConstrainedBy {} owl:onProperty {nameprop}; owl:allValuesFrom {valueclass}`
+`UNION`
+`SELECT DISTINCT prop, obj, rangeclass`
+`FROM`
+`{parent:} prop {obj},`
+`{parentclass:} xsd2owl:isConstrainedBy {} owl:onProperty {prop}; [owl:allValuesFrom {valueclass}],`
+`{prop} rdfs:range {rangeclass}`
+`WHERE valueclass=NULL`
+`using namespace`
+`  xsd2owl = <`[`http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#`](http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#)`>,`
+`  owl = <`[`http://www.w3.org/2002/07/owl#`](http://www.w3.org/2002/07/owl#)`>,`
+`  xsd = <`[`http://www.w3.org/2001/XMLSchema#`](http://www.w3.org/2001/XMLSchema#)`>,`
+`  parent = <`[`http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc`](http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc)`>,`
+`  parentclass = <`[`http://www.opengis.net/wcs/1.1#CoverageDescriptionType`](http://www.opengis.net/wcs/1.1#CoverageDescriptionType)`>`
+
+where we have used both the parent and the parentclass to restrict the
+returns. This particular example returns
+
+| nameprop                                | obj                                                                    | valueclass                                          |
+|-----------------------------------------|------------------------------------------------------------------------|-----------------------------------------------------|
+| <http://www.opengis.net/wcs/1.1#Range>  | <http://iri.columbia.edu/~benno/opendaptest/auxinfo.owl#sampleRangeB>  | <http://www.opengis.net/wcs/1.1#RangeType>          |
+| <http://www.opengis.net/wcs/1.1#Domain> | <http://iri.columbia.edu/~benno/opendaptest/auxinfo.owl#sampleDomain3> | <http://www.opengis.net/wcs/1.1#CoverageDomainType> |
+
+#### Subsequent Queries: RangeType
+
+Continuing on to the next level, one of the xsd:elements we need to
+expand is a wcs:RangeType called sampleRangeB. Using the same query but
+resetting parent and parentclass appropriately, we get
+
+`SELECT DISTINCT nameprop, obj, valueclass`
+`FROM`
+`{parent:} nameprop {obj},`
+`{parentclass:} xsd2owl:isConstrainedBy {} owl:onProperty {nameprop}; owl:allValuesFrom {valueclass}`
+`UNION`
+`SELECT DISTINCT prop, obj, rangeclass`
+`FROM`
+`{parent:} prop {obj},`
+`{parentclass:} xsd2owl:isConstrainedBy {} owl:onProperty {prop}; [owl:allValuesFrom {valueclass}],`
+`{prop} rdfs:range {rangeclass}`
+`WHERE valueclass=NULL`
+`using namespace`
+`  xsd2owl = <`[`http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#`](http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#)`>,`
+`  owl = <`[`http://www.w3.org/2002/07/owl#`](http://www.w3.org/2002/07/owl#)`>,`
+`  xsd = <`[`http://www.w3.org/2001/XMLSchema#`](http://www.w3.org/2001/XMLSchema#)`>,`
+`  parent = <`[`http://iri.columbia.edu/~benno/opendaptest/auxinfo.owl#sampleRangeB`](http://iri.columbia.edu/~benno/opendaptest/auxinfo.owl#sampleRangeB)`>,`
+`  parentclass = <`[`http://www.opengis.net/wcs/1.1#RangeType`](http://www.opengis.net/wcs/1.1#RangeType)`>`
+
+returning Query results:
+
+| nameprop                               | obj                                                                                | valueclass                                 |
+|----------------------------------------|------------------------------------------------------------------------------------|--------------------------------------------|
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#tp>   | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#tco3> | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#hcc>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#mcc>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#lcc>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#e>    | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#p2d>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#p2t>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#p10v> | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#p10u> | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#tcc>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#blh>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#msl>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#cp>   | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#lsp>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#tcwv> | <http://www.opengis.net/wcs/1.1#FieldType> |
+| <http://www.opengis.net/wcs/1.1#Field> | <http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#tcw>  | <http://www.opengis.net/wcs/1.1#FieldType> |
+|                                        |                                                                                    |                                            |
+
+17 results found in 2 ms.
+
+#### Subsequent Queries: FieldType
+
+The same query structure might have returned literals as well. For
+example, at the next level,we ask for a variable cp within ECMWF as a
+wcs:FieldType
+
+`SELECT DISTINCT nameprop, obj, valueclass`
+`FROM`
+`{parent:} nameprop {obj},`
+`{parentclass:} xsd2owl:isConstrainedBy {} owl:onProperty {nameprop}; owl:allValuesFrom {valueclass}`
+`UNION`
+`SELECT DISTINCT prop, obj, rangeclass`
+`FROM`
+`{parent:} prop {obj},`
+`{parentclass:} xsd2owl:isConstrainedBy {} owl:onProperty {prop}; [owl:allValuesFrom {valueclass}],`
+`{prop} rdfs:range {rangeclass}`
+`WHERE valueclass=NULL`
+`using namespace`
+`  xsd2owl = <`[`http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#`](http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#)`>,`
+`  owl = <`[`http://www.w3.org/2002/07/owl#`](http://www.w3.org/2002/07/owl#)`>,`
+`  xsd = <`[`http://www.w3.org/2001/XMLSchema#`](http://www.w3.org/2001/XMLSchema#)`>,`
+`  parent = <`[`http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#cp`](http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#cp)`>,`
+`  parentclass = <`[`http://www.opengis.net/wcs/1.1#FieldType`](http://www.opengis.net/wcs/1.1#FieldType)`>`
+
+returns
+
+| nameprop                                    | obj                                                                 | valueclass                                          |
+|---------------------------------------------|---------------------------------------------------------------------|-----------------------------------------------------|
+| <http://www.opengis.net/wcs/1.1#NullValue>  | "-32767"^^http://www.w3.org/2001/XMLSchema#short                    | <http://www.opengis.net/ows/1.1#CodeType>           |
+| <http://www.opengis.net/wcs/1.1#Identifier> | "cp"^^http://www.w3.org/2001/XMLSchema#string                       | <http://www.w3.org/2001/XMLSchema#string>           |
+| <http://www.opengis.net/ows/1.1#Abstract>   | "Convective precipitation"^^http://www.w3.org/2001/XMLSchema#string | <http://www.opengis.net/ows/1.1#LanguageStringType> |
+
+A more sophisticated version of that query returns the order as well,
+using the reification we have added to the XMLSchema representation.
+
+`SELECT DISTINCT nameprop, obj, valueclass, order`
+`FROM`
+`{parent:} nameprop {obj},`
+`{parentclass:} xsd2owl:isConstrainedBy {} owl:onProperty {nameprop}; owl:allValuesFrom {valueclass},`
+`[{parentclass:} xsd2owl:uses {nameprop},`` xsd2owl:useCount {order}]`
+`UNION`
+`SELECT DISTINCT nameprop, obj, rangeclass,order`
+`FROM`
+`{parent:} nameprop {obj},`
+`{parentclass:} xsd2owl:isConstrainedBy {} owl:onProperty {nameprop}; [owl:allValuesFrom {valueclass}],`
+`{nameprop} rdfs:range {rangeclass}`
+`,`
+`[{parentclass:} xsd2owl:uses {nameprop},`` xsd2owl:useCount {order}]`
+`WHERE valueclass=NULL`
+`using namespace`
+`  xsd2owl = <`[`http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#`](http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#)`>,`
+`  owl = <`[`http://www.w3.org/2002/07/owl#`](http://www.w3.org/2002/07/owl#)`>,`
+`  xsd = <`[`http://www.w3.org/2001/XMLSchema#`](http://www.w3.org/2001/XMLSchema#)`>,`
+`  parent = <`[`http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#cp`](http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#cp)`>,`
+`  parentclass = <`[`http://www.opengis.net/wcs/1.1#FieldType`](http://www.opengis.net/wcs/1.1#FieldType)`>`
+
+returns
+
+Query results:
+
+| nameprop                                    | obj                                                                 | valueclass                                          | order |
+|---------------------------------------------|---------------------------------------------------------------------|-----------------------------------------------------|-------|
+| <http://www.opengis.net/wcs/1.1#NullValue>  | "-32767"^^http://www.w3.org/2001/XMLSchema#short                    | <http://www.opengis.net/ows/1.1#CodeType>           | "6"   |
+| <http://www.opengis.net/wcs/1.1#Identifier> | "cp"^^http://www.w3.org/2001/XMLSchema#string                       | <http://www.w3.org/2001/XMLSchema#string>           | "4"   |
+| <http://www.opengis.net/ows/1.1#Abstract>   | "Convective precipitation"^^http://www.w3.org/2001/XMLSchema#string | <http://www.opengis.net/ows/1.1#LanguageStringType> | "2"   |
+
+3 results found in 2 ms.
+
+More complicated still, we get both the reification and the element
+XML-type.
+
+`SELECT DISTINCT nameprop, obj, rangeclass,order,objtype`
+`FROM`
+`{parent:} nameprop {obj},`
+`{parentclass:} xsd2owl:isConstrainedBy {} owl:onProperty {nameprop}; [owl:allValuesFrom {valueclass}];xsd2owl:propertyIsA {objtype},`
+`{nameprop} rdfs:range {rangeclass},`
+`[{parentclass:} xsd2owl:uses {nameprop},`` xsd2owl:useCount {order}]`
+`WHERE valueclass=NULL`
+`using namespace`
+`  xsd2owl = <`[`http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#`](http://iridl.ldeo.columbia.edu/ontologies/xsd2owl.owl#)`>,`
+`  owl = <`[`http://www.w3.org/2002/07/owl#`](http://www.w3.org/2002/07/owl#)`>,`
+`  xsd = <`[`http://www.w3.org/2001/XMLSchema#`](http://www.w3.org/2001/XMLSchema#)`>,`
+`  parent = <`[`http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#cp`](http://dev1.opendap.org:8080/opendap/netcdf/examples/ECMWF_ERA-40_subset.nc#cp)`>,`
+`  parentclass = <`[`http://www.opengis.net/wcs/1.1#FieldType`](http://www.opengis.net/wcs/1.1#FieldType)`>`
+
+returns Query results:
+
+| nameprop                                    | obj                                                                 | valueclass                                          | order | objtype                                    |
+|---------------------------------------------|---------------------------------------------------------------------|-----------------------------------------------------|-------|--------------------------------------------|
+| <http://www.opengis.net/wcs/1.1#NullValue>  | "-32767"^^http://www.w3.org/2001/XMLSchema#short                    | <http://www.opengis.net/ows/1.1#CodeType>           | "6"   | <http://www.w3.org/2001/XMLSchema#element> |
+| <http://www.opengis.net/wcs/1.1#Identifier> | "cp"^^http://www.w3.org/2001/XMLSchema#string                       | <http://www.w3.org/2001/XMLSchema#string>           | "4"   | <http://www.w3.org/2001/XMLSchema#element> |
+| <http://www.opengis.net/ows/1.1#Abstract>   | "Convective precipitation"^^http://www.w3.org/2001/XMLSchema#string | <http://www.opengis.net/ows/1.1#LanguageStringType> | "2"   | <http://www.w3.org/2001/XMLSchema#element> |
+
+3 results found in 4 ms.
+
+Types are mostly xsd:element or xsd:attribute. There is a further
+complication for simpleContent with attributes: these are rendered as a
+class with the attributes as properties and with the content as a
+property rdf:value which is of type xsd:simpleContent. It is intended
+that these will be rendered as RDF literals if they have no attributes,
+and as a anonymous class with rdf:value holding the content plus other
+properties holding the attributes if there are attributes.
+
+## [WCS DispatchHandler Configuration](WCS_Service_Prototype#WCS_Configuration "wikilink")
+
+[For information about configuring and deploying the
+***opendap.semantics.IRISail.StaticRDFCatalog*** with the WCS
+DispatchHandler look
+here.](WCS_Service_Prototype#WCS_Configuration "wikilink")
+
+[Category:WCS](Category:WCS "wikilink")

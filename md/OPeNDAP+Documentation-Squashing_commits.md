@@ -1,0 +1,150 @@
+# Squashing Commits of a branch to make things tidy
+
+## Why
+
+Lots of commit messages are about fixing spelling errors, etc., and
+often it's better to combine a branch's commit messages into a smaller
+set of commits. This is how to use 'git rebase' for that, even when you
+have already pushed the branch to a repo like GitHub. This should work
+with a merged code, too, but fiddling with the master branch should not
+be done unless absolutely necessary.
+
+## How
+
+First, while you're on your branch, use 'git log' to find the commit
+hash for the commit right before the first commit of your branch. In the
+git log output below (which has some stuff elided) it has the info
+\*\*(origin/master, master)\*\*. Copy the first 8 or so characters of
+that commit hash.
+
+`[nori:hello_world jimg$] git log`
+`commit 48a898d0830fbf8a795204993bbd572b83e6557c (HEAD -> hack, origin/hack)`
+`Merge: de1b5fe 1037dfa`
+`Author: James Gallagher <jgallagher@opendap.org>`
+`Date:   Wed Sep 30 12:40:34 2020 -0600`
+``
+`    Merge branch 'hack' of https://github.com/jgallagher59701/hello into hack`
+``
+` ...`
+``
+`commit e6239975aaa6bf18d44a113873100df48d46087e`
+`Author: James Gallagher <jgallagher@opendap.org>`
+`Date:   Wed Sep 30 12:37:40 2020 -0600`
+``
+`    Added an error.`
+``
+`commit f1302d5f3549937ddc770b06e7316fc11e5079ae (origin/master, master)`
+`Author: James Gallagher <jgallagher@opendap.org>`
+`Date:   Wed Sep 30 12:32:19 2020 -0600`
+``
+`    Initial commit`
+
+Now, use 'git rebase --interactive f1302d5f3'
+
+Which will show (in the Git EDITOR):
+
+`pick e623997 Added an error.`
+`pick 19c0052 Comments`
+`pick de1b5fe Namespace finagling`
+`pick 1037dfa Namespace finaggling`
+``
+`# Rebase f1302d5..48a898d onto f1302d5 (4 commands)`
+`#`
+`# Commands:`
+`# p, pick = use commit`
+`# r, reword = use commit, but edit the commit message`
+`# e, edit = use commit, but stop for amending`
+`# s, squash = use commit, but meld into previous commit`
+`# f, fixup = like "squash", but discard this commit's log message`
+`# x, exec = run command (the rest of the line) using shell`
+`# d, drop = remove commit`
+`#`
+`# These lines can be re-ordered; they are executed from top to bottom.`
+`#`
+`# If you remove a line here THAT COMMIT WILL BE LOST.`
+`#`
+`# However, if you remove everything, the rebase will be aborted.`
+`#`
+`# Note that empty commits are commented out`
+
+Change the 'pick' word to 'squash'
+
+`pick e623997 Added an error.`
+`squash 19c0052 Comments`
+`squash de1b5fe Namespace finagling`
+
+Now we have:
+
+`[nori:hello_world jimg$] git log`
+`commit 94eba834437908e738f80c80403d2e95a6f11fe2 (HEAD -> hack)`
+`Author: James Gallagher <jgallagher@opendap.org>`
+`Date:   Wed Sep 30 12:37:40 2020 -0600`
+``
+`    Added an error.`
+``
+`commit f1302d5f3549937ddc770b06e7316fc11e5079ae (origin/master, master)`
+`Author: James Gallagher <jgallagher@opendap.org>`
+`Date:   Wed Sep 30 12:32:19 2020 -0600`
+``
+`    Initial commit`
+`[nori:hello_world jimg$]`
+
+But... This won't work to push to GitHub because git will want us to
+pull first. To force the push, don't use \`--force\` but instead use
+this magic: 'git push origin +hack'. Yes, the magic is to include the
+word 'origin' and to use a plus sign, '+hack'. That will look like:
+
+`[nori:hello_world jimg$] git push origin +hack`
+`Counting objects: 3, done.`
+`Delta compression using up to 8 threads.`
+`Compressing objects: 100% (3/3), done.`
+`Writing objects: 100% (3/3), 463 bytes | 463.00 KiB/s, done.`
+`Total 3 (delta 0), reused 0 (delta 0)`
+`To https://github.com/jgallagher59701/hello.git`
+` + 48a898d...94eba83 hack -> hack (forced update)`
+
+## What can go wrong
+
+Conflicts
+
+If you try to squash a single commit and git rebase get's grumpy like:
+
+`[-bash: ~/OPeNDAP/hyrax/bes] git rebase --interactive ffad8f66b806e2f2c90de79bec2fa6efb7d2e00b`
+`Auto-merging dispatch/AllowedHosts.cc`
+`CONFLICT (content): Merge conflict in dispatch/AllowedHosts.cc`
+`error: could not apply 2820cf541... Repairs AllowedHosts::is_allowed() unsigned to signed conversion issue`
+`Resolve all conflicts manually, mark them as resolved with`
+`"git add/rm `<conflicted_files>`", then run "git rebase --continue".`
+`You can instead skip this commit: run "git rebase --skip".`
+`To abort and get back to the state before "git rebase", run "git rebase --abort".`
+`Could not apply 2820cf541... Repairs AllowedHosts::is_allowed() unsigned to signed conversion issue`
+`[-bash: ~/OPeNDAP/hyrax/bes] `
+
+I had a look at AllowedHosts.cc, found the typical git merge marks
+\<\<\<\<\<\< etc. I resolved the conflict, ran added AllowedHosts.cc cat
+to the git stage and tried again:
+
+`[-bash: ~/OPeNDAP/hyrax/bes] git add dispatch/AllowedHosts.cc`
+`[-bash: ~/OPeNDAP/hyrax/bes] git rebase --continue`
+`[detached HEAD 812a17b81] Repairs AllowedHosts::is_allowed() unsigned to signed conversion issue`
+` 1 file changed, 1 insertion(+), 1 deletion(-)`
+`Auto-merging modules/dmrpp_module/DmrppArray.h`
+`Auto-merging modules/dmrpp_module/DmrppArray.cc`
+`CONFLICT (content): Merge conflict in modules/dmrpp_module/DmrppArray.cc`
+`error: could not apply a383e908f... Migrated DmrppArray::read_chunks() to c++11 threads`
+`Resolve all conflicts manually, mark them as resolved with`
+`"git add/rm `<conflicted_files>`", then run "git rebase --continue".`
+`You can instead skip this commit: run "git rebase --skip".`
+`To abort and get back to the state before "git rebase", run "git rebase --abort".`
+`Could not apply a383e908f... Migrated DmrppArray::read_chunks() to c++11 threads`
+`[-bash: ~/OPeNDAP/hyrax/bes]`
+
+This time the merge conflict was an epic train wreck and a I bailed:
+
+`[-bash: ~/OPeNDAP/hyrax/bes] git rebase --abort`
+
+Abort Rebase
+If you get scared and bail out of the editor with the 'pick' etc.,
+lines, you'll be stuck in 'rebase mode.' You can use 'git rebase
+--continue' or 'git rebase --abort' to get out of that state and
+continue or abort.
