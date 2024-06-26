@@ -1,0 +1,92 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - OLFS Installation</title>
+    <ns>0</ns>
+    <id>25</id>
+    <revision>
+      <id>4089</id>
+      <parentid>4088</parentid>
+      <timestamp>2009-05-04T16:25:39Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Install */</comment>
+      <origin>4089</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2278" sha1="80928y8sg2ie60l1zvqpby0ldu4bkan" xml:space="preserve">'''The OLFS comes with a default configuration that is compatible with the default configuration of the BES. If you do a default install of each one you should get a running Hyrax server that will be pre-populated with test data suitable for running the integrity tests.'''
+
+
+
+=[[Hyrax - BES Installation|Install The BES]]=
+
+=Download=
+If you haven't already got it, go [http://www.opendap.org/download/olfs.html get the latest OLFS distribution from here]. You should get the binary jar file which will be named something like: '''''olfs-x.x.x-webapp.tgz'''''
+
+=Unpack=
+Unpack the jar file with the command: 
+ tar -xvf olfs-x.x.x-webapp.tgz
+which will unpack a directory called olfs-x.x.x-webapp
+
+=Install=
+Inside the that directory find the opendap.war file, and copy it into the Tomcat's webapps directory: 
+ cp olfs-x.x.x-webapp/opendap.war /usr/local/apache-tomcat-6.x.x/webapps/
+(Assuming the your Tomcat server is in /usr/local) 
+
+If you're replacing an older version of the OLFS you may:
+* Need to remove the directory &lt;tt&gt;$CATALINA_HOME/webapps/opendap&lt;/tt&gt; before restarting Tomcat.
+* Discover that some of the existing configuration information for the OLFS may need to be updated. If after you start Tomcat things don't work you should compare the &lt;tt&gt;$CATALINA_HOME/content/opendap/olfs.xml&lt;/tt&gt; file that contains your exisiting configuration to the new default configuration located in &lt;tt&gt;$CATALINA_HOME/webapps/opendap/intitalContent/olfs.xml&lt;/tt&gt; Look at the lists of DispatchHandlers and adjust your configuration to use the same ones.
+
+=Setup Tomcat=
+Configure the Tomcat environment by setting the environment variable CATALINA_HOME to the full path for the Tomcat distribution.
+
+In bash: 
+ export CATALINA_HOME = /usr/local/apache-tomcat-6.x.x
+
+=Start Tomcat=
+In the top level tomcat directory (apache-tomcat-6.x.x on my machine) issue the command:
+ bin/startup.sh; tail -f logs/catalina.out
+Wait a few seconds while it all starts up.
+
+When Tomcat starts up it will unpack your '''OLFS'' and install the webapp.
+
+
+'''Usage Note''': If you use ''ctrl-c'' to stop watching the tail of the servers output, make sure to run the command:
+ bin/shutdown.sh
+to shutdown Tomcat. If you don't, you may get errors when you next try to start the Tomcat server.
+
+
+
+----</text>
+      <sha1>80928y8sg2ie60l1zvqpby0ldu4bkan</sha1>
+    </revision>
+  </page>
+</mediawiki>

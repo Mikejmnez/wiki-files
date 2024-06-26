@@ -1,0 +1,177 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - Hyrax + Shibboleth</title>
+    <ns>0</ns>
+    <id>888</id>
+    <revision>
+      <id>10931</id>
+      <parentid>10908</parentid>
+      <timestamp>2014-11-05T23:51:59Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>10931</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7970" sha1="a82bcomh8sautzteuaq68o2w909en93" xml:space="preserve">
+
+== Overview ==
+
+This document is intended to help those that have been asked to deploy Hyrax into an environment where authentication services are provided by an instance of [http://shibboleth.net Shibboleth].
+
+
+== Terms ==
+
+; [http://en.wikipedia.org/wiki/Identity_provider Identity Provider (IdP)]
+: Also known as an '''Identity Assertion Provider''' an '''Identity Provider (IdP)''' is a service that provides authentication and identity information services. An '''IdP''' is a kind of provider that creates, maintains, and manages identity information for principals and provides principal authentication to other service providers within a federation, such as with web browser profiles.
+
+; Service Provider (SP)
+: A '''Service Provider (SP)''' is a Web Service that utilizes an IdP service to determine the identity of it's users. Or more broadly, a role donned by a system entity where the system entity provides services to principals or other system entities. 
+
+
+
+With respect to this document Hyrax, Tomcat, and Apache all become part of an '''SP''' through the installation and configuration of the Apache '''httpd''' Shibboleth module (mod_shib).
+
+
+See [http://www.thedotnetfactory.com/learningcenter/technologies/service-identity-providers Service Providers, Identity Providers &amp; Security Token Services explained] for more.
+
+== Install and Configure  Shibboleth ==
+
+The Shibboleth wiki provides excellent documentation on how to get Shibboleth authentication services working with Tomcat. This is primarily an Apache ''httpd'' activity.
+
+Basically you need to [https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPJavaInstall follow the instructions for a Native Java Install] and remember - Hyrax does not use either Spring or Grails.
+
+
+=== Installation ===
+The logical starting point for this is with the  [https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPJavaInstall Native Java SP Installation]:
+* https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPJavaInstall
+But as far as the organization of the work is concerned it is really the last page you need to process, as it will send you off to do a platform dependent Shibboleth Native Service Provider for Apache installation which needs to be completed, working, and configured before you'll return to the  [https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPJavaInstall Native Java SP Installation] to enable the part where Tomcat and ''mod_shib'' pass authenticated user information into Tomcat.
+
+The document path on the [https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPJavaInstall Natvie Java Install wiki page] will send you off to do Shibboleth Native Service Provider  installation which is platform dependent:
+* https://wiki.shibboleth.net/confluence/display/SHIB2/Installation
+** Install a ''Native Service Provider'' on your target system. 
+**  In the initial testing section for Linux they suggest accessing the Status page https://localhost/Shibboleth.sso/Status, but you may have to use the loopback address to be able to do so: https://127.0.0.1/Shibboleth.sso/Status
+
+
+Return to the  [https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPJavaInstall Native Java SP Installation] and complete the instructions there.
+
+=== Configuration ===
+Once the SP installation is completed go to the Native SP Configuration page:
+* https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPConfiguration
+Read that page and then follow the link to the instructions for Apache:
+* https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPApacheConfig
+Follow those instructions.
+* Do not be confused by the section [https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPApacheConfig#NativeSPApacheConfig-MakingURLsUsedbymod_shibGetProperlyRouted Making URLs Used by mod_shib Get Properly Routed]. While you must add this ''Location'' directive to "reveal" the shibboleth module to the world don't think the URL https://yourhost/Shibboleth.sso is a valid access point to the module. That URL may always return a Shibboleth error page even if ''mod_shib'' and ''shibd'' are configured and working correctly.
+* Read and understand the section [https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPApacheConfig#NativeSPApacheConfig-EnablingtheModuleforAuthentication   Enabling the Module for Authentication] 
+
+
+The Shibboleth instructions should have had you add something like this:
+
+&lt;source lang="apache"&gt;
+&lt;Location /opendap&gt;
+  AuthType shibboleth
+  ShibRequestSetting requireSession 1
+  require valid-user
+&lt;/Location&gt;
+&lt;/source&gt;
+
+to ''httpd.conf''. This will require users to authenticate to access any part of Hyrax which may be exactly what you want. If you want more fine grained control you may want use multiple &lt;code&gt;Location&lt;/code&gt; elements with different &lt;code&gt;require&lt;/code&gt; attributes. For example:
+ 
+&lt;source lang="apache"&gt;
+&lt;Location /opendap&gt;
+  AuthType shibboleth
+  ShibCompatWith24 On
+  require shibboleth
+&lt;/Location&gt;
+&lt;Location /opendap/AVHRR&gt;
+  AuthType shibboleth
+  ShibCompatWith24 On
+  ShibRequestSetting requireSession 1
+  require valid-user
+&lt;/Location&gt;
+&lt;/apache&gt;
+&lt;/source&gt;
+
+In this example the first &lt;code&gt;Location&lt;/code&gt; establishes Shibboleth as the authentication tool for the entire ''/opendap'' application path, and enables the Shibboleth module over the entire Hyrax Server.  
+* Since there is no &lt;code&gt;ShibRequestSetting requireSession 1&lt;/code&gt; line it does not require a user to be logged in order to access the path. 
+* The &lt;code&gt;require shibboleth&lt;/code&gt; command activates mod_shib for all of Hyrax.
+
+The second &lt;code&gt;Location&lt;/code&gt; states that only valid-users may have access "/opendap/AVHRR" URL path.
+* The &lt;code&gt;require valid-user&lt;/code&gt; command  requires user authentication.
+* The &lt;code&gt;AuthType&lt;/code&gt; command is set to &lt;code&gt;shibboleth&lt;/code&gt; so ''mod_shib'' will be called upon to perform the authentication.
+
+For more examples and better understanding see the [https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPApacheConfig#NativeSPApacheConfig-AuthConfigOptions Apache Configuration section of the Shibboleth wiki.]
+
+&lt;!--
+== Hyrax Managed Access ==
+
+In order for the Hyrax Managed Access to work correctly you will need to alter the Apache security constraint for the Hyrax Web Application. The Shibboleth wiki example would have had you add something like this:
+
+&lt;source lang="apache"&gt;
+&lt;Location /opendap&gt;
+  AuthType shibboleth
+  ShibRequestSetting requireSession 1
+  require valid-user
+&lt;/Location&gt;
+&lt;/source&gt;
+
+to ''httpd.conf'', which places Apache in full control of the authentication process. 
+
+Hyrax Managed Access needs to have some of that control. 
+
+In the follow example the first &lt;code&gt;Location&lt;/code&gt; establishes Shibboleth as the authentication tool for the entire ''/opendap'' application path, and enables the Shibboleth module over the entire Hyrax Server.  
+* Since there is no &lt;code&gt;ShibRequestSetting requireSession 1&lt;/code&gt; line it does not require a user to be logged in order to access the path. 
+* The &lt;code&gt;require shibboleth&lt;/code&gt; command activates mod_shib for all of Hyrax - and that means that user information will be available from mod_shib through Tomcat to Hyrax over the entire Hyrax service. 
+
+The second &lt;code&gt;Location&lt;/code&gt; element establishes an endpoint for Hyrax Managed Access to initiate Shibboleth authentication for the user, this example shows the value of the Location element set to the default login context for the opendap.auth.ShibbolethIdP class. If a custom login context is specified in the Hyrax configuration the the values of this second ''Location'' must be changed to reflect the Hyrax configuration.
+
+ 
+&lt;source lang="apache"&gt;
+&lt;Location /opendap&gt;
+  AuthType shibboleth
+  ShibCompatWith24 On
+  require shibboleth
+&lt;/Location&gt;
+&lt;Location /opendap/login/shib&gt;
+  AuthType shibboleth
+  ShibCompatWith24 On
+  ShibRequestSetting requireSession 1
+  require shib-session
+&lt;/Location&gt;
+&lt;/apache&gt;
+&lt;/source&gt;
+
+
+--&gt;</text>
+      <sha1>a82bcomh8sautzteuaq68o2w909en93</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,81 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Implementation of Version in Hyrax</title>
+    <ns>0</ns>
+    <id>624</id>
+    <revision>
+      <id>6823</id>
+      <parentid>6822</parentid>
+      <timestamp>2011-11-14T23:28:19Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>6823</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3259" sha1="5zk6dhpd72rnpz33c7brtqji5xu09hr" xml:space="preserve">&lt;font color="red" size="+"&gt;OBSOLETE&lt;/font&gt;:[[User:Jimg|Jimg]] 15:28, 14 November 2011 (PST)
+
+=== Implementation of Version in Hyrax ===
+
+We've implemented all three of the options in libdap/BES. The MIME header technique has been in the Hyrax server for well over two years. In fact it has been the hassles with using that that lead to the development of a way to specify the DAP protocol of the request (or the desired protocol for the response) that drove the design of the ''keyword'' and ''projection function'' approaches.
+
+==== MIME header ====
+
+Note that MIME headers for Hyrax responses are written by the OLFS, not the BES or libdap (libdap contains support for this because some other projects use the BES without a front end).
+
+==== Projection Function ====
+
+I added a C++ function ''function_dap'' with the type signature 
+'''''&lt;nowiki&gt;void function_dap(int argc, BaseType *argv[], DDS &amp;dds, ConstraintEvaluator &amp;)&lt;/nowiki&gt;''''' (the type of a ''projection function'')
+that takes a numeric argument and sets the DAP protocol version in the DDS object from libdap. Pretty straightforward. Here's how it works.
+
+* The DDS class registers the C++ function ''function_dap'' with the ''ConstraintEvaluator'' instance during object instantiation. 
+* The function is bound to the name ''dap'' at the time of registration. See ConstraintEvaluator::add_function. 
+* During DDS instantiation, the DDS sets its default protocol level to DAP 2.0. 
+* When a constraint Expression is parsed, if the ''dap()'' function is called, its argument is used to set the value of the DAP protocol in the DDS. 
+
+:Notes: 
+:# The ''projection function'' typedef takes the DDS as an argument, so a projection function can modify the DDS. 
+:# The constraint evaluator will wrap constants (e.g., 3.2) in the appropriate DAP data type. 
+:# Given that projection functions are evaluated ''during'' the parse, the new value of the protocol is present for the remainder of the parse and all of the subsequent operations.
+:#The DDS does not include methods to trigger the formation of a 'DDS response object.' That code is in ResponseBuilder, see ResponseBuilder::send_dds(), et cetera. In there, the response MIME headers are built and that's where the XDAP header is built that indicates the protocol version of the response. Thus libdap/BES can build the MIME headers for the response object.
+:# In Hyrax, the MIME headers are not build by libdap/BES but instead by the OLFS.
+:# As part of this feature I cloned and then refactored ''DODSFilter'', removing most of the excess code that was present to support the CGI-based server. The resulting new class is called ''ResponseBuilder''
+
+==== Keyword ====
+
+I added a little code to ''ResponseBuilder'' to parse the CE before it is feed to the 'real' parser. If a word is found that is a keyword, then it is set in the ''ResponseBuilder'' object and removed from the CE. I have not completed the implementation of this so that the keywords are used to set different property values since it seems the ''projection function'' technique is actually better (because it requires no change to the parsing of the CE). But doing so would be pretty easy.
+
+I think the keyword approach ultimately won't be used, but it's in the code for now.</text>
+      <sha1>5zk6dhpd72rnpz33c7brtqji5xu09hr</sha1>
+    </revision>
+  </page>
+</mediawiki>

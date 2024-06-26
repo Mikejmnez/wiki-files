@@ -1,0 +1,204 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>How to build the DataDDX response in/with Hyrax</title>
+    <ns>0</ns>
+    <id>518</id>
+    <revision>
+      <id>6584</id>
+      <parentid>6583</parentid>
+      <timestamp>2011-08-21T18:18:34Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Division of Labor */</comment>
+      <origin>6584</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="11837" sha1="dippv7b7n6ymgt1bdgn2xnh1myv4iw7" xml:space="preserve">== Normative References ==
+
+;MIME
+:RFC 1521
+;&lt;nowiki&gt;Multipurpose Internet Mail Extensions
+                            (MIME) Part One:
+                   Format of Internet Message Bodies&lt;/nowiki&gt;
+:RFC 2045
+;Multipart/Related MIME
+:RFC 2387
+;SOAP with Attachments
+:http://www.w3.org/TR/SOAP-attachments
+;&lt;nowiki&gt;RFC2234 - Augmented BNF for Syntax Specifications: ABNF&lt;/nowiki&gt;
+:RFC 2234
+
+== Division of Labor ==
+
+[[Image:DAP4 DataDDX Design 2.png|400px|right|frame|'''Figure 1'''. Building the DataDDX with the OLFS making the initial and final headers. The BES/libdap/handler will have to make the 'part' headers except for the closing segment. This provides an easy way for the OLFS to combine several DataDDX responses in a single MP MIME document (easy in the sense that the OLFS does not have to pull apart the response from the BES).]]
+
+[[Image:DAP4 DataDDX Design 1.png|right|thumb|'''Figure 2'''. This design would be good from the standpoint of support for protocols that don't want data responses in multipart MIME documents, but it's far from optimal since the DDS has to be built twice for each request]]
+
+The BES and OLFS work together to support DAP, however, it is the job of the OLFS to correctly implement the DAP. The BES understands certain aspects of the DAP, but it does not actually build correct responses from DAP requests. Instead the OLFS reads a request and asks the BES to build parts of the correct response that it then assembles to make the complete response document.
+
+To build a DataDDX response, the OLFS and BES will work together as shown in Figure 1. When the OLFS receives and processes a DAP4 DataDDX request, it will first parse from that request the information the BES needs and send that along with both the Multipart MIME (MPM) ''start'' and ''boundary'' values. The BES will use a handler to build a C++ DDS object and return the MPM document that forms the payload of the DataDDX response, with a few wrinkles, such as why the start and boundary values need to be passed by the OLFS to the BES, to be described shortly.
+
+When the OLFS begins to receive the MPM payload for the DataDDX response, it will first write out the MIME headers for the response. Following that, it will stream the response from the BES, and following that, it will append (send to the stream) the closing section of the document.
+
+&lt;blockquote&gt;'''Note:''' In Figures 1 and 2 the sequence of interactions between the OLFS, the BES and a generic Handler are shown using a UML sequence diagram. That type of diagram is intended to be used for objects and their methods, but I thought it was a useful diagram even though the idea of the BES, OLFS or a handler as an object is a bit of a stretch.&lt;/blockquote&gt;
+
+=== Why this design? ===
+
+This design describes the implementation of the DataDDX response with as little modification to the libdap and BES software as possible (and minimal changes to the OLFS, too). However, we want this design to be usable as a building block for two things besides DAP4: A SOAP interface for DAP servers, where several DataDDX responses can be held in a single SOAP envelope; and implementations of DAP4 that use transport protocols other than HTTP.
+
+Like most designs intended for several uses, this one is a compromise. Figure 2 shows a design that would be better at addressing the issues associated with ''support for other transport protocols'' and which might offer advantages to SOAP as well. In fact, it also has a cleaner separation of duties because the OLFS takes over complete responsibility for building the headers of the MPM document. But the cost is that the BES must build two DDS objects - an expensive operation, especially for large datasets. So the compromise reached is that some effort to build MIME headers, those that are part of the payload of the response, is moved into the BES/Handler/libdap software. However, because support for a SOAP interface means that we should be able to stuff several of these MPM documents into one SOAP envelope, the trailing MPM separator information is ''not'' written by the BES/Handler/libdap. Instead, the trailing separator that closes the document needs to be written by the OLFS. 
+
+With the design presented, the BES/... software can behave as efficiently as the current DataDDS code but each response can be used as a building block in a SOAP response - one response concatenated after the other - that is closed by the OLFS so the BES/Handler software does need to know about the way the responses are being packaged. At the same time the response format is likely usable by other transport protocols because either that implementation can use MPM as its payload or take apart the response (since MIME is designed to make that operation fairly easy).
+
+=== What is not Covered Here? ===
+
+HTTP and MIME are both 'header and payload' protocols in the sense that control information is put in a set of headers and then the information to be sent is held in a second part called the payload. In the case of multipart MIME over HTTP, there are two payloads. First, the HTTP response has a set of headers and a payload and that payload is, in this design, a multipart MIME document, which itself has sections with headers and payloads. See the Figure. 
+
+We will want to make some changes to the 'data part' or 'data payload' of the multipart MIME document, but ''those are not described here.'' Those changes will be described in the DAP 4.0 design specification. If they are complex enough to warrant their own implementation document, then we will either add a section here or start a new document. For now (8/21/09), the data payload transported by the DataDDX is the same as the data payload in the DataDDS response of DAP2.
+
+=== Handler/libdap ===
+
+The Handler running inside the BES uses libdap's DDS class and its methods to make the DDX and XDR-encoded data blob. The DDS::print_xml() method will take the ''Content-Id'' to be used with the data blob section as a parameter. A new method will be added to build the data blob.
+
+A new set of functions will be added to libdap's collection of MIME-header writers to build the MPM boundary sections. Two functions will be needed: One to write the boundary headers for the DDX and one to write the boundary headers for the data blob.
+
+The libdap DODSFilter class will get a new method that will package all of these calls in a way that's similar to the existing DODSFilter::send_das(), ..., send_data() methods
+
+=== BES ===
+
+The BES will need to be modified to respond to a ''get dataddx'' request and will need to accept the ''start'' and ''boundary'' values for the MPM document from the OLFS. Each handler will likely need some modification to support the new response type.
+
+The XML request document will look like the following:
+
+   &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+   &lt;request reqID ="####" &gt;
+        &lt;get type="dataddx" definition="def_name" returnAs="name"&gt;
+            &lt;contentStartId&gt;SOME_ID_STRING&lt;/ContentStartId &gt;
+            &lt;mimeBoundary&gt;MIME_BOUNDARY_STRING&lt;/MimeBoundary &gt;
+        &lt;/get&gt;
+   &lt;/request&gt;
+
+And the bescmdln command string will be:
+
+    get dataddx for def_name contentStartId SOME_ID_STRING mimeBoundary MIME_BOUNDARY_STRING;
+
+=== OLFS ===
+
+The OLFS will need to be modified to recognize the new request, generate the correct boundary and start values, and complete the response by building the correct response headers and closing 'separator' headers.
+
+== Example Response Document ==
+
+&lt;pre&gt;
+     Content-Type: Multipart/Related; boundary=example-2;
+             start="&lt;1@opendap.org&gt;"  &lt;-------------------
+             type="Text/x-Okie"                           |
+                                                          |
+     --example-2                                          |
+     Content-Type: Text/xml; charset=iso-8859-1;          |
+             declaration="&lt;3@opendap.org&gt;"                |
+     Content-ID: &lt;1@opendap.org&gt;      &lt;-------------------
+     Content-Description: dap4-ddx
+
+     [DDX with &lt;blob href="cid:2@opendap.org"/&gt;]  &lt;----
+     --example-2                                       |
+     Content-Type: application/octet-stream            |
+     Content-ID: &lt;2@opendap.org&gt;      &lt;----------------                
+     Content-Transfer-Encoding: gzip
+     Content-Description: dap4-data
+     Content-Disposition: ATTACHMENT
+
+     [XDR Encoded data]
+     --example-2--
+&lt;/pre&gt;
+
+Here are the parts, broken down into which parts of Hyrax are responsible for what:
+
+&lt;pre&gt;
+     Content-Type: Multipart/Related; boundary=example-2;
+             start="&lt;1@opendap.org&gt;"
+             type="Text/x-Okie"
+&lt;/pre&gt;
+The response headers are built by the OLFS. It must figure out the value of ''boundary'' and ''start'' and both pass those to the BES and use them to build the ''Content-Type'' header.
+
+&lt;pre&gt;
+     --example-2
+     Content-Type: Text/xml; charset=iso-8859-1;
+             declaration="&lt;3@opendap.org&gt;"
+     Content-ID: &lt;1@opendap.org&gt;
+     Content-Description: dap4-ddx
+
+     [DDX with &lt;blob href="cid:2@opendap.org"/&gt;]
+&lt;/pre&gt;
+The part boundary, headers and DDX. This will be built by the BES (likely in BESDapTransmit) using a method in DODSFilter that will build/send the part headers and then call a method in DDS to build/send the DDX.
+
+&lt;pre&gt;
+     --example-2
+     Content-Type: application/octet-stream
+     Content-ID: &lt;2@opendap.org&gt;
+     Content-Transfer-Encoding: gzip
+     Content-Description: dap4-data
+     Content-Disposition: ATTACHMENT
+
+     [XDR Encoded data]
+&lt;/pre&gt;
+Teh data blob will be written also using a method in DODSFilter that will build/send the part headers and then the data blob. As with the previous part, this DODSFilter method will be called by the BES.
+
+&lt;pre&gt;
+     --example-2--
+&lt;/pre&gt;
+The closing part boundary will be written by the OLFS.
+
+=== Notes about the example ===
+
+* "Usage of "cid:", as in this example, may be useful for a variety of compound objects.  It is not, however, a part of the Multipart/Related specification." (Multipart/RElated MIME, p5.)
+*"User Agents that recognize Multipart/Related will ignore the Content-Disposition header's disposition type.  Other User Agents will process the Multipart/Related as Multipart/Mixed and may make use of that header's information." (Multipart/RElated MIME, p6.)
+*We probably need to use "Content-Transfer-Encoding: binary" on things without compression. " "Binary" means that not only may non-ASCII characters be present, but also that the lines are not necessarily short enough for SMTP transport." (MIME, p14.)
+*The boundary markers are all prefixed by "--" and the line is terminated by a CRLF pair '''except''' for the closing boundary which is ended by "--" and a CRLF pair.
+*The boundary text (not including the "--" and CRLF) is limited to 69 characters (RFC 1521, p68).
+*The grammar for boundary is:
+&lt;pre&gt;
+ boundary := 0*69&lt;bchars&gt; bcharsnospace
+
+ bchars := bcharsnospace / " "
+
+ bcharsnospace :=    DIGIT / ALPHA / "'" / "(" / ")" / "+"  / "_"
+                  / "," / "-" / "." / "/" / ":" / "=" / "?"
+&lt;/pre&gt;
+where '0*69&lt;bchars&gt;' means zero to sixty nine '&lt;bchars&gt;'; &lt;bchars&gt; are either a 'bcharnospace' or a space; and a 'bcharnospace' is any one of DIGIT, ALPHA, et cetera.
+*Content-Id headers use the Message-Id header syntax and must be world-unique (RFC 2045, p25). See RFC 822 for information about Message-Id. 
+*A brief summary of the Message-Id header value as described by RFC 822: The value is ''word *(. word) "@" domain'' where ''*(. word)'' means zero or more occurrences of a dot and a word; "@" is the literal at sign; and ''domain'' is the internet domain of the host building the message.
+*Use ''getdomainname()'' on Unix to get ''domain''.
+*Get a UUID for the first part of the Message-Id using uuid_generate() (#include &lt;uuid/uuid.h&gt; in C/C++). This may be overkill, but who cares?</text>
+      <sha1>dippv7b7n6ymgt1bdgn2xnh1myv4iw7</sha1>
+    </revision>
+  </page>
+</mediawiki>

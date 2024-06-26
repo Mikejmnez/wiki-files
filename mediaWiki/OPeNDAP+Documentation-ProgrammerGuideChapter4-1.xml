@@ -1,0 +1,215 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>ProgrammerGuideChapter4-1</title>
+    <ns>0</ns>
+    <id>193</id>
+    <revision>
+      <id>1196</id>
+      <timestamp>2007-09-28T01:26:44Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>New page: ===Documenting Your Work===   If you do write a server, and intend to circulate it beyond your own site, here are some guidelines for documenting that server that will help others use it. ...</comment>
+      <origin>1196</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7784" sha1="fzkku9yw9u5x7654wd1vnn3iq830ozd" xml:space="preserve">===Documenting Your Work===
+
+
+If you do write a server, and intend to circulate it beyond your own
+site, here are some guidelines for documenting that server that will
+help others use it.
+
+
+
+Since there are two sets of "users" for a data server program, there
+are two sets of instructions that need to be prepared for a given
+server. One set will be read by the person who installs and maintains
+the server on the host platform. The other set is designed to be read
+by people who intend to request data from that server. These users
+will get this documentation by submitting queries to the Info
+Service, in rather the same way that many UNIX commands have a
+&lt;font color='green'&gt;-usage&lt;/font&gt; option.
+
+In addition to these two documents, all servers should include a set
+of text files in their distribution directory.
+
+
+
+====The README File====
+
+
+The &lt;font color='green'&gt;README&lt;/font&gt; file should contain the following information:
+
+
+*A brief overview that describes the purpose and method of   operation of the server.
+
+*The revision level of the server.
+
+*Any features the local &lt;font color='green'&gt;httpd&lt;/font&gt; daemon must support to use   this server.
+
+*Any data translations that this data server can do.  If any are   done, they should be described in detail, so that users can know   what data they get.
+
+
+====The ERRORS File====
+
+
+The &lt;font color='green'&gt;ERRORS&lt;/font&gt; file should contain a complete list of the error messages
+and explanations that might ever be issued by the server.
+
+
+====Installation Notes====
+
+These instructions should be included in a file called &lt;font color='green'&gt;INSTALL&lt;/font&gt; which is
+to be included with the server distribution. At a minimum, they should
+cover the following topics:
+
+
+*Configuring and compiling the server code. Ideally, there should be a &lt;font color='green'&gt;configure&lt;/font&gt; script included, but detailed instructions on editing the &lt;font color='green'&gt;Makefile&lt;/font&gt; will often suffice. Remember to install the usage data file somewhere the server can find it.
+*Are there any environment variables that must be defined in order to run the server? Are there other programs (e.g. &lt;font color='green'&gt;gzip&lt;/font&gt; that must be installed on the host machine?
+*What configuration options are there for the installed server? This covers issues like enabling data compression, ancillary data caching, and choosing the GUI manager program with which the server will communicate. If there are performance trade-offs associated with each option, note them here.
+*Ancillary data files:
+**Must the installer prepare ancillary data files by hand, or     are these created automatically and cached?
+**If they must be created, where ought they be put?
+**If they are cached, where are they kept?
+**Also, if the ancillary data files are cached, what     implications are there for updating the data sets served by this     server? (i.e. must the ancillary data files be updated also?     Deleted and recreated?)
+*:
+*What temporary files will be created by the server? Where will they be stored? Under what conditions may (or must they) they be erased?
+
+
+
+====Information Files====
+
+
+
+The information files contain the information that remote users of
+this server will use to figure out how to use this server and its
+datasets once it is installed somewhere.  The files are used in
+constructing the HTML page for the &lt;font color='green'&gt;info&lt;/font&gt; server  The &lt;font color='green'&gt;.info&lt;/font&gt;
+results can include information about both the server and the current
+dataset.  (In fact, the results will usually include the DAS and DDS
+of the dataset named in the URL.)
+
+When a user appends &lt;font color='green'&gt;.info&lt;/font&gt; to a URL, the info service is
+activated.  This service collates information about the server and the
+dataset (from the DAS, DDS, lists of global attributes, and variable
+summaries), and assembles that information in an HTML document.  The
+server then looks for additional HTML files created by the server's
+administrator, and appends them the original file, and returns the
+whole document to the client.
+
+Although it is possible merely to rely on the collated data to
+describe a server, we hope that server writers will provide rich,
+human-friendly descriptions of the server's usage and the accompanying
+datasets.  These files can be thought of as "usage" or "README"
+files.  At a minimum, they should cover:
+
+
+*Any special data functions defined by the server that can be   used in a constraint expression, and
+*Any data model translations the server supports, and how they   are to be controlled by the user\footnote{Remember that the "how"     is to be answered very specifically, and on the user's level (i.e.     "Do such-and-such, spelled like ''this'' , to make the array     returned be nx5 instead of 5xn."), and not on the programmer's     level (i.e. "You use the invert method to return an array of 5xn     instead of nx5.")}
+*A list of the programs a user should have to use certain   features of the server. For example, note here that the server   expects that the GUI manager is running a Tcl interpreter.    
+*A list of the error messages that the user is apt to see.   Include explanations of the conditions that may have caused them,   and any steps the user may take to recover from them.
+*The answers to any questions you are frequently asked about this   server or its usage.
+
+
+The usage data file need not be any more elaborate than any man page.
+
+To create information for a server, write an HTML fragment using the
+format given below, and put the HTML file in the same directory as teh
+server.  Name it using the base name of the server; for example, the
+HTML file that describes the netCDF server (made up of &lt;font color='green'&gt;nph-nc&lt;/font&gt;,
+and &lt;font color='green'&gt;nc_das&lt;/font&gt;, &lt;font color='green'&gt;nc_dods&lt;/font&gt; and so on) is called &lt;font color='green'&gt;nc.html&lt;/font&gt;.
+
+This example shows the correct HTML tagging for server information:
+
+&lt;pre&gt;
+&lt;h3&gt;
+Server Function:
+&lt;/h3&gt;
+&lt;dl&gt;
+&lt;dt&gt;geolocate(variable, lat1, lat2, lon1, lon2)&lt;/dt&gt;
+&lt;dd&gt;Returns the elements of &lt;em&gt;variable&lt;/em&gt; that fall
+within the box created by (&lt;em&gt;lat1&lt;/em&gt;,&lt;em&gt;lon1&lt;/em&gt;)
+and (&lt;em&gt;lat2&lt;/em&gt;,&lt;em&gt;lon2&lt;/em&gt;).&lt;/dd&gt;
+&lt;p&gt;
+&lt;dt&gt;time(variable, start_time, stop_time)&lt;/dt&gt;
+&lt;dd&gt;Returns the elements of &lt;em&gt;variable&lt;/em&gt; that fall
+within the time interval &lt;em&gt;start_time&lt;/em&gt; and
+&lt;em&gt;stop_time&lt;/em&gt;.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;
+&lt;/pre&gt;
+
+For datasets, put the HTML file, tagged using the format given below,
+in the same directory as the datasets.  Name it using the base name of
+the datasets; for example, the HTML file for &lt;font color='green'&gt;fnoc1.nc&lt;/font&gt;,
+&lt;font color='green'&gt;fnoc2.nc&lt;/font&gt;, and &lt;font color='green'&gt;fnoc3.nc&lt;/font&gt; might be called &lt;font color='green'&gt;fnoc.html&lt;/font&gt;.
+This example shows the correct HTML for a dataset information file:
+
+&lt;pre&gt;
+&lt;h3&gt;
+About the dataset
+&lt;/h3&gt;
+This is where the server administrator would supply
+information about the dataset.  And so on...
+&lt;p&gt;
+&lt;/pre&gt;
+
+You may prefer to override this method of creating documentation and
+simply provide a single, complete HTML document that contains general
+information for the server or for a group of datasets.  For example,
+to force the info server to return a particular HTML document for all
+its datasets, you would create a complete HTML document and give it
+the name \var{dataset}&lt;font color='green'&gt;.ovr&lt;/font&gt;, where \var{dataset} is the dataset
+name.  The HTML file in this case would look like this:
+
+&lt;pre&gt;
+
+&lt;\html&gt;
+&lt;\head&gt;
+&lt;title&gt;Override document&lt;/title&gt;
+&lt;\/head&gt;
+&lt;\body&gt; 
+Test dataset
+
+This is where the server administrator would supply
+information about the dataset(s) and what-have-you.
+&lt;\/body&gt;
+&lt;\/html&gt;
+
+&lt;/pre&gt;
+
+Remember to ensure that the installation instructions cover installing the
+usage data file in a place where the server can find it.</text>
+      <sha1>fzkku9yw9u5x7654wd1vnn3iq830ozd</sha1>
+    </revision>
+  </page>
+</mediawiki>

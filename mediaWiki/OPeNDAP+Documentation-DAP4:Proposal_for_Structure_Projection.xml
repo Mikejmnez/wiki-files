@@ -1,0 +1,80 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Proposal for Structure Projection</title>
+    <ns>0</ns>
+    <id>814</id>
+    <revision>
+      <id>8097</id>
+      <timestamp>2012-05-01T20:09:31Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <comment>Created page with "==Background==  Assume this running example &lt;source lang="xml"&gt; &lt;Structure name="ST"&gt;   &lt;dimension name=z/&gt;   &lt;Int32 name="f1"&gt;     &lt;dimension value=5/&gt;   &lt;/Int32&gt;   &lt;Int32 name=..."</comment>
+      <origin>8097</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1554" sha1="ivmirh2edhwe0pnc0r0xutbp5kem0gx" xml:space="preserve">==Background==
+
+Assume this running example
+&lt;source lang="xml"&gt;
+&lt;Structure name="ST"&gt;
+  &lt;dimension name=z/&gt;
+  &lt;Int32 name="f1"&gt;
+    &lt;dimension value=5/&gt;
+  &lt;/Int32&gt;
+  &lt;Int32 name="f2"&gt;
+  &lt;Int32 name="f3"&gt;
+&lt;/Structure&gt;
+&lt;/source&gt;
+
+In DAP2, a complete and possibly range-projected structure could be returned using an expression such as this.
+&lt;pre&gt;ST[1:7]&lt;/pre&gt;
+[Note: a range projection is the typical DAP2 projection of a set of
+array dimensions such as A[1:10][31:2:40] ].
+
+If, however, one wanted to return some non-empty subset of the fields of that structure, one had to resort to using multiple separate expressions &amp;ndash; one for each field of interest &amp;ndash; and rely on the implicit rule that such separately chosen fields would be placed into the same structure. So, to get ST with only fields f2 and f3, one had to write something like this.
+&lt;pre&gt;ST[0].f2,ST[0].f3&lt;/pre&gt;
+This introduced the obvious problem of having to figure out which fields should be grouped together. If I had written this
+&lt;pre&gt;ST[0].f2,ST[1].f3&lt;/pre&gt;
+this would have to appear to the client in the resulting DDX as two separate structures using some rename algorithm.
+
+==Proposal==
+I want to propose that we extend the [...] notation to allow the specification of fields (as I have done for [[DAP4: Proposal for a Constraint Notation | relational projections]]). So the above example would be written like this.
+&lt;pre&gt;ST[0][f2,f3]&lt;/pre&gt;
+
+Additionally, nesting would be allowed. This would allow one to write things like this.
+&lt;pre&gt;ST[0][f1[5],f3]&lt;/pre&gt;
+
+[[User:dmh|Dennis]]</text>
+      <sha1>ivmirh2edhwe0pnc0r0xutbp5kem0gx</sha1>
+    </revision>
+  </page>
+</mediawiki>

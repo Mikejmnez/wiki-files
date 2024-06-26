@@ -1,0 +1,59 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Proposal for an abstract Constraint specification</title>
+    <ns>0</ns>
+    <id>824</id>
+    <revision>
+      <id>12111</id>
+      <parentid>8258</parentid>
+      <timestamp>2016-01-14T02:18:15Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Abstract */</comment>
+      <origin>12111</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="885" sha1="aeko03hj57sola42jp19zj8pichwb1e" xml:space="preserve">= Abstract =
+[[User:Jimg|Jimg]] 14:31, 22 May 2012 (PDT) Notes from an open discussion between OPeNDAP and Unidata developers.
+
+Constraints must support subsetting and sampling on the basic data types. These operations are keyed to the types without any domain-specific features.
+
+The constraint language will use server-side functions to support domain-specific subsetting operations. This will enable multiple sets of these kinds of operations. 
+
+This project will define a set of subsetting functions that encapsulate the operations provided by the Common Data Model (CDM).
+
+The functions  (or named sets of functions) applicable will be named in the 'get capabilities' response for each data set, so that clients at least have a shot at knowing what will work. Given that these get capabilities responses can be rendered in HTML, people with a browser can see this information too.</text>
+      <sha1>aeko03hj57sola42jp19zj8pichwb1e</sha1>
+    </revision>
+  </page>
+</mediawiki>

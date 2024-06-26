@@ -1,0 +1,88 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>CopyRights</title>
+    <ns>0</ns>
+    <id>765</id>
+    <revision>
+      <id>7529</id>
+      <parentid>7527</parentid>
+      <timestamp>2012-03-07T05:04:03Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>7529</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2442" sha1="nvvc3ax4qvyd0tvk7kxadm9xhf0wg2b" xml:space="preserve">= Copyrights for OPeNDAP software =
+
+Unless otherwise specified, all software written for OPeNDAP is '''Open Source''' and should be copyrighted using the GNU [http://www.fsf.org/ Free Software Foundation]'s [http://www.fsf.org/licensing/licenses/lgpl.html Lesser General Public License].
+
+== What to do ==
+
+First, you should prefix all of your source code with a header like the following:
+
+&lt;source lang="c"&gt;
+/////////////////////////////////////////////////////////////////////////////
+// This file is part of the "Server4" project, a Java implementation of the
+// OPeNDAP Data Access Protocol.
+//
+// Copyright (c) 2005 OPeNDAP, Inc.
+// Author: Nathan David Potter  &lt;nathan's email here&gt;
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact OPeNDAP, Inc. at PO Box 112, Saunderstown, RI. 02874-0112.
+/////////////////////////////////////////////////////////////////////////////
+&lt;/source&gt;
+
+Make sure to change that header to fit the software you're writing. For example, not all of the code we produce is a library, so change 'library' to 'software,' 'program,' 'server,' ..., whatever is appropriate. Put this at the start of all .c, .cc, .h, .java, et c. files.
+
+Second, in the main directory of the software's distribution, include a copy of the license in a file named [[File:COPYING.txt |COPYING]]. In the README file, which should also appear in the distribution's main directory, explain that the license is in the file named 'COPYING'.
+
+== What about books and the like? ==
+
+There is a GNU open source license specifically tailored to documentation. This is not needed for files like README, INSTALL, but it is appropriate for larger documents such as our User's Guide. See the [http://www.fsf.org/ FSF] Web site for details.</text>
+      <sha1>nvvc3ax4qvyd0tvk7kxadm9xhf0wg2b</sha1>
+    </revision>
+  </page>
+</mediawiki>

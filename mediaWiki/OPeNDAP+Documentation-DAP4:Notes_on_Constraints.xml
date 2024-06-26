@@ -1,0 +1,73 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Notes on Constraints</title>
+    <ns>0</ns>
+    <id>810</id>
+    <revision>
+      <id>8077</id>
+      <parentid>8073</parentid>
+      <timestamp>2012-04-29T18:05:45Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <origin>8077</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1856" sha1="00lb043efcyz505mgr8o3oo95r3qhl8" xml:space="preserve">[[Development#OPULS_Development | &lt;-- back to OPULS Development]]
+
+=== This page contains various thoughts about DAP4 constraints. ===
+
+====Projections====
+There are two kinds of "projection" implicit in DAP2 constraints.
+# Range projections such as A[0:2:22] where the result keeps the same rank, but the dimensions sizes are reduced and the result is a subset of the values in the original array, A.
+# Column projections, which are the traditional relation projections in which a relation (Sequence) has some of its columns (fields) removed. This might convert, for example, Sequence {int32 f1; float32 f2;} to Sequence {int32 f1;} if column/field f1 is projected away.
+
+One oddity (flaw?) in the way DAP2 constraints are constructed is that they completely separate a (column) projection specification from any associated selection constraint. This makes interpretation of the constraint somewhat more difficult and also has the consequence that it is impossible to return two different projection+selection combinations over the same sequence/relation. I think, that we should strongly consider modifying the grammar of constraints to use something much closer to the SQL project-where kind of construct. 
+
+==== Extended Dimensional Selection====
+With respect to [[DAP4: Subsetting Arrays and Grids By Value | Nathan's proposal for selections]], I might note that it does lose dimensional information that might be both useful and performance enhancing. For instance, it might be useful to be able to say something like
+&lt;pre&gt;?sal[0:22][0:9][]&lt;3.2&lt;/pre&gt;
+and get something back like this:
+&lt;font size="2"&gt;&lt;source lang="xml"&gt;
+&lt;Sequence name="sal"&gt;
+    &lt;Float64 name="sal"&gt;
+      &lt;Dimension size="23" /&gt;
+      &lt;Dimension size="10" /&gt;
+    &lt;/Float64&gt;
+    &lt;Float32 name="lat"/&gt;
+    &lt;Float32 name="lon"/&gt;
+    &lt;Float32 name="depth"/&gt;
+&lt;/Sequence&gt;
+&lt;/source&gt;&lt;/font&gt;</text>
+      <sha1>00lb043efcyz505mgr8o3oo95r3qhl8</sha1>
+    </revision>
+  </page>
+</mediawiki>

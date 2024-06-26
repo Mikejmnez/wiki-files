@@ -1,0 +1,93 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Possible Notation for Server Commands</title>
+    <ns>0</ns>
+    <id>745</id>
+    <revision>
+      <id>7964</id>
+      <parentid>7962</parentid>
+      <timestamp>2012-04-13T19:48:31Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <origin>7964</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3805" sha1="9smvx5j2583j3dud6uuiclewxpcwttu" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+==Background==
+Looking to the future, it is clear that eventually
+our query language, or more generically our [[DAP4: URL Annotations | server commands ]] must encompass three classes of computations.
+# Queries in the DAP2 sense,
+# Commands to control the processing of requests on the server (i.e. thing like caching),
+# Server-side processing.
+
+I want to propose a notation for everything in the URL after the "?". I think this notation has the ability to represent a wide variety of features without, I hope, being too generic.
+
+== Proposal ==
+The notation is basically nested functions combined with single assignment variables. A semantically nonsensical, but grammatical example would look something like this.
+ ?svc("cmd");$x=f("string17",g(h(12))),f2($x,[0:3:10])
+Everything  past the "?" is in the form of a semi-colon separated list of expression lists. An expression list is a comma separated list of nested function invocations, possibly assigned to a variable. Anything that begins with a dollar sign is considered a local, temporary, variable, anything that does not look like a function call (i.e. name followed immediately by left paren) is assume to be what I will call a non-quoted string constant; standard quoted string constants are also allowed. Each function has an arbitrary number of argument expressions separated by commas.
+
+BTW, the term "single assignment" means that a variable may only be assigned to once, but may be referenced as many times as desired after that.
+
+One important issue involves providing namespaces for function names. That is, there will be standard pre-defined functions, server-specific functions, and even dynamically defined functions. In order to define a namespace, it is necessary to provide some kind of marker in function names. I have chosen the Java fully qualified name model in which the marker is the dot character.
+
+The idea is that any function name has a fully qualified name specified using dot separators. Names that have no dots (modulo import below) are assumed to be in the pre-defined standard namespace.
+
+The management of that namespace tree must be determined, with some mechanisms for allowing others to assign functions in the namespace. Also, some form of import mechanism ala Java would be desirable as a separate server command.
+
+
+== Syntactic and Lexical Structure ==
+I have defined a preliminary [http://dl.dropbox.com/u/53929684/query.y syntax document] and [http://dl.dropbox.com/u/53929684/query.lex lexical document] for the ideas presented here.
+
+== Discussion ==
+The purpose of providing multiple expression lists separated by semi-colons is to support the a visible notation for specififying server commands separate from constraint evaluation.
+
+My hypothesis is that this notation should also be able to handle most kinds of server side processing by defining and composing functions.
+
+The standard projection+selection constraints of DAP2 can be represented using a special constraint() function whose argument is the standard DAP2 constraint. Alternatively, one could define a collection of nested functions to do the same thing.
+
+An important issue involves the construction of a DDX from a constraint. I have begun this discussion [[DAP4: Constructing a DDX from a Query | here ]]
+
+I hypothesize that Ferret notations coud be represented in my proposed function notation without having to clutter up the URL format. Consider this Ferret expression.
+: &lt;nowiki&gt;http://.../thredds/dodsC/hfrnet/agg/6km_expr_{}{let deq1ubar=u[d=1,l=1:24@ave]}&lt;/nowiki&gt;
+
+A possible equivalent (assuming I understand the Ferret expression) might look like this.
+: &lt;nowiki&gt;?avg(u[1,1:24])&lt;/nowiki&gt;
+
+
+''-Dennis Heimbigner''</text>
+      <sha1>9smvx5j2583j3dud6uuiclewxpcwttu</sha1>
+    </revision>
+  </page>
+</mediawiki>

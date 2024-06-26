@@ -1,0 +1,70 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Double Quotes in Constraint Expressions</title>
+    <ns>0</ns>
+    <id>436</id>
+    <revision>
+      <id>6535</id>
+      <parentid>3302</parentid>
+      <timestamp>2011-06-22T17:02:26Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* examples */</comment>
+      <origin>6535</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1987" sha1="5y15sl8846zj2e1zqtaizv2x2pb3dex" xml:space="preserve">==DAP 3.2==
+
+Double quotes (") can be used to quote any identifier in a Constrain Expression. 
+
+==Rationale==
+
+Many data sets us identifier names which contain characters other than those that qualify as an identifier in a programming language like C. For example, using an ampersand (&amp;) in a variable name will cause a conflict with the meaning of an ampersand as a prefix AND operator in the CE's selection clause. Enclosing the identifier name in double quotes resolves the ambiguity. The same can be said for other DAP/CE meta-characters like the dot (.) which serves as a separator for the name of a Structure, et c., and its fields. 
+
+===examples===
+
+;scale factor
+:"scale factor" or scale%20factor or "scale%20factor"
+
+;level_2 data.scale factor
+:"level_2 data"."scale factor" and the %20 variants. Note that each component of the full field name is quoted separately so the dot (.) will be read by the parser
+
+;level.2.data&amp;errors
+:"level.2"."data&amp;errors" In this example, the first dot is part of the variable name and the second is a separator between a field and its container
+
+==Implementation Note==
+
+In libdap++ we use a pair of functions to encode and decode strings so they meet the criteria set forth for characters in a URL as described by RFC 2396. We also store strings (identifiers) internally in the library so that they have spaces 'escaped' using ''%20'' because this makes it easier to parse names with spaces (since most scanners group lexemes into tokens based on whitespace). We assume that all information in a URL will have been encoded using the ''%&lt;hex-digit&gt;&lt;hex-digit&gt;'' notation as per RFC 2396 and decode the identifiers when they are read from the URL, with the exception that we allow some characters (e.g., spaces) to remain encoded because it simplifies the implementation of our scanners and parsers. There's no need to do this. However, we are mentioning it here because it seems like a useful trick when dealing with the constraint expressions.</text>
+      <sha1>5y15sl8846zj2e1zqtaizv2x2pb3dex</sha1>
+    </revision>
+  </page>
+</mediawiki>

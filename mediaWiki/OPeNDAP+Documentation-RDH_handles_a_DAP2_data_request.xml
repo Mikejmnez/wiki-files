@@ -1,0 +1,170 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>RDH handles a DAP2 data request</title>
+    <ns>0</ns>
+    <id>480</id>
+    <revision>
+      <id>4119</id>
+      <parentid>4118</parentid>
+      <timestamp>2009-05-05T17:48:38Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Basic Flow */</comment>
+      <origin>4119</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="8041" sha1="d8151nlv3h5o2xwi3ua6sahebl5fo08" xml:space="preserve">'''Point Of Contact:''' ''A Human''
+
+== Description ==
+&lt;font size="-2" color="green"&gt;''Give a short descriptive name for the use case to serve as a unique identifier.''&lt;/font&gt;
+
+The RDH receives and responds to a bes:get request for DAP2 data.
+
+== Goal ==
+&lt;font size="-2" color="green"&gt;''The goal briefly describes what the user intends to achieve with this use case.''&lt;/font&gt;
+
+== Summary == 
+&lt;font size="-2" color="green"&gt;''Give a summary of the use case to capture the essence of the use case (no longer than a page). It provides a quick overview and includes the goal and principal actor.''&lt;/font&gt;
+
+The BES receives a request for a DAP2 data that it identifies as being serviceable by the RDH.&lt;font color="red"&gt;How does it determine this?&lt;/font&gt;
+The RDH determines which ODBC Data Source is associated with the request, conneccts to the Data Sources and uses the introspection methods of ODBC to collect information about the tables and views in the target database. From this information the RDH builds a DDS instance that represents the Data Source. The RDH converts the DAP2 constraint expression (or lack thereof) from the request into an SQL query string(s). It then serializes the DDS, retrieving data from the ODBC Data Source using the SQL query string(s) to get the data to populate the DAP2 data content of the response.
+
+== Actors ==
+&lt;font size="-2" color="green"&gt;''List actors, people or things outside the system that either acts on the system (primary actors) or is acted on by the system (secondary actors). Primary actors are ones that invoke the use case and benefit from the result. Identify sensors, models, portals and relevant data resources. Identify the primary actor and briefly describe role.''&lt;/font&gt;
+
+=== Primary Actors ===
+; client
+: A BES client application
+
+=== Secondary Actors ===
+; RDBMS
+: A relational database system holding the data required to fulfill the request
+
+== Preconditions ==
+&lt;font size="-2" color="green"&gt;''Here we state any assumptions about the state of the system that must be met for the trigger (below) to initiate the use case. Any assumptions about other systems can also be stated here, for example, weather conditions. List all preconditions.''&lt;/font&gt;
+
+# The BES is installed and configured - including the correct [[Adding the RDH to the BES   | installation and configuration of the RDH]]
+# The RDBMS database with tables and/or views associated with the Data Source associated with the requested DAP2 data is available.
+
+== Triggers ==
+&lt;font size="-2" color="green"&gt;''Here we describe in detail the event or events that brings about the execution of this use case. Triggers can be external, temporal, or internal. They can be single events or when a set of conditions are met, List all triggers and relationships.''&lt;/font&gt;
+
+* A client issues a bes:get command for DAP2 data associated with a Data Source exposed by the RDH
+
+== Basic Flow ==
+&lt;font size="-2" color="green"&gt;''Often referred to as the primary scenario or course of events. In the basic flow we describe the flow that would be followed if the use case where to follow its main plot from start to end. Error states or alternate states that might be highlighted are not included here. This gives any browser of the document a quick view of how the system will work. Here the flow can be documented as a list, a conversation or as a story.(as much as required)''&lt;/font&gt;
+
+# The BES receives from a BES client a request containing bes:get command for a DAP2 data response for data help by a Data Source in the RDH:&lt;tt&gt;
+#:&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+#:&lt;bes:request xmlns:bes="http://xml.opendap.org/ns/bes/1.0#" reqID="[http-8080-2:17:bes_request]"&gt;
+#:&amp;nbsp;&amp;nbsp; &lt;bes:setContext name="xdap_accept"&gt;2.0&lt;/bes:setContext&gt;
+#:&amp;nbsp;&amp;nbsp; &lt;bes:setContext name="dap_explicit_containers"&gt;no&lt;/bes:setContext&gt;
+#:&amp;nbsp;&amp;nbsp; &lt;bes:setContext name="errors"&gt;dap2&lt;/bes:setContext&gt;
+#:&amp;nbsp;&amp;nbsp; &lt;bes:setContainer name="catalogContainer" space="catalog"&gt;/data/stuff/dataSourceOne&lt;/bes:setContainer&gt;
+#:&amp;nbsp;&amp;nbsp; &lt;bes:define name="d1" space="default"&gt;
+#:&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;bes:container name="catalogContainer" /&gt;
+#:&amp;nbsp;&amp;nbsp; &lt;/bes:define&gt;
+#:&amp;nbsp;&amp;nbsp; &lt;bes:get type="dods" definition="d1" /&gt;
+#:&lt;/bes:request&gt;&lt;/tt&gt;
+#: &lt;font color="red"&gt;''Make sure to update this to match what we actuall use! [[User:Ndp|ndp]] 16:27, 28 April 2009 (PDT) ''&lt;/font&gt;
+# In the BES, the RDH is identified as the service will provide the requested DAP2 data.
+# The RDH determines which ODBC Data Source is associated with the requested DAP2 data.
+# The RDH uses the ODBC introspection API to get the structural &lt;font color="red"&gt;(''do i mean schema here? [[User:Ndp|ndp]]'')&lt;/font&gt; descriptions of the tables and views held by the ODBC Data Source.
+# The RDH instantiates/constructs a DDS class instance in memory that reflects the [[RDH: Mapping the ODBC data model to the DAP2 data model  | DAP data model representation of the tables and views]] held by the ODBC Data Source using the information collected in the previous step.
+# The RDH applies  the constraint expression to the DDS instance. (marks all of the projected variables).
+# The RDH converts the constraint expression (or the lack of one if none is present) into one or more SQL query strings.
+# The RDH uses the ODBC API to send the SQL query string(s) to the Data Source.
+# The RDH uses the ODBC API retrieve the ''row set(s)'' returned.
+# The RDH uses the ODBC API and the DDS instance to serialize the DAP2 data response to the BES client, while applying any as yet unresolved query conditions (conditions that were not converted into part of the SQL query string(s).)
+
+== Alternate Flow ==
+&lt;font size="-2" color="green"&gt;''Here we give any alternate flows that might occur. May include flows that involve error conditions. Or flows that fall outside of the basic flow.''&lt;/font&gt;
+
+== Post Conditions ==
+&lt;font size="-2" color="green"&gt;''Here we give any conditions that will be true of the state of the system after the use case has been completed.''&lt;/font&gt;
+
+At the end of the Basic Flow the RDH will have returned to a ready state, awaiting the next transaction.
+
+== Activity Diagram ==
+&lt;font size="-2" color="green"&gt;''Here a diagram is given to show the flow of events that surrounds the use case.''&lt;/font&gt;
+
+== Notes ==
+&lt;font size="-2" color="green"&gt;''There is always some piece of information that is required that has no other place to go. This is the place for that information.''&lt;/font&gt;
+
+== Resources ==
+&lt;font size="-2" color="green"&gt;''In order to support the capabilities described in this Use Case, a set of resources must be available and/or configured.  These resources include data and services, and the systems that offer them.  This section will call out examples of these resources.''&lt;/font&gt;
+
+
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+| BES
+| Data Provider
+| The data server
+| Assumed available as it is the framework from within which the RDH operates.
+| Hardware running the BES.
+|-
+| ODBC Driver
+| Data Provider
+| The ODBC driver compatible with the target RDBMS.
+| Open source availability for most open source RDBMSs. Purchase availability fr others.
+| Hardware running the BES.
+|-
+| ODBC configuration
+| Data Provider
+| A system level ODBC configuration
+| Operating system dependent. Complexity of creation a function of target OS.
+| Hardware running the BES.
+
+|-
+| ODBC Data Sources
+| Data Provider
+| A Data Source definition for each RDBMS database to be served as a DAP Dataset
+| Operating system dependent. Complexity of creation a function of target OS.
+| Hardware running the BES.
+
+|-
+| Target RDBMS(s)
+| Database Operator/Provider
+| The relational database management system(s) that will provide the data server by the RDH.
+| Depends on level of operators permission in the RDBMS and it's host system. At minimum SQL SELECT access must be available on all databases, tables, and views which will be served.
+| Hardware running the RDMS. Not required to be the same system running the BES.
+
+|}</text>
+      <sha1>d8151nlv3h5o2xwi3ua6sahebl5fo08</sha1>
+    </revision>
+  </page>
+</mediawiki>

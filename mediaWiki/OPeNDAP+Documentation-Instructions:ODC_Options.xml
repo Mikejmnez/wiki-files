@@ -1,0 +1,63 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Instructions : ODC Options</title>
+    <ns>0</ns>
+    <id>658</id>
+    <revision>
+      <id>6421</id>
+      <parentid>6419</parentid>
+      <timestamp>2011-05-06T19:46:56Z</timestamp>
+      <contributor>
+        <username>Nbathani</username>
+        <id>44</id>
+      </contributor>
+      <origin>6421</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="799" sha1="35p3mj3dh1410gju0wuu5bt5yii1j23" xml:space="preserve">There are a number of options possible in the ODC. The options are listed in a text box in the "Options" tab. It looks like this:
+
+[[image:instruction_options.png]]&lt;br&gt; &lt;br&gt;
+&lt;!-- how to --&gt;
+&amp;nbsp;&lt;b&gt;Step-By-Step&lt;/b&gt;
+
+* Select the option you want to modify in the list (single click)&lt;br&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;[the current value of the option will appear in the text box below]&lt;br&gt;
+* Modify the contents of the text box to the value you want&lt;br&gt;
+* Click the "update" button or press enter to complete the change&lt;br&gt;
+
+Tip: entering "y" or "n" is good enough for the yes/no values&lt;br&gt;
+
+You can learn more about plotting by perusing the [[OPeNDAP_Data_Connector_Web_Guide#Check_out_the_ODC_Plot_Gallery | plot gallery]].&lt;br&gt;
+
+See our [http://www.opendap.org OPeNDAP home] for more information about OPeNDAP.</text>
+      <sha1>35p3mj3dh1410gju0wuu5bt5yii1j23</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,208 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: DAP4 Filter Constraints</title>
+    <ns>0</ns>
+    <id>844</id>
+    <revision>
+      <id>9670</id>
+      <parentid>9405</parentid>
+      <timestamp>2013-07-22T19:22:35Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Discussion */</comment>
+      <origin>9670</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7022" sha1="o58alv17eqwvl4w1fa5vossvzxcf3ch" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt;back to OPULS Development]]
+
+Revised: 9/21/2012 [[User:dmh|Dennis]]
+
+Authors: [[User:dmh|Dennis Heimbigner]], John Caron, Ethan Davis
+
+==Background==
+
+One of the unaddressed issues for sequences is the degree to
+which they should support relational operators, and specifically
+joins and equivalent operations such as selections involving
+multiple sequences.
+
+Some time ago, in one of our telecons, Nathan
+proposed the idea of forcing all complex relational queries to be
+pre-built on the server. The idea was that this would allow the
+server to limit relational queries to those that could be
+performed in a computationally efficient and secure fashion.
+
+I am making a proposal for an alternative to complex
+client-specified queries under the assumption that
+we adopt the idea of pre-defined server-side queries.
+
+== Proposal ==
+
+First, I assume that all complex queries are pre-built
+on the server in the form of server-side functions. The term
+"complex" here effectively means any query that involves joins
+(explicit or implicit) or unions or intersections.
+
+Under this assumption, I would then propose that we replace
+the DAP2 selection constraint with a combination of
+projection plus "filter" constraint.  I deliberately use the
+term "filter" instead of "selection" to indicate its more
+limited semantics.
+
+The filter is a predicate over the fields of a
+sequence record. In effect it specifies a subset of
+sequence records to transmit to the client. When the predicate
+applied to a record evaluates to true, the record is tranmitted,
+otherwise it is suppressed.
+
+Projection (in the SQL sense) is supported by allowing a
+reference to a Sequence to select only certain fields to be
+transmitted. 
+
+The proposed syntax for filters is as follows:
+&lt;pre&gt;
+&amp;lt;sequence-projection&amp;gt; | &amp;lt;filter-predicate&amp;gt;
+&lt;/pre&gt;
+The '|' can be read as "such that".
+
+The syntax of the filter predicate would be a standard
+expression where the atomic (leaf) elements of the predicate
+would be either fields of the sequence record or constants.
+The allowed operators would be boolean (&amp;&amp; || !),
+comparison (= != &gt; &lt; &gt;= &lt;=) and arithmetic (+ - * / %).
+I do not think there is any syntactic ambiguity here, but to be sure,
+we could require the filter predicate to be enclosed in parentheses.
+
+The "sequence-projection" has the following syntax.
+&lt;pre&gt;
+&amp;lt;sequence-name&amp;gt;'[' record-variable-name (',' record-variable-name)* ']'
+&lt;/pre&gt;
+The list of record names indicates which part of each sequence are to be
+transmitted. Note that filtering is applied before sequence projection.
+
+==Examples==
+Suppose we have this sequence variable.
+&lt;pre&gt;
+&amp;lt;Sequence name="S"&amp;gt;
+  &amp;lt;Int32 name="field1"/&amp;gt;
+  &amp;lt;Float32 name="field2"/&amp;gt;
+&amp;lt;/Sequence&amp;gt;
+&lt;/pre&gt;
+Example filters might be as follows:
+# S|(field1 &amp;gt; 5 &amp;&amp; field2 &amp;lt;= 100.0)&lt;br&gt;This would transmit all records in S that met the specified predicate.
+# S[field2]|(field1 == field2)&lt;br&gt;Transmit projected records of S matching the specified predicate. The projected record would contain only the field "field1". 
+
+Consider this more complicated example.
+&lt;pre&gt;
+&amp;lt;Sequence name="S"&amp;gt;
+  &amp;lt;Int32 name="field1"/&amp;gt;
+  &amp;lt;Structure name="field2"&amp;gt;
+       &amp;lt;Int64 name="v1"/&amp;gt;
+       &amp;lt;Int64 name="v2"/&amp;gt;
+     &amp;lt;Dimension size="15"/&amp;gt;
+     &amp;lt;Dimension size="*"/&amp;gt;
+  &amp;lt;/Structure&amp;gt;
+  &amp;lt;Float32 name="field3"/&amp;gt;
+&amp;lt;/Sequence&amp;gt;
+&lt;/pre&gt;
+Ideally, one might specify the following filter.
+# S|(field2[7][5].v2 == 37.0)
+
+I say "ideally" because it is not obvious to me that references to
+specific instances of dimensioned object is of any use to anyone. I would
+need a use case to be convinced.
+
+[Note: even more strongly, I am not sure I like being able to do this.
+I would prefer restricting
+the filter variables to refer to only atomic typed top-level fields
+of the Sequence (see next section).]
+
+==Implementation==
+Implementation of this concept is not quite as simple as one might think.
+The key problem has to do with searching a record instance to locate the
+specified fields.
+
+Consider our previous example. In order to locate, say, "field3"
+one might have to traverse all of the dimensioned structure "field2".
+The efficiency of this is highly dependent on how the sequence records
+are represented on the server.
+
+==Discussion==
+The advantage of the filter approach is that it
+should be easier (but not necessarily easy) to
+implement than more complex queries; it certainly
+would be easier to implement than the DAP2 select constraints.
+Further, it is not dependent on the sequence being represented
+in a relational database.
+
+I hypothesize that the filter mechanism would be
+capable of representing most of the real-world
+examples that have been encountered in DAP2.
+
+Note that limiting complex queries to be encapsulated
+in server side functions is without loss of generality since someone could
+be so foolish as to define a server-side function
+that took a full SQL query as an argument and executed it
+on the server.
+
+[[User:Ndp|ndp]] 07:10, 21 September 2012 (PDT)
+I like this idea, and I want to put forward this corollary:
+What if we were to say that we would allow the use of this
+type of constraint on arrays (i.e. subsetting by value), and
+as a result the request would return a Sequence of the
+matching values? In other words, whenever you use a "filter"
+constrain the returned object is ALWAYS a Sequence.
+
+[[User:dmh|Dennis]] 3PM 9/21/2012 With respect to relational databases,
+I note that it may be the case that the Sequence S is actually
+being stored in a relational database on the server. In this
+situation, it is possible
+to turn the filter into an equivalent SQL expression except for
+references to structure fields e.g. field2. It is likely that such fields
+would be represented as BLOBs in the database and hence not easy
+to apply a predicate to them.  This is one reason to consider limited
+the types of fields that can appear in a filter predicate.
+
+[[User:dmh|Dennis]] 3:30PM 9/21/2012
+I also should note that the form S[field1] is ambiguous with respect to
+the range syntax proposed in the DAP4 spec. field1 could be interpreted
+as being a name of a defined range (e.g. using field1=[1:3:5]). This can
+only be disambiguated by determining (in a context sensitive manner) that
+S is a sequence.
+
+[[User:Jimg|Jimg]] 08:54, 24 September 2012 (PDT) I think this is a good way of looking at Sequences and ways to extract elements from them 'by value,' which is very important. I agree with all of Dennis' stipulations and, I believe, all of his conjectures. Also, I like Nathan's corollary, as well. I like less the idea that we represent these filter operations as server functions because of exactly the same reason Dennis gave in an email - that doing so provides too much 'wiggle room' for servers. I think thse operations on this datatype are not &lt;del&gt;operational&lt;/del&gt; optional in the same way that hyperslabbed access to an array is not optional.</text>
+      <sha1>o58alv17eqwvl4w1fa5vossvzxcf3ch</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,142 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>ASCII Data DDX</title>
+    <ns>0</ns>
+    <id>582</id>
+    <revision>
+      <id>5783</id>
+      <parentid>5782</parentid>
+      <timestamp>2010-08-03T13:07:19Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Questions */</comment>
+      <origin>5783</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3369" sha1="2alqzikqjp4u3pxlykhp3wspo8c130p" xml:space="preserve">== Proposal ==
+Although inefficient, a pure XML data response could be very useful for inferencing engines. I imagine a response in which variables contain their values, much like Attributes. Consider this modified DDX:
+
+ &lt;Dataset name="bears.nc"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="http://xml.opendap.org/ns/DAP/3.3#"
+ &gt;
+    &lt;Grid name="bears"&gt;
+        &lt;Array name="bears"&gt;
+            &lt; Float32/&gt;
+            &lt;dimension name="i" size="2"/&gt;
+            &lt;dimension name="j" size="3"/&gt;
+            &lt;value&gt;72.022&lt;/value&gt;
+            &lt;value&gt;72.184&lt;/value&gt;
+            &lt;value&gt;72.256&lt;/value&gt;
+            &lt;value&gt;72.745&lt;/value&gt;
+            &lt;value&gt;72.297&lt;/value&gt;
+            &lt;value&gt;72.367&lt;/value&gt;
+        &lt;/Array&gt;
+        &lt;Map name="i"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="i" size="2"/&gt;
+            &lt;value&gt;1&lt;/value&gt;
+            &lt;value&gt;2&lt;/value&gt;
+        &lt;/Map&gt;
+        &lt;Map name="j"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="j" size="3"/&gt;
+            &lt;value&gt;92&lt;/value&gt;
+            &lt;value&gt;93&lt;/value&gt;
+            &lt;value&gt;94&lt;/value&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+ &lt;/Dataset&gt;
+We would need to iron out the details of how the &lt;value&gt; elements could be are for the various data types. Possible ideas:
+
+* Simply use the same ordering and markers we use now in the XDR encoded binary content, and simply produce all of the values as their ASCII versions, suitably encoded for XML content.
+** Grids, and Structures could embed the variable values as above.
+** Sequences would have a a single list of values whose deserialization into the DAP data object would be governed by the template.
+ &lt;Dataset name="bears.nc"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="http://xml.opendap.org/ns/DAP/3.3#"
+ &gt;
+    &lt;Sequence name="bears"&gt;
+        &lt;Array name="bears"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="i" size="2"/&gt;
+            &lt;dimension name="j" size="3"/&gt;
+        &lt;/Array&gt;
+        &lt;Array name="i"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="i" size="2"/&gt;
+        &lt;/Map&gt;
+        &lt;Aray name="j"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="j" size="3"/&gt;
+        &lt;/Map&gt;
+        &lt;value&gt;0x5a&lt;/value&gt;
+        &lt;value&gt;72.022&lt;/value&gt;
+        &lt;value&gt;72.184&lt;/value&gt;
+        &lt;value&gt;72.256&lt;/value&gt;
+        &lt;value&gt;72.745&lt;/value&gt;
+        &lt;value&gt;72.297&lt;/value&gt;
+        &lt;value&gt;72.367&lt;/value&gt;
+        &lt;value&gt;1&lt;/value&gt;
+        &lt;value&gt;2&lt;/value&gt;
+        &lt;value&gt;92&lt;/value&gt;
+        &lt;value&gt;93&lt;/value&gt;
+        &lt;value&gt;94&lt;/value&gt;
+        &lt;value&gt;0x5a&lt;/value&gt;
+        &lt;value&gt;72.022&lt;/value&gt;
+        &lt;value&gt;72.184&lt;/value&gt;
+        &lt;value&gt;72.256&lt;/value&gt;
+        &lt;value&gt;72.745&lt;/value&gt;
+        &lt;value&gt;72.297&lt;/value&gt;
+        &lt;value&gt;72.367&lt;/value&gt;
+        &lt;value&gt;1&lt;/value&gt;
+        &lt;value&gt;2&lt;/value&gt;
+        &lt;value&gt;92&lt;/value&gt;
+        &lt;value&gt;93&lt;/value&gt;
+        &lt;value&gt;94&lt;/value&gt;
+        &lt;value&gt;0xa5&lt;/value&gt;
+    &lt;/Sequence&gt;
+ &lt;/Dataset&gt;
+:* Alternately we could try embedding the values in the template variables. Each variable would have a sequence of &lt;value&gt; elements representing its value in each row of the parent Sequence. I think this is sub optimal because of memory and response generation efficiency concerns.
+
+==Questions==
+What extension will we use to trigger this response? 
+
+Suggestions:
+* .dodx (not in use as an extension)
+* .axml (may be in use)
+* .ascx (in use http://www.fileinfo.com/extension/ascx)
+* .addx (not in use)</text>
+      <sha1>2alqzikqjp4u3pxlykhp3wspo8c130p</sha1>
+    </revision>
+  </page>
+</mediawiki>

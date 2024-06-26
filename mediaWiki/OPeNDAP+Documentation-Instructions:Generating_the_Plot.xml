@@ -1,0 +1,59 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Instructions : Generating the Plot</title>
+    <ns>0</ns>
+    <id>656</id>
+    <revision>
+      <id>6422</id>
+      <parentid>6420</parentid>
+      <timestamp>2011-05-06T19:47:20Z</timestamp>
+      <contributor>
+        <username>Nbathani</username>
+        <id>44</id>
+      </contributor>
+      <origin>6422</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="848" sha1="lyuim1ni6ezv4rx72qv0n26cg90dnpi" xml:space="preserve">Generating the plot is as easy as clicking the blue plot button. The plotter is designed so that in nearly all cases you will always get some sort of plot when you press the plot button no matter what the data set is (unless it is empty or has only a single value). There are some important options, though, such as the output target. The area of the screen with the controls for generating the plot is shown below:
+&lt;br&gt;&lt;br&gt;
+[[image:instruction_plot.png]] &lt;br&gt; &lt;br&gt;
+&lt;!-- how to --&gt;
+&lt;b&gt;Step-By-Step&lt;/b&gt;
+
+* If you have data loaded and selection click the plot button and the plot will be drawn and sent to the output specified.
+
+
+You can learn more about plotting by perusing the [[OPeNDAP_Data_Connector_Web_Guide#Check_out_the_ODC_Plot_Gallery | plot gallery]].&lt;br&gt;
+
+See our [http://www.opendap.org OPeNDAP home] for more information about OPeNDAP.</text>
+      <sha1>lyuim1ni6ezv4rx72qv0n26cg90dnpi</sha1>
+    </revision>
+  </page>
+</mediawiki>

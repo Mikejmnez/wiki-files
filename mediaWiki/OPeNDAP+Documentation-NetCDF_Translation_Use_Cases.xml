@@ -1,0 +1,100 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>NetCDF Translation Use Cases</title>
+    <ns>0</ns>
+    <id>397</id>
+    <revision>
+      <id>2720</id>
+      <parentid>2719</parentid>
+      <timestamp>2009-01-09T20:47:57Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Use Cases for the &lt;nop&gt;NetCDF Client Library's Translation Feature(s) */</comment>
+      <origin>2720</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6200" sha1="iimlngpxf86y3fofm63qfah491fp5if" xml:space="preserve">==Use Cases for the NetCDF Client Library's Translation Feature(s)==
+
+===Actors===
+
+Developers, End users of analysis programs.
+
+===Use cases===
+
+Break the use cases into three groups, one for each of the data types. There are some features that are common to all of these and those will be broken out as 'common use cases' even though maybe they should be considered common 'features' instead.
+
+Looking over these some more, it's more like they are features and not use cases... -- Main.JamesGallagher - 03 Nov 2004
+
+# Structure
+## Structure names should collapse so that a struct1 with var1 and var2 becomes struct1.var1 and struct1.var2. Using these names will make CEs work as expected, too. %GREEN%Done.%ENDCOLOR%
+## Make sure to handle arrays of Structures. Make sure to name the dimensions (when un-named) &amp;lt;struct name&amp;gt;-unnamed-&amp;lt;i&amp;gt; for i = 0 ... N-1 for N dimensions. This will indicate to clients that the different variables' share common dimensions. %ORANGE%Low Priority; Arrays of Structures occur rarely.%ENDCOLOR%
+## Attributes: Copy the attributes of var1 to struct1.var1. %GREEN%Done. The S2000415.HDF file can be used to test this. It appears to work correctly.%ENDCOLOR%
+## Attributes: Given a Structure struct1 and to variable var1 and var2, the attributes of the translated variable struct1.var1 are those of struct1 merged with var1. Similarly, struct1.var2 has the attributes of var2 and struct1 combined. %ORANGE%Low Priority; Most Structures don't have their own attributes.%ENDCOLOR%
+# Sequence
+## The CL is used to open a data source with one, single-level Sequence: The Sequence should appear as a collection of arrays.%GREEN% Done. %ENDCOLOR%
+## The CL is used to open a data source with a nested Sequence: The Sequence should appear as a collection of arrays, where the Sequence hierarchy is 'flattened' so that values in the outer level are repeated. %RED%Skip This until everything else is done. It's hard and the other requirements, when put together, add up to something that many peope will find very useful.%ENDCOLOR%
+## The CL is used to open a data source with a constraint expression: The CE will determine how many elements of the Sequence are returned. 
+## The CL is used to open a data source with a Sequence but no CE is given: The first 100 elements of the Sequence will be accessed. %GREEN% Done. Sort of. If limit is not specified, only one value is accessed. If it is given, limit values are accessed. %ENDCOLOR%
+## An end-user opens a data source using no CE, looks at the first hundred values of a Sequence and then closes and reopens the data source, this time using a CE.
+## Attributes. %ORANGE%Low priority: most Sequences don't have thier own attributes.%ENDCOLOR%
+# String
+## The CL should represent DAP Strings as char arrays with the single dimension named &amp;lt;var-name&amp;gt;-chars.
+## The size of the array should be max-length (255) characters unless limit-&amp;lt;var-name&amp;gt; is used to specify a limit.
+## If the size of the string is larger than limit, then replace the last three chars with '...'. If it's shorter than limit, pad with nulls.
+## Attributes
+# Global attributes
+## translation-scheme: String attribute. Added to the NC_GLOBAL attribute container. %GREEN%Done for Sequences and Structures. 10/25%ENDCOLOR%
+## The CL opens a data source which has a NC_GLOBAL attribute container. Use the attribtues in that as the global attributes. %GREEN%Done. Test: &lt;nop&gt;NCConnectTest (using fnoc1.nc). %ENDCOLOR%
+## The CL opens a data source which does not have a NC_GLOBAL container. Search for another likely candidate and use that. %GREEN%Done. Test: &lt;nop&gt;NCConnectTest (using 3B42.980909.5.HDF). %ENDCOLOR%
+## The CL opens a data source which has nested attribtues in the global container. Flatten it and use the resulting attributes. %GREEN%Done. Test: &lt;nop&gt;NCConnectTest(using 3B42.980909.5.HDF). When attributes are flattened, a colon (:) is used to separate the original names in the new attribute's name.%ENDCOLOR%
+
+===Common use cases:===
+
+# Behavior of client-side URL parameters
+## limit: Implement this first. The limit parameter sets the default size for variably-sized values. For a Sequence this means setting the number of rows of that Sequence which will be read.  This size is then reported via the netCDF API as the number of dimensions in the arrays which correspond to the fields of the Sequence. When preload is true, this is not used. %GREEN% Done. 11/3. %ENDCOLOR%
+## preload: implement this second but not until translation for Sequences is complete. What does this mean for Strings? When true, load values when the data source is opened. All the values are loaded and the sized of arrays which correspond to Sequence fields are the true sizes; that is, the arrays hold all of the data in the Sequence.
+## limit-&amp;lt;variable&amp;gt;: Provides a limit for a specific variable. This will work just like limit above, but sets the limit for only the named variable. Other variables get either the value of limit or the default limit. %GREEN% Done. 11/3. %ENDCOLOR%
+## scheme: do this later; we're only going to implement the 'flatten' scheme.
+# New attributes added to a variable
+## translation: String; added to every variable that's the result of translation. The values should be 'translated' or 'synthesized'. The later is for more complex translation schemes than flatten, so it'll not occur until/if those are implemented. %GREEN%Done for Structures and Sequences. 10/26%ENDCOLOR%
+## limit-exceeded: true if the actual size of the variable is bigger than the limit. I'm not sure if this will be easy to implement. Plus there's no boolean attribute type. Make implementing this a lower priority than other attribute-related features. %ORANGE%Low priority; I'm not sure how to implement this given that we're using the range fetch feature of Sequences. What if a CE requests 100 elements and the server returns 100; there might be more and there might not...%ENDCOLOR%
+
+---
+
+Note: I have two other test data sources that can be used to test the attribute processing. There are all HDF4 data sources since support for HDF4 seems to be the most important.
+-- Main.JamesGallagher - 25 Oct 2004
+
+[[category:NC-DAP]]</text>
+      <sha1>iimlngpxf86y3fofm63qfah491fp5if</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,149 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: VLEN proposal</title>
+    <ns>0</ns>
+    <id>860</id>
+    <revision>
+      <id>9669</id>
+      <parentid>9668</parentid>
+      <timestamp>2013-07-22T14:52:29Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <origin>9669</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4246" sha1="fjz8sxfhzefgrrlr8sdzjkyv4z51p52" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+
+==Background==
+This page is intended to provide a concrete
+proposal for replacing the current variable length
+dimension model with a more syntactically and
+semantically clear alternative.
+As such it replaces a
+[[DAP4: VLens (and Sequences)| previous proposal]].
+
+==Problem Addressed==
+In my opinion, the decision to treat variable length objects (''sequences''
+of objects) using the '*' dimension notation is a mistake. The reason is
+that (1) it requires special handling for * in the code, (2) it violates
+the desired constraint that a dimension have a specific size across all
+of its occurrences (at a specific point in time).
+
+In order to rectify this, I proposed basically two alternatives.
+# Define a new type constructor, temporarily called ''Sequence'' here, and analogous to the existing DAP2 Sequence construct.
+# Define a new type constructor analogous to the HDF5/netcdf-4 ''vlen'' construct. So one might define as a type, &amp;lt;Int32*&amp;gt; to indicate that its type is a sequence of Int32 objects.
+
+There is a relationship between the two proposals in that the first
+is effectively equivalent to &amp;lt;Sequence*&amp;gt;.
+
+==Proposed Solution==
+Specifically, I propose we adopt alternative 1, but possibly with a keyword other than ''Sequence''.
+
+Its semantics is that it represents an arbitrary number of instances of objects where the objects conform to the format of a Structure equivalent to the Sequence syntax.
+
+For example, consider this sequence declaration.
+&lt;pre&gt;
+&amp;lt;Sequence name="s"&amp;gt;
+&amp;lt;Int32 name="field1"/&amp;gt;
+&amp;lt;/Sequence&amp;gt; 
+&lt;/pre&gt;
+It is equivalent in semantics to a sequence of
+structure instances of this form.
+&lt;pre&gt;
+&amp;lt;Structure name="s"&amp;gt;
+&amp;lt;Int32 name="field1"/&amp;gt;
+&amp;lt;/Structure&amp;gt; 
+&lt;/pre&gt;
+
+The serialized representation is the obvious one. It consists of a count, N say, representing the number of objects in the sequence followed by N serialized instances of the equivalent structure.
+
+Note that I explicitly allow arrays of Sequences to exist. For example.
+&lt;pre&gt;
+&amp;lt;Sequence name="s"&amp;gt;
+&amp;lt;Int32 name="field1"/&amp;gt;
+&amp;lt;Dim name="d2"/&amp;gt;
+&amp;lt;Dim size="17"/&amp;gt;
+&amp;lt;/Sequence&amp;gt; 
+&lt;/pre&gt;
+
+
+==Discussion==
+
+This proposal seems to me to be the simplest solution to the VLEN problems I have identified. There is at least one drawback.
+* In translating from, say, CDM, to DAP4, it will require the creation and naming of an extra Sequence construct to appear in the DMR. In some cases, this can be mitigated, but will generally be necessary.
+
+From previous discussions, there seems to be a consensus that calling this new constructor a ''Sequence'' is undesirable because it would be confused with the DAP2 ''Sequence'' constructor. Some possible alternative names are as follows.
+* vector
+* series
+* &lt;strike&gt;vlen&lt;/strike&gt;
+* sequence (consider keeping this and living with any confusion)
+
+[[User:dmh|Dennis]]
+
+[[User:Jimg|Jimg]] 14:11, 21 July 2013 (PDT) :
+We should use ''vlen'' only if our definition matches that of HDF4/5 ''exactly''. If our definition is the same as HDF's, then we should definitely use that name.
+
+Question: What does the definition of an array with two dimensions look like where the first dimension size is some fix number and the second size varies? What about the case where both sizes vary?
+
+[[User:dmh|Dennis]] Jul 22, 2013  8:38:41 AM :
+I have removed ''vlen'' as an possible alternative for the reason Jim gives above. I have, however, added ''sequence'' because although confusing, is still a good name.
+
+To answer Jim's question about dimensions, in the first case, I assume the initial situation is this: Int32 x[5][*]. The equivalent would be
+&lt;pre&gt;
+Sequence synthname1 { Int32 x;} [5]
+&lt;/pre&gt;
+The DMR form would be 
+&lt;pre&gt;
+&amp;lt;Sequence name="synthname1"&amp;gt;
+&amp;lt;Int32 name="x"/&amp;gt;
+&amp;lt;Dim size="5"&amp;gt;
+&amp;lt;/Sequence&amp;gt;
+&lt;/pre&gt;
+
+For the second case, I assume the initial situation is this: Int32 x[*][*]. The equivalent would be
+&lt;pre&gt;
+Sequence synthname1 { Sequence synthname2 {Int32 x;} }
+&lt;/pre&gt;
+The DMR form would be 
+&lt;pre&gt;
+&amp;lt;Sequence name="synthname1"&amp;gt;
+&amp;lt;Sequence name="synthname2"&amp;gt;
+&amp;lt;Int32 name="x"/&amp;gt;
+&amp;lt;/Sequence&amp;gt;
+&amp;lt;/Sequence&amp;gt;
+&lt;/pre&gt;</text>
+      <sha1>fjz8sxfhzefgrrlr8sdzjkyv4z51p52</sha1>
+    </revision>
+  </page>
+</mediawiki>

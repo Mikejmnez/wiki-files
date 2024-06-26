@@ -1,0 +1,172 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>OPULS: UGrid Subsetting</title>
+    <ns>0</ns>
+    <id>853</id>
+    <revision>
+      <id>12080</id>
+      <parentid>12072</parentid>
+      <timestamp>2015-12-07T18:25:03Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Retired */</comment>
+      <origin>12080</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="15221" sha1="lsr0fz9mqs423kydaoz0ixil83e8vtj" xml:space="preserve">== Overview ==
+We have written server functions that utilize Bill Howe's Gridfields library to subset unstructured grids (aka irregular meshes) that conform to the UGrid 0.9 specification that is part of the CF-1.6 specification. Our function has a little latitude in its requirements because it also supports features found in earlier versions of the UGrid specification (e.g., the 'mesh array' can be either the Nx3 or 3xN). However, our function only supports triangular (2D) meshes, not the other mesh schemes outlined in the specification. The function will subset one or more ''range variables'' based on the values of the ''domain variables'' as expressed in a simple relational expression. The result of the function is an unstructured grid - that is, the subsetting operation will return a a set of variables that could be written to a netcdf file and the result would conform to the UGrid 0.9 specification. Because the specification has evolved over time and older data are still perfectly valid, we often 'tweak' those older datasets using NcML so that the contain the variables and attributes required by the newer versions of the UGrid specification. Our function supports both zero- and ones-based indexing for both the range and domain variables.
+
+== Background information on UGrid 0.9.0 ==
+The [https://github.com/ugrid-conventions UGrid specification] moved to GitHub in 2013. The 0.9.0 version of the specification was last edited on 29 Oct 2013. Our function conforms to that specification and to an older version (0.6?), where the major difference is the organization of the mesh array data. For a triangular array, the 0.9.0 version specifies the array be a Nx3 while the older specification specified a 3xN. Our code supports both.
+
+== The ugrid subsetting functions ==
+These functions allow you to subset the UGrid dataset by the values associated with nodes, edges, or faces.
+=== ugnr: Subset by node value. ===
+;Name
+:'''''ugnr''''' - Subset an unstructured 2D Mesh Topology grid based on domain values associated with the nodes
+;Syntax
+: &lt;tt&gt;ugnr(rangeVariable:string, [rangeVariable:string, ... ] condition:string)&lt;/tt&gt;
+:* The first, second, ..., parameter is a list of (''range'') data variable names that you wish to subset, they may be associated with nodes, edges, or faces of the mesh.
+:* The last parameter is an expression that defines conditions that the ''domain'' variables must meet in order to be included in the result. 
+: Here is an example:
+:: &lt;tt&gt;ugnr(depth, "28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0")&lt;/tt&gt;
+: Used in a url (that returns the DDS for the subset data):
+:: &lt;tt&gt;[http://52.70.199.67:8080/opendap/hyrax/ugrids/Ike/2D_varied_manning_windstress/test_dir-norename.ncml.dds?ugnr(depth,%2228.0%3Clat&amp;lat%3C29.0&amp;-89.0%3Clon&amp;lon%3C-88.0%22) http://52.70.199.67:8080/opendap/hyrax/ugrids/Ike/2D_varied_manning_windstress/test_dir-norename.ncml.dds?ugnr(depth,"28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0")]&lt;/tt&gt;
+
+; Subsetting the range variables
+: In the example dataset [http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc NECOFS_GOM3_FORECAST.nc] ([http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc.dds DDS] [http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc.das DAS]) we can see that there are range variables associated with the nodes of the mesh that have a ''time'' dimension and a ''siglay'' dimension. Since the ''time'' dimension has 145 values, and ''siglay'' dimension has 40 values it may be that you wish to only retrieve a single time slice and/or siglay slice. This can accomplished by using an array constraint on the variable as it is passed to the ugrid function. For example, to retrieve the 12th siglay slice of the 5th time slice of the variable salinity you would constrain it like ''salinity[4][11][*]'' (note that the indices begin at zero). In the request URL the function call is
+::&lt;tt&gt;[http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc.dds?ugnr(salinity%5B4%5D%5B11%5D%5B*%5D,%2238.0%3Clat%20&amp;%20lat%3C42.0%20&amp;%20-64.0%3Clon%20&amp;%20lon%3C-60.0%22) &lt;nowiki&gt;ugnr(salinity[4][11][*],"38.0&lt;lat &amp; lat&lt;42.0 &amp; -64.0&lt;lon &amp; lon&lt;-60.0")&lt;/nowiki&gt;]&lt;/tt&gt;
+: It is also possible to request, say, every 5th time slice  ''salinity[0:5:*][*][*]'' or every 3rd siglay slice from 3 to 30 ''salinity[4][3:3:30][*]''. In a request URL this would look like
+::&lt;tt&gt;[http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc.dds?ugnr(salinity%5B4%5D%5B3:3:30%5D%5B*%5D,%2238.0%3Clat%20&amp;%20lat%3C42.0%20&amp;%20-64.0%3Clon%20&amp;%20lon%3C-60.0%22) &lt;nowiki&gt;ugnr(salinity[4][3:3:30][*],"38.0&lt;lat &amp; lat&lt;42.0 &amp; -64.0&lt;lon &amp; lon&lt;-60.0")&lt;/nowiki&gt;]&lt;/tt&gt;
+
+=== uger: Subset by edge value. ===
+
+;Name
+:'''''uger''''' - Subset an unstructured 2D Mesh Topology grid based on domain values associated with the edges
+;Syntax
+: &lt;tt&gt;uger(rangeVariable:string, [rangeVariable:string, ... ] condition:string)&lt;/tt&gt;
+:* The first, second, ..., parameter is a list of (''range'') data variable names that you wish to subset, they may be associated with nodes, edges, or faces of the mesh.
+:* The last parameter is an expression that defines conditions that the ''domain'' variables must meet in order to be included in the result. 
+: Here is an example:
+:: &lt;tt&gt; uger(depth, "28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0")&lt;/tt&gt;
+
+=== ugfr: Subset by face value. ===
+
+;Name
+:'''''ugfr''''' - Subset an unstructured 2D Mesh Topology grid based on domain values associated with the faces
+;Syntax
+: &lt;tt&gt; ugfr(rangeVariable:string, [rangeVariable:string, ... ] condition:string)&lt;/tt&gt;
+:* The first, second, ..., parameter is a list of (''range'') data variable names that you wish to subset, they may be associated with nodes, edges, or faces of the mesh.
+:* The last parameter is an expression that defines conditions that the ''domain'' variables must meet in order to be included in the result. 
+: Here is an example:
+:: &lt;tt&gt; ugfr(depth, "28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0")&lt;/tt&gt;
+
+
+== Retired Functions ==
+=== The ugr5 Function ===
+'''''This function is deprecated.''' Supported by Hyrax 1.12.2 and earlier.''
+;Name
+:ugr5 - Restrict the domain of an unstructured 2D Mesh Topology grid 
+
+;Syntax
+:ugr5(0, rangeVariable:string, [rangeVariable:string, ... ] condition:string)
+:* The first parameter indicates that the supplied relational constraint condition is to be applied to coordinate values at the nodes (0) or the faces (2) of the mesh.
+:* The second, third, ..., parameter is a list of (''range'') data variables that you wish to subset, they may be associated with nodes or faces of the mesh.
+:* The last parameter is an expression that defines conditions that the ''domain'' variables must meet in order to be included in the result. 
+: Here is an example:
+:: ugr5(0, depth, "28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0")
+: Used in a url (that returns the DDS for the subset data):
+:: [http://52.70.199.67:8080/opendap/hyrax/ugrids/Ike/2D_varied_manning_windstress/test_dir-norename.ncml.dds?ugr5(0,depth,%2228.0%3Clat&amp;lat%3C29.0&amp;-89.0%3Clon&amp;lon%3C-88.0%22) http://52.70.199.67:8080/opendap/hyrax/ugrids/Ike/2D_varied_manning_windstress/test_dir-norename.ncml.dds?ugr5(0,depth,"28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0")]
+
+; Subsetting the range variables
+: In the example dataset [http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc NECOFS_GOM3_FORECAST.nc] ([http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc.dds DDS] [http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc.das DAS]) we can see that there are range variables associated with the nodes of the mesh that have a ''time'' dimension and a ''siglay'' dimension. Since the ''time'' dimension has 145 values, and ''siglay'' dimension has 40 values it may be that you wish to only retrieve a single time slice and/or siglay slice. This can accomplished by using an array constraint on the variable as it is passed to the ugrid function. For example, to retrieve the 12th siglay slice of the 5th time slice of the variable salinity you would constrain it like ''salinity[4][11][*]'' (note that the indices begin at zero). In the request URL the function call is
+:: [http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc.dds?ugr5(0,salinity%5B4%5D%5B11%5D%5B*%5D,%2238.0%3Clat%20&amp;%20lat%3C42.0%20&amp;%20-64.0%3Clon%20&amp;%20lon%3C-60.0%22) &lt;nowiki&gt;ugr5(0,salinity[4][11][*],"38.0&lt;lat &amp; lat&lt;42.0 &amp; -64.0&lt;lon &amp; lon&lt;-60.0")&lt;/nowiki&gt;]
+: It is also possible to request, say, every 5th time slice  ''salinity[0:5:*][*][*]'' or every 3rd siglay slice from 3 to 30 ''salinity[4][3:3:30][*]''. In a request URL this would look like
+::[http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc.dds?ugr5(0,salinity%5B4%5D%5B3:3:30%5D%5B*%5D,%2238.0%3Clat%20&amp;%20lat%3C42.0%20&amp;%20-64.0%3Clon%20&amp;%20lon%3C-60.0%22) &lt;nowiki&gt;ugr5(0,salinity[4][3:3:30][*],"38.0&lt;lat &amp; lat&lt;42.0 &amp; -64.0&lt;lon &amp; lon&lt;-60.0")&lt;/nowiki&gt;]
+
+== Sample Data ==
+A server with unstructured grid data and subsetting function on board is here: http://52.70.199.67:8080/opendap/
+
+In the directory [http://52.70.199.67:8080/opendap/ugrids/ ugrids] You can find a number of test datasets:
+; fvcom_1step.nc, hex.nc
+: These are test data from Bill Howe. The ''hex'' file is small but it lacks the special variable the UGrid uses to encode metadata the function depends on to read the unstructured data.
+; test4.nc, test4-rename-nodedata.ncml, test4-ugrid.ncml
+: ''test4'' also lacks the special 'metadata variable' but we have written NcML (''test4-ugrid'') that adds it to the dataset, so you can use ugr5() with a URL that points at the virtual dataset that NcML file defines. The companion NcML file (''test4-rename-nodedata.ncml'') uses NcML to rename the node data variable and while this works fine for normal DAP accesses, the ugr5() won't work with this - the purpose of this example is to document a known bug where using NcML to rename a range variable breaks the function.
+; NECOFS_GOM3_FORECAST.nc, NECOFS_WAVE_FORECAST.nc
+: These files us a 3xN face node connectivity array (corresponding to the older version of the UGrid specification)
+; Ike/2D_varied_manning_windstress and Ike/2D_varied_manning_windstress_wave
+: These directories have data from c. 2008 that requires (minimal) NcML to work with our function
+; RENCI
+: Data used by the ODSIP EarthCube project. This directory has the same data (or nearly so) where the face node connectivity array is organized a Nx3 and 3xN.
+; lana
+: This is a bit of a mystery; it may have been lumped into the ugrid sample data by mistake.
+; README
+: A brief recap of this information
+
+&lt;!--
+I adapted their original test data using ncml files. I wrote an ncml file for test4.nc ( called test4-ugrid.ncml in the same directory) that makes it compliant with the Deltares specification and it can be subset with the ugrid restrict function.  http://52.70.199.67:8080/opendap/ugrids/test4-ugrid.ncml  Also in that directory is the dataset (NECOFS_GOM3_FORECAST.nc) that Rich Signell provided http://52.70.199.67:8080/opendap/hyrax/ugrids/NECOFS_GOM3_FORECAST.nc  Which can be subset using the ugrid restrict function.
+
+Also, a while back I tracked down and downloaded on of the larger, multi-time-step fvcom ugrid data files, it's now set up here:  http://52.70.199.67:8080/opendap/ugrids/Ike/ Inside you'll find that the 2D models have useful stuff. In http://52.70.199.67:8080/opendap/ugrids/Ike/2D_varied_manning_windstress/ You should see the original nmcl files from the source server. These weren't compatible with Hyrax - mostly the result of Hyrax not being as "elastic" as the TDS with its inputs.
+
+The file test_dir-norename.ncml can be subset using the ugrid restrict function: http://52.70.199.67:8080/opendap/ugrids/Ike/2D_varied_manning_windstress/test_dir-norename.ncml  The file test_dir.ncml is closer to the original ncml file 00_dir.ncml, unfortunately it only works superficially. You can get the metadata responses for this dataset, but there is a bug in the ncml code that prevents ugrid restrict function from returning data values for renamed variables. The test_dir-norename.ncml is simply test_dir.ncml without the renamed variables.
+
+=== Places for improvement ===
+* Make a version in which only the lat and lon boundaries are specified that then proceeds to subset all of the nodes, edges, and faces.
+*: See the "super restrict" function discussion below
+* Allow the user to specify both face and grid variables
+*: It appears that this should be straight forward, and this is where I'll proceed.
+*: '''UPDATE: This works now.''' Test URL: http://ec2-54-242-224-73.compute-1.amazonaws.com:8080/opendap/ugrids/fvcom_1step.nc.dds?ugr3(0,ua,h,%2228.0%3Clat%20&amp;amp;%20lat%3C29.0%20&amp;amp;%20-89.0%3Clon%20&amp;amp;%20lon%3C-88.0%22)
+* Figure out how to handle node (or edge, or face) variables that have additional dimensions.
+*: '''UPDATE: This works now!'''
+* Can we have the CE allow us to get a single time slice using something like this:
+:: ugr3(0,zeta[18][*],"28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0")
+: where zeta is defined "Float32 zeta[time = 1081][node = 417642];"??
+: '''UPDATE: YES! This works  now!'''
+
+# Make individual functions that can be 'nested'
+#:&lt;font size="2"&gt; &lt;code&gt; regrid(ugr(....),....)&lt;/code&gt;&lt;/font&gt;
+#: &lt;font size="2"&gt; &lt;code&gt;ugr(regrid(....))&lt;/code&gt;&lt;/font&gt;
+#:''Do we let the users expression dictate the efficency of the operation, or do we try to optimize (subset before regrid etc.) and how would we do that?''
+#Can we restrict time series like this (using the current syntax)?? '''As of 10/29/13 we have this functionality (see above syntax description)'''
+#: We need a way to do it, either in the ugrid code or elsewhere. This example (potentially) uses DAP but it may not be support and there may be issues making it happen. Maybe DAP4 syntax would make this easier? James?
+#: &lt;font size="2"&gt; &lt;code&gt;?zeta[0:15:1000][*],ugr3(0,zeta,"28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0")&lt;/code&gt;&lt;/font&gt;
+# What about nesting using some kind of wild card for the current (ugrid) dataset. This keeps the type signature constant. ($ is the entire dataset which is a ugrid dataset, and is the inout to the interior ugr3 function call)
+#:&lt;font size="2"&gt; &lt;code&gt;datasetName?ugr3(2,ugr3(0,$,"28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0"),"temp&gt;12")&lt;/code&gt;&lt;/font&gt;
+# Create a super restrict function that can operate at any rank and that always operates on the entire ugrid dataset
+#:&lt;font size="2"&gt; &lt;code&gt;datsetname?superrestrict("28.0&lt;lat &amp; lat&lt;29.0 &amp; -89.0&lt;lon &amp; lon&lt;-88.0","","temp&gt;12")&lt;/code&gt;&lt;/font&gt;
+#  If I understood Bill correctly we may be able to reorganize the code and make a couple more calls into gridfields which would allow us to restrict the coordinate topology (but preserve the coordinate index mapping) so that then we can load one  variable at a time, subset the variable and then transmit it. Which I think we can make work for both one and N dimensional variables.
+#: '' While we still marshal the response in memory the new code (10/29/13) uses index variables to determine the subset by utilizing the ugrid library once, and then it reads just the minimum data required to fulfill the restricted response.''
+--&gt;</text>
+      <sha1>lsr0fz9mqs423kydaoz0ixil83e8vtj</sha1>
+    </revision>
+  </page>
+</mediawiki>

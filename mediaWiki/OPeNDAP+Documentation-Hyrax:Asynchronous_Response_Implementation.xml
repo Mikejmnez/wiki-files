@@ -1,0 +1,129 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax: Asynchronous Response Implementation</title>
+    <ns>0</ns>
+    <id>799</id>
+    <revision>
+      <id>7931</id>
+      <parentid>7930</parentid>
+      <timestamp>2012-04-12T16:05:14Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Overview */</comment>
+      <origin>7931</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5240" sha1="nz5zcgzfhcynew9h2uj9hnckdfx8lmu" xml:space="preserve">
+== Overview ==
+The proposed use cases so far are:
+
+# Near-line tape drive
+# Server side processing
+
+I think it's important to identify the various issues in each of these use cases because much of what has to happen isn't just the asynchronous aspects of the response.
+
+
+;URLs
+: I think that while the Async definition for DAP4 allows the Async response essentially forward the request to a new URL in order to access the requested item at a later date, we might want to utilize our existing architecture to make the URL the same as the original request URL. We do exactly this with uncompressed files that are cached, a we could use a similar mechanism for the async use cases...
+
+== Near-line tape drive ==
+In this use case primary data are held in some type of near-line tape storage system. This means that the data can be accessed, but the access time may take lounger than a typical TCP time-out period.
+
+=== Issues ===
+; Catalog 
+: The near-line system must be cataloged: Some expressive list of contents must be made available to the BES so that the BES can include them in either the default catalog (called "catalog") or in some specific catalog implementation for the near-line system.
+
+; Caching
+: The BES will be required to cache datasets held in the near-line system. 
+
+; Cache Purging
+: The BES will need to be able to purge, or otherwise make room in the cache for new datasets being brought in from the near-line system.
+
+; Concurrency
+: It will be crucial that the BES be able to identify when a near-line dataset has been requested but has not yet been cached in order to prevent multiple concurrent calls to unpack the same dataset.
+
+=== Basic Flow Stage 1===
+
+# A client asks for a catalog of holdings from a Hyrax server.
+# The client makes a request for one the datasets in the catalog.
+# OLFS receives the request for a dataset and routes that request to the BES.
+# The BES identifies that this is a request for a near-line dataset
+# The BES checks to see if the requested dataset is in the near-line cache andy finds the requested dataset is NOT represented in the cache.
+# The BES returns an error/message to the OLFS indicating that the response will be delayed by a specified amount of time.
+# The OLFS responds to the client request with the "async" response and HTTP 201 (Accepted)
+# The BES checks to see if the requested dataset is in the process of being extracted from the near-line system.
+# If the requested dataset is not already in the process of being extracted the BES initiates the retrieval of the requested dataset from the near-line system.
+
+=== Basic Flow Stage 2===
+
+# The client makes a request for one the datasets in the catalog.
+# OLFS receives the request for a dataset and routes that request to the BES.
+# The BES identifies that this is a request for a near-line dataset
+# The BES checks to see if the requested dataset is in the near-line cache.
+# The requested dataset is in the cache the BES services the request immediately.
+# The OLFS forwards the BES response and returns HTTP 200.
+
+== Server Side Processing ==
+In this use case the server is asked to perform a computationally extensive processing operation on existing data, for example re-projection and re-gridding of a high resolution global dataset.
+
+=== Issues ===
+
+; Caching
+: The BES will be required to cache datasets generated by asynchronous server side processing operations. 
+
+; Cache Purging
+: The BES will need to be able to purge, or otherwise make room in the cache for new datasets being generated by server side processing operations.
+
+; Concurrency
+: It will be crucial that the BES be able to identify when a server side processing dataset has been requested but has not yet been cached in order to prevent multiple concurrent calls to generate the same dataset.
+
+=== Basic Flow Stage 1===
+# A client asks for a catalog of holdings from a Hyrax server.
+# The client makes a request for one the datasets in the catalog, in the constraint expression the client requests that server perform a computationally intensive operation.
+# OLFS receives the request for a dataset and routes that request to the BES.
+# The BES identifies that this is a request will require sometime to service.
+# The BES checks to see if the requested result is already in the server side processing cache, and finds that is not there.
+# The BES returns an error/message to the OLFS indicating that the response will be delayed by a specified amount of time.
+# The OLFS responds to the client request with the "async" response and HTTP 201 (Accepted).
+# The BES initiates the generation of the requested dataset/processing combination.
+
+=== Basic Flow Stage 2 ===
+# The client makes a request for one the datasets in the catalog, in the constraint expression the client requests that server perform a computationally intensive operation.
+# OLFS receives the request for a dataset and routes that request to the BES.
+# The BES identifies that this is a request will require sometime to service.
+# The BES checks to see if the requested result is already in the server side processing cache.
+# The requested dataset is in the cache and the BES services the request immediately.
+# The OLFS forwards the BES response and returns HTTP 200.</text>
+      <sha1>nz5zcgzfhcynew9h2uj9hnckdfx8lmu</sha1>
+    </revision>
+  </page>
+</mediawiki>

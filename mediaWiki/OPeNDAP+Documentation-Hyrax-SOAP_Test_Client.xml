@@ -1,0 +1,56 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - SOAP Test Client</title>
+    <ns>0</ns>
+    <id>132</id>
+    <revision>
+      <id>1407</id>
+      <parentid>719</parentid>
+      <timestamp>2007-11-07T07:03:41Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>[[Hyrax 1.2: SOAP Test Client]] moved to [[Hyrax - SOAP Test Client]]</comment>
+      <origin>1407</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="490" sha1="iugl4zfwncmmqr4v55pivfjhwxka5nj" xml:space="preserve">A prototype SOAP interface is included with this release of Hyrax. 
+
+The details of the SOAP interface are discussed in the  [http://rsg.opendap.org:8090/server-4/templates/soapAPI.html RSG template pages here]. 
+
+Example client code can be found at our [http://www.opendap.org/download/hyrax.html web site], and can be found in our [http://scm.opendap.org:8090/trac/browser/tags/SoapTestClient Subversion archive here].
+
+@TODO: '''Flesh out the usage and details of the SOAP Test Client'''</text>
+      <sha1>iugl4zfwncmmqr4v55pivfjhwxka5nj</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,202 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4 XML schema</title>
+    <ns>0</ns>
+    <id>409</id>
+    <revision>
+      <id>2969</id>
+      <timestamp>2009-01-22T03:54:10Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>New page: &lt;pre&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt; &lt;!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by Nathan Potter (OSU-COAS) --&gt; &lt;xs:schema targetNamespace="http://xml.opendap.org/ns/D...</comment>
+      <origin>2969</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5931" sha1="d58s883j30ymeab0if1xocugyddqq6l" xml:space="preserve">&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by Nathan Potter (OSU-COAS) --&gt;
+&lt;xs:schema targetNamespace="http://xml.opendap.org/ns/DAP/3.3/dap#"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dap="http://xml.opendap.org/ns/DAP/3.3/dap#"
+    xmlns:att="http://xml.opendap.org/ns/DAP/3.3/att#"
+    xmlns="http://xml.opendap.org/ns/DAP/3.3/dap#" elementFormDefault="qualified"
+    attributeFormDefault="unqualified"&gt;
+
+
+    &lt;!-- ==============================================================
+        includes and imports
+        ============================================================== --&gt;
+
+    &lt;xs:import namespace="http://xml.opendap.org/ns/DAP/3.3/att#" schemaLocation="dapAtt_3.x.xsd"/&gt;
+
+    &lt;!--
+	
+	--&gt;
+    &lt;xs:element name="Dataset" type="DODS_Dataset"/&gt;
+    &lt;xs:element name="Map" type="Array"/&gt;
+    &lt;xs:element name="Byte" type="BaseType"/&gt;
+    &lt;xs:element name="Int16" type="BaseType"/&gt;
+    &lt;xs:element name="UInt16" type="BaseType"/&gt;
+    &lt;xs:element name="Int32" type="BaseType"/&gt;
+    &lt;xs:element name="UInt32" type="BaseType"/&gt;
+    &lt;xs:element name="Float32" type="BaseType"/&gt;
+    &lt;xs:element name="Float64" type="BaseType"/&gt;
+    &lt;xs:element name="String" type="BaseType"/&gt;
+    &lt;xs:element name="Url" type="BaseType"/&gt;
+    &lt;xs:element name="Array" type="Array"/&gt;
+    &lt;xs:element name="Grid" type="Grid"/&gt;
+    &lt;xs:element name="Structure" type="Structure"/&gt;
+    &lt;xs:element name="Sequence" type="Sequence"/&gt;
+    &lt;!--
+	
+	--&gt;
+    &lt;xs:group name="allDapTypes"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;Reusable Content Model for Complex DODS types&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element ref="Byte" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="Int16" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="UInt16" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="Int32" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="UInt32" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="Float32" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="Float64" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="String" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="Url" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="Array" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="Grid" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="Structure" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="Sequence" minOccurs="0" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+    &lt;/xs:group&gt;
+    &lt;!--
+	
+	--&gt;
+    &lt;xs:complexType name="DODS_Dataset"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;This is the XML representation of a DODS DDS
+                object.&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:group ref="att:allAttributeTypes" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:group ref="allDapTypes" minOccurs="0" maxOccurs="unbounded"/&gt;
+        &lt;/xs:sequence&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+	
+	--&gt;
+    &lt;xs:complexType name="BaseType"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DODS Base Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:group ref="att:allAttributeTypes" minOccurs="0" maxOccurs="unbounded"/&gt;
+        &lt;/xs:sequence&gt;
+        &lt;xs:attribute name="name" type="xs:string"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+	
+	--&gt;
+    &lt;xs:complexType name="Array"&gt;
+        &lt;xs:complexContent&gt;
+            &lt;xs:extension base="BaseType"&gt;
+                &lt;xs:sequence&gt;
+                    &lt;xs:choice minOccurs="1" maxOccurs="1"&gt;
+                        &lt;xs:element ref="Byte"/&gt;
+                        &lt;xs:element ref="Int16"/&gt;
+                        &lt;xs:element ref="UInt16"/&gt;
+                        &lt;xs:element ref="Int32"/&gt;
+                        &lt;xs:element ref="UInt32"/&gt;
+                        &lt;xs:element ref="Float32"/&gt;
+                        &lt;xs:element ref="Float64"/&gt;
+                        &lt;xs:element ref="String"/&gt;
+                        &lt;xs:element ref="Url"/&gt;
+                        &lt;xs:element ref="Grid"/&gt;
+                        &lt;xs:element ref="Structure"/&gt;
+                        &lt;xs:element ref="Sequence"/&gt;
+                    &lt;/xs:choice&gt;
+                    &lt;xs:element name="dimension" type="dap:ArrayDimension" minOccurs="1"
+                        maxOccurs="unbounded"/&gt;
+                &lt;/xs:sequence&gt;
+            &lt;/xs:extension&gt;
+        &lt;/xs:complexContent&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+
+	--&gt;
+    &lt;xs:complexType name="ArrayDimension"&gt;
+        &lt;xs:attribute name="name" type="xs:string"/&gt;
+        &lt;xs:attribute name="size" type="xs:integer" use="required"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+	
+	--&gt;
+    &lt;xs:complexType name="Grid"&gt;
+        &lt;xs:complexContent&gt;
+            &lt;xs:extension base="dap:BaseType"&gt;
+                &lt;xs:sequence&gt;
+                    &lt;xs:element ref="Array" minOccurs="1" maxOccurs="1"/&gt;
+                    &lt;xs:element ref="Map" minOccurs="1" maxOccurs="unbounded"/&gt;
+                &lt;/xs:sequence&gt;
+            &lt;/xs:extension&gt;
+        &lt;/xs:complexContent&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+
+	--&gt;
+    &lt;xs:complexType name="Structure"&gt;
+        &lt;xs:complexContent&gt;
+            &lt;xs:extension base="BaseType"&gt;
+                &lt;xs:group ref="allDapTypes" minOccurs="1" maxOccurs="unbounded"/&gt;
+            &lt;/xs:extension&gt;
+        &lt;/xs:complexContent&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+
+	--&gt;
+    &lt;xs:complexType name="Sequence"&gt;
+        &lt;xs:complexContent&gt;
+            &lt;xs:extension base="BaseType"&gt;
+                &lt;xs:group ref="allDapTypes" minOccurs="1" maxOccurs="unbounded"/&gt;
+            &lt;/xs:extension&gt;
+        &lt;/xs:complexContent&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+	
+	 --&gt;
+&lt;/xs:schema&gt;
+&lt;/pre&gt;</text>
+      <sha1>d58s883j30ymeab0if1xocugyddqq6l</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,96 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>OPeNDAP Workshops at APAC and the Australian BOM, Oct. 2007.</title>
+    <ns>0</ns>
+    <id>336</id>
+    <revision>
+      <id>2408</id>
+      <parentid>2407</parentid>
+      <timestamp>2008-08-26T02:26:33Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Australian Bureau of Meteorology Meeting */</comment>
+      <origin>2408</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3768" sha1="mn20ykr51y5ksxn1rb7sj9ymd5jxxod" xml:space="preserve">This page provides access to the presentations and other materials used at the Australian Partnership for Advanced Computing (APAC) and Australian Bureau of Meteorology (BOM) workshops in Perth and Melbourne on 12 and 15 to 18 October 2007
+
+== Australian Partnership for Advanced Computing Meeting ==
+Presentations from the Australian Partnership for Advanced Computing (APAC) OPeNDAP Workshop (held Friday 12 Oct 2007)
+
+* [http://www.opendap.org/support/APAC_2007/OPeNDAP_APAC_intro_20071012.ppt Introduction and background]
+* [http://www.opendap.org/support/APAC_2007/APAC_section_2r3.ppt DAP Servers]
+* [http://www.opendap.org/support/APAC_2007/APAC_section_3r3.ppt DAP Clients and client-side issues]
+
+== Australian Bureau of Meteorology Meeting ==
+
+The [[Australian BOM System Administrator's Agenda and Presentations]]
+
+The [[Australian BOM Software Developer's Agenda and Presentations]]
+
+== Virtual Machine for tutorials ==
+
+For each of the workshops, attendees needed access to a computer running Windows XP or Vista or an Intel Mac running OS/X (unfortunately there was no support for the PowerPC Mac). The workshop attendees used a virtual host running SLAX Linux for the hands-on material. The virtual host was provided on CD-ROM, but it can be downloaded (see below). The host contains a complete development environment along with a pre-built and installed server and sample client software. To run the virtual machine, you need to download a copy of [http://www.vmware.com/products/player/ VMware Player ] (free) or [http://www.vmware.com/products/ws/ Workstation](pay ware; 30-day evaluation period) for Windows XP or Vista or [http://www.vmware.com/products/fusion/ VMware Fusion](pay ware) for Intel Mac.
+
+The workshop's version of the virtual machine ISO is 1.6 and can be found at [http://www.opendap.org/pub/vm/opendap_tutorial_1_6.iso OPeNDAP Tutorial 1.6]. The size is around 590MB so you'll need a fast connection to get this.
+
+It is also possible to bypass the Virtual Machine by downloading the software, setting up build and development environment and then compiling from sources. We used only software that was released at the time of the workshops.
+
+What's included on the VM:
+
+* KDE desktop; Firefox
+* A development environment including make, gcc, g++, g77, bison, flex, ANTLR, et cetera.
+* Libraries: readline, curl
+* Web servers:
+** Apache 2.2.x
+** Tomcat 5.5.12
+* Ant 1.7
+* JDK 1.5
+* OPeNDAP DAP Sources (All of these compiled and installed in the order listed):
+** libdap 3.7.7
+** libnc-dap 3.7.0
+** bes 3.5.1
+** dap-server 3.7.4
+** netcdf_handler 3.7.6
+** freeform_handler 3.7.5
+*OPenDAP Java binaries:
+** ODC plus a hand tooled install and script for starting it
+** olfs-1.2.3 (java binary; opendap.war file installed in Tomcat's webapps directory
+* Other sources:
+** netcdf 3.6.2 - you need to build and install this before building the netcdf handler above
+** nco 3.9.2 - you need to build and install this after building the libnc-dap code above; we might have the attendees do this build depending on time
+
+This VM was used for both the APAC and BOM workshops, so it contained some things that are targeted at the BOM System Admin and Developer Workshops and were not completely relevant to the APAC workshop. For example, If all you want to do is look at some clients, you can skip all the downloads &amp; builds for the server parts. In that case you could get the ODC and NCO clients. For NCO you'll need to get the various support code or a binary build - Google "NetCDF Operators". We will also spend some time demonstrating the web interface and reading data into a spreadsheet (Excel, Spreadsheet, et c.). Most computers include a spreadsheet and there's clearly no need to download one specially for the workshop material!</text>
+      <sha1>mn20ykr51y5ksxn1rb7sj9ymd5jxxod</sha1>
+    </revision>
+  </page>
+</mediawiki>

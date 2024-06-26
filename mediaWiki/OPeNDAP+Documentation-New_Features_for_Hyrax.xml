@@ -1,0 +1,60 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>New Features for Hyrax</title>
+    <ns>0</ns>
+    <id>566</id>
+    <revision>
+      <id>5422</id>
+      <parentid>5393</parentid>
+      <timestamp>2010-03-25T19:11:05Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>5422</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1434" sha1="948ct48kphgcpb3610611hahmhgvwup" xml:space="preserve">New features for Hyrax
+
+Proposed new features:
+* Value-based constraints
+* Asynchronous responses
+* Checksums
+
+Why are these important?
+* Providing value-based constraints is one way to bring support for geo-spatial data into the realm of DAP’s Constraint Expression system. It would expand on the ‘from/to’ notation of the CE’s indicial constraints to ones that use data values. The value-based accesses would be supported for Grids, using the Grid maps as the sources for the values, and Arrays, using attribute values for the sources of the values. In either case, it might be that the value-based constraints are not applicable and would then result in an Error response from the server. 
+* Support for asynchronous responses provides a solution to a decade-old problem presented by the complexities of many real-world solutions to the problem of storing more data than can be stored on a spinning disk. We will do this by returning a response that is both human and machine readable that provides a URL which can be used to get the data at a later date and a hint about when that later date might be. The result is guaranteed to be either the data or a similar ‘asynchronous response.’
+* Checksums are one of the most effective ways to ensure that a given data request produced the same response on two separate instances. This is a fundamental feature needed by provenance systems
+
+[[Category:Google Summer of Code]]</text>
+      <sha1>948ct48kphgcpb3610611hahmhgvwup</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,103 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/ServerInstallationGuide5</title>
+    <ns>0</ns>
+    <id>203</id>
+    <revision>
+      <id>1623</id>
+      <parentid>1622</parentid>
+      <timestamp>2008-01-04T13:27:26Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Constructing the URL */</comment>
+      <origin>1623</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1794" sha1="2io2jmtjzq0qmpzlkp5tb0c6n6sbvih" xml:space="preserve">=Constructing the URL=
+
+After a dataset has been installed, and the handler programs installed,
+you need to know what its address is.  If you've tested the web server
+installation as in ([[Wiki_Testing/ServerInstallationGuide2 | Chapter2]]), you know the
+beginning of the URLs that will point to data at your site.
+
+(If you're using the DRDS Java server, see ([[Wiki_Testing/ServerInstallationGuide4 | Section 4.3.3]]).)
+
+ 
+Suppose your web server's document root is at:
+
+&lt;pre&gt;
+/var/www/html/
+&lt;/pre&gt;
+
+And you are serving netCDF data that you've stored at:
+
+&lt;pre&gt;
+/var/www/html/datasets/atlantic/cooldata.nc
+&lt;/pre&gt;
+
+Following the test URL in ([[Wiki_Testing/ServerInstallationGuide2 | Chapter2]]), this would
+be the URL to use in a client.
+
+&lt;pre&gt;
+http://yourmachine/cgi-bin/nph-dods/datasets/atlantic/cooldata.nc
+&lt;/pre&gt;
+
+Note that this URL will work for a DAP client, but not for a standard
+web browser. If you want to use a standard web browser to test your
+installation, read on, and also take a look at [http://docs.opendap.org/index.php/QuickStart &lt;cite&gt;The OPeNDAP QuickStart Guide&lt;/cite&gt;] . See note
+
+
+==Constructing a OPeNDAP/JGOFS URL==
+
+Suppose that you have installed the OPeNDAP/JGOFS handler, as described
+above, on the machine &lt;font color='green'&gt;test.opendap.org&lt;/font&gt;.  And a partial listing
+of the the data objects dictionary contained the following
+definitions:
+ 
+&lt;pre&gt;
+test0=def(/var/www/html/data/test0.data)
+s87_xbt=def(/var/www/html/data/xbt.catalog)
+s87_ctd=def(/var/www/html/data/ctd.catalog)
+htf=autoedges(/fronts/hatteras-to-florida/edges)
+htn=autoedges(/fronts/hatteras-to-nova-scotia/edges)
+glk=autoedges(/fronts/great-lakes/edges)
+&lt;/pre&gt;
+
+A URL that references the data object 's87_xbt' would look like:
+
+&lt;pre&gt;
+http://test.opendap.org/cgi-bin/nph-dods/s87_xbt
+&lt;/pre&gt;</text>
+      <sha1>2io2jmtjzq0qmpzlkp5tb0c6n6sbvih</sha1>
+    </revision>
+  </page>
+</mediawiki>

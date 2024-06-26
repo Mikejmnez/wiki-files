@@ -1,0 +1,135 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Caching that's multi-process safe</title>
+    <ns>0</ns>
+    <id>772</id>
+    <revision>
+      <id>11471</id>
+      <parentid>7645</parentid>
+      <timestamp>2015-01-22T23:48:21Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Problem */</comment>
+      <origin>11471</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="8031" sha1="o5yb64tifvxdfol61faz1nfw5r1vtpn" xml:space="preserve">== Problem ==
+Develop a general procedure (or software) for implementing a cache that can be shared by several processes. There seems to be no readily available library that implements caching. It certainly needs to work for Unix; Windows suport would be good, but is of less importance because the OC library may take over or client role on that platform.
+
+== Background ==
+We have several cases where files need to be cached, both in our server software and in the client code. These include at least: files that have been decompressed and responses from the web that can be cached using the HTTP/1.1 rules. We need for the caching to be both thread safe and multi-process safe. That is, the cache needs to be shared between processes that do not, otherwise, synchronize their operation.
+
+Information:
+* http://stackoverflow.com/questions/1599459/optimal-lock-file-method
+* http://perl.plover.com/yak/flock/
+* see open(2) using O_CREAT | O_RDWR | O_EXCEL (atomically creates a file or returns an error if it exists)
+
+== Proposed solution ==
+
+=== Assumptions ===
+# The consistency of objects in the cache is most important
+# We do not want to lock the entire cache
+# The cache must work with multiple processes
+# we can tolerate some errors when computing the size of the cache (objects and their size, in the cache)
+# The BES cache for compressed data will be one directory
+# It should use some sort if LRU or similar scheme
+
+=== Definitions ===
+;shared lock: a synonym for a read-only lock; a program cannot acquire an exclusive lock when a shared lock exists, but it can acuire another shared lock. Thus, many programs can use a shared lock for reading and prevent a program from writing/deleting the file.
+;exclusive lock: synonym for a write lock; a program cannot acquire an exclusive lock when either a shared lock or another exclusive lock already exists.
+;semaphore file: a file that is used to serve as a proxy lock for another file. These can be use to indicate to cooperating processes that a file should not be touched - it is effectively locked - without actually locking the file. This can be used to establish overlapping locks, particularly so that files can be first exclusively locked and, without removing that lock, have a shared lock too. Once the shared (i.e., read) lock is in place, the 'exclusive lock' can be removed, thus ensuring that at no time in the sequence is the file left in the unprotected state.
+
+=== Releasing locks ===
+
+The ''[http://linux.die.net/man/2/fcntl fcntl]'' command makes locks  that are removed whenever ''any'' of the file descriptors to an open file are closed. So long as we use advisory locking and program logic follows the rules, we can use these locks and be sure that files will be unlocked whenever a handler closes the file, without any need to actually close the lock in the using the same file descriptor used to obtain the lock. This is apparently not the case for [http://linux.die.net/man/2/flock flock] or [http://linux.die.net/man/3/lockf lockf]. Both the BES and the HTTP caching code in libdap have support for releasing resources, so it's possible to use flock(2), et c., for this which also means we can use the open(2) and creat(2) calls for lock management.
+
+&lt;!-- === There are basic operations that must be implemented ===
+
+;Is a file in the cache: Try to get a ''shared lock''. If the shared lock attempt was successful, the file can be read (because it's locked for read). (It's important to lock the file for read, because locking it is the only way to ensure it won't be deleted by the time the caller reads &amp; processes the response.) Return status (successful lock or not) with the lock as a side effect.
+
+;Write a new file: Make the file and get an exclusive lock on it. Write the data to the file. release the exclusive lock. The trick here is that the ''make the file'' step may return an error because two processes could try to make the same file at the file at the same time, so the caller of this code must deal with the error that it cannot write the file and should then assume that another process is making a file of the same name and try to obtain a read-lock on it.
+
+;Delete a file: Get an ''exclusive lock'' on the file. Delete it.
+--&gt;
+=== Operations the cache must provide ===
+
+# Create and lock a file so that data cam be decompressed
+#* Determine the cache size
+#* If it's too big, purge to 90% of max size
+# Get a shared lock to decompressed data
+
+=== Cache design ===
+
+In addition to the files themselves, maintain information about the time each file was last used and their size. The cache should also probably have information about its total size. Store this in the cache in files, so that it's accessible for the processes accessing the cache.
+
+The cache will be a directory.
+
+Each file to be cached with have a name that is a function of its pathname, so it is guaranteed to be unique. The BES decomp cache will use the 'take the pathname and replace the slashes with hashes' technique to make the names unique. Example:
+ /usr/local/data/modis.hdf --&gt; #usr#local#data#modis#hdf
+The leading hash can be used or not,  but it's probably easier to include it. This is a pretty easy transform; simply replace the characters [/.] with #
+
+It would be best if the size and last use time for each file in the cache was not recorded in a single file.
+&lt;!--
+Idea: For each file, use a companion file to record size and last use time. Updates won't change the size, they will only change the time. The cache does not actually need to be too picky about getting the exact time of the last access in the file. If two processes update it at overlapping times, the time recorded will be close enough. The file will contain one value, that will be the time at which the matched data fie was last read. We will update the time when the lock on the data was was obtained, not released. The name of the file will be the be made of the data file name, a dot and the size in bytes of the data file. Example:
+* Data file: #usr#local#data#modis#hdf
+* Cache control file:  #usr#local#data#modis#hdf.123456789; where 123456789 is the size in bytes and the file contains the last used time as its sole value.
+
+How to purge:
+# Look at every control file
+# Store the basename (i.e., data file name), size and last used time
+# Find the oldest files and remove until the total size of the cache falls below 90% of the max size.
+--&gt;
+
+How to purge:
+# Look at every data file
+# Store the basename (i.e., data file name), size and last used (access) time
+# Find the oldest files and remove until the total size of the cache falls below 90% of the max size.
+#* if a file is locked when the cache tries to delete it, just skip it, since its access is clearly just become recent!
+# with every delete, update the 'total size' file
+
+How to track the total size of the cache's data:
+# maintain a single 'global' cache control file
+# store the total size there.
+# for every file created, update that size
+# for every file deleted, update that size
+# use an exclusive rd/wr lock for those updates
+# Note: ''This is a compromise given our original goal of not ever locking the whole cace because it technically locks the entire cache for write operations, but does not lock it for read operations. Also, the time the file is locked can be much smaller than the time required to actually write one of the data files.''
+
+===== Software we have =====
+In the BES software, the class ''BESContainer'' provides a partially abstract base class that holds two methods: ''access()'' and ''release()'' that are used to access and release the 'container' that holds the data. The class ''BESFileContainer'' has concrete implementations for these methods that uncompress files if need be. The class ''BESUncompressManager'' performs the decompression operation and uses the ''BESCache'' class to store the result. BESCache handles the locking operations.
+
+To avoid making a new BESCache object on every call to BESContainer::access(), maybe move BESCache into BESUncompressManager.</text>
+      <sha1>o5yb64tifvxdfol61faz1nfw5r1vtpn</sha1>
+    </revision>
+  </page>
+</mediawiki>

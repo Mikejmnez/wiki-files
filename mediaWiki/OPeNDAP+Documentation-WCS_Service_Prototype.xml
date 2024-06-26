@@ -1,0 +1,451 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>WCS Service Prototype</title>
+    <ns>0</ns>
+    <id>461</id>
+    <revision>
+      <id>10247</id>
+      <parentid>5873</parentid>
+      <timestamp>2013-12-19T20:47:47Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Example olfs.xml */</comment>
+      <origin>10247</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="24861" sha1="gw4g3z3grjb5tz6b0fn5aup82vhx72n" xml:space="preserve">[[Category:WCS]]
+
+== Overview ==
+
+This WCS service is an OLFS DispatchHandler implementation. The implementation provides WCS services by separating the construction and maintenance of the WCS catalog from the service activities themselves. 
+
+=== The DispatchHandler ===
+
+The WCS service prototype is written as a [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration DispatchHandler] implementation for the OLFS (essentially a plug-in). As such it is added to the OLFS  via  the [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration#olfs.xml_Configuration_File olfs.xml] file. The WCS Service utilizes its own configuration directory and files which are stored in a well known location within the OLFS content directory: ''$CATALINA_HOME/content/opendap/'''&lt;prefix&gt;'''''
+
+=== Catalog Implementations ===
+
+One of the challenges encountered when implementing a WCS service for Hyrax is catalog generation: ''How do we generate a list of coverages from existing holdings in Hyrax? '' The DAP contains the mechanism for transmitting the information, but lacks the explicit semantics required to describe a WCS Coverage. Luckily many of the users of DAP servers have provided metadata that complies to some type of metadata convention or standard.  This WCS service can build its catalog by using semantic web technology to crosswalk from existing DAP data sets which use the Climate Forecast (CF-1.0) metadata convention into the WCS metadata space. It can also build a catalog from WCS document fragments stored on the local disk.
+
+==== [[StaticRDFCatalog]] ====
+
+The StaticRDFCatalog uses semantic web technologies to create mappings between DAP data sets and WCS Coverages. A WCS Coverage is a very specific data type and is much more constrained than the more general DAP data model. Thus, only certain DAP data sets will be representable as WCS Coverages. Evaluating which ones can be represented as WCS Coverages requires the semantic analysis of the metadata associated with each data set. Since the DAP has no actual semantic metadata requirements for metadata it is necessary (at least for the moment) to look only at DAP data sets that have metadata that conforms to some well known metadata convention or standard. Since the semantics of the convention are know it is then possible to write inferencing rules that relate pieces of information in one convention/standard to the equivalent information in another convention/standard.
+
+==== LocalFileCatalog ====
+The LocalFileCatalog uses human written documents to build its catalog. In this catalog every wcs:CoverageDescription is hand written and placed in a file in a designated directory. The directory is identified in the DispatchHandler's configuration object and at system start-up each file in the Coverages directory is ingested (with the assumption that the file contains a single wcs:CoverageDescription) and added to the catalog.
+
+Although there are many drawbacks to this approach it is something that has a few positive qualities:
+* It works.
+* Although it's possible for a data provider to have large numbers of wcs:Coverages in their holdings, it is not practical since large numbers of wcs:Coverages will cause the wcs:Capabilities document to grow to such a size as to be indigestible by clients. Thus it seems that although it appears that this method is limited in its scalability, if a software process is developed to generate the wcs:CoverageDescriptions it would seem that long before the file system became clogged with wcs:CoverageDescription files the service itself would become too cumbersome for most clients.
+* Many data centers with large numbers of small coverages may find that these coverages would be appropriately aggregated into a singe larger coverage. For many cases this is now possible with Hyrax, and it is accomplished using NcML configurations similar to the THREDDS Data Server.
+
+== Requirements ==
+
+----
+== Installation ==
+
+=== Install The Software ===
+* Download and install the BES for Hyrax 1.6 including:
+** [http://www.opendap.org/download/libdap++.html libdap version x.x.x]
+** [http://www.opendap.org/download/BES.html BES version x.x.x]
+** [http://www.opendap.org/download/general_purpose_handlers.html General Purpose Handlers version x.x.x]
+** [http://www.opendap.org/download/nc_server.html NetCDF Data Handler version x.x.x]
+** [http://www.opendap.org/download/fileout_netcdf.html Fileout for NetCDF Handler version x.x.x]
+** [http://www.opendap.org/download/ncml_module.html NcML Handler version x.x.x]
+* Verify that the BES is working correctly.
+* [http://tomcat.apache.org/download-60.cgi Download and install Tomcat 6.x]
+* Download the OLFS WCS Service WAR file, opendap.war
+* Copy the opendap.war file to $CATALINA_HOME/webapps
+* Start Tomcat
+
+At this point, assuming that the BES and the OLFS are running on their default ports on the same system the Service should be running, although in an un-configured state.
+
+=== Configure the software ===
+The following changes will not take effect until Tomcat is restarted.
+* Localize the WCS service metadata
+** [[#Service Provider|Edit &lt;font face="Courier&gt;$CATALINA_HOME/content/opendap/&lt;prefix&gt;/ServiceProvider.xml&lt;/font&gt; so that the specific information about the contact point, address and other information about the service reflect the needs of your organization.]]
+**  [[#Service Identification|Edit  &lt;font face="Courier&gt;$CATALINA_HOME/content/opendap/&lt;prefix&gt;/ServiceIdentification.xml&lt;/font&gt; so that the Title and Abstract sections reflect your needs. '''''DO NOT alter the ServiceType or ServiceTypeVersion element content.''''']]
+**  [[#Operations Metadata|Edit  &lt;font face="Courier&gt;$CATALINA_HOME/content/opendap/&lt;prefix&gt;/OperationsMetadata.xml&lt;/font&gt; so that the links to the service reflect the domain names and ports upon which you are running the service. ]]
+* [[#WCS Catalogs|Configure the catalog for the WCS service.]]
+* Stop and restart Tomcat.
+
+
+
+----
+
+== WCS Service Configuration ==
+
+The WCS Service utilizes its own configuration directory and files which are stored in a well known location within the OLFS content directory:
+ $CATALINA_HOME/content/opendap/'''&lt;prefix&gt;'''
+where &lt;font  face="Courier"&gt;'''&lt;prefix&gt;'''&lt;/font&gt; is defined in the in the WCS [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration DispatchHandler] configuration element in the [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration#olfs.xml_Configuration_File olfs.xml] file. In the WCS Service directory (&lt;font  face="Courier"&gt;CATALINA_HOME/content/opendap/&lt;prefix&gt;&lt;/font&gt;) is kept various documents used by the WCS Service including:
+
+;wcs_service.xml
+:The &lt;font face="Courier"&gt;wcs_service.xml&lt;/font&gt; file identifies and configures the WCS catalog implementation.
+
+;[[#Service Identification|ServiceIdentification.xml]]
+:The &lt;font face="Courier"&gt;ServiceIdentification.xml&lt;/font&gt; file contains WCS metadata used in the wcs:Capabilities document.
+
+;[[#Service Provider|ServiceProvider.xml]]
+:The &lt;font face="Courier"&gt;ServiceProvider.xml&lt;/font&gt; file contains WCS metadata used in the wcs:Capabilities document.
+
+;[[#Operations Metadata| OperationsMetadata.xml]] 
+:The &lt;font face="Courier"&gt;OperationsMetadata.xml&lt;/font&gt; file contains WCS metadata used in the wcs:Capabilities document.
+
+Every installation of a WCS service requires a localization step in which much of the required metadata about the particular service instance and its keepers is captured so that it can be returned to clients.
+
+From a client's perspective a WCS service is made up of three commands:
+# wcs:GetCapabilities
+# wcs:DescribeCoverage
+# wcs;GetCoverage
+The response for a wcs:GetCapaibilities request requires localization information that can only be determined by the individual(s) that are installing the service. The responses for both the  wcs:DescribeCoverage and wcs:GetCoverage requests can be generated directly from the WCS "catalog".
+
+The wcs:Capabilites document contains 4 sections:
+* Service Identification (ows:ServiceIdentification)
+* Service Provider (ows:ServiceProvider)
+* Operations Metadata (ows:OperationsMetadata)
+* Contents (wcs:Contents)
+For any given installation of a WCS service the first three sections must be carefully localized. Their contents cannot realistically be ascertained by an automation. Thus, they are really part of the WCS configuration activity that must be performed by the service installer. The last section, Contents, can be automatically generated from the catalog of Coverages.
+
+In this WCS implementation the ows:ServiceIdentification, ows:ServiceProvider and ows:OperationsMetadata sections are each stored as a separate XML file that is loaded by the server at startup.  Default versions of these files are installed into the OLFS's persistent content directory the first time that the WCS Service is launched. They can be found in the directory:
+ $CATALINA_HOME/content/opendap/'''&lt;prefix&gt;'''
+where &lt;font  face="Courier"&gt;'''&lt;prefix&gt;'''&lt;/font&gt; is defined in the in the WCS [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration DispatchHandler] configuration element in the [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration#olfs.xml_Configuration_File olfs.xml] file.
+
+
+=== Service Identification ===
+
+The Service Identification metadata as described in section 7.4.4 of  OGC document ''[http://www.opengeospatial.org/standards/common OGC 06-121r3]''.  
+
+Localization should include (but may not be limited to)  updating the ows:Keytwords, ows:Fees and ows:AccessConstraints
+
+==== Example Document ====
+&lt;pre&gt;&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;!-- * SERVICE IDENTIFICATION SECTION                           * --&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;ows:ServiceIdentification xmlns="http://www.opengis.net/wcs/1.1"
+xmlns:ows="http://www.opengis.net/ows/1.1"
+xmlns:xlink="http://www.w3.org/1999/xlink" &gt;
+  &lt;ows:Title&gt;OPeNDAP Hyrax Prototype WCS Service&lt;/ows:Title&gt;
+  &lt;ows:Abstract&gt;A prototype WCS server intended to provide WCS 1.1 (1.1.2) access to DAP datasets&lt;/ows:Abstract&gt;
+  &lt;ows:Keywords&gt;
+     &lt;ows:Keyword&gt;Web Coverage Service&lt;/ows:Keyword&gt;
+     &lt;ows:Keyword&gt;OPeNDAP&lt;/ows:Keyword&gt;
+     &lt;ows:Keyword&gt;nectcdf&lt;/ows:Keyword&gt;
+     &lt;ows:Keyword&gt;DAP&lt;/ows:Keyword&gt;
+  &lt;/ows:Keywords&gt;
+  &lt;ows:ServiceType&gt;WCS&lt;/ows:ServiceType&gt;
+  &lt;ows:ServiceTypeVersion&gt;1.1.2&lt;/ows:ServiceTypeVersion&gt;
+  &lt;ows:Fees&gt;NONE&lt;/ows:Fees&gt;
+  &lt;ows:AccessConstraints&gt;NONE&lt;/ows:AccessConstraints&gt;
+&lt;/ows:ServiceIdentification&gt;
+&lt;/pre&gt;
+
+;File Location
+:&lt;font  face="Courier"&gt;$CATALINA_HOME/content/opendap/'''&lt;prefix&gt;'''/ServiceIdentification.xml&lt;/font&gt; where &lt;font  face="Courier"&gt;'''&lt;prefix&gt;'''&lt;/font&gt; is defined in the in the WCS [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration DispatchHandler] configuration element in the [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration#olfs.xml_Configuration_File olfs.xml] file.
+
+=== Service Provider ===
+
+The Service Provider metadata as described in section 7.4.5 of  OGC document ''[http://www.opengeospatial.org/standards/common OGC 06-121r3]''.  
+
+The ows:ServiceProvider section should be localized to identify the local operator of the system. Typically this would be the name and contact information of the individual or group responsible for installing and maintaing the WCS service.
+
+==== Example Document ====
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;!-- * SERVICE PROVIDER SECTION                                 * --&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;ows:ServiceProvider  xmlns="http://www.opengis.net/wcs/1.1"
+xmlns:ows="http://www.opengis.net/ows/1.1"
+xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+  &lt;ows:ProviderName&gt;OPeNDAP Inc.&lt;/ows:ProviderName&gt;
+  &lt;ows:ProviderSite xlink:href="http://www.opendap.org"/&gt;
+  &lt;ows:ServiceContact&gt;
+     &lt;ows:IndividualName&gt;Nathan D. Potter&lt;/ows:IndividualName&gt;
+     &lt;ows:PositionName&gt;Senior Software Engineer&lt;/ows:PositionName&gt;
+     &lt;ows:ContactInfo&gt;
+        &lt;ows:Phone&gt;
+           &lt;ows:Voice&gt;123-456-7890&lt;/ows:Voice&gt;
+           &lt;ows:Facsimile&gt;234-567-8901&lt;/ows:Facsimile&gt;
+        &lt;/ows:Phone&gt;
+        &lt;ows:Address&gt;
+           &lt;ows:DeliveryPoint&gt;165 Dean Knauss Dr&lt;/ows:DeliveryPoint&gt;
+           &lt;ows:City&gt;Narragansett&lt;/ows:City&gt;
+           &lt;ows:AdministrativeArea&gt;Rhode Island&lt;/ows:AdministrativeArea&gt;
+           &lt;ows:PostalCode&gt;02882&lt;/ows:PostalCode&gt;
+           &lt;ows:Country&gt;USA&lt;/ows:Country&gt;
+           &lt;ows:ElectronicMailAddress&gt;support[a.t]opendap[d.o.t]org&lt;/ows:ElectronicMailAddress&gt;
+        &lt;/ows:Address&gt;
+        &lt;ows:OnlineResource xlink:href="http://ndp.opendap.org:8080/opendap/"/&gt;
+        &lt;ows:HoursOfService&gt;24x7x365&lt;/ows:HoursOfService&gt;
+        &lt;ows:ContactInstructions&gt;email&lt;/ows:ContactInstructions&gt;
+     &lt;/ows:ContactInfo&gt;
+     &lt;ows:Role&gt;Developer&lt;/ows:Role&gt;
+  &lt;/ows:ServiceContact&gt;
+&lt;/ows:ServiceProvider&gt;
+&lt;/pre&gt;
+
+;File Location
+:&lt;font  face="Courier"&gt;$CATALINA_HOME/content/opendap/'''&lt;prefix&gt;'''/ServiceProvider.xml&lt;/font&gt; where &lt;font  face="Courier"&gt;'''&lt;prefix&gt;'''&lt;/font&gt; is defined in the in the WCS [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration DispatchHandler] configuration element in the [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration#olfs.xml_Configuration_File olfs.xml] file.
+
+=== Operations Metadata ===
+
+The Operations Metadata  as described in section 7.4.6 of  OGC document ''[http://www.opengeospatial.org/standards/common OGC 06-121r3]''.  
+
+Careful localization of this information is crucial to the correct function of the WCS service. Many clients will use this section of the wcs:Capabilities document to ascertain where and how they can interact with the service. It is required that the Get and Post URL's for each WCS operation point to the correct terminus on your server. If the server is behind a firewall which is port-forwarding the incoming requests the URL's may have little to do with the local network configuration.
+
+&lt;hr&gt;
+&lt;font color="grey"&gt;
+Looking at this again I am wondering if this could be either configured or determined?
+: The base URL for their system could be added to the DispatchHandler configuration and the service URL's generated from that.
+OR
+: It is the case that the servlet request contains the URL to be dereferenced. I think it might work to dynamically determine the URL that brought the GetCapabilities request to the service and to pluck it from the request and build the service URLs from it.
+
+Either one of these would diminish the configuration burden presented to the Hyrax user.
+
+Comments?
+
+[[User:Jimg|jimg]] 10:54, 15 April 2009 (PDT)
+
+What about the case you mention above where a firewall and port-forwarding make the external and internal URLs structurally different?
+
+[[User:Ndp|ndp]] 19:57, 14 April 2009 (PDT)
+
+Also - the URLs for the POST and SOAP interfaces are defined in the olfs.xml file, but not in the part of the configuration that is used by the promary WCS DispatchHandler. Determining the values of each ones '''&lt;prefix&gt;''' element will require some architectural redesign...
+
+--[[User:Ndp|ndp]] 07:28, 13 January 2010 (PST)
+
+&lt;/font&gt;
+
+==== Example Document ====
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;!-- * OPERATIONS METADATA                                      * --&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;ows:OperationsMetadata xmlns="http://www.opengis.net/wcs/1.1"
+                        xmlns:ows="http://www.opengis.net/ows/1.1"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+    &lt;ows:Operation name="GetCapabilities"&gt;
+        &lt;ows:DCP&gt;
+            &lt;ows:HTTP&gt;
+                &lt;ows:Get xlink:href="http://ndp.opendap.org:8080/opendap/WCS?"/&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/post"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;XML&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/soap"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;SOAP&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+            &lt;/ows:HTTP&gt;
+        &lt;/ows:DCP&gt;
+    &lt;/ows:Operation&gt;
+    &lt;ows:Operation name="GetCoverage"&gt;
+        &lt;ows:DCP&gt;
+            &lt;ows:HTTP&gt;
+                &lt;ows:Get xlink:href="http://ndp.opendap.org:8080/opendap/WCS?"/&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/post"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;XML&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/soap"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;SOAP&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+            &lt;/ows:HTTP&gt;
+        &lt;/ows:DCP&gt;
+        &lt;ows:Parameter name="Format"&gt;
+            &lt;ows:AllowedValues&gt;
+                &lt;ows:Value&gt;application/x-netcdf-cf1.0&lt;/ows:Value&gt;
+                &lt;ows:Value&gt;application/x-dap2.0&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+        &lt;/ows:Parameter&gt;
+    &lt;/ows:Operation&gt;
+    &lt;ows:Operation name="DescribeCoverage"&gt;
+        &lt;ows:DCP&gt;
+            &lt;ows:HTTP&gt;
+                &lt;ows:Get xlink:href="http://ndp.opendap.org:8080/opendap/WCS?"/&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/post"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;XML&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/soap"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;SOAP&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+            &lt;/ows:HTTP&gt;
+        &lt;/ows:DCP&gt;
+        &lt;ows:Parameter name="Format"&gt;
+            &lt;ows:AllowedValues&gt;
+                &lt;ows:Value&gt;text/xml&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+        &lt;/ows:Parameter&gt;
+    &lt;/ows:Operation&gt;
+&lt;/ows:OperationsMetadata&gt;
+&lt;/pre&gt;
+
+;File Location
+:&lt;font  face="Courier"&gt;$CATALINA_HOME/content/opendap/'''&lt;prefix&gt;'''/OperationsMeadata.xml&lt;/font&gt; where &lt;font  face="Courier"&gt;'''&lt;prefix&gt;'''&lt;/font&gt; is defined in the in the WCS [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration DispatchHandler] configuration element in the [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration#olfs.xml_Configuration_File olfs.xml] file.
+
+=== WCS Catalogs ===
+
+The WCS service must maintain a catalog of ''Coverages''.  In the Hyrax WCS service the implementation of this catalog is identified at server start-up from the ''wcs_service.xml'' file located here: &lt;font  face="Courier"&gt;$CATALINA_HOME/content/opendap/'''&lt;prefix&gt;'''/wcs_service.xml&lt;/font&gt; where &lt;font  face="Courier"&gt;'''&lt;prefix&gt;'''&lt;/font&gt; is defined in the in the WCS [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration DispatchHandler] configuration element in the [http://docs.opendap.org/index.php/Hyrax_-_OLFS_Configuration#olfs.xml_Configuration_File olfs.xml] file.
+
+==== [[StaticRDFCatalog]] Configuration ====
+
+[[StaticRDFCatalog|StaticRDFCatalog configuration instructions can be found here]]
+
+==== [[LocalFileCatalog]] Configuration====
+''This is a development tool and is not expected to be used by data providers.''
+
+[[LocalFileCatalog| LocalFileCatalog configuration instructions can be found here]]
+
+==WCS  DispatchHandler Configuration ==
+
+
+The Hyrax WCS service is made of a collection 4 implementations of the opendap.coreServlet.DispatchHandler interface.
+
+* HTTP GET: opendap.wcs.v1_1_2.DispatchHandler
+* HTTP POST (For posting unadorned XML WCS requests): opendap.wcs.v1_1_2.PostHandler
+* HTTP POST (For posting SOAP envelopes containg WCS requests): opendap.wcs.v1_1_2.SoapHandler
+* HTTP POST (For handling WCS requests posted from an HTML form): opendap.wcs.v1_1_2.FormHandler
+
+The service is enabled by creating an entry for each service component in the olfs.xml file.
+
+The primary DispatchHandler is  opendap.wcs.v1_1_2.DispatchHandler. It is required for the WCS service and its Handler declaration contains the configuration information for the service. In its Handler declaration the location of the ServiceIdentification, ServiceProvider, and OperationsMetadata documents are identified, along with a WCS catalog implementation to be used by the service.
+
+A WCS catalog implementation (and its configuration)  must be provided in the WcsCatalog element.
+
+
+
+To "turn on" the service Handler declarations must appear in the olfs.xml  opendap.wcs.v1_1_2.DispatchHandler Configuration
+
+
+=== Example olfs.xml ===
+
+
+  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;OLFSConfig&gt;
+    &lt;DispatchHandlers&gt;
+        &lt;HttpGetHandlers&gt;
+            &lt;Handler className="opendap.bes.BESManager"&gt;
+                &lt;BES&gt;
+                    &lt;!-- The prefix is a URL token between server address/port
+                    and catalog root used to designate a particular BES instance
+                    in the case that multiple Back-End-Servers are available to
+                    a single OLFS.  The default is no additional tag,
+                    designated by "/". So, for a single BES the prefix MUST be
+                    set to "/".  --&gt;
+                    &lt;prefix&gt;/&lt;/prefix&gt;
+                    &lt;!-- The hostname (or IP address) for this BES --&gt;
+                    &lt;host&gt;localhost&lt;/host&gt;
+                    &lt;!-- The port number for this BES --&gt;
+                    &lt;port&gt;10022&lt;/port&gt;
+                    &lt;!-- The ClientPool maximum number of concurrent
+                      -  BES client connections allowed.
+                      --&gt;
+                    &lt;ClientPool maximum="10" /&gt;
+                &lt;/BES&gt;
+            &lt;/Handler&gt;
+ 
+ &lt;b&gt;
+            &lt;Handler className="opendap.wcs.v1_1_2.DispatchHandler"&gt;
+                &lt;prefix&gt;WCS&lt;/prefix&gt;
+            &lt;/Handler&gt;
+  &lt;/b&gt;
+ 
+            &lt;Handler className="opendap.threddsHandler.StaticCatalogDispatch"&gt;
+                &lt;prefix&gt;thredds&lt;/prefix&gt;
+                &lt;useMemoryCache&gt;true&lt;/useMemoryCache&gt;
+            &lt;/Handler&gt;
+            &lt;Handler className="opendap.bes.DapDispatchHandler" /&gt;
+            &lt;Handler className="opendap.bes.DirectoryDispatchHandler" /&gt;
+            &lt;Handler className="opendap.coreServlet.SpecialRequestDispatchHandler" /&gt;
+            &lt;Handler className="opendap.bes.VersionDispatchHandler" /&gt;
+            &lt;Handler className="opendap.bes.FileDispatchHandler" &gt;
+                &lt;!-- AllowDirectDataSourceAccess
+                  - If this element is opresent then the server will allow users to request
+                  - the data source (file) directly. For example a user could just get the
+                  - underlying NetCDF files located on the server without using the OPeNDAP
+                  - request interface.
+                  -
+                  - THINK TWICE before allowing this, as data sources can be quite large
+                  - and allowing their transmission with out subsetting can put heavy loads
+                  - on the network and the server.
+                  --&gt;
+                &lt;AllowDirectDataSourceAccess /&gt;
+            &lt;/Handler&gt;
+            &lt;Handler className="opendap.bes.BESThreddsDispatchHandler" /&gt;
+        &lt;/HttpGetHandlers&gt;
+ 
+        &lt;HttpPostHandlers&gt;
+ &lt;b&gt;
+            &lt;Handler className="opendap.wcs.v1_1_2.PostHandler" &gt;
+                &lt;prefix&gt;WCS/post&lt;/prefix&gt;
+            &lt;/Handler&gt;
+            &lt;Handler className="opendap.wcs.v1_1_2.SoapHandler" &gt;
+                &lt;prefix&gt;WCS/soap&lt;/prefix&gt;
+            &lt;/Handler&gt;
+            &lt;Handler className="opendap.wcs.v1_1_2.FormHandler" &gt;
+                &lt;prefix&gt;WCS/form&lt;/prefix&gt;
+            &lt;/Handler&gt;
+ &lt;/b&gt; 
+ 
+            &lt;Handler className="opendap.coreServlet.SOAPRequestDispatcher" &gt;
+                &lt;OpendapSoapDispatchHandler&gt;opendap.bes.SoapDispatchHandler&lt;/OpendapSoapDispatchHandler&gt;
+            &lt;/Handler&gt;
+        &lt;/HttpPostHandlers&gt;
+    &lt;/DispatchHandlers&gt;
+ &lt;/OLFSConfig&gt;</text>
+      <sha1>gw4g3z3grjb5tz6b0fn5aup82vhx72n</sha1>
+    </revision>
+  </page>
+</mediawiki>

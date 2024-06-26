@@ -1,0 +1,246 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Constraint and Query</title>
+    <ns>0</ns>
+    <id>845</id>
+    <revision>
+      <id>10386</id>
+      <parentid>10385</parentid>
+      <timestamp>2014-02-08T21:03:13Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Constraint Expression */</comment>
+      <origin>10386</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="11253" sha1="6laqu5dkt7f5i4pe8h4uhnnqdjphoit" xml:space="preserve">[[Development#OPULS_Development | &lt;-- back to OPULS Development]]
+
+[[User:Ndp|ndp]] 16:25, 24 September 2012 (PDT)
+
+== Background ==
+
+In DAP2 the constraint expression (CE) was defined as a ''projection'' and a ''selection''. The ''projection'' being a list of dataset variables to be returned, and the ''selection'' being the conditions that must be met to return them. . The projected variables could, if they were arrays, be subset using a square bracket notation (rigorously described elsewhere). The ''selection'' was written as a list of "clauses" (my word),  separated from the ''projection'' and from each other by an "&amp;" character. The ''selection'' was applied to all of the requested variables, and in practice was rarely used because the only legitimate application of the ''selection''  was to constrain a Sequence object.
+
+The DAP2 CE consumed the entire URL query string, in other words everything after the "'''?'''" in the URL was considered to be the DAP2 CE string.
+
+== Terms ==
+
+; DAP4 Constraint Expression (CE)
+: The constraint expression that encapsulates various sub-setting of,  and possibly the application of server side functions to variables in a DAP4 dataset.
+
+; Query String (QS)
+: Everything after the "&lt;font size="3"&gt;&lt;code&gt;?&lt;/code&gt;&lt;/font&gt;" character in a URL.
+
+== Problems addressed ==
+
+This proposal puts forth a framework for a DAP4 Query String syntax, which is required for DAP4 the protocol.
+
+Throughout the web the predominate interpretation of the query string is to view it as a collection of key-value pairs (KVP), where each pair is separated by an "'''&amp;'''" character.
+: &lt;font size="3"&gt;&lt;code&gt;?key=value&amp;key=value&amp;key=value ... &lt;/code&gt;&lt;/font&gt; 
+Many web services utilize this pattern, including our friends at OGC. Because the DAP2 CE subsumed the entire query string it doesn't fit into this model. Tomcat (and other web server frameworks) provide specific API methods for collecting the KVP from the query string, but again DAP2 doesn't play well with this.
+
+DAP4 has many needs (problems to be addressed) by the syntax and positioning of the CE. This is a place to begin addressing these issues.
+
+== Proposed solution ==
+
+=== Constraint Expression ===
+
+The DAP4 CE should be held in a single key value pair. The CE value should be URI encoded** as appropriate for it's character content and all occurrences of the "'''&amp;'''" must also be URI encoded.  Combined with a riff on [[DAP4:_DAP4_Filter_Constraints |  Dennis' Filter Proposal ]] we could get to something like this:
+
+: &lt;tt&gt; ?dap4.ce=n;a[3:1:100];k|x&lt;=y|z=y&lt;/tt&gt; 
+
+Where we are asking for the variable '''n''', the 3rd through the 100th elements of the array '''a''',  and all members of the rows of sequence '''k''' for which '''k.x&lt;=k.y''' and '''k.z=k.y'''
+
+
+
+
+
+&lt;nowiki&gt;**&lt;/nowiki&gt;  In general URIs as defined by  [http://tools.ietf.org/html/rfc3986  RFC 3986] may contain any of the following characters: 
+
+&lt;pre&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;=.&lt;/pre&gt;
+
+Any other character needs to be encoded with the percent-encoding (%hh). Each part of the URI has further restrictions about what characters need to be represented by an percent-encoded word.
+
+=== Additional Server Controls ===
+
+By removing the "'''&amp;'''" character from the CE we can now use the rest of the query string to pass server controls and options. Consider if we were to take my corollary to Dennis' filter proposal and allow filters to be applied to arrays. The resulting data object could be expressed as a Sequence, or as a array with a mask applied. A server could support both and the type of result might be controlled by a KVP. You might even specify the mask value:
+: &lt;font size="3"&gt;&lt;code&gt;?dap4.ce=u[25:1:1000][75:1:1000]|u&gt;4.0|u&lt;12.7&amp;dap4.arraySelection=mask(0x00)&lt;/code&gt;&lt;/font&gt; 
+Or, ask for a Sequence:
+: &lt;font size="3"&gt;&lt;code&gt;?dap4.ce=u[25:1:1000][75:1:1000]|u&gt;4.0|u&lt;12.7&amp;dap4.arraySelection=Sequence&lt;/code&gt;&lt;/font&gt;
+
+=== Extensibility ===
+
+We claim the set of all query string keys beginning with the string "&lt;tt&gt;dap4.&lt;/tt&gt;" to be owned by the DAP4 protocol. 
+
+Examples:
+
+* "&lt;tt&gt;dap4.ce&lt;/tt&gt;" for the constraint expression.
+* "&lt;tt&gt;dap4.async&lt;/tt&gt;"  for asynchronous response control.
+* Any other key beginning with "&lt;tt&gt;dap4.&lt;/tt&gt;"  to give us future expandability. 
+
+This will allow us to add service controls and inputs over time without the risk of interfering with other efforts to add service controls and inputs to various DAP4 servers.
+
+== Examples ==
+
+Example: 
+: &lt;tt&gt;?dap4.ce=constraintExpressionString&amp;dap4.checksums=off&amp;dap4.arraySelection=mask(0x00)&amp;dap4.saveAs=newgranule&amp;dap4.async=true&lt;/tt&gt; 
+
+
+Example:
+: &lt;tt&gt;?dap4.ce=build_data(place,u[100:200])&amp;dap4.checksums=off&amp;dap4.arraySelection=Sequence&amp;dap4.saveAs=newgranule&amp;dap4.asyncAccepted&lt;/tt&gt;
+
+== Rationale for the solution ==
+
+Not a solution, just a starting point.
+
+== Discussion ==
+
+This is just a draft to get my ideas down so that we can talk about them.
+
+
+[[User:dmh|Dennis]] 9/27/2012&lt;br&gt;
+I have a number of comments about
+this proposal and especially about
+issues that need to be addressed.
+
+'''Namespaces''':&lt;br&gt;
+James made the claim that this proposal did not
+require namespaces for keys because (paraphrasing)
+"...google and facebook don't need it, why should we".
+
+The reason is that e.g. google has complete control
+over its servers hence keyword name conflicts are handled
+internally to google.
+
+We do not have that luxury.  Not only do we have
+multiple independently developed servers
+(e.g. hyrax, thredds, pydap), but each server has
+multiple instances across the web: instances not under
+our (opendap/unidata) control.
+
+Each of these server types and server instances are likely
+to have specific keys that pertain to their operation and
+are meaningless to others. Further, there will be keys whose
+semantics should be the same globally (i.e. across all servers).
+I claim that this forces the use
+of some kind of namespace mechanism for keys.
+
+There are a number of issues in assigning and using namespaces.
+First, there are going to be several important namespaces.
+# A default namespace.
+# The namespace implied by the specific server.
+# A namespace tree of keys whose meaning is intended to be defined by organizations other than dap. DAP (opendap+unidata) defined keys will be in this space, but provision should be made for other organizations to use this tree as well.
+
+Let me propose that #1 and #2 be the same. That is,
+keys with no special prefix are assumed to be local to the
+specific server and are interpreted by the server in any way
+it wishes. Note, that if it chooses, a server can define
+one of its keys to mean the same as some externally defined (#3)
+key.
+
+Let me further propose two possible ways to assign
+the namespace tree to organizations.
+
+First, we use the Java idea of
+defining the tree based on reverse url components.
+So we might have "edu.colorado.keyx" as a key under the
+control of the University of Colorado.
+For convenience, we might reserve the url "dap" or
+the url "." for DAP use. So we might define "dap.ce" or ".ce"
+as the key to specify a standard constraint as defined
+in the DAP4 spec.
+
+A second possible namespace tree would be based on
+the unix filesystem model with "/". Again, we might
+reserver the root and/or /dap for DAP specific use.
+This gives either "/ce" or "/dap/ce" as the constraint key.
+With this model, some organization (presumably opendap+unidata)
+has to assign paths in the tree
+to organizations. In order to reduce the need for that, we can
+again use a variant of the url model and have, for example,
+"/edu/colorado/keyx" be controlled by the University of Colorado.
+
+Personally, I prefer the second namespace model (using "/").
+
+&lt;blockquote&gt;
+&lt;em&gt;
+&lt;font color="green"&gt;
+I added a section to the proposal titled "Extensibility" which I believe minimally addresses this. We should discuss it and see if you feel more needs to be done. &lt;/font&gt; [[User:Ndp|ndp]] 13:15, 6 November 2012 (PST) &lt;/em&gt;
+&lt;/blockquote&gt;
+
+'''Parsing and Escaping''':&lt;br&gt;
+A minor point, but note that parsing of the sequence of
+keyword pairs will have to be done before
+%xx escaping is performed. This is because
+the significant characters ('=' and '&amp;' and '?')
+may appear in the value part of a pair.
+However, additional escaping using (presumably)
+'\' escapes will still be required to handle
+escaping within values -- when, for example,
+constraint expressions contain string constants.
+
+&lt;blockquote&gt;
+&lt;em&gt;
+&lt;font color="green"&gt;
+I did some testing against Tomcat using curl and  a browser. I learned the following: &lt;br/&gt;
+# The browser escapes the URL, curl does not (although you may have to shell escape components of a URL/CE to get command-line-curl and your shell to swallow it)
+# If you utilize URL encoding to encode a '&amp;' sign in the query string,  then Tomcat will ignore it when breaking the query string into KVPs, but will subsequently decode it before generating the keys and their values.
+# Every '&amp;' in the query string received by Tomcat that is not encoded (i.e. that appears as itself in the query string) will signal the Tomcat URL parser to start to generate a new KVP. I say start because there could be two adjacent ampersands (&amp;&amp;),  in which case they are treated as a single ampersand (and Tomcat generates a warning: "WARNING: Parameters: Invalid chunk '' ignored."). Additionally, the content may lack an equals symbol or a value, in which case the entire substring (between ampersands or between the last ampersand and the end of the query string) becomes a key whose value is the empty string. &lt;br/&gt; This I think means that we might also consider using simple keywords to control server behavior if we wished - for example instead of saying: &lt;font size="3"&gt;&lt;code&gt;&amp;async=true &lt;/code&gt;&lt;/font&gt; we might instead say simply &lt;font size="3"&gt;&lt;code&gt; &amp;acceptAsync &lt;/code&gt;&lt;/font&gt; with the server simply testing for the presence (or lack thereof) of the particular key.&lt;br/&gt;
+All of which pretty much confirms that Dennis' point regarding Parsing and Escaping of the DAP4 URL  is spot on, and that Tomcat does exactly what he suggests. I believe that the specification should make clear that clients need to URL escape ( %hh where hh is the hexadecimal value of the character being escaped)(uh... UNICODE?) the keys and values but not the ampersands that seperate them when making requests to DAP4 servers. &lt;br/&gt;
+How does that sound?&lt;br/&gt;
+&lt;/font&gt;
+[[User:Ndp|ndp]] 15:11, 6 November 2012 (PST)
+&lt;/em&gt;
+&lt;/blockquote&gt;
+
+
+
+
+'''Pairs as Map Versus Ordered List''':&lt;br&gt;
+Another issue that that should be spelled out
+involves the answer to the following two questions:
+# Is it legal to have multiple occurrences of the same key?&lt;br&gt;E.g. is ?x=5&amp;x=6 legal?
+# Does the order of occurrence of pairs matter?&lt;br&gt; E.g. is ?x=5&amp;y=x the same as ?y=x&amp;x=5 ?
+
+&lt;blockquote&gt;
+&lt;em&gt;
+&lt;font color="green"&gt;
+I believe the short answer to this question is: "It depends." I think that when we describe the usage of a KVP term that  we must explicitly indicate if that particular Key may occur multiple times and what happens if it does appear multiple times even when such use is not supported.
+&lt;/font&gt; [[User:Ndp|ndp]] 15:29, 6 November 2012 (PST)
+&lt;/em&gt;
+&lt;/blockquote&gt;
+
+I will probably have other comments as I think about this more.</text>
+      <sha1>6laqu5dkt7f5i4pe8h4uhnnqdjphoit</sha1>
+    </revision>
+  </page>
+</mediawiki>

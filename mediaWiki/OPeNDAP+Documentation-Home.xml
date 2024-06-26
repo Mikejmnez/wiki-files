@@ -1,0 +1,80 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Home</title>
+    <ns>0</ns>
+    <id>86</id>
+    <revision>
+      <id>12914</id>
+      <parentid>12468</parentid>
+      <timestamp>2021-05-28T10:44:30Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>12914</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1764" sha1="ss21gqhleuo8bk14uwedvkdbfi40vso" xml:space="preserve">{|style="width:100%" border="0" cellspacing="0" cellpadding="5"
+|[[File:OPeNDAP-Logo Large.png|300px]]
+|&lt;span style="font-size:14pt"&gt;This site holds Documentation on the different components of OPeNDAP software.&lt;/span&gt;
+&lt;BR&gt;&lt;br&gt;
+&lt;!-- &lt;br&gt;&lt;br&gt;
+&lt;span style="font-size:12pt;"&gt;OPeNDAP provides software which makes local data accessible to remote locations regardless of local storage format. OPeNDAP also provides tools for transforming existing applications into OPeNDAP clients (i.e., enabling them to remotely access OPeNDAP served data).&lt;/span&gt;
+&lt;BR&gt;&lt;BR&gt;--&gt;
+&lt;span style="font-size:12pt;"&gt;We invite contributions from the community! If you would like an account to contribute to this site, please email [mailto:support@opendap.org OPeNDAP User Support].
+
+&lt;/span&gt;
+|-
+|}
+----
+&lt;!-- &lt;div style="width:44%;background-color:#eeeeee;float:left;"&gt; --&gt;
+==Quick Links==
+* [https://opendap.github.io/hyrax_guide/Master_Hyrax_Guide.html Hyrax Installation and Configuration]
+* [https://opendap.github.io/documentation/QuickStart.html Getting Started with OPeNDAP Software]
+* [https://opendap.github.io/documentation/UserGuideComprehensive.html The User's Guide]
+* [https://opendap.github.io/libdap4/html libdap++: C++ DAP Implementation Documentation]
+* [https://opendap.github.io/bes/html/  BES: Hyrax C++ Backend Server Documentation]
+* [[DMR++]]
+
+&lt;!-- * [[Google Summer of Code 2011 Ideas]] --&gt;
+&lt;!-- * [[Google Summer of Code 2012 Ideas]] --&gt;
+&lt;!-- &lt;/div&gt; --&gt;
+
+== Contents ==
+* [[Documentation]] Documentation for both users and developers
+* [[Developer Info]] Documentation for developers
+* [[Development]] Project information: reports for completed projects; status of ongoing work; and new designs
+** [[OPULS Development|OPULS/DAP4]]
+* [[Meetings]]
+* [[Document Templates]]</text>
+      <sha1>ss21gqhleuo8bk14uwedvkdbfi40vso</sha1>
+    </revision>
+  </page>
+</mediawiki>

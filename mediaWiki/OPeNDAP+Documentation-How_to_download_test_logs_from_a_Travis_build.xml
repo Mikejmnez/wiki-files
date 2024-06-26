@@ -1,0 +1,70 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>How to download test logs from a Travis build</title>
+    <ns>0</ns>
+    <id>1063</id>
+    <revision>
+      <id>13490</id>
+      <parentid>13489</parentid>
+      <timestamp>2023-04-19T19:40:21Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <origin>13490</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1571" sha1="758ugpy0jhxwblpyxyc02s850kgviq7" xml:space="preserve">All of our CI/CD builds for both libdap4 and the BES run tests and save the results of the tests to an S3 bucket named '''opendap.travis.tests'''. 
+
+Here's how to download the collected log files from those tests.
+
+# Scroll to the end of one of the travis builds for these projects.
+# At the very end you will see a line that says ...
+# Expand that line by clicking the triangle to the left.
+# Copy the S3 URL.
+# Using the AWS Command Line Tool, copy the file to your local computer. For example: '''aws s3 cp s3://opendap.travis.tests/bes-autotest-4389.2-logs.tar.gz .'''
+# Make a new directory, move the tarball into that new (otherwise empty) directory, and expand the tarball (if you don't do this in a new directory, it can litter your CWD with lots of files and dirs).
+# Now, find the test results you want to see.
+
+Here's a screenshot of the line at the very bottom of a travis build log --&gt; [[File:Travis test log line 2023-04-19.png|500px|thumb|right|The part of the Travis build log that has the information you need to download the information]]
+
+=== Caveats ===
+This bucket is not open to anyone, you will need AWS credentials to download from it.
+
+It is possible to visit the bucket using the AWS console (assuming you have credentials) and browse and download pretty much any build.
+
+We periodically clean this bucket because it does cost money to store data there.
+
+If you restart a build, the logs from the restart will overwrite the logs from the original run since the tarball will have the same name and we do not have 'S3 object versioning turned on.'</text>
+      <sha1>758ugpy0jhxwblpyxyc02s850kgviq7</sha1>
+    </revision>
+  </page>
+</mediawiki>

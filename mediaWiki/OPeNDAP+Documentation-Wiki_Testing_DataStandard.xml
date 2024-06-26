@@ -1,0 +1,96 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/DataStandard</title>
+    <ns>0</ns>
+    <id>223</id>
+    <revision>
+      <id>1304</id>
+      <parentid>1299</parentid>
+      <timestamp>2007-10-06T01:47:49Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Organization of this Document */</comment>
+      <origin>1304</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1610" sha1="qmi4ryjrkd3ee271xm2veew2fw7dwtn" xml:space="preserve">=Preface=
+
+
+This document describes the various data standards that may be used by
+the \DODS (DODS) data providers to facilitate the interoperability of
+DODS datasets.  These standards are not essential to the operation of
+the DODS software, but are only meant as a guide to those providers
+for whom interoperability is an important consideration.
+
+This document is relevant to version \DODSversion and later of DODS.
+
+
+
+==Who is this Guide for?==
+
+
+This guide is designed to address the concerns of scientists and
+others who wish to use DODS to make their data available to one, two,
+or zillions of other scientists (and other others).  Making data
+available using DODS is usually only half of the battle.  It is often
+the case that for data to be actually useful to others, it must
+conform to certain data standards expected by other users or other
+users' software.  This manual documents standards used and
+''recommended''  (not required) by the DODS group.
+
+This guide assumes a basic familiarity with the DODS software
+package.  Refer to the \DODSuser for an overview of the package.
+
+
+
+==Organization of this Document==
+
+&lt;blockquote&gt;
+
+; [[Wiki_Testing/intro | Chapter 1]] : 
+provides an overview of the need for standards.
+
+; [[Wiki_Testing/dods-standards | Chapter 2]] : 
+describes one set of optional (and evolving) DODS data standards.
+
+; [[Wiki_Testing/adding-attr | Chapter 3]] : 
+shows an example: Making a simple dataset DODS compliant.
+
+; [[Wiki_Testing/adding-appa | Appedix]] : 
+ contains a list of the data variable
+names currently incorporated into the DODS meta-data standard.
+
+&lt;/blockquote&gt;</text>
+      <sha1>qmi4ryjrkd3ee271xm2veew2fw7dwtn</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,127 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>A One-day Course on Hyrax Development</title>
+    <ns>0</ns>
+    <id>815</id>
+    <revision>
+      <id>10871</id>
+      <parentid>10870</parentid>
+      <timestamp>2014-10-02T15:57:02Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Server Functions */</comment>
+      <origin>10871</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6547" sha1="ikxqpsdqnhes6jhifty8qnvqyn51xpo" xml:space="preserve">Many of these slide sets show examples based on Hyrax running in Linux. We have built a CentOS 6 64-bit virtual machine that runs under the VMware hypervisor (Fusion, Workstation or Player will all work with this VM) and it is available for download [http://www.opendap.org/pub/vm/centos6 here]. This VM contains a CentOS 6 machine configured according to our page on setting up a [[ConfigureCentos |CentOS box for RPM production]]. It also includes Hyrax (from the 1.9 release branch) already built and tested. Additional items from/for the course outlined here may also be on the VM, but if not, just follow the directions to download them.
+
+We have also built an older Virtual Machine that runs openSUSE 12.1 for this tutorial and it's available [http://www.opendap.org/pub/vm/miic here]. The VM will run in all of the modern versions of Vmware's tools (Fusion, Workstation and Player). This virtual machine contains Hyrax 1.8, also built and testes along with other downloads from the tutorial. We've used it on OS/X (with fusion and Player) and on Windows 7 (with Player). ''In general, unless you have a particular need for SUSE or Hyrax 1.8, use the newer CentOS 6 VM and Hyrax 1.9.''
+
+== Introduction to OPeNDAP ==
+An introduction to both OPeNDAP and the Data Access Protocol (DAP) data model. (lecture - 20m)
+[http://www.opendap.org/pub/vm/centos6/1_DAP_Intro_dwf_jhrg.ppt Slides]
+
+DAP and Grid Coverages. (lecture - 20m) [http://www.opendap.org/pub/vm/centos6/1.1_Data_Model_and_Coverages.pptx Slides]
+
+DAP4 with DAP2 to DAP4 transition use cases. (lecture - 20m) [http://www.opendap.org/pub/vm/centos6/1.2_DAP4_Overview_7_2014.pptx Slides]
+
+== The Hyrax Data Server Architecture ==
+An overview of the architecture of the Hyrax server. This presentation is intended for software developers. (lecture - 40m)
+[http://www.opendap.org/pub/vm/centos6/2_HyraxArchitecture_v1.1.ppt Slides]
+
+== Running &amp; Debugging the server ==
+The VM is a CentOS 6 64-bit Virtual Machine that works with Vmware's Fusion 7, Workstation 10 and Player. Older versions of those may work. The login username is ''opendap'' and the password is ''opendap''. 
+
+There is also an openSUSE 12.1 Linux 32-bit VM that works with Fusion 4, Workstation 7 and player 3. The home account directory is ''/home/dev/OPeNDAP'' but otherwise the two VMs are virtually (ahem) identical. The username for the SUSE VM is ''dev'' and the password is ''foofoo''.
+
+Start the virtual machine and Hyrax (hands-on 40m)
+[http://www.opendap.org/pub/vm/centos6/3_Hyrax_Setup.ppt Slides]
+
+Break
+
+Hyrax setup on the VM (hands-on - 20m)
+[http://www.opendap.org/pub/vm/centos6/4_Checking_the_Server.ppt Slides]
+
+This shows how to use getdap and telnet to debug the server. These are low-level command line tools that cut to the chase when the server seems to be broken. Also note that both of these slide sets show you how to use the bescmdln tool. The bescmdln tool is very useful for working with the BES alone - note that we used it to test the BES ''before'' we started tomcat and had Hyrax in its full form up and running. 
+
+The bescmdln tool has several options that are useful:
+* It can use the SQL-like ''set'', ''define'' and ''get'' commands
+* it can also use the XML command syntax that the front-end also uses
+* It can read sets of commands from text files (using the ''-i'' option)
+* ...and those command files can also be used with another tool - ''besstandalone'' - which can be used to test server components with actually starting the BES.
+
+For more information on ''bescmdln'' see:
+* [[Hyrax - Running bescmdln]]
+* [[Hyrax - BES Client commands]]
+* [[BES XML Commands]]
+All of which you can find on the [[Hyrax#Developers | Developers]] section of the [[Hyrax]] documentation
+
+== Extending The BES ==
+Extending The BES: Commands, Response Objects, Handlers, and more [http://www.opendap.org/pub/vm/centos6/5_BES_Extensibility.ppt Slides] (lecture)
+
+* New commands (like our hello world example)
+* New response objects
+* New response handlers
+* New request handlers (data handlers like netcdf, freeform, csv)
+* Aggregation engines
+* Methods of returning your data (return as netcdf)
+* Reporters
+* Exception Handlers
+* Debugging
+
+== Server Functions ==
+This is an introduction to Server-side Functions. It is both lecture and hands-on and works best if you have Eclipse, Emacs or another suitable programming editor running. [http://www.opendap.org/pub/vm/centos6/6_Server_Side_Functions.ppt Slides] (lecture + hands-on 2 hours)
+
+&lt;blockquote&gt;'''Note''' In libdap 3.13 we changed how functions are managed, making it possible to build a 'function module' in the same way that the BES supports modules for format access and response transmission. These function modules are loaded by the BES, just as the other modules are, even though the code they are based on is part of libdap. The ''essential'' parts of the function system are the same as before, except that functions are no longer compiled into a specific part of the code base (e.g., libdap or a format handler like FreeForm). Here is a short tutorial that describes how to build a libdap 3.13++ style function module: [[Hyrax: Server Side Functions | server side function modules for Hyrax.]]&lt;/blockquote&gt;
+
+* Background on DAP2 and Constraints
+* Writing Server Functions: short version
+* Programming with libdap
+* A Real Server Function
+* Write HelloWorld()
+* Advanced Topics
+
+=== Setting up for developing server functions ===
+* [[Hyrax - Build the Shrew Project]]
+* [[Eclipse - How to Setup Eclipse in a Shrew Checkout]]
+* [[BES - Debugging Using besstandalone]]
+
+== Advanced Topics ==
+Cloud computing environments provide many interesting capabilities for sites serving data, especially large volumes of data or with highly variable load levels. 
+
+* [[ConfigureAmazonLinuxAMI | How to configure an Amazon AMI so that you can build and run the development version of Hyrax]]. Note that configuration of a VM (using pretty much any hypervisor and a Linux VM) to run the distribution version of Hyrax is no different from an install on physical hardware. But ''building'' the development source code requires both development tools and the development versions of the server's dependencies.
+* Running Hyrax in a cloud environment. This [http://www.opendap.org/pub/vm/centos6/OPeNDAP_Cloud_12.2013.ppt slide set] describes some experimental work on the Amazon S3 and Glacier storage systems. These are Amazon cloud services that provide ways to store data that are very different from a spinning disk with a Unix file system.</text>
+      <sha1>ikxqpsdqnhes6jhifty8qnvqyn51xpo</sha1>
+    </revision>
+  </page>
+</mediawiki>

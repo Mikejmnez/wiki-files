@@ -1,0 +1,382 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/tblfmt</title>
+    <ns>0</ns>
+    <id>213</id>
+    <revision>
+      <id>4946</id>
+      <parentid>4945</parentid>
+      <timestamp>2009-10-06T23:45:19Z</timestamp>
+      <contributor>
+        <username>TomSgouros</username>
+        <id>39</id>
+      </contributor>
+      <origin>4946</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="12379" sha1="n5qc5lr7tuk7unev9om60cx15boorm2" xml:space="preserve">[[FreeForm|return to FreeForm]]
+
+=Format Descriptions for Tabular Data=
+
+
+
+Format descriptions define the formats of input and output data and
+headers. FreeForm ND provides an easy-to-use mechanism for describing
+data. FreeForm ND programs and FreeForm ND-based applications that you
+develop use these format descriptions to correctly access data. Any
+data file used by FreeForm ND programs must be described in a format
+description file.
+
+This page explains how to write format descriptions for data
+arranged in tabular format---rows and columns---only. For data in
+non-tabular formats, see [[Wiki_Testing/arrayfmt|Array Format]].
+
+==FreeForm ND Variable Types==
+
+
+The data sets you produce and use may contain a variety of variable
+types. The characteristics of the types that FreeForm ND supports are
+summarized in the table below, which is followed by a
+description of each type.
+
+&lt;center&gt;
+ OPeNDAP FreeForm ND Data Types
+
+{| border="1" 
+! Name  !! Minimum Value !! Maximum Value !! Size in Bytes !! Precision*
+|-
+| &lt;font color='green'&gt;char&lt;/font&gt; ||  ||  || ** ||
+|-
+| &lt;font color='green'&gt;uchar&lt;/font&gt; || 0 || 255 || 1 ||
+|-
+| &lt;font color='green'&gt;short&lt;/font&gt; || -32,767 || 32,767 || 2 ||
+|-
+|&lt;font color='green'&gt;ushort&lt;/font&gt; || 0 || 65,535 || 2 ||
+|-
+| &lt;font color='green'&gt;long&lt;/font&gt; || -2,147,483,647 || 2,147,483,647 || 4 ||
+|-
+| &lt;font color='green'&gt;ulong&lt;/font&gt; || 0 || 4,294,967,295 || 4 ||
+|-
+| &lt;font color='green'&gt;float&lt;/font&gt; || &lt;math&gt;10^{-37}&lt;/math&gt; || &lt;math&gt;10^{38}&lt;/math&gt; || 4 || 6***
+|-
+| &lt;font color='green'&gt;double&lt;/font&gt; || &lt;math&gt;10^{-307}&lt;/math&gt; || &lt;math&gt;10^{308}&lt;/math&gt; || 8 || 15***
+|-
+| &lt;font color='green'&gt;constant&lt;/font&gt; ||  ||  || ** ||
+|-
+| &lt;font color='green'&gt;initial&lt;/font&gt; ||  ||  || record length ||
+|-
+| &lt;font color='green'&gt;convert&lt;/font&gt; ||  ||  || ** ||
+|-
+| * Expressed as the number of significant digits  
+|-
+| ** User-specified  
+|-
+| *** Can vary depending on environment   
+
+|}
+ 
+&lt;/center&gt;
+
+&lt;blockquote&gt;NOTE: The sizes in table 3.1 are machine-dependent.
+Those given are for most Unix workstations.  &lt;/blockquote&gt;
+
+
+ 
+; &lt;font color='green'&gt;char&lt;/font&gt; : The &lt;font color='green'&gt;char&lt;/font&gt; variable type is used for character strings. Variables of this type, including numerals, are interpreted as characters, not as numbers.
+
+; &lt;font color='green'&gt;uchar&lt;/font&gt; : The &lt;font color='green'&gt;uchar&lt;/font&gt; (unsigned character) variable type can be used for integers between 0 and 255 (28- 1). Variables that can be represented by the &lt;font color='green'&gt;uchar&lt;/font&gt; type (for example: month, day, hour, minute) occur in many data sets. An advantage of using the &lt;font color='green'&gt;uchar&lt;/font&gt; type in binary formats is that only one byte is used for each variable. Variables of this type are interpreted as numbers, not characters.
+
+; &lt;font color='green'&gt;short&lt;/font&gt; : A &lt;font color='green'&gt;short&lt;/font&gt; variable can hold integers between -32,767 and 32,767 (&lt;math&gt;2^{15}- 1&lt;/math&gt;). This type can be used for signed integers with less than 5 digits, or for real numbers with a total of 4 or fewer digits on both sides of the decimal point (-99 to 99 with a precision of 2, -999 to 999 with a precision of 1, and so on).
+
+; &lt;font color='green'&gt;ushort&lt;/font&gt; : A &lt;font color='green'&gt;ushort&lt;/font&gt; (unsigned short) variable can hold integers between 0 and 65,535 (&lt;math&gt;2^{16} - 1&lt;/math&gt;).
+
+; &lt;font color='green'&gt;long&lt;/font&gt; : A &lt;font color='green'&gt;long&lt;/font&gt; variable can hold integers between -2,147,483,647 and +2,147,483,647 (&lt;math&gt;2^{31} - 1&lt;/math&gt;). This variable type is commonly used to represent floating point data as integers, which may be more portable. It can be used for numbers with 9 or fewer digits with up to 9 digits of precision, for example, latitude or longitude (-180.000000 to 180.000000).
+
+; &lt;font color='green'&gt;ulong&lt;/font&gt; : The &lt;font color='green'&gt;ulong&lt;/font&gt; (unsigned long) variable type can be used for integers between 0 and 4,294,967,295 (&lt;math&gt;2^{32} - 1&lt;/math&gt;).
+
+; &lt;font color='green'&gt;float, double&lt;/font&gt; : Numbers that include explicit decimal points are either &lt;font color='green'&gt;float&lt;/font&gt; or &lt;font color='green'&gt;double&lt;/font&gt; depending on the desired number of digits. A &lt;font color='green'&gt;float&lt;/font&gt; has a maximum of 6 significant digits, a &lt;font color='green'&gt;double&lt;/font&gt; has 15 maximum. The extra digits of a &lt;font color='green'&gt;double&lt;/font&gt; are useful, for example, for precisely specifying time of day within a month as decimal days. One second of time is approximately 0.00001 day. The number specifying day (maximum = 31) can occupy up to 2 digits. A &lt;font color='green'&gt;float&lt;/font&gt; can therefore only specify decimal days to a whole second (31.00001 occupies seven digits). A &lt;font color='green'&gt;double&lt;/font&gt; can, however, be used to track decimal parts of a second (for example, 31.000001).
+
+
+==FreeForm ND File Types==
+
+
+
+
+FreeForm ND supports binary, ASCII, and dBASE file types. Binary data
+are stored in a fixed amount of space with a fixed range of values.
+This is a very efficient way to store data, but the files are
+machine-readable rather than human-readable. Binary numbers can be
+integers or floating point numbers.
+
+Numbers and character strings are stored as text strings in ASCII. The
+amount of space used to store a string is variable, with each
+character occupying one byte.
+
+The dBASE file type, used by the dBASE product, is ASCII text without
+end-of-line markers.
+
+==Format Description Files==
+
+
+
+Format description files accompany data files. A format description
+file can contain descriptions for one or more formats. You include
+descriptions for header, input, and output formats as appropriate.
+Format descriptions for more than one file may be included in a single
+format description file.
+
+An example format description file is shown next. The sections that
+follow describe each element of a format description file.
+
+&lt;pre&gt;
+/ This format description file is for
+/ data files latlon.bin and latlon.dat.
+
+binary_data "Default binary format"
+latitude 1 4 long 6
+longitude 5 8 long 6
+
+ASCII_data "Default ASCII format"
+latitude 1 10 double 6
+longitude 12 22 double 6
+&lt;/pre&gt;
+
+Lines 1 and 2 are comment lines.  Lines 4 and 8 give the format type and title. Lines 5, 6,
+9, and 10 contain variable descriptions.  Blank lines signify the end of a format
+description
+
+
+You can include blank lines between format descriptions and comments
+in a format description file as necessary.  Comment lines begin with a
+slash (/). FreeForm ND ignores comments.
+
+==Format Descriptions==
+
+
+A format description file comprises one or more format descriptions. A
+format description consists of a line specifying the format type and
+title followed by one or more variable descriptions, as in the
+following example:
+
+&lt;pre&gt;
+binary_data "Default binary format"
+latitude 1 4 long 6
+longitude 5 8 long 6
+&lt;/pre&gt;
+
+===Format Type and Title===
+
+
+
+
+A line specifying the format type and title begins a format
+description. A ''format descriptor'', for example, &lt;font color='green'&gt;binary_data&lt;/font&gt;, is
+used to indicate format type to FreeForm ND. The ''format title'', for
+example, "Default binary format", briefly describes the format. It
+must be surrounded by quotes and follow the format descriptor on the
+same line. The maximum number of characters for the format title is 80
+including the quotes.
+
+====Format Descriptors====
+
+
+Format descriptors indicate (in the order given) file type, read/write
+type, and file section. Possible values for each descriptor component
+are shown in the following table.
+ 
+&lt;center&gt;
+
+Format Descriptor Components
+ 
+{| border="1" 
+|+
+! File Type  !! Read/Write Type (optional) !! File Section
+|-
+| 
+{| border="1" 
+  |+
+  | &lt;font color='green'&gt;ASCII&lt;/font&gt;
+  |-
+  | &lt;font color='green'&gt;binary&lt;/font&gt;
+  |-
+  | &lt;font color='green'&gt;dBASE&lt;/font&gt;
+|}
+||
+{| border="1" 
+  |+
+  | &lt;font color='green'&gt;input&lt;/font&gt;
+  |-
+  | &lt;font color='green'&gt;output&lt;/font&gt;
+ |} 
+||
+{| border="1" 
+  |+
+  | &lt;font color='green'&gt;data&lt;/font&gt;
+  |-
+  | &lt;font color='green'&gt;file_header&lt;/font&gt;
+  |-
+  |&lt;font color='green'&gt;record_header&lt;/font&gt;
+  |-
+  |&lt;font color='green'&gt;file_header_separate&lt;/font&gt;*
+  |-
+  |&lt;font color='green'&gt;record_header_separate&lt;/font&gt;*
+|}
+|- 
+| colspan="3" | * The qualifier &lt;font color='green'&gt;separate&lt;/font&gt; indicates there is a header file separate from the data file.
+
+|}
+&lt;/center&gt;
+
+The components of a format descriptor are separated by underscores
+(_). For example, &lt;font color='green'&gt;ASCII_output_data&lt;/font&gt; indicates that the format
+description is for ASCII data in an output file. The order of
+descriptors in a format description should reflect the order of format
+types in the file. For instance, the descriptor
+&lt;font color='green'&gt;ASCII_file_header&lt;/font&gt; would be listed in the format description
+file before &lt;font color='green'&gt;ASCII_data&lt;/font&gt;. The format descriptors you can use in
+FreeForm ND are listed in the next table, where &lt;font color='green'&gt;XXX&lt;/font&gt; stands for
+&lt;font color='green'&gt;ASCII&lt;/font&gt;, &lt;font color='green'&gt;binary&lt;/font&gt;, or &lt;font color='green'&gt;dBASE&lt;/font&gt;.  (Example: &lt;font color='green'&gt;XXX_data&lt;/font&gt;
+= &lt;font color='green'&gt;ASCII_data&lt;/font&gt;, &lt;font color='green'&gt;binary_data&lt;/font&gt;, or &lt;font color='green'&gt;dBASE_data&lt;/font&gt;.)
+
+&lt;center&gt;
+Format Descriptors
+
+{| border="1" 
+! Data !! Header !! Special
+|-
+|
+{| border="1" 
+|+
+| &lt;font color='green'&gt;XXX_data&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_input_data&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_output_data&lt;/font&gt;
+|}
+||
+{| border="1" 
+|+ 
+| &lt;font color='green'&gt;XXX_file_header&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_file_header_separate&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_record_header&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_record_header_separate&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_input_file_header&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_input_file_header_separate&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_input_record_header&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_input_record_header_separate&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_output_file_header&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_output_file_header_separate&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_output_record_header&lt;/font&gt;
+|-
+| &lt;font color='green'&gt;XXX_output_record_header_separate&lt;/font&gt;
+|}
+||
+{|
+|&lt;font color='green'&gt;RETURN&lt;/font&gt;*
+|-
+|&lt;font color='green'&gt;EOL&lt;/font&gt;**
+|}
+|-
+| colspan="3" |* The RETURN descriptor lets FreeForm ND skip
+over end-of-line characters in the data. 
+|-
+| colspan="3" |** The EOL descriptor is a constant
+indicating an end-of-line character should be inserted in a
+multi-line record. 
+|}
+&lt;/center&gt;
+
+For more information about header formats, see ([[Wiki_Testing/hdrfmts|Header Formats]]).
+
+===Variable Descriptions===
+
+
+
+A variable description defines the name, start and end column
+position, type, and precision for each variable. The fields in a
+variable description are separated by white space. Two variable
+descriptions are shown below with the fields indicated. Each field is
+then described.
+
+Here are two example variable descriptions.  Each one consists of a
+name, a start position, and end position, a type, and a precision.
+
+&lt;pre&gt;
+latitude    1  10  double  6
+longitude  12  22  double  6
+&lt;/pre&gt;
+
+&lt;blockquote&gt;
+; Name :
+The variable name is case-sensitive, up to 63 characters long with
+no blanks. The variable names in the example are latitude and
+longitude. If the same variable is included in more than one format
+description within a format description file, its name must be the
+same in each format description.
+
+; Start Position :
+The column position where the first character (ASCII) or byte
+(binary) of a variable value is placed. The first position is 1, not
+0. In the example, the variable latitude is defined to start at
+position 1 and longitude at 12.
+
+; End Position :
+The column position where the last character (ASCII) or byte
+(binary) of a variable value is placed. In the example, the variable
+latitude is defined to end at position 10 and longitude at 22.
+
+; Type :
+The variable type can be a standard type such as char, float,
+double, or a special FreeForm ND type. The type for both variables
+in the example is double. See above for
+descriptions of supported types.
+
+; Precision :
+Precision defines the number of digits to the right of the decimal
+point. For float or double variables, precision only controls the
+number of digits printed or displayed to the right of the decimal
+point in an ASCII representation. The precision for both variables
+in the example is 6.
+
+&lt;/blockquote&gt;</text>
+      <sha1>n5qc5lr7tuk7unev9om60cx15boorm2</sha1>
+    </revision>
+  </page>
+</mediawiki>

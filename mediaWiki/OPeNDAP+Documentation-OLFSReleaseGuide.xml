@@ -1,0 +1,270 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>OLFSReleaseGuide</title>
+    <ns>0</ns>
+    <id>759</id>
+    <revision>
+      <id>13521</id>
+      <parentid>13374</parentid>
+      <timestamp>2024-01-23T23:42:48Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Update the Build Offset */</comment>
+      <origin>13521</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="12292" sha1="76yis1l95lcr72wp4bg8eaptfdknuy6" xml:space="preserve">[[Developer_Info |&lt;&lt; back to '''Developer Info''']]
+
+== Overview ==
+This document describes how to make releases of the OLFS.  
+
+About version numbers: 
+* We use Hyrax &lt;major&gt;.&lt;minor&gt; version numbers for release branches.
+* We use &lt;major&gt;.&lt;minor&gt;.&lt;revision&gt; version numbers for the olfs code version.
+
+New versions of a release (only the &lt;revision&gt; field in the version number is changed) should contain:
+* Bug fixes.
+* Updated tests.
+* Changes to production rules.
+These changes should be made on the trunk and the merged to the release branch.
+
+Since major development is only happening on development branches, very little on the trunk should change until a development branch is merged into the trunk. If new features are added or the code API changes there should be a new release made, which means make a new release branch.
+
+''' This page is based on the [http://docs.opendap.org/index.php/ShrewBranchGuide branching and merging guidelines found here].'''
+
+== Make sure the code is ready to release ==
+
+&lt;!-- First, make sure that the source code you're using is on a branch, up-to-date (''svn up'') and that the software passes its tests and no outstanding tickets remain for the release milestone. --&gt;
+
+Make sure that all of the developers working on the code have checked in their working copies of the trunk, and that all development branches whose functionality/features/codeBase are to included in the release have been merged to the trunk and committed. 
+
+=== Check out the master branch of the OLFS code from GitHub ===
+In a new directory get a fresh copy of the trunk:
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;git clone https://github.com/opendap/olfs&lt;/source&gt;&lt;/font&gt;&lt;!-- svn co https://scm.opendap.org/svn/trunk/olfs --&gt;
+
+=== Build the OLFS ===
+In the checked out OLFS directory run the command:
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;% ant server&lt;/source&gt;&lt;/font&gt;
+
+=== Run the tests ===
+''Updated Dec 29th 2020''
+
+The Hyrax regression tests utilize an autotools/automake/autotest test system. In order to to run the tests you must have the Hyrax server running. Build and install the BES first. Then build and install the OLFS into a Tomcat instance and start that instance. 
+
+Once you have the OLFS built, installed, and running do the following:
+* If you have not done so already, clone the hyrax_regression_tests project:
+: &lt;code&gt;gitclone https://github.com/opendap/hyrax_regression_tests&lt;/code&gt;
+* Change directory into the top of  &lt;code&gt;hyrax_regression_tests&lt;/code&gt; and perform the following:
+: &lt;code&gt;autoreconf -vif&lt;/code&gt;
+: &lt;code&gt;./configure&lt;/code&gt;
+: &lt;code&gt;make check&lt;/code&gt;
+The tests may also be run directly:
+: &lt;code&gt;./testsuite &lt;/code&gt;
+
+Either command will run the tests in a traditional autotest test harness, against the server you should have running at http://localhost:8080/opendap/
+
+The &lt;code&gt;testsuite&lt;/code&gt; supports several notable command line options:
+
+* &lt;code&gt;--besdev=yes|no&lt;/code&gt; Was the BES built using --enable-developer?
+* &lt;code&gt;--hyraxurl=hyrax-service-endpoint-url&lt;/code&gt; Run the various tests (DAP2/4, w10n, wcs, etc.) against the Hyrax instance located at the specified endpoint URL. (default: http://localhost:8080/opendap)
+* &lt;code&gt;--netrc=netrc_file_name&lt;/code&gt; Run tests using the specified netrc file (ala cURL) so that the test can authenticate to access the server. (default: ~/.netrc)
+
+== Determine Version Numbers ==
+You will need to know the OLFS version and the Hyrax version of the release to build the distribution and to update the various release related files.
+
+=== OLFS Version Number ===
+# Look in the NEWS and README.md files to determine the previous version number.
+# Determine new version number by looking at the changes to the code (start by reviewing the ChangeLog file)
+#* Versioning rules: What the ''MAJOR.MINOR.REVISION'' string means:'' 
+#**No interfaces changed, only implementations (good): ==&gt; Increment REVISION.
+#**Interfaces added, none removed (good): ==&gt; Increment MINOR, set REVISION to 0.
+#**Interfaces removed or changed (BAD, breaks upward compatibility): ==&gt; Increment MAJOR, set MINOR and REVISION to 0.
+# Remember the new version number so that it can be used to:
+#* Update the release related files 
+#* Build the versioned software distribution bundles.
+
+=== Hyrax Version ===
+; Need a set of criteria or a link to them here.
+
+== Edit the release related files ==
+
+; ChangeLog
+:Use the script &lt;tt&gt;gitlog-to-changelog&lt;/tt&gt; (which can be found with Google) to update the '''ChangeLog''' file by running it using the &lt;tt&gt;--since="&lt;date&gt;"&lt;/tt&gt; option with a date one day later in time than the newest entry in the current ChangeLog. Then, to write the NEWS file, just read over the new ChangeLog entries and summarize.
+: '''Tip''' - This command gets the entire gitlog and reformats it to change log, wrapping and indenting long lines to under 80 characters. Be sure to update the date to the latest date in the current ChangeLog file.:
+:: '''&lt;tt&gt;gitlog-to-changelog --since="1970-01-01" 2&gt;&amp;1  | fold -s -w 72 | awk '{if(!match($0,"^[0-9]|^[\\t]")){printf("\t%s\n",$0);}else{print $0;}}' -&lt;/tt&gt;'''
+
+
+; README.md
+: Update version number for the OLFS and HYRAX
+: Update the version number and DOI markup for the BES.
+: Update the version number and DOI markup for libdap.
+: Review content to make sure it's current. 
+
+; NEWS
+: Add new version number and,
+: Summarize the new additions to the change log. There may be many checkins associated with new feature development. You can summarize those as "Added 'X' feature."
+
+; install.html
+: Update version number.
+: Review content to make sure it's current.
+
+== Update the Build Offset ==
+''Setting the build offset correctly will set the build number for the new release to "0".''
+
+The file &lt;tt&gt;travis/versions_and_build_offsets.sh&lt;/tt&gt; is used by our TravisCI production to set the
+values of the:
+* &lt;tt&gt;OLFS_VERSION&lt;/tt&gt;
+* &lt;tt&gt;HYRAX_VERSION&lt;/tt&gt;
+* &lt;tt&gt;TRAVIS_OLFS_BUILD_OFFSET&lt;/tt&gt; 
+* &lt;tt&gt;TRAVIS_HYRAX_BUILD_OFFSET&lt;/tt&gt; 
+
+Set the &lt;tt&gt;OLFS_VERSION&lt;/tt&gt; and the &lt;tt&gt;HYRAX_VERSION&lt;/tt&gt; to the values that you used in the NEWS, README, and other files.
+
+Set the values of &lt;tt&gt; TRAVIS_OLFS_BUILD_OFFSET &lt;/tt&gt; and &lt;tt&gt;TRAVIS_HYRAX_BUILD_OFFSET&lt;/tt&gt; to the number of the last OLFS TravisCI build plus one. The previous commit and push will have triggered a TravisCI build. Find the build number for the previous commit in [https://app.travis-ci.com/github/OPENDAP/olfs the TravisCI page for the OLFS] and use that build number plus 1.
+
+== Check in and push the changes ==
+
+In the local copy of the OLFS master branch in which you updated the '''ChangeLog''' and other files:
+ 
+&lt;font size="2"&gt;
+&lt;source lang="bash"&gt;
+git commit -a -m "olfs: Updating olfs version and release files to version 1.2.3"
+git push
+&lt;/source&gt;&lt;/font&gt;
+
+Once this is done, use github to tag the code you just committed both with its version and the version of hyrax to which it belongs:
+
+==== Tag the release ====
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;
+git tag -m "olfs-&lt;numbers&gt;" -a &lt;numbers&gt; 
+git push origin &lt;numbers&gt;
+&lt;/source&gt;&lt;/font&gt;
+
+==== If this is part of Hyrax, also tag this point in the master branch with the Hyrax release number ====
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;
+git tag -m "hyrax-&lt;numbers&gt;" -a hyrax-&lt;numbers&gt; 
+git push origin hyrax-&lt;numbers&gt;
+&lt;/source&gt;&lt;/font&gt;
+
+&lt;!-- == The release branch ==
+
+
+; Question for James 
+:So what happens if the OLFS changes a lot on the trunk and the C++ code does not. Since release branch name is tied to a Hyrax version (ex: ''branch/olfs/release/hyrax-1.9'') and the rule is to make a new release branch, what do? Do we abandon the hyrax release branch and make one named something like ''branch/olfs/release/olfs-1.10.2'' ?? But then what if I also make changes to the OLFS to fix a bug for the hyrax-1.9 release and those are on the trunk too.
+:It's kind of like the two bodies of code don't progress in lock step.  
+:Maybe the answer is that we don't merge development branches to the trunk until we are getting ready for a new release?
+:[[User:Ndp|ndp]] 19:43, 12 September 2013 (PDT)
+=== If the release branch does not exist then create it ===
+
+; Naming the release branch
+: Since every release of the OLFS is tied to a release of the Hyrax server we create OLFS release branches based the name of the Hyrax release with which they are associated. 
+
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;svn cp -m "olfs: Creating OLFS release branch for hyrax-4.5" $svn/trunk/olfs $svn/branch/olfs/release/hyrax-4.5&lt;/source&gt;&lt;/font&gt;
+
+=== Otherwise (the release branch exists) so merge the trunk to the branch ===
+
+Checkout a copy of the release branch:
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;svn co $svn/branch/olfs/release/hyrax-4.5&lt;/source&gt;&lt;/font&gt;
+
+In this new local copy of the release branch merge from the trunk like this:
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;
+svn merge $svn/trunk/olfs
+&lt;/source&gt;&lt;/font&gt;
+You need to run this command from within a working copy and the changes are made to the working copy. You need to commit them to add them to the repository.
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;
+svn ci -m "olfs: Merged trunk to hyrax-4.5 release branch."
+&lt;/source&gt;&lt;/font&gt;
+
+== Tag the release ==
+
+; Determining the tag name
+: The tag should be named with the name and full version number of the Hyrax release.
+:* If you created a new release branch (which is always named with the ''major.minor'' version) called  ''hyrax-4.5'' then the tag name will be ''hyrax-4.5.0''
+:* If you are releasing a new version of an existing release then the version field should be incremented by one from the previous version. So if the most recent tag was ''hyrax-4.5.6'' then the new tag should be ''hyrax-4.5.7''
+
+
+=== Example: A new release branch was just created ===
+
+And the new release branch is named ''hyrax-4.5'' then add a 0 as the revision number for a tag name of ''hyrax-4.5.0''
+
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;svn cp -m "olfs: Tagging OLFS release for hyrax-4.5.0" $svn/branch/olfs/release/hyrax-4.5 $svn/tags/olfs/hyrax-4.5.0&lt;/source&gt;&lt;/font&gt;
+
+=== Example: Releasing a new revision an existing release ===
+
+And the most recent release tag was ''hyrax-4.5.6'' then add a increment the revision field for a tag name of ''hyrax-4.5.7''
+
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;svn cp -m "olfs: Tagging OLFS release for hyrax-4.5.7" $svn/branch/olfs/release/hyrax-4.5 $svn/tags/olfs/hyrax-4.5.7&lt;/source&gt;&lt;/font&gt;
+--&gt;
+
+=== Make The Release ===
+* Make the release in GitHub.
+** Look at previous releases for title format.
+** Use the NEWS entry for the description.
+* Get The DOI for the release from Zendodo.
+** Use the search api to find &lt;cod&gt;olfs xx.yy.zz&lt;/code&gt;
+** Copy the markup for the DOI badge and then
+* Update the Release Page in Github with the DOI markup.
+
+== Build and Sign the versioned distribution bundles ==
+
+In an up to date local copy of the OLFS software:
+
+&lt;font size="2"&gt;&lt;source lang="bash"&gt;ant -DOLFS_VERSION=1.2.3 -DHYRAX_VERSION=4.5.0 DISTRO&lt;/source&gt;&lt;/font&gt;
+
+This will create the three compressed tar files for the release in the $olfs/build/dist directory.
+;olfs-1.2.3-src.tgz: Contains the source files for the release
+;olfs-1.2.3-webapp.tgz: Contains the instructions and .war file that will be used in the tomcat webapps directory.
+;robots-olfs-1.2.3-webapp.tgz: Contains just the robots webapp that can supply site inventory to bots.
+
+===  Use '''gpg''' to sign the tar bundle ===
+
+#: One File: &lt;tt&gt;gpg --detach-sign --local-user security@opendap.org olfs-####.tgz&lt;/tt&gt;
+#: All Files: &lt;tt&gt;for i in build/dist/*.tgz; do gpg --detach-sign --local-user security@opendap.org $i; done&lt;/tt&gt;
+# Use '''sftp''' to push the signature file and the tar bundle to the /httpdocs/pub/source directory on www.opendap.org
+#: ''(Assuming your current working directory is the top of the '''bes''' project)''
+#: &lt;tt&gt;sftp opendap@www.opendap.org&lt;/tt&gt;
+#: &lt;tt&gt;cd httpdocs/pub/source&lt;/tt&gt;
+#: &lt;tt&gt;put olfs-####.tgz.sig&lt;/tt&gt;
+#: &lt;tt&gt;put olfs-####.tgz&lt;/tt&gt;
+#: &lt;tt&gt;quit&lt;/tt&gt;
+# Check your work!
+## Download the source tar bundle and signature from www.opendap.org.
+## Verify the signature:
+##: &lt;tt&gt; gpg --verify olfs-####.tgz.sig olfs-####.tgz &lt;/tt&gt;
+
+Use [[SecureEmail#Encrypting_files | GPG to detach sign]] each of these three files and you're ready to upload them to the website for distribution. 
+
+The OLFS has historically been published here: http://www.opendap.org/pub/olfs/</text>
+      <sha1>76yis1l95lcr72wp4bg8eaptfdknuy6</sha1>
+    </revision>
+  </page>
+</mediawiki>

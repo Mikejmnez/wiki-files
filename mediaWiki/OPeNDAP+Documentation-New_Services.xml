@@ -1,0 +1,58 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>New Services</title>
+    <ns>0</ns>
+    <id>446</id>
+    <revision>
+      <id>3416</id>
+      <parentid>3412</parentid>
+      <timestamp>2009-03-09T12:53:58Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <origin>3416</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1622" sha1="llwwf6m1r5d9cvpmcubtxfuupvmhk4f" xml:space="preserve">A service is a grouping of commands that are provided by a module and can be handled by other modules, like data handlers. For example, OPeNDAP provides the &lt;code&gt;dap&lt;/code&gt; service with the commands &lt;code&gt;das, dds, ddx, and dods&lt;/code&gt;. These commands can be handled by the different data handlers that can serve up OPeNDAP responses for these commands. The format for each of these commands is &lt;code&gt;dap2&lt;/code&gt;.
+
+Services can be added to the BES in addition to the &lt;code&gt;dap&lt;/code&gt; service. For example, the [http://cedarweb.hao.ucar.edu CEDAR project] adds the service &lt;code&gt;cedar&lt;/code&gt; with the commands &lt;code&gt;flat, tab, info, and stream&lt;/code&gt;, each of those commands with the format &lt;code&gt;cedar&lt;/code&gt;.
+
+You can also add commands to a service. For example, the dap-server modules add the three commands &lt;code&gt;ascii, info_page, and html_form&lt;/code&gt; to the &lt;code&gt;dap&lt;/code&gt; service because they use the base services provided by the &lt;code&gt;dap&lt;/code&gt; service. In other words, the &lt;code&gt;ascii&lt;/code&gt; response, for example, takes a &lt;code&gt;data&lt;/code&gt; response and converts it to ascii.
+
+And, you can add formats to the different commands. For example, the fileout_netcdf module can take a data response &lt;code&gt;dods&lt;/code&gt; and return it as a netcdf file. So it adds the format &lt;code&gt;netcdf&lt;/code&gt; to the &lt;code&gt;dods&lt;/code&gt; command of the &lt;code&gt;dap&lt;/code&gt; service.
+
+To add a service to the BES you register the service, each command and the format of the command, with the BESServiceRegistry class. This is done in the &lt;code&gt;initialize&lt;/code&gt; method of your &lt;code&gt;BESModule&lt;/code&gt; class.
+
+[[Category:Extending BES|Services]]</text>
+      <sha1>llwwf6m1r5d9cvpmcubtxfuupvmhk4f</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,70 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>GeoTIFF responses for Hyrax</title>
+    <ns>0</ns>
+    <id>576</id>
+    <revision>
+      <id>5445</id>
+      <timestamp>2010-03-29T15:33:34Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>New page: GeoTIFF Output From Hyrax  Why?  The Data Access Protocol provides a way to transfer structured data into sophisticated analysis tools without first requiring that the data be packaged in ...</comment>
+      <origin>5445</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2277" sha1="sb9vcfi69r1m0k5kwkcn6op4ik4lkcn" xml:space="preserve">GeoTIFF Output From Hyrax
+
+Why?
+
+The Data Access Protocol provides a way to transfer structured data into sophisticated analysis tools without first requiring that the data be packaged in particular format like TIFF which is so specialized it can only be practically used for a limited set of purposes. Instead DAP uses a very general self-describing format that can encode virtually anything stored in or processed by a computer. 
+However, there are many applications now available that expect georeferenced data and can at least display such data if it’s encoded in one of several ways. While the main emphasis of OPeNDAP has been to provide data for analysis, these newer display applications are important tools for many users (and potential users) of our software. That is, even though ‘display’ of data has not be a primary focus of our work up to now, that doesn't mean it’s not important.
+
+The idea is that like the netcdf_fileout it would return data in a GeoTIFF format. Obviously Grids would map well to GeoTIFF (assuming that the Grid has the requisite maps). We would need to either creatively represent other data types/structures or simply deny GeoTIFF access for non-grid data types. Even if we never build releasable WMS or WCS services adding this would allow others to easily wrap those services around our server.
+
+Just creating this kind of output has the potential to increase our user base immensely.
+
+
+How?
+
+The idea is that like the netcdf_fileout it would return data in a GeoTIFF format. Obviously Grids would map well to GeoTIFF (assuming that the Grid has the requisite maps). We would need to either creatively represent other data types/structures or simply deny GeoTIFF access for non-grid data types. Even if we never build releasable WMS or WCS services adding this would allow others to easily wrap those services around our server.
+What?
+
+Applications that would be able to display information from our servers includes: Google Earth, Google Maps, Google Maps for mobile devices, NASA WorldWind, ESRI ArcGIS Explorer, Adobe PhotoShop, AutoCAD, and Yahoo! Pipes.
+
+To do:
+* What do we need to have to build ta GeoTIFF image? That is, how is a data set like a climatology returned as a GeoTIFF image?
+
+[[Category:Google Summer of Code]]</text>
+      <sha1>sb9vcfi69r1m0k5kwkcn6op4ik4lkcn</sha1>
+    </revision>
+  </page>
+</mediawiki>

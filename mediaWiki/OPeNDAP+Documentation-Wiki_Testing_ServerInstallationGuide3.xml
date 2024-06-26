@@ -1,0 +1,369 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/ServerInstallationGuide3</title>
+    <ns>0</ns>
+    <id>201</id>
+    <revision>
+      <id>1606</id>
+      <parentid>1605</parentid>
+      <timestamp>2008-01-04T12:04:33Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Special Instructions for the FreeForm Server */</comment>
+      <origin>1606</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="16307" sha1="dhgm2kjwemeniwshe9kmyldd3tcw5gk" xml:space="preserve">=Installing Your Data=
+
+
+After installing the server, the data to be provided must be put in
+some location where it may be served to clients. The server navigates
+a directory tree rooted in the web server's document root
+directory. This is the directory (often called &lt;font color='green'&gt;htdocs&lt;/font&gt; or the
+&lt;font color='green'&gt;DocumentRoot&lt;/font&gt;) in which the web server first looks for web pages
+to serve. If you send your web server this URL:
+
+&lt;pre&gt;
+http://yourmachine/page.html
+&lt;/pre&gt;
+
+It will look for the file &lt;font color='green'&gt;page.html&lt;/font&gt; in the document root
+directory.  Again, the location of this directory depends entirely on
+the web server you use and its configuration data.  A server may also
+be enabled to follow links from the root directory tree, which means
+that you can store your data somewhere else, and make symbolic links
+to it from the root directory tree.  By default, this is disabled for
+most servers, since it can become a security problem, but it is
+relatively easy to enable it.  (The option is called
+&lt;font color='green'&gt;FollowSymLinks&lt;/font&gt; for Apache users.)  Further, there may be
+other options provided by the specific server used in a particular
+installation.  In other words, there is really no way to avoid
+consulting the configuration instructions of the web server you use.
+
+&lt;blockquote&gt;NOTE: You can also use the server's &lt;font color='green'&gt;data_root&lt;/font&gt; configuration
+  parameter to tell the server where to look for data. The value of
+  &lt;font color='green'&gt;data_root&lt;/font&gt; is used as a prefix for the location of data. Using
+  this you can configure a server for data that cannot also accessed
+  using the web. The only drawback to serving data this way is that
+  the directory browsing functions of the OPeNDAP server will not
+  work.&lt;/blockquote&gt;
+
+As noted, the location of the data depends not only on the configuration of the Web
+server, but also on the API used to access the data requested.  For
+example, the netCDF server simply stores data in files with a pathname
+relative to the document root directory, &lt;font color='green'&gt;htdocs&lt;/font&gt;, while the JGOFS
+server uses its data dictionary to specify the location of its data.
+Refer to the specific installation notes for each API for more
+information about the location of the data.
+
+==Special Instructions for the NetCDF, HDF, and DSP handlers==
+
+To install data for the NetCDF, HDF, or DSP formats, follow these
+steps:
+
+&lt;blockquote&gt;NOTE: The &lt;font color='green'&gt;data_root&lt;/font&gt; parameter can be substituted for the web
+  server's &lt;font color='green'&gt;DocumentRoot&lt;/font&gt; in the discussion that follows.&lt;/blockquote&gt;
+
+
+#Make a data directory somewhere in the document root tree.  For   Apache, this is the &lt;font color='green'&gt;htdocs&lt;/font&gt; directory and all its   subdirectories.  If your web browser is configured to follow   symbolic links (Apache: &lt;font color='green'&gt;FollowSymLinks&lt;/font&gt; is enabled), you can   just put links to the data files or to their directories in the   document root tree.  Do be aware that the reason symbolic links are   not enabled by default is that there are potential security holes in   its use.  Consult your web server's documentation for more   information.
+#Put the data files into the data directory you've just made.
+#Test the URL with a web browser.  See [[http://docs.opendap.org/index.php/QuickStart| Quick Start Guide]] for   information about how to construct a URL if you know the machine name.
+
+That's all.
+
+==Special Instructions for the OPeNDAP/JGOFS Server==
+
+The JGOFS data system is a distributed, object-based data management
+system for multidisciplinary, multi-institutional programs. It
+provides the capability for all JGOFS scientists to work with the data
+without regard for the storage format or for the actual location where
+the data resides.
+
+A full description of the JGOFS data system and U.S JGOFS program can
+be found at [[http://www1.whoi.edu/ | http://www1.whoi.edu/ ]].
+
+===About JGOFS Servers===
+
+In the JGOFS data system, scientific datasets are encapsulated in
+\new{data objects}.  Data objects are simply names defined in the
+JGOFS \new{objects} dictionary which associate specific scientific
+datasets with a computer program, known as an access \new{method},
+which can \subj{The JGOFS API reads "objects", not files.}  read them.
+This mechanism provides a single, uniform access methodology for all
+scientific datasets served by this data server, regardless of whether
+they are simple single file or complex multi-file datasets.
+
+Here is an example of a JGOFS object dictionary entry:
+
+&lt;pre&gt;
+test0=def(/usr/local/apache/htdocs/data/t0)
+&lt;/pre&gt;
+
+In this example,
+
+&lt;blockquote&gt;
+; &lt;font color='green'&gt;test0&lt;/font&gt; :  defines the data object name.
+; &lt;font color='green'&gt;def&lt;/font&gt; : specifies the access 'method' or program used to read the scientific dataset.
+; &lt;font color='green'&gt;/usr/local/apache/htdocs/data/t0&lt;/font&gt; : specifies the scientific dataset to read.
+&lt;/blockquote&gt;
+
+The OPeNDAP/JGOFS server requires only two components of a complete JGOFS
+installation to function, the `objects' dictionary and the access
+`methods' used to read local data files.
+
+For those sites who wish to use the OPeNDAP/JGOFS server without
+installing a complete JGOFS data system we provide these required
+components.  For sites which currently have a JGOFS data system
+installed the OPeNDAP/JGOFS servers can be configured to use the current
+installation.
+
+ 
+Included with the OPeNDAP/JGOFS server is an example object dictionary,
+named &lt;font color='green'&gt;.objects&lt;/font&gt;, and a binary version of the JGOFS default
+(&lt;font color='green'&gt;def&lt;/font&gt;) method.  The &lt;font color='green'&gt;def&lt;/font&gt; method can read single or
+multi-file flat ASCII datasets.  An example ASCII dataset is also
+provided to test the server installation.
+
+&lt;blockquote&gt;NOTE:The OPeNDAP/JGOFS server currently ''requires''  the object
+dictionary to be named &lt;font color='green'&gt;.objects&lt;/font&gt;.&lt;/blockquote&gt;
+
+The server uses two mechanisms for determining the location of the data
+objects dictionary and access method directory:
+
+
+#The CGI dispatch script &lt;font color='green'&gt;nph-dods&lt;/font&gt; defines two shell   variables, &lt;font color='green'&gt;JGOFS_OBJECT&lt;/font&gt; and &lt;font color='green'&gt;JGOFS_METHOD&lt;/font&gt;.  These are   used by the server to determine the location of the objects   dictionary and access method directory.  Initially, the definition   of these variables is set to the OPeNDAP server's directory (i.e.,   the directory that contains &lt;font color='green'&gt;nph-dods&lt;/font&gt;).
+#If the shell variables &lt;font color='green'&gt;JGOFS_OBJECT&lt;/font&gt; and &lt;font color='green'&gt;JGOFS_METHOD&lt;/font&gt;   are not defined, the OPeNDAP/JGOFS server checks for the existence of a   &lt;font color='green'&gt;jgofs&lt;/font&gt; user in the &lt;font color='green'&gt;/etc/passwd&lt;/font&gt; file.  If a &lt;font color='green'&gt;jgofs&lt;/font&gt;   user exists it will set the &lt;font color='green'&gt;JGOFS_METHOD&lt;/font&gt; location to   &lt;font color="#cd4b19"&gt;~jgofs/methods/&lt;/font&gt;, and the &lt;font color='green'&gt;JGOFS_OBJECT&lt;/font&gt; location to   &lt;font color="#cd4b19"&gt;~jgofs/objects/&lt;/font&gt;.
+#If the server cannot locate the objects directory using either   of the above two mechanisms it will search the current working   directory.
+
+If the OPeNDAP/JGOFS server cannot resolve the filesystem paths for the
+objects dictionary or methods directory using any of these mechanisms
+it will report an error to the client and exit.
+
+&lt;blockquote&gt;[Tip:] If you have an existing &lt;font color='green'&gt;jgofs&lt;/font&gt; user but would like to use a different objects dictionary for the OPeNDAP server, then specifying the &lt;font color='green'&gt;JGOFS_OBJECT&lt;/font&gt; and &lt;font color='green'&gt;JGOFS_METHOD&lt;/font&gt; variables in the &lt;font color='green'&gt;nph-dods&lt;/font&gt; script will override your existing JGOFS setup.&lt;/blockquote&gt;
+
+To use the &lt;font color='green'&gt;.objects&lt;/font&gt; dictionary and &lt;font color='green'&gt;def&lt;/font&gt; access method supplied with the OPeNDAP/JGOFS server, edit the &lt;font color='green'&gt;nph-dods&lt;/font&gt;
+script. In the &lt;font color='green'&gt;nph-dods&lt;/font&gt; script, update the lines specifying the
+&lt;font color='green'&gt;JGOFS_OBJECT&lt;/font&gt; and &lt;font color='green'&gt;JGOFS_METHOD&lt;/font&gt; variables. These variables must contain the directory name containing the &lt;font color='green'&gt;.objects&lt;/font&gt;
+dictionary and &lt;font color='green'&gt;def&lt;/font&gt; access method. Don't forget to remove the
+comment specifiers at the beginning of these lines.
+
+&lt;blockquote&gt;[Tip:]{Though not required, copying these two files to the cgi-bin
+  location will keep all the OPeNDAP/JGOFS files in one convenient
+  location.&lt;/blockquote&gt;
+
+To make data accessible via the server, the entries in the objects
+dictionary must define an object name, and associate that name with an
+access method and a dataset to serve. Datasets served as JGOFS objects
+can be located anywhere within your computer's filesystem. However,
+the user and group used to run the WWW daemon must have permission to
+read these files.
+
+&lt;blockquote&gt;[Another tip:]To find out which user/group httpd is running as, look in the &lt;font color='green'&gt;httpd.conf&lt;/font&gt; file for lines like: &lt;font color='green'&gt;User nobody&lt;/font&gt; &lt;font color='green'&gt;Group nobody&lt;/font&gt;
+&lt;/blockquote&gt;
+
+To test your server installation using the provided dictionary, and
+test data, edit the &lt;font color='green'&gt;.objects&lt;/font&gt; dictionary so that the &lt;font color='green'&gt;test0&lt;/font&gt; object points to the files located in the
+&lt;font color='green'&gt;$prefix/share/dap-server/jgofs_data&lt;/font&gt;
+directory.[[Wiki_Testing/ServerInstallationGuideFootnotes| 9]] You are free to move these files to any location on your computer so long as the WWW daemon has permission to read
+these files, and the objects dictionary points to their location.
+
+Using the supplied test datasets, try issuing the following URL:
+
+&lt;pre&gt;
+http://yourmachine/cgi-bin/nph-dods/test0.dds
+&lt;/pre&gt;
+
+You will see something like this:
+
+&lt;pre&gt;
+Dataset {
+    Sequence {
+        String leg;
+        String year;
+        String month;
+        Sequence {
+            String station;
+            String lat;
+            String lon;
+            Sequence {
+                String press;
+                String temp;
+                String sal;
+                String o2;
+                String sigth;
+            } Level_2;
+        } Level_1;
+    } Level_0;
+} test0;
+&lt;/pre&gt;
+
+You can go further and ask for some data:
+
+&lt;pre&gt;
+http://yourmachine/cgi-bin/nph-dods/test0.asc
+&lt;/pre&gt;
+
+You should see a comma-separated list of data values.
+
+===Attribute Data for OPeNDAP/JGOFS===
+
+The JGOFS data access API does not support a wide variety of attribute
+data. The OPeNDAP server willlook for a file that contains
+\new{ancillary data} file named \var{object}&lt;font color='green'&gt;.das&lt;/font&gt;, in the same
+directory which contains the JGOFS methods (i.e., the directory
+referenced by &amp;#36;JGOFS_METHODS).
+
+&lt;blockquote&gt;NOTE:In the past the server looked in the same directory as the
+  data.&lt;/blockquote&gt;
+
+For example, suppose that you have installed the OPeNDAP/JGOFS server, as
+described above, and a partial listing of the data objects dictionary
+contained the following definitions:
+
+&lt;pre&gt;
+test0=def(/home/httpd/htdocs/data/test0.data)
+s87_xbt=def(/home/httpd/htdocs/data/xbt.catalog)
+&lt;/pre&gt;
+
+To find attribute data for the JGOFS object `test0', the server will
+search for the file:
+
+&lt;pre&gt;
+$JGOFS_METHODS/test0.das
+&lt;/pre&gt;
+
+
+The file itself should simply be a text version of the DAS you wish
+the server to supply to clients.  For example:
+
+&lt;pre&gt;
+Attributes {
+    leg {
+       String Description "The number of the voyage leg.";
+    }
+    year {
+       String Range "Data between 1982 and 1992";
+    }
+}
+&lt;/pre&gt;
+
+===Data Types for OPeNDAP/JGOFS Data===
+
+The JGOFS data access system returns string data when using the
+default (&lt;font color='green'&gt;def&lt;/font&gt;) method. That is, all data is returned to the
+client as character strings. The OPeNDAP/JGOFS server supports a
+variety of other data types, allowing the data provider (i.e., you) to
+specify the variable type to use when returning data to the remote
+client. To accomplish this, the server will look for an ancillary DAS
+file (described in([[Wiki_Testing/ServerInstallationGuide3| Section3.2.2 ]])) for the object, and search that file for attribute containers for each variable.  If the variable's container
+exists, it will then look for the &lt;font color='green'&gt;DODS_Type&lt;/font&gt;, and
+&lt;font color='green'&gt;missing_value&lt;/font&gt; attributes in that container.
+
+If &lt;font color='green'&gt;DODS_Type&lt;/font&gt; exists it will set the output type of the variable.
+If the &lt;font color='green'&gt;missing_value&lt;/font&gt; attribute is set, it well replace any
+&lt;font color='green'&gt;nd&lt;/font&gt;, or missing data values in the output stream for that
+variable to the value specified in the &lt;font color='green'&gt;missing_value&lt;/font&gt; attribute.
+If the &lt;font color='green'&gt;missing_value&lt;/font&gt; attribute is not specified, the server will
+set the missing value field to the largest value possible for
+specified type. The server assumes that the data provider knows the
+proper data type to use to contain the full range of possible data
+values for the object.  If the JGOFS variable values cannot be
+converted to the specified data type, then a &lt;font color='green'&gt;missing_value&lt;/font&gt; value
+will be returned.
+
+Suppose that you have installed the OPeNDAP/JGOFS server, as described
+above, and a partial listing of the data objects dictionary contained
+the following definitions:
+
+&lt;pre&gt;
+test0=def(/home/httpd/htdocs/data/test0.data)
+&lt;/pre&gt;
+
+The ancillary DAS file for this dataset could contain these new attributes:
+
+&lt;pre&gt;
+Attributes {
+    leg {
+        String DODS_Type "Int32";
+        Int32 missing_value -99;
+    }
+    press {
+        String DODS_Type "Float32";
+        Float32 missing_value -1.99.;
+    }
+    temp {
+        String DODS_Type "Float64";
+    }
+}
+&lt;/pre&gt;
+
+The server will use the values specified in the &lt;font color='green'&gt;DODS_Type&lt;/font&gt;
+attribute for any variable container provided, to define the output
+variable type. In this example, the variable named &lt;font color='green'&gt;leg&lt;/font&gt; will be
+returned as a 32-bit integer (Int32), with missing values set to -99.
+Similarly, variable &lt;font color='green'&gt;press&lt;/font&gt; will be returned as a 32-bit floating
+point number, with missing values set to -1.99. The variable
+&lt;font color='green'&gt;temp&lt;/font&gt; will be returned as a 64-bit floating point number, but
+missing values will be returned as the largest possible 64-bit
+floating point number (1.797693e+308).
+
+===Limiting Access to a OPeNDAP/JGOFS Server===
+
+Generally speaking, it is straightforward to configure OPeNDAP servers
+with limited access. However, the data dictionary structure of the JGOFS
+data access API provides an additional way to differentiate between public
+and private datasets. To do this, you would maintain different data
+object dictionaries which encapsulate different scientific datasets.
+One dictionary would define data objects for general public access,
+and other dictionaries could define data objects for specific user
+communities, where access is restricted.
+
+To accomplish this the site would maintain different versions of the
+&lt;font color='green'&gt;nph-dods&lt;/font&gt; dispatch script. For example, using &lt;font color='green'&gt;nph-dods&lt;/font&gt; for public access, this file would set the &lt;font color='green'&gt;JGOFS_OBJECT&lt;/font&gt; variable to the public-access dictionary, and another dispatch script, say &lt;font color='green'&gt;nph-dods-globec&lt;/font&gt; would set the &lt;font color='green'&gt;JGOFS_OBJECT&lt;/font&gt; variable to a restricted-access dictionary. The WWW daemon is then configured to
+permit general access to &lt;font color='green'&gt;nph-dods&lt;/font&gt; and restricted access to
+&lt;font color='green'&gt;nph-dods-globec&lt;/font&gt;.
+
+==Special Instructions for the FreeForm Server==
+
+The OPeNDAP FreeForm data handler can serve data stored in a wide variety of
+formats.  To read data, it uses a \new{format file} that describes the
+structure of the data file to be read.  Armed with a knowledge of the
+file structure, the server can read a data file, and send it along to
+the client.
+
+The FreeForm server has its own documentation: see [[http://opendap.org/user/servers/dff-html/|The OPeNDAP FreeForm ND Server Manual]] .  You
+will find a complete description of the server, as well as
+instructions on how to write a format file for your data.</text>
+      <sha1>dhgm2kjwemeniwshe9kmyldd3tcw5gk</sha1>
+    </revision>
+  </page>
+</mediawiki>

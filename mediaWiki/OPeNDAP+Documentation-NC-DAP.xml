@@ -1,0 +1,74 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>NC-DAP</title>
+    <ns>0</ns>
+    <id>384</id>
+    <revision>
+      <id>4475</id>
+      <parentid>2802</parentid>
+      <timestamp>2009-06-11T21:34:49Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* [[DAP3/4]] extensions */</comment>
+      <origin>4475</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1066" sha1="pig8f75x3ee4n3f98ug4oyaiylj9qq1" xml:space="preserve">[[Category:Development]] [[Category:NC-DAP]]
+
+The NC-DAP project: Integration of the DAP into the netCDF library (Two-year effort to integrate DAP access into Unidata's netCDF library).
+
+== Meetings, milestones, etc ==
+
+====[[Milestones from the kickoff meeting]]====
+====[[NC-DAP Project Meeting 3 June 2008]]====
+====[[NC-DAP Project Meeting 8 Jan 2009]]====
+
+== Software Project Documents ==
+
+====[[Explicit API]] for Ocapi==== 
+''This will be developed to provide a more usable interface to the Ocapi''
+
+====[[DAP3/4]] extensions==== 
+''This page contains information about the on-going development of DAP and there are parts that explicitly relate to the needs of the NC-DAP project''
+
+====[[DAP 4.0 Design]]==== 
+''This page contains information about the DAP 4.0 Design and less about the discussions that preceded it''
+
+====[[Character Arrays in the netCDF 3 handler for Hyrax]]====
+''How should we address the 'char array' problem in the netCDF 3 handler?''
+
+====[[OC Library Features and Analysis]]====
+''Can we substitute the 'oc' library for the Ocapi?''</text>
+      <sha1>pig8f75x3ee4n3f98ug4oyaiylj9qq1</sha1>
+    </revision>
+  </page>
+</mediawiki>

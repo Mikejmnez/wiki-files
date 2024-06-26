@@ -1,0 +1,268 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>NCML Module Aggregation Union</title>
+    <ns>0</ns>
+    <id>522</id>
+    <revision>
+      <id>5515</id>
+      <parentid>5514</parentid>
+      <timestamp>2010-04-15T17:53:56Z</timestamp>
+      <contributor>
+        <username>Mjohnson</username>
+        <id>42</id>
+      </contributor>
+      <origin>5515</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="11068" sha1="aey0j4nfvt9fof0s05wrv76zyctvdv2" xml:space="preserve">= NCML Module: Union Aggregation =
+[[Category:Aggregation]]
+[[Category:NCML]]
+
+The current trunk version of the module supports the union aggregation element of the form:
+
+&lt;pre&gt;
+&lt;netcdf&gt;
+  &lt;aggregation type="union"&gt;
+      &lt;!-- some &lt;netcdf&gt; nodes --&gt;
+  &lt;/aggregation&gt;
+&lt;/netcdf&gt;
+&lt;/pre&gt;
+
+Note that we do not implement &lt;scan&gt; yet, so all member datasets of the union must be explicitly listed as a &lt;netcdf&gt; element.
+
+== Functionality ==
+
+The union aggregation specifies the attributes and variables (and perhaps dimensions) for the dataset it is contained within (i.e. it's parent &lt;netcdf&gt; node, which must be be virtual, i.e. have no location specifed).  To do this it:
+
+* Processes each child netcdf element recursively, creating the final transformed dataset
+* Scans the processed child datasets in order of specification and:
+** Adds to the parent dataset any attribute, variable, or dimension that doesn't already exist in the parent dataset
+** Skips any attribute or variable that already exists in the parent dataset
+** Skips any dimension already in the parent dataset, unless the lengths do not match, in which case it throws a parse error.
+
+Note that the module processes each child dataset entirely as if it were a top level element, obeying all the normal processing for a dataset, but collecting the result into that netcdf node.  This means that any child netcdf of an aggregation may refer to a location, have transformations applied to it, have metadata removed, or may even contain its own nested aggregation!
+
+Which items will show up in the output?  We need to discuss this in a little more detail, in particular since we have deviated slightly from the Unidata implementation.
+
+=== Order of Element Processing ===
+
+The NCML Module processes the nodes in a &lt;netcdf&gt; element in the order encountered.  This means that the parent dataset of an aggregation may place attributes and variables into the union prior to an aggregation taking place, meaning that those items matching the name in the aggregation itself will be skipped.  It also implies that any changes to existing metadata within a member of the aggregation by using an attribute element, for example, must come AFTER the actual aggregation element, or else a parse error will be thrown.
+
+==== Shadowing an Aggregation Member ====
+
+For example, the following examples show how to "shadow" a variable contained in an aggregation by specifying it in the parent dataset prior to the aggregation:
+
+&lt;pre&gt;
+&lt;netcdf&gt;
+  
+  &lt;variable name="Foo" type="string"&gt;
+    &lt;values&gt;I come before the aggregation, so will appear in the output!&lt;/values&gt;
+  &lt;/variable&gt;
+  
+  &lt;aggregation type="union"&gt;
+    
+    &lt;netcdf&gt;
+      &lt;variable name="Foo" type="string"&gt;
+	&lt;values&gt;I will be skipped since there's a Foo in the dataset prior to the aggregation.&lt;/values&gt;
+      &lt;/variable&gt;
+   &lt;/netcdf&gt;
+
+    &lt;netcdf&gt;
+      &lt;variable name="Bar" type="string"&gt;
+	&lt;values&gt;I do not exist prior, so will be in the output!&lt;/values&gt;
+      &lt;/variable&gt;
+    &lt;/netcdf&gt;
+
+  &lt;/aggregation&gt;
+
+&lt;/netcdf&gt;
+&lt;/pre&gt; 
+
+The values make it clear what the output will be.  The variable "Foo" in the first child will be skipped since the parent dataset already specified it, but the variable "Bar" in the second child dataset will show up in the output since it doesn't already exist in either the parent or the previous child.  Note that this would also work on an attribute or dimension.
+
+==== Modifying the "Winner" of the Union Aggregation ====
+
+The following example shows how to modify the "winning" variable in a union aggregation by specifying the attribute change AFTER the aggregation element:
+
+&lt;pre&gt;
+&lt;netcdf&gt;
+  &lt;aggregation type="union"&gt;
+    
+    &lt;netcdf&gt;
+      &lt;variable name="Foo" type="string"&gt;
+	&lt;attribute name="Description" type="string" value="Winning Foo before we modify, should NOT be in output!"/&gt;
+	&lt;values&gt;I am the winning Foo!&lt;/values&gt;
+      &lt;/variable&gt;
+    &lt;/netcdf&gt;
+
+    &lt;netcdf&gt;
+      &lt;variable name="Foo" type="string"&gt;
+	&lt;attribute name="Description" type="string" value="I will be the losing Foo and should NOT be in output!"/&gt;
+	&lt;values&gt;I am the losing Foo!&lt;/values&gt;
+      &lt;/variable&gt;
+    &lt;/netcdf&gt;
+
+  &lt;/aggregation&gt;
+
+  &lt;!-- Now we modify the "winner" of the previous union --&gt;
+  &lt;variable name="Foo"&gt;
+    &lt;attribute name="Description" type="string" value="I am Foo.Description and have modified the winning Foo and deserve to be in the output!"/&gt;
+  &lt;/variable&gt;
+  
+&lt;/netcdf&gt;
+&lt;/pre&gt;
+
+In this case the output dataset will have the variable Foo with a value of "I am the winning Foo!", but its metadata will have been modified by the transformation after the aggregation, so its attribute "Description" will have the value "I am Foo.Description and have modified the winning Foo and deserve to be in the output!".
+
+If this entire netcdf element were contained within another aggregation, then other transformations might be applied after the fact as well, again in the order encountered for clarity.
+
+
+=== Dimensions ===
+
+Since the DAP2 does not specify dimensions as explicit data items, a union of dimensions is only done ''if the child netcdf elements explicitly declare dimensions''.  In practice, this is mostly of little utility since the only time dimensions are specified is to create virtual array variables (Note: we do not load dimensions from wrapped sets, so effectively they '''do not exist''' in them, even if the wrapped dataset was an NcML file!) 
+
+If a dimension does exist explicitly in a child dataset and a second with the same name is encountered in another child dataset, the cardinalities are checked and a parse error is thrown if they do not exist.  This is a simple check that can be done to ensure the resulting arrays are of the correct size.  Note that even if an array had a named dimension within a wrapped set, we '''do not check''' that these match at this time.  
+
+Here is an example of a valid use of dimension in the current module:
+
+&lt;pre&gt;
+
+&lt;netcdf xmlns="http://www.unidata.ucar.edu/namespaces/netcdf/ncml-2.2"&gt;
+	
+  &lt;!-- Test that a correct union with dimensions in the virtual datasets will work if the dimensions match as they need to --&gt;
+  &lt;attribute name="title" type="string" value="Testing union with dimensions"/&gt;
+
+  &lt;aggregation type="union"&gt;
+    
+    &lt;netcdf&gt;
+      &lt;attribute name="Description" type="string" value="The first dataset"/&gt;
+      &lt;dimension name="lat" length="5"/&gt;
+      
+      &lt;!-- A variable that uses the dimension, this one will be used --&gt;
+      &lt;variable name="Grues" type="int" shape="lat"&gt;
+	&lt;attribute name="Description" type="string"&gt;I should be in the output!&lt;/attribute&gt;
+	&lt;values&gt;1 3 5 3 1&lt;/values&gt;
+      &lt;/variable&gt;
+ 
+    &lt;/netcdf&gt;
+    
+    &lt;netcdf&gt;
+      &lt;attribute name="Description" type="string" value="The second dataset"/&gt;
+
+      &lt;!-- This dimension will be skipped, but the length matches the previous as required --&gt;
+      &lt;dimension name="lat" length="5"/&gt;
+
+      &lt;!-- This dimension is new so will be used... --&gt;
+      &lt;dimension name="station" length="3"/&gt;
+
+      &lt;!-- A variable that uses it, this one will NOT be used --&gt;
+      &lt;variable name="Grues" type="int" shape="lat"&gt;
+	&lt;attribute name="Description" type="string"&gt;!!!! I should NOT be in the output! !!!!&lt;/attribute&gt;
+	&lt;values&gt;-3 -5 -7 -3 -1&lt;/values&gt;
+      &lt;/variable&gt;
+      
+      &lt;!-- This variable uses both and will show up in output correctly --&gt;
+      &lt;variable name="Zorks" type="int" shape="station lat"&gt;
+	&lt;attribute name="Description" type="string"&gt;I should be in the output!&lt;/attribute&gt;
+	&lt;values&gt;
+	  1  2   3   4   5
+	  2  4   6   8  10
+	  4  8  12 16 20
+	&lt;/values&gt;
+      &lt;/variable&gt;
+      
+   &lt;/netcdf&gt;
+    
+  &lt;/aggregation&gt;
+
+&lt;/netcdf&gt;
+&lt;/pre&gt;
+
+Here is an example that will produce a dimension mismatch parse error:
+
+&lt;pre&gt;
+&lt;netcdf xmlns="http://www.unidata.ucar.edu/namespaces/netcdf/ncml-2.2"&gt;
+	
+  &lt;!-- Test that a union with dimensions in the virtual datasets will ERROR if the child set dimensions DO NOT match as they need to --&gt;
+  &lt;attribute name="title" type="string" value="Testing union with dimensions"/&gt;
+
+  &lt;aggregation type="union"&gt;
+    
+    &lt;netcdf&gt;
+      &lt;dimension name="lat" length="5"/&gt;
+      &lt;!-- A variable that uses the dimension, this one will be used --&gt;
+      &lt;variable name="Grues" type="int" shape="lat"&gt;
+	&lt;attribute name="Description" type="string"&gt;I should be in the output!&lt;/attribute&gt;
+	&lt;values&gt;1 3 5 3 1&lt;/values&gt;
+      &lt;/variable&gt;
+    &lt;/netcdf&gt;
+    
+    &lt;netcdf&gt;
+      &lt;!-- This dimension WOULD be skipped, but does not match the representative and will cause an error on union! --&gt;
+      &lt;dimension name="lat" length="6"/&gt;
+     &lt;!-- This dimension is new so will be used... --&gt;
+      &lt;dimension name="station" length="3"/&gt;
+      &lt;!-- A variable that uses it, this one will NOT be used --&gt;
+      &lt;variable name="Grues" type="int" shape="lat"&gt;
+	&lt;attribute name="Description" type="string"&gt;!!!! I should NOT be in the output! !!!!&lt;/attribute&gt;
+	&lt;values&gt;-3 -5 -7 -3 -3 -1&lt;/values&gt;
+      &lt;/variable&gt;
+      
+      &lt;!-- This variable uses both and will show up in output correctly --&gt;
+      &lt;variable name="Zorks" type="int" shape="station lat"&gt;
+	&lt;attribute name="Description" type="string"&gt;I should be in the output!&lt;/attribute&gt;
+	&lt;values&gt;
+	  1  2   3   4   5  6
+	  2  4   6   8  10  12
+	  4  8  12 16 20  24
+	&lt;/values&gt;
+      &lt;/variable&gt;
+      
+   &lt;/netcdf&gt;
+    
+  &lt;/aggregation&gt;
+
+&lt;/netcdf&gt;
+&lt;/pre&gt;
+
+Note that the failure is that the second dataset has had an extra "lat" sample added to it, but the prior dataset has not.  Again, these dimension checks only occur now in a '''pure virtual dataset''' like we see here.  Using netcdf@location will effectively "hide" all the dimensions within it at this point.
+
+==== Thoughts About Future Directions for Dimension ====
+
+For a future implementation, we may want to consider a DAP2 Grid Map vector as a dimension and do cardinality checks on them if we have multiple grids in a union each of which specify the same names for their map vectors.  One argument is that this should be done if an explicit dimension element with the map vector name is specified in the parent dataset and is explicitly specified as "isShared".  Though DAP2 does not have shared dimensions, this would be a basic first step in the error checking that will have to be done for shared dimensions.
+  
+
+== Notes About Changes from NcML 2.2 Implementation ==
+
+In the Aggregation tutorial, it is mentioned that in a given &lt;netcdf&gt; node, the &lt;aggregation&gt; element is process prior to any other nodes, which reflects an explicitly DOM implementation of the NcML parser.  Since we are using a SAX parser for efficiency, we cannot follow this prescription.  Instead, we process the elements in the order encountered.  We argue that this approach, while more efficient, also allows for more explicit control over which attributes and variables show up in the dataset which is the parent node of the aggregation.  The examples above show this extra power gained by allowing elements to be added to the resultant dataset prior to or after the aggregation has been processed.  In particular, it will let us shadow potential members of the aggregation.</text>
+      <sha1>aey0j4nfvt9fof0s05wrv76zyctvdv2</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,242 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - Extending BES Module</title>
+    <ns>0</ns>
+    <id>129</id>
+    <revision>
+      <id>6251</id>
+      <parentid>6250</parentid>
+      <timestamp>2011-02-02T20:47:03Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <comment>/* Configuring your Module */</comment>
+      <origin>6251</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="9110" sha1="atvmwuck4yxuahmz9tixn4g6k6hbg6t" xml:space="preserve">= Writing modules and handlers =
+
+== Putting it all together into a Module ==
+Once you have created your extensions to the BES you need to be a able to add them to the BES. This is done in the Module class. For example, in the netcdf_handler directory you will see a NCModule class. Within this Module class there is a static function that gets called when the Module is loaded.
+
+&lt;pre&gt;
+extern "C"
+{
+    BESAbstractModule *maker()
+    {
+        return new NCModule ;
+    }
+}
+&lt;/pre&gt;
+
+This function must exist in your shared library in order for your module to be loaded into the BES. In the above example, the netcdf_handler module NCModule is created in the maker function.
+
+The Module classes have two methods:
+
+&lt;pre&gt;
+void
+NCModule::initialize( const string &amp;modname )
+{
+    BESDEBUG( "Initializing NC Handlers:" &lt;&lt; endl )
+
+    // Your code here
+
+    BESDEBUG( "Done Initializing NC Handlers:" &lt;&lt; endl )
+}
+&lt;/pre&gt;
+and
+&lt;pre&gt;
+void
+NCModule::terminate( const string &amp;modname )
+{
+    BESDEBUG( "Removing NC Handlers:" &lt;&lt; endl )
+
+    // Your code here
+
+    BESDEBUG( "Done Removing NC Handlers:" &lt;&lt; endl )
+}
+&lt;/pre&gt;
+
+As you could probably already tell, the initialize method is where you would add all of your extensions and the terminate method is where you would remove them and do any cleanup of your module. This is not to be confused with the initialization and termination callbacks described later. The callbacks are called whenever a request is made to the BES where as the methods in the Module class are called when the module is loaded and when it is unloaded from the BES respectively.
+
+Once you have your new Module class you will need to build the new module. In order to be dynamically loaded by the BES the module needs to be built as a shared object module. The following is a snippet from a Makefile.am from an existing module for netcdf.
+
+&lt;pre&gt;
+lib_besdir=$(libdir)/bes
+lib_bes_LTLIBRARIES = libnc_module.la
+
+libnc_module_la_SOURCES = $(MODULE_SOURCES)
+libnc_module_la_CPPFLAGS = $(BES_CPPFLAGS)
+libnc_module_la_LDFLAGS = -avoid-version -module 
+libnc_module_la_LIBADD = $(BES_DAP_LIBS)
+&lt;/pre&gt;
+
+The important line to take note of is for the LDFLAGS, where we spcify &lt;code&gt;-avoid-version -module&lt;/code&gt;. This will build a .so file for your library that can be loaded into the BES.
+
+==Configuring your Module==
+Now that you have the shared object module built you need to have it loaded into the BES. To do this you need to create/edit your configuration file. If you used the script we've provided to create a template module, find the *.conf.in file. And find this line.
+
+&lt;pre&gt;
+BES.modules+=your_module_name
+&lt;/pre&gt;
+
+For example, using the netcdf_handler as an example again, we would have the following:
+
+&lt;pre&gt;
+BES.modules+=nc
+&lt;/pre&gt;
+
+And then you need to tell it where to find that &lt;code&gt;nc&lt;/code&gt; module. So you'll need to add the following line:
+
+&lt;pre&gt;
+BES.module.nc=/full/path/to/installation/lib/bes/libnc_module.so
+&lt;/pre&gt;
+
+And the next time the BES is started it will know to load your module (in this example) nc. It will know to find the nc module using the full path to the shared object module libnc_module.so.
+
+If you'd like to add new key/value pairs (parameters) to your configuration file, you can do so at the end of the file. For example, in the nc module we have:
+
+&lt;pre&gt;
+NC.ShowSharedDimensions=true
+&lt;/pre&gt;
+
+In your code, you'll look for this parameter using the following code:
+
+&lt;pre&gt;
+bool found = false ;
+string key = "NC.ShowSharedDimensions" ;
+string value ;
+TheBESKeys::TheKeys()-&gt;get_value( key, value, found ) ;
+if( found )
+{
+  // Do something here with the value
+}
+&lt;/pre&gt;
+
+Parameters:
+* key - the parameter name that you are looking for
+* value - the value of the parameter if found
+* found - whether the parameter was found in any of the configuration files
+
+You can also have multiple values for a parameter. Notice in the BES.modules parameter, we use += to add a value to this parameter. To get these values you would use the following code:
+
+&lt;pre&gt;
+bool found = false ;
+string key = "NC.MultiValue.Parameter" ;
+vector&lt;string&gt; values ;
+TheBESKeys::TheKeys()-&gt;get_values( key, values, found ) ;
+if( found )
+{
+  // Do something here with the values
+}
+&lt;/pre&gt;
+
+Parameters:
+* key - the parameter name that you are looking for
+* values - the vector of values for the parameter if found
+* found - whether the parameter was found in any of the configuration files
+
+Throughout this document we will tell you how to add the particular extensions to the Module class' initialization method and how to remove your extensions in the Module class' termination method.
+
+== New services ==
+A service is a grouping of commands that are provided by a module and can be handled by other modules, like data handlers. For example, OPeNDAP provides the &lt;code&gt;dap&lt;/code&gt; service with the commands &lt;code&gt;das, dds, ddx, and dods&lt;/code&gt;. These commands can be handled by the different data handlers that can serve up OPeNDAP responses for these commands. The format for each of these commands is &lt;code&gt;dap2&lt;/code&gt;.
+
+[[New Services]]
+
+== New response types. ==
+A response to a BES request is considered here to be a response type. Whether this response type is a simple informational response, such as a response to 'show help;' or the response type is a data response such as a DAS response in the 'get das for definition;' command. New response types can be added to the BES.
+
+[[New Response Types]]
+
+== New request/data handlers ==
+A request handler is a handler that knows how to fill in a particular response, such as DAS, DDS, DataDDS, help, and version responses, for example.
+
+[[New Request Handlers]]
+
+== Containers and how to store them ==
+New ways of storing containers, called container storage. Currently we have built in volatile storage, which means storing new containers only during the duration of your connection with the BES. We also have a way to load containers from a file that can be configured in the initialization file. You could also create user specific container storage, storing container information in a MySQL database, for example.
+
+[[BES Containers|Containers, and how to store them]]
+
+== Definitions and how to store them ==
+New ways of storing definitions, called definition storage. Currently we have built in volatile storage, which means storing new definitions only during the duration of your connection with the BES. You could also create user specific definition storage, saving off those oft used definitions for later use.
+
+[[BES Definitions|Definitions, and how to store them]]
+
+== Reporting ==
+A report mechanism. Once a request has been completed, the information is passed to any reporters that are registered with the server. This way you can save user information, usage information, data access information, and more.
+
+[[BES Reporters|Keeping Track of Requests]]
+
+== Transmitting responses ==
+Different ways of transmitting the data. The default is to return the data through standard output, which gets redirected back to the client. But, with the 'get' command you can specify a 'return as' command ( see above ) that could save the response to a file, transmit it via email, save it in a new data file like netcdf.
+
+[[New Transmitters]]
+
+== Initialization and Terminiation Callbacks ==
+Add in your own initialization and termination routines. If you have routines that need to be run when the BES starts up, you can add callback functions for initialization and termination.
+
+[[BES Initialization Termination|Creating Initialization and Termination callbacks]]
+
+== Handling Exceptions ==
+Add in your own exception handling methods. When an exception is thrown within the BES, the exception is handled by the BES Exception Manager. It is possible to register a routine to be called before the default handling is done. This way, if you have a specific way that you want to handle specific exceptions, you can do that here.
+
+[[BES Exception Handling|Handling Exceptions within the BES]]
+
+== Aggregating your data ==
+
+By default there are no aggregation routines in the BES. But, the BES provides a mechanism for data to be aggregated.
+
+[[BES Aggregation|Providing Aggregation Routines]]
+
+== New commands ==
+
+You've seen all the default commands available in the BES. Now what if you want to create a new command, or even modify an already existing command.
+
+[[New BES Commands|Creating your own commands]]
+
+== Adding Debugging to your code ==
+
+The BES has a simple to use debugging tool. When the BES is started up you can specify -d "&lt;output&gt;,&lt;context&gt;" on the command line of the besctl script to enable debugging. The output option is either cerr, which will dump all debug statements to standard error, or a file name, which will dump all debug information to the specified file. The context option is a comma separated list of components.
+
+[[New Debugging]]
+
+== Submitting your modules ==
+So you've come up with a killer module that does some pretty cool stuff. Well ... share it with the rest of us.
+
+[[Sharing BES Modules|Sharing your BES Modules]]
+
+[[Category:Extending BES|Extending BES]]
+[[Category:BES Modules|Extending BES Module]]</text>
+      <sha1>atvmwuck4yxuahmz9tixn4g6k6hbg6t</sha1>
+    </revision>
+  </page>
+</mediawiki>

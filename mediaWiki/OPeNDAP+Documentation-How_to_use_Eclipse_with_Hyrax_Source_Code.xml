@@ -1,0 +1,154 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>How to use Eclipse with Hyrax Source Code</title>
+    <ns>0</ns>
+    <id>916</id>
+    <revision>
+      <id>12521</id>
+      <parentid>12520</parentid>
+      <timestamp>2018-03-24T18:37:21Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Debugging with eclipse on OSX */</comment>
+      <origin>12521</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6232" sha1="2pkcdbys93455sv2h1g8ogx6kpk6y9n" xml:space="preserve">This presents one way to set up Eclipse to build, edit, debug, etc., the Hyrax source code. It's based on our previous how to documents, but is updated for (and maybe specific to) OSX 10.10, Eclipse 4.4 (Luna) and CDT 8.5. There are many things about Eclipse that can be pretty obscure, not the least of which is that Eclipse &amp; CDT are not really 'just Eclipse' but may have specific configuration nuances. This is almost certainly not the ''only'' way to set this tool up to build the Hyrax code, just one way.
+
+The set up assumes that you have already cloned the ''hyrax'' repo from GitHub (https://github.com/opendap/hyrax.git) and have run ''source spath.sh'' and ''./hyrax_clone.sh'' so that the $PATH and $prefix environment variables are set and the ''libdap'', ''bes'' and ''olfs'' repos have all been cloned. For most development, it's a good idea to clone ''hyrax-dependencies'' too. 
+
+== The ''git'' perspective ==
+What I've done to make projects that use the existing C++ code repos cloned from GitHub was to first use the ''git'' perspective to add the repo to Eclipse.
+
+Switch to the ''git'' perspective using either the icon/toll-bar item on the right side of the main window  or by going to the Window -&gt; Open Perspective menu item. 
+
+[[File:Perspective Menu.png|border|Perspective views are accessed using either the rightmost set of icons or the Window menu]]
+
+Once the Eclipse window is showing the ''git'' perspective, you'll see something like the following:
+
+[[File:Git Repo Perspective.png]]
+
+Use the ''Add existing git repository'' icon to add an existing ''git'' repo.
+
+[[File:Add Existing Repo.png]]
+
+The result looks like:
+
+[[File:Once Added.png]]
+
+== Make the projects ==
+Follow theses steps to make a new project using the repo you just added to the ''git'' perspective.
+
+* Import Projects
+* New Project
+* Use the New Project Wizard
+* Existing Code Makefile
+* Setup the Project
+* Switch to C++ Perspective
+* The New project
+
+[[File:0 Import Projects 2.png]]
+
+[[File:2 Use New Project Wizard.png]]
+
+[[File:3 Existing Code Makefile.png]]
+
+[[File:4 Setup The Project.png]]
+
+[[File:5 Switch To Cpp Perspective.png]]
+
+[[File:6 The New Project.png]]
+
+== General Eclipse configurations ==
+These are not specific to our project, but they are very useful and somewhat hard to sort out.
+
+* How to set up PATH so the CDT build (which uses an external program) reads from the PATH you want instead of the default PATH
+** [[File:0 Set PATH in Eclipse.png]]
+** [[File:1 Add the prefix var to project.png]]
+** [[File:2 Set PATH in the project.png]]
+** Do you need to set PATH in both Eclipse and the Project? I don't know, but that's what I wound up doing to get it to work.
+* How to get the editor in CDT to save before building code
+** [[File:0 Set autosave on build.png]]
+* How to configure builds using an existing Makefile
+** [[File:0 make target.png]]
+** [[File:1 configure new make target.png]]
+* Editor tweaks:
+** Emacs mode (it's not a real emacs, but it's bearable)
+** How to configure Eclipse's editor to find includes
+*** [[File:0 Goto includes fir project.png]]
+*** [[File:1 Add directory workspace path.png]]
+*** [[File:2 Result of adding workspace path.png]]
+*** [File:4 Filesystem path.png]]
+*** [[File:3 Add filesystem path.png]]
+*** [[File:5 Probably reindex.png]]
+** Setting up folding to hide #if 0 ... #endif blocks (help with refactoring, among other things).
+*** [[File:0 Editor folding.png]]
+*** [[File:1 editor folding.png]]
+*** [[File:2 editor folding.png]]
+
+== Debugging with eclipse on OSX ==
+Short version: Use lldbmi2.
+
+I changed debugger to LLDB using the library lldbmi2: 
+# git clone https://github.com/freedib/lldbmi2.git lldbmi2 
+# cd lldbmi2 
+# mkdir build 
+# cd build 
+# cmake ../ 
+# make 
+# sudo make install
+
+Once lldbmi2 is installed, you can debug your application by creating a new C/C++ Application in Debug Configurations... and change the GDB debugger (in Debugger tab) from gdb to lldbmi2. Options to lldbmi2 may be set there. Something like /usr/local/bin/lldbmi2 --log.
+
+[[File:Lldbmi2 in eclipse oxygen.3.png]]
+
+== Old information on using GDB - this will not work with OSX 10.13 ==
+* GDB on OS/X 10.9 and 10.10 is broken WRT shared object libraries (i.e., BES modules). 
+** Build GDB 7.8.x (other versions might work, but the default 6.x that comes with OS/X won't). To do this I had to ''sudo cp /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/include/machine/setjmp.h /usr/include/machine/'' because while ''setjmp.h'' is present, there's nothing in &lt;machine/setjmp.h&gt; on 10.10 (and maybe 10.9, too). This may also explain the ''homebrew'' install fail on gdb, but I don't know. I also used ''export CC=gcc'' before running ''./configure'' for gdb, but I doubt that made any difference in hindsight. Regardless, get a modern GDB built and installed.
+** Follow this advice on setup with eclipse: http://ntraft.com/installing-gdb-on-os-x-mavericks/. NB: since PATH is already configured to have /usr/local/bin before the other stuff, the part about setting C/C++ -&gt; Debug -&gt; GDB to /usr/local/bin/gdb may be moot, but I did it all the same. The example shows the preferences window from a version of eclipse earlier than 4.4, which I am using.
+** GDB and libtool: But GDB won't debug programs built with shared libs (dylibs on OS/X), responding with this message: ''"hell": not in executable format: File format not recognized'' for the program ''hell'' that's linked using libtool. Nice. The work-around is to use ''libtool --mode=execute gdb hell'' and maybe to set GDB to be ''libtool --mode=execute gdb'' although I have not tried the later.
+** Here is advice on signing GDB (if you build it from source) so that OS/X 10.9++ will run it and let it attach to a running process: https://sourceware.org/gdb/wiki/BuildingOnDarwin
+** Now set up Eclipse:
+*** [[File:0 GDB Issues with shared libs.png]]
+*** [[File:1 GDB Issues cont.png]]
+*** [[File:2 Setup the debug configuration.png]]
+*** [[File:3 Debug config dialog.png]]
+*** [[File:4 Use legacy launcing with Eclipse 4.4.png]]
+*** [[File:5 Debugger tab should look like.png]]
+*** [[File:6 warning gone.png]]
+** [[File:0 GDB Suppres auto build on launch.png]]
+**</text>
+      <sha1>2pkcdbys93455sv2h1g8ogx6kpk6y9n</sha1>
+    </revision>
+  </page>
+</mediawiki>

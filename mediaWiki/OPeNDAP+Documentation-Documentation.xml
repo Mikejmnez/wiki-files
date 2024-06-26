@@ -1,0 +1,142 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Documentation</title>
+    <ns>0</ns>
+    <id>33</id>
+    <revision>
+      <id>12897</id>
+      <parentid>12558</parentid>
+      <timestamp>2020-12-04T17:25:55Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* User Guides */</comment>
+      <origin>12897</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5544" sha1="25zkkhg7qm6bmvxolaa7ywlcgrwbq05" xml:space="preserve">__NOTOC__
+This site contains the (new) repository for OPeNDAP software documentation.
+
+=User Guides=
+
+===[https://opendap.github.io/documentation/QuickStart.html Getting Started with OPeNDAP Software]===
+
+An overview of our software
+
+===[https://opendap.github.io/documentation/UserGuideComprehensive.html The User's Guide]===
+
+A comprehensive guide to sharing data with our software
+
+===[[Server Side Processing Functions]]===
+
+A listing of functions that Hyrax provides along with their documentation.
+
+===[[How-To Guides]]===
+
+This page holds a collection of Jupyter notebooks, Videos, et cetera. These have been developed by us and by other groups.
+
+=Software=
+
+===[https://opendap.github.io/hyrax_guide/Master_Hyrax_Guide.html Hyrax - Installation and Customization (BES, OLFS, format &amp; response handlers)]===
+
+The OPeNDAP Data Server, Hyrax, is a data server developed by OPeNDAP that supports DAP2, DAP4 and other Web APIs for data access. These pages contain documentation that covers server installation and customization. The old [[Hyrax | MediaWiki documentation pages]] are still available, but are not being maintained.
+
+===[[libdap|libdap++: C++ DAP Implementation Documentation]]===
+
+Libdap is the C++ implementation of the OPeNDAP Data Access Protocol. This pages contains links to the libdap++ reference guide and a usage guide that explains some of the ins and outs of this class library.
+
+===[http://www.opendap.org/api/javaDocs/index.html Java OPeNDAP API Documentation]===
+
+The Java OPeNDAP API; this is used by TDS, Netcdf-Java and lots of other software.
+
+===[https://opendap.github.io/bes/html/ BES Implementation Documentation]===
+
+The BES (OPeNDAP Back-End Server) is a part of the OPeNDAP 4 Server, known as Hyrax. These pages contain the BES reference guide.
+
+===[[Aggregation_enhancements|Aggregation Service]]===
+
+The Aggregation Service provides a way for users to apply constraints to a number of files and returns the result in a single archive file.
+
+=White Papers=
+
+===[[Making the transition to DAP4]]===
+
+8/27/14
+
+This is a short How-To that covers modifying existing modules (aka 'handlers') for the BES so that they will return DAP4 Data and Metadata responses. In this how-to, we cover modifications for modules that read data as well as ones that transform the DAP responses into other things, such as taking a binary data object and transforming it into a netCDF file or a CSV ASCII response.
+
+===[[Configuration of BES Modules]]===
+11/20/14
+
+This is a short How-To for BES modules so that they can be built using autotools as both standalone code and as part of a unified bes build.
+
+===[[A One-day Course on Hyrax Development]]===
+
+2/11/2013
+
+This one day course on Hyrax development focuses on building and debugging the Back End Server (BES) component of Hyrax, with a particular emphasis on writing server side functions. Included is a SUSE linux virtual machine that contains a complete copy of Hyrax, ready to run, along with some sample data and Eclipse. The course is a mixture of PowerPoint slide sets, hands-on work and MediaWiki pages.
+
+===[[Writing a Client]]===
+
+A short tutorial on how to write a client. Still under development.
+
+===[[Writing a Module for Hyrax]]===
+
+A short tutorial on how to write a module for Hyrax. This is one of many such 'short tutorials on ...'. Another, much older, one can be found at [[Wiki_Testing/WritingAServer|Writing A Server]]. It covers the older server design, but many of the concepts are still valid.
+
+===[[Using Virtual Machines to Serve Data]]===
+
+This short guide discusses using a virtual machine and a [http://en.wikipedia.org/wiki/Hypervisor hypervisor] ([http://www.vmware.com/ VMware] Server) to serve data. In the guide we cover both serving data with Hyrax running within a VM and also using Hyrax in a workshop where the hypervisor is VMware Workstation. You cannot actually serve data to remote users with Workstation, but it's a great environment in which to learn about the server's different capabilities. In both cases the advantages of using a VM are that the server runs in Linux on the virtual machine while you run the hypervisor under any of its supported operating systems. An additional advantage is that the hypervisor can be used very effectively in the context of an overall security plan.
+
+===[[ServerDispatchOperations|Server Dispatch Operations]]===
+
+===Building OPeNDAP Software ===
+
+We have several pages that describe how to set up an OS/X or CentOS machine to build our code, particularly Hyrax, which can be tricky to build. See the [[Developer Info]] page for more information.
+&lt;!--
+How to build our code on OS X. Really, the short answer "./configure; make; make install" is only technically true. To work with the code as a developer you will need to update parts of teh stock OS X development environment. This describes how to do that and avoid some common pitfalls.
+*[[Libdap On Leopard|Building OPeNDAP Software on OS X 10.5 Leopard]] 
+*[[Libdap On Lion|Building OPeNDAP Software on OS X 10.7 Lion]]
+
+===[[ Hyrax-1.6.2 Packages for OS-X| Building Hyrax-1.6.2 Package Installer(s) for OS-X 10.5 (Leopard)]]===
+
+This describes how to take our '''shrew''' project and build an OS/X package that enables users to install Hyrax with a single click. The resulting server can be easily uninstalled as well. Included with the server is a set of dependencies, so all a person needs is an OS/X 10.5 or greater machine and this package. --&gt;
+
+=Housekeeping=
+
+====[[Wiki Testing]]====
+
+====[[Retired|Retired Pages]]====</text>
+      <sha1>25zkkhg7qm6bmvxolaa7ywlcgrwbq05</sha1>
+    </revision>
+  </page>
+</mediawiki>

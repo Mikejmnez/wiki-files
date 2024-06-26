@@ -1,0 +1,70 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Formulation of Working Groups</title>
+    <ns>0</ns>
+    <id>84</id>
+    <revision>
+      <id>801</id>
+      <parentid>600</parentid>
+      <timestamp>2007-03-29T04:21:36Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>801</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3331" sha1="fdca9n9aiypevpg78glcsw7kobvrel5" xml:space="preserve">Community forums for deciding on standards/processes within (and  beyond) the OPeNDAP community
+
+Process developed at the February 2007 OPeNDAP Developer Meeting, in  Boulder CO.
+
+The OPeNDAP community process draws on experience from other  community processes: e.g. IETF,
+OGC, ISO, JCP, Unidata.
+
+==Working Group Attributes==
+
+To meet the needs of the OPeNDAP community, the following attributes of the process had broad agreement:
+
+# OPeNDAP working groups (OWG) should be formed with a specific focus, deliverables, timeframe and minimum membership. OPeNDAP would welcome agency, project or institutional sponsorship and/or co-sponsorship.
+## Specific focus - The working groups must define the areas of their work efforts as covering a) OPeNDAP the software, b) OPeNDAP (DAP) the specification, or c) both. Working Groups should only be formed for well-defined topics where the community feels the development of a deliverable is a high priority.
+## Deliverables/outcomes - Deliverables produced by a OWG fall into two categories. First, an OWG may produce software, either prototype or production. Second, an OWG may produce documentation including: Software specifications; Standard Operating Procedure documents; Best Practices documents; and Technical Notes. In some cases the OWG may reccommend that the ideas developed be taken to a more formal standards organization to be developed further.
+## Timeframe - OWGs should aim to complete their discussions, white papers, documents/proposals within a nominal 3 month timeframe. In cases where prototypes/software are to be produced the timeframe can be extended with OWG executive (see next item) approval), especially where funding is sought to complete the project. The intent is not to have stagnant or dormant efforts.
+## Minimum membership is 3 people.
+# The OWG executive is nominated by the community and appointed by the OPeNDAP advisory board, with membership of 5-7 people, a nominal term limit for membership is 2 years. Members may serve more than one term (with board approval). The first task of the executive is to formalize the OWG Terms of Reference.
+# The OWG executive will make recommendations on how to take OWG outcomes to standards processes and other relevant organizations for  broader community comment, adoption, etc.
+# The OPeNDAP advisory board membership will be broadened (serves  OPeNDAP Inc.) to accommodate this expanded role and term limits will be applied to the board.
+# OWGs can be proposed by anyone but must be chartered within the  OPeNDAP community by the OWG executive. 
+# OWG forums should be public (via opendap.org supported wiki) EXCEPT  for any OWG which addresses security of data service systems (discussion on if we can/should use  US-CERT as an announcement forum for security matters is an item to be pursued).
+# The only requirement for participation and comment on OWG forums is  to be a registered user on the opendap.org provided wiki.
+# The approval and decision making process may vary depending on the  scope of the subject area. The OWG proposers must identify a suitable decision making process (if it  is required) and the OWG executive must approve that process before the OWG can be chartered. In some  cases, standards and specifications must have broad community comment and consensus before being adopted.</text>
+      <sha1>fdca9n9aiypevpg78glcsw7kobvrel5</sha1>
+    </revision>
+  </page>
+</mediawiki>

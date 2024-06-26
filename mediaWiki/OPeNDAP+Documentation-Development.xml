@@ -1,0 +1,136 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Development</title>
+    <ns>0</ns>
+    <id>502</id>
+    <revision>
+      <id>12759</id>
+      <parentid>12741</parentid>
+      <timestamp>2019-04-11T17:00:36Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* BALTO */</comment>
+      <origin>12759</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3590" sha1="0frwoeh114k307xqyry7ov1dx6b1yqi" xml:space="preserve">This page is a kind of directory for pages that document any development activity we want to write about. These can be ideas we'd like to write down before they get lost, funded projects underway or designs that need to be documented after the fact.
+
+There are a set of [[Document_Templates | MediaWiki templates]] that simplify writing some kinds of documents such as Use cases.
+
+==Completed Projects==
+For these projects, there are often other palceson the web (this site, www.opendap.org and/or others) that have more up-to-date information. This part of our site is designed to be a place where new ideas are tried out and not where finished, polished, work is presented.
+
+* [[NetCDF Translation]]
+* [[CheapStix]]
+* [[Hyrax-1.6.2 Packages for OS-X]]
+* [[ASCII Data DDX]]
+* Australian BOM Contract (2011)
+** [[Hyrax Admin Interface]]
+** [[Hyrax - Administrators Interface]] documentation
+** [[DAP: Authentication Discussion]]
+** [[Expanded NetCDF support]]
+** [[BES - Modules - The NetCDF Handler]] documentation
+* [[Gateway Service]]
+* [[NC-DAP]]
+* [[REAP Cataloging and Searching]]
+* [[WCS]]
+** [[WCS_Service_version_1.1 | User documentation]], [[WCS Technical Description | Technical documentation]], [[WCS Tutorial on Serving Data | Tutorial on Serving Data]]
+* [[OPULS: NOAA S3 Data Access]]
+* [[DAP4: Async Service for AWS Glacier]]
+* [[OPULS: UGrid Subsetting]]
+* [[Caching that's multi-process safe]]
+* [[DAP Service Terminus]]
+* [[Hyrax: Asynchronous Response Implementation]]
+* [[DAP Test Server]]
+
+== [[ODSIP Development]] ==
+[[ODSIP Development | The ODSIP Project has its own page.]]
+
+== [[OPULS Development]] ==
+
+[[OPULS Development | OPULS development has been moved to its own page.]]
+
+== ANU ==
+*[[Hyrax - User Identification (Authentication)]]
+*[[Hyrax - Managed Access (Authorization)]]
+*[[DAP Clients - Authentication]]
+
+==General Development==
+* [[Expanded arguments for Constraint Expressions]]
+* [[Hyrax Development]] This page contains several designs, both completed and ongoing, for parts of Hyrax. They include the NCML handler, DAP4 implementation, THREDDS XSLT implementation, The BES XML interface, NetCDF File Response, ...
+* [[IOOS Gateway]]
+* [[libdap refactor]]
+* [[Hyrax Customization user manual]]
+* [[Javascript Data Request Form]]
+* [[Use cases for swath and time series aggregation]] Developed as part of a contract with NASA
+
+=== Handler engineering information ===
+* [[Understanding the NCML Handler]] This is a roadmap to the NCML handler source files (started Aug 2015) &lt;font color="red"&gt;move this to doxygen?&lt;/font&gt;
+
+=== BALTO ===
+* Stamps' Use cases - See the Google Doc versions of these.
+# BALTO:FIND_DATA
+# BALTO:FIND_DATA_LOCAL_SEARCH
+# BALTO:ADD_BROKERED_DATA
+# BALTO:USE_DATA
+* Easton/Fuka Use Cases
+
+==Project Ideas==
+* [[Server side processing]] Some of these ideas could be part of DAP4, some could be additional services Hyrax performs.
+* [[Image Service]]
+* [[Relational Database Handler | RDH]]
+* [[GeoDAP]]
+* [[THREDDS Catalog Metadata]]
+* [[DAP Capabilities]]
+* OGC Web Services Framework
+** [[Sensor Observation Service]]
+* [[Hyrax Metadata Management]]
+* [[Data Service Statistics]]
+* [[AMQP Support in Hyrax]]
+* [[BES: Root Catalog]]
+* [[Shibboleth Enabling DAP Clients]]
+
+==Summer of Code==
+* [[Google Summer of Code 2010 Ideas]]
+* [[Google Summer of Code 2011 Ideas]]
+* [[Google Summer of Code 2012 Ideas]]
+
+==Project boneyard==
+* [[HowTo: Adding to the Dataset List]] The dataset list is a great idea, but without significant resources, it could not sustain itself.
+* [[Dataset List]]
+
+[[Category:Development|Development]]</text>
+      <sha1>0frwoeh114k307xqyry7ov1dx6b1yqi</sha1>
+    </revision>
+  </page>
+</mediawiki>

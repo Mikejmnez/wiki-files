@@ -1,0 +1,120 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - Running bescmdln</title>
+    <ns>0</ns>
+    <id>127</id>
+    <revision>
+      <id>10244</id>
+      <parentid>8101</parentid>
+      <timestamp>2013-12-19T20:46:26Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Basic Commands */</comment>
+      <origin>10244</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3669" sha1="b2ee2o9c01z1y26z8c3impjpexk9l90" xml:space="preserve">== Basic Commands ==
+First we will issue some simple commands to make sure that the client is talking to the server. First, start the command-line client:
+
+ % bescmdln -h localhost -p 10022
+
+The -h option specifies the machine on which the BES is running. In this case, it's your local machine. The -p option specifies the port the BES is running on. The default, set in the BES configuraiton file, is 10022. If you changed this, or if you started the server with the -p option, then you need to use that port number here.
+
+If you just use these options then you will start using the command line version of the client. There are other options, but we'll start here. From here you should get a prompt. Let's try a simple command (remember to terminate each command with a semicolon):
+
+ BESClient&gt; show status;
+
+You should get a response showing the status of the server:
+
+ Listener boot time: MDT Thu Jun  9 14:12:22 2005
+
+Try another one:
+
+ BESClient &gt; show help;
+
+This one should show both the BES core commands, DAP commands, and your help information.
+
+If you have installed a data handler, let's take a look at your data. By executing this request you should see the root node of your data directory.
+
+ BESClient &gt; show catalog;
+
+If you can't see your data, then make sure that the RootDirectory parameters in the [[Hyrax - BES Configuration|BES Configuration file]] are correct.
+
+ BESClient &gt; exit
+
+This one will exit out of interactive mode.
+
+== Commands for Hyrax testing ==
+
+=== Poke around in the RootDirectory to see what's actually visible to the BES ===
+
+===== show the root catalog =====
+ show catalog;
+
+=====  will show the contents of "pathname" =====
+For example, show catalog for "/data/nc"; will show all the stuff in the /data/nc directory.
+ show catalog for "pathname";
+
+=== Get the BES to return a DAP response object ===
+
+You need three commands to do this:
+===== bind the dataset to a container in a catalog =====
+ set container in catalog values c,/data/nc/feb.nc;
+
+===== make a definition so you can access that container =====
+ define d as c;
+
+===== request a particular response =====
+ get ddx for d;
+
+== Command line options ==
+Other command line options available to the bescmdln program:
+
+ -u specifies the name of a Unix socket for connecting to the server.
+ -h specifies the name of a host for TCP/IP connection
+ -p specifies the port where the server is listening for TCP/IP connection.
+ -x makes the client execute a command and exit. This flag requires the -f flag.
+ -f sets the target file name for the return stream from the server.
+ -i sets the target file name for a sequence of input commands.
+ -t sets the timeout in seconds and is optional.
+ -d "cerr|&lt;filename&gt;,&lt;context&gt;" sets the client session for debugging and is optional.
+ -v forces the client to show the version and exit
+
+Connection Flags: -u or -p -h are required to connect to a server and specify either a Unix socket or a TCP/IP socket.
+
+Input/Output Flags: you can specify that the input is from the command line with the -x flag or that the input must be read from a file with the -i flag. If you specify either -x or -i you must specify the name of a file for the output stream of the server with the -f flag. If neither the -x nor the -i flags are specified then the client goes into interactive mode. To exit out of interactive mode just type 'exit' (without the quotes) at the BESClient&gt; prompt.
+
+For debugging information either specify cerr to have debugging information dump to standard error, or the name of a file. The context option is a comma separated list of debugging context (component debugging). Specify all to get debugging from all components.</text>
+      <sha1>b2ee2o9c01z1y26z8c3impjpexk9l90</sha1>
+    </revision>
+  </page>
+</mediawiki>

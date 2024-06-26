@@ -1,0 +1,112 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Australian BOM Software Developer's Agenda and Presentations</title>
+    <ns>0</ns>
+    <id>338</id>
+    <revision>
+      <id>8129</id>
+      <parentid>2410</parentid>
+      <timestamp>2012-05-04T23:32:34Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>8129</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3034" sha1="lctyn1ky9r5hardmewb8lfywt7hyjii" xml:space="preserve">&lt;font color="red" size="+1"&gt;This is out of date: See [http://www.opendap.org/apac_workshop_vm The APAC/BOM Workshops] which has links to all of the presentation materials plus other related information.&lt;/font&gt;
+
+== Software Developer's Workshop ==
+
+Wednesday 17 October to Thursday 18 October
+
+----
+
+This workshop will target developers and focus on building custom modules, adding support for new data formats and new service protocols to, as well as extending the server to support server-side functions and other protocols.  Developers will learn how to enable client applications to access OPeNDAP data servers using several different client libraries.
+
+
+'''9:00am Wednesday - Start of Software Developer’s workshop'''
+:1. [http://www.opendap.org/support/bom_sdw/SDW_1r0_HyraxArchitecture.ppt Architecture and Design of Hyrax] (lecture)
+
+'''10:30am Wednesday'''
+:2. [http://www.opendap.org/support/bom_sdw/SDW_2r0_OLFSExtensions.ppt Extending the OLFS: Writing Custom DispatchHandlers] (lecture)
+
+'''12:30pm Wednesday - Lunch'''
+
+'''1:30pm Wednesday'''
+:3. [http://www.opendap.org/support/bom_sdw/SDW_3r0_Checking_the_Server.ppt Examination and verification of a working Hyrax server] (hands-on)
+
+'''2:00pm Wednesday'''
+:4. [http://www.opendap.org/support/bom_sdw/SDW_4r0_BESExtensibility.ppt Extending The BES: Commands, Response Objects, Handlers, and more] (lecture)
+::* New commands (like our hello world example)
+::* New response objects
+::* New response handlers
+::* New request handlers (data handlers like netcdf, freeform, csv)
+::* Aggregation engines
+::* Methods of returning your data (return as netcdf)
+::* Reporters
+::* Exception Handlers
+::* Debugging
+
+'''3:00pm Wednesday'''
+:5. [http://www.opendap.org/support/bom_sdw/SDW_5r0_Server_Side_Functions.ppt Server-side processing] (lecture)
+
+'''4:00pm Wednesday'''
+:6. Use-Case for developer’s projects (10 min. presentation on Thursday)
+
+'''5:00pm Wednesday - Retire until Thursday morning at 9:00am'''
+
+'''9:00am Thursday – Start of 2nd day of workshop'''
+:7. Presentations of Use-Case for developer’s project
+
+'''10:30am Thursday'''
+:8. [http://www.opendap.org/support/bom_sdw/SDW_8r0_Development.ppt OPeNDAP development and security policies]
+:9.  Logging from Hyrax modules (hands-on)
+:10. [http://www.opendap.org/support/bom_sdw/SDW_10r0_Client_Toolkits.ppt OPeNDAP client libraries for custom application design]
+
+'''12:30pm Thursday Lunch'''
+
+'''1:30pm Thursday'''
+:11. OPeNDAP working groups
+
+'''2:30pm Thursday'''
+:12. Development activities: (open discussion, user projects)
+
+'''5:00pm  End of Software Developer’s Workshop'''
+
+All attendees are asked to bring a PC laptop and will be given a Linux virtual machine. If people want to use a Mac, they will have to be able to 'roll with the punches' when it comes to building code in that environment.
+
+We will provide attendees with a binder for the lecture and hands-on info. 
+
+More information about the [http://opendap.bom.gov.au/opendap_workshops/ Australian OPeNDAP workshops is available here].</text>
+      <sha1>lctyn1ky9r5hardmewb8lfywt7hyjii</sha1>
+    </revision>
+  </page>
+</mediawiki>

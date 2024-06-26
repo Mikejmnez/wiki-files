@@ -1,0 +1,91 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Configuration changes</title>
+    <ns>0</ns>
+    <id>67</id>
+    <revision>
+      <id>810</id>
+      <parentid>808</parentid>
+      <timestamp>2007-04-18T21:00:49Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* 4/18/2007 */</comment>
+      <origin>810</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1569" sha1="d0eoyljs3vu048uptxfyj9hpaqnl6m5" xml:space="preserve">===LocalSettings.php hacks===
+
+&lt;pre&gt;
+# This snippet prevents new registrations from anonymous users
+# (Sysops can still create user accounts)
+$wgGroupPermissions['*']['createaccount'] = false;
+
+# This prevents anonymous users from editing.
+$wgGroupPermissions['*']['edit'] = false;
+require_once( "includes/DefaultSettings.php" );
+
+# Types of files which may be uploaded.
+$wgFileExtensions = array( 'png', 'gif', 'jpg', 'jpeg', 'pdf', 'txt', 'ppt');
+
+# OPeNDAP Logo
+$wgLogo = "http://www.opendap.org/images/OPeNDAP-meatball.png";
+$wgFavicon = "http://www.opendap.org/favicon.ico";
+
+# Allow raw HTML. Normally 'dangerous' but we limit edits so it should be OK
+$wgRawHtml = true;
+
+# disable anonomous talk
+$wgDisableAnonTalk = true;
+
+# Set the article path
+#$wgArticlePath = "/$1";
+&lt;/pre&gt;
+
+===3/20/2007===
+
+Trying to increase the limit on file uploads. This hasn't worked so far. 
+ Changed MAX_FILE_SIZE in SpecialImport.php to 10485760
+I also tried various things with &lt;code&gt;/usr/local/lib/php.ini&lt;/code&gt; without any luck.
+
+See http://meta.wikimedia.org/wiki/Uploading_files and http://us3.php.net/manual/en/ini.core.php#ini.upload-max-filesize.
+
+===4/18/2007===
+
+I changed the message "Log in / create account" on th log in page to "Log in" since that seemed more appropriate by editing the message on [[Special:Allmessages|''System messages'']] as described in the file
+''./languages/messages/MessagesEn.php''.
+
+
+I also added some text to the ''includes/templates/Userlogin.php'' page so that people that try to login without an account are asked to request an account.</text>
+      <sha1>d0eoyljs3vu048uptxfyj9hpaqnl6m5</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,89 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>BES: Root Catalog</title>
+    <ns>0</ns>
+    <id>802</id>
+    <revision>
+      <id>7938</id>
+      <parentid>7937</parentid>
+      <timestamp>2012-04-12T16:47:52Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Discussion */</comment>
+      <origin>7938</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3793" sha1="qgfqg84u0laxi5go02fch2n677yrg7r" xml:space="preserve">== Background ==
+
+When we designed Hyrax the BES supported multiple catalogs. At that time the BES had file system based catalog (a.k.a. the catalog called "catalog"), and a catalog implementation for the CEDAR ([http://cedarweb.hao.ucar.edu/wiki/index.php/Main_Page  Coupling, Energetics and Dynamics of Atmospheric Regions]).
+
+== Problem addressed ==
+At the time we designed Hyrax we chose (consciously or not) to ignore the facility of the BES to support multiple catalogs by not making space in the URL scheme for them. 
+
+The URL scheme defines a path through a directed graph. And in this graph the Hyrax server presents it holdings. THe OLFS provides a facility to map secondary BES's into the graph based on a path prefix that allows these secondary BES's to be injected into any part of the graph.
+
+[[File:Hyrax-1.8-Catalog.png|800px]]
+
+
+However, the system relies entirely on the use of the BES catalog called "catalog" which in turn relies on a filesystem to build it's holdings. Since that time other BES catalogs have been developed (gateway catalog, relational database catalog, etc.) , but there is no simple facility for mapping them into the directed graph of the Hyrax holdings. Each one requires the OLFS be extended to provide a mapping into the graph, and to instruct the BES which catalog to use.
+
+== Proposed solution ==
+
+Create a BES meta-catalog (the catalog called "root" or the "root catalog"??) which subsumes all of the catalogs in a particular BES. (Should the root catalog be an extension of the catalog "catalog"??)
+
+[[File:Hyrax-2.0-Catalog.png|800px]]
+
+;The root catalog should behave as follows -
+# At it's top level it should reveal to the world the contents of the file system catalog ("catalog") PLUS
+# It should inject into the top level catalog a "node"  for each of the other catalogs in use.
+# The name of these child catalog nodes should be the name of the catalog (or be configurable better yet)
+# If the child catalog name conflicts with one of the file system holdings then the catalog should take precedence, and the BES should write an &lt;del&gt;error&lt;/del&gt;([[User:Jimg|Jimg]]) warning message regarding this to it's logs.
+# Access to the child catalogs should be seamless. In other words using the root catalog should allow one to exercise this command:
+#::  &lt;font size="2"&gt;&lt;code&gt;&lt;bes:setContainer name="catalogContainer" space="root"&gt;/rdh/CTD&lt;/bes:setContainer&gt;&lt;/code&gt;&lt;/font&gt;
+#:Which should be setting the container to use the CTD dataset in the RDH catalog in the above example.
+
+; How do we determine what catalogs are present?
+: I am thinking that although run time discovery from some registry would be cool, that's probably more practical in Java land. We probably should use the configuration of the root catalog  to define all of the catalogs that it will subsume.
+
+== Rationale for the solution ==
+
+Doing this will change the current situation where adding a new catalog to the BES requires additional coding in the OLFS to provide access to that catalog. This is usually a fairly cumbersome process and it is anticipated that making this change will reduce the overall OLFS code volume and make the server more flexible.
+
+== Discussion ==
+
+[[User:Ndp|ndp]] 19:03, 11 April 2012 (PDT) 
+* It seems like it might be pretty cool to allow the meta catalog to use any of the catalogs as "root" and map the others into the top level of that. Or maybe even map the others into not just the top level (maybe that's a default) but to any path specified in a configuration of the root catalog...
+* We might consider making the root catalog be configurable to build the root node as a collection of the root nodes of it's catalogs. Or it could be configured to use any one of it's catalogs as a root catalog and then map the others into it's root node.</text>
+      <sha1>qgfqg84u0laxi5go02fch2n677yrg7r</sha1>
+    </revision>
+  </page>
+</mediawiki>

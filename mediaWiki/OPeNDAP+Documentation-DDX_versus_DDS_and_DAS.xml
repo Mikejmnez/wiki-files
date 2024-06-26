@@ -1,0 +1,78 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DDX versus DDS and DAS</title>
+    <ns>0</ns>
+    <id>458</id>
+    <revision>
+      <id>3591</id>
+      <parentid>3590</parentid>
+      <timestamp>2009-04-14T20:08:58Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Building the DDS and DAS using XSLT */</comment>
+      <origin>3591</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4634" sha1="gu7kkdz6k8jbqffl8pqcall6sgdgsa3" xml:space="preserve">In the current set of data handlers, the DDS and DAS objects/responses are built separately but in the future all of that information should be extracted at once from the data source and used to build the DDX. How then should backward compatibility be achieved? 
+
+In the current data handlers, the DAS and DDS objects are built when requested and serialized to generate the 'network representation' of the object (i.e., the response). Most of the handlers work this way, although the HDF4 handler builds both objects and caches them, with one caveat to be discussed later. 
+
+There are at least three problems with this approach:
+# Most clients want the information in both the DDS and DAS at just about the same time, so most clients wind up making two requests for information that's often to be used in the same part of their code.
+# Most of the handlers don't actually build DAS objects that correctly match the corresponding DDS objects, thus 'cross walking' the DDS and DAS for a data source is often a hit or miss operation.
+# A third issue has arisen now that server-side functions are becoming more important - the DDS/DAS combination is used by these functions because several (e.g., geogrid) use attributes to determine units, constant values, et c., for different variables.
+
+The DDX was designed to address the first two of these problems, but resources to modify the handlers is so limited that instead of changing the software to build and return the DDX, we've compromised and adapted the existing DAS/DDS software so that first the two objects are built independently and then the DAS is 'merged into' the DDS. This forms an object in memory that holds all of the information that is required to form the DDX response.
+
+The problem with this solution is that it fails to address the underlying issue - that DAS objects are often malformed. Heuristic code is used to merge the DAS object into a DDS that 'matches' in the sense that both are from the same data source. The code is good enough to build the correct object most of the time, but not always.
+
+=== A better way to build the DDX ===
+[[Image:BuildDASDDS.png|200px|right|Building the DAS and DDS individually]] 
+for the rest of this discussion, it's best to separate the object (which is a binary object instantiated in a C++ program) from the response, which is a representation of that object encoded in XML. The current DDS object implemented in libdap can be used to generate the DDX response.
+
+The current handlers need to be modified to integrate reading the data type and name information about the variables with reading the attribute information about those variables. Then the attribute information can be bundled with the correct variable at the outset. This is currently supported by the software in libdap.
+
+Because the DDS class in libdap contains methods to print the DDX, there's no additional work to do to build that response once the above change is made to the handlers so that they read and store attribute information for each variable at the time the variable is added to the DDS object.
+
+=== Building the DDS and DAS using XSLT ===
+[[Image:BuildonlyDDX.png|200px|right|Build Only the DDX]]
+If the DDX response has been built, then it should be possible to use that along with suitable XSLT code to build the corresponding DDS and DAS responses. This will allow us to eventually phase-out support for the DAS and DDS responses. Initially we will be able to remove the functions used to build the ASCII text that is the response and at some point we might be able to eliminate the somewhat error-prone parsers used to read the responses. The latter will only be possible when the DDX is nearly universally supported by servers.
+
+=== Caching the binary object ===
+
+Some code, like the HDF4 handler, caches the DDS/DAS objects by generating their 'responses' and writing those to disk. Unfortunately, this presents a problem when using those cached responses to instantiate objects that are then used for form a data response: Extra information needed to build the data response that is part of the binary DDS/DAS objects but not in the response will be missing. Thus the cached responses cannot be fully used.
+
+To address this the handlers (or the server?) should use a cache for the binary C++ objects - some sort of a persistent store - that can correctly cache the ''objects'' and not the DAP responses. In this case, information read from a data source could be used many times for both the 'metadata' responses and for data responses. Because this would be implemented outside a given handler's logic, it could be used by all handlers.</text>
+      <sha1>gu7kkdz6k8jbqffl8pqcall6sgdgsa3</sha1>
+    </revision>
+  </page>
+</mediawiki>

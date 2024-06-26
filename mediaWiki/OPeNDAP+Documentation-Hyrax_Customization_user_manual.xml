@@ -1,0 +1,180 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax Customization user manual</title>
+    <ns>0</ns>
+    <id>594</id>
+    <revision>
+      <id>5775</id>
+      <parentid>5774</parentid>
+      <timestamp>2010-07-15T21:37:35Z</timestamp>
+      <contributor>
+        <username>Rduncan</username>
+        <id>31</id>
+      </contributor>
+      <comment>/* Image Files */</comment>
+      <origin>5775</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5499" sha1="5affv0jp0m13658fb4v4f9hzojhp9yo" xml:space="preserve">= Web page customization =
+
+Hyrax can be easily customized to fit the end users needs. The public "face" of Hyrax can be easily modified to match an organizations look and feel. Almost all of the web pages can be completely customized by the site administrator by editing a combination of HTML, Image, and CSS files.
+
+== Where to make the changes ==
+
+All of the default versions of the HTML, Image, and CSS files come bundled with Hyrax in the ''$CATALINA_HOME/webapps/opendap/docs'' directory. $CATALINA_HOME is the directory that you installed tomcat in. If you did the default install of tomcat, your $CATALINA_HOME will be "/usr/local/apache-tomcat-6.x.x". 
+
+CD to you $CATALINA_HOME directory (again default would look like (on Linux machine): cd /usr/local/apache-tomcat-6.x.x) (The -6.x.x is the version number of tomcat you are running, ex. if you are running tomcat 6.0.24 then it would be just that.)
+
+Make a new directory $CATALINA_HOME/content/opendap/docs/. (This would be: mkdir content, cd content, mkdir opendap ...)
+
+Copy (do not move) the files in $CATALINA_HOME/webapps/opendap/docs to $CATALINA_HOME/content/opendap/docs by using:
+cp -r $CATALINA_HOME/webapps/opendap/docs/ $CATALINA_HOME/content/opendap/docs/ 
+
+;Warning: ''Do NOT remove files from this new directory (Or the old one for that matter). Each file, in its location, is required by Hyrax. You can make changes to the files but you should not rename or remove them.''
+
+'''The rest of these instructions are written with the assumption that a copy of the ''docs'' directory has been made as described above.'''
+
+== What to change ==
+
+=== HTML Files ===
+The HTML files provide  the static content of a Hyrax server. 
+{|
+|&lt;u&gt;File&lt;/u&gt;
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+|&lt;u&gt;Location&lt;/u&gt;
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+|&lt;u&gt;Description&lt;/u&gt;
+|-
+| '''index.html'''
+|
+| ''$CATALINA_HOME/content/opendap/docs''
+|
+| The documentation web page for the top level of Hyrax. As shipped it contains a description of Hyrax and links to documentation and funders. The contents.html pages (aka the OPeNDAP directories) links to this document. &lt;br/&gt;&lt;br/&gt;
+|-
+| '''error400.html'''
+|
+| ''$CATALINA_HOME/content/opendap/docs''
+|
+| Contains the default error page that Hyrax will return when the client request generates a '''Bad Request''' error (Associated with an HTML status of 400) &lt;br/&gt;&lt;br/&gt;
+|-
+| '''error403.html'''
+|
+| ''$CATALINA_HOME/content/opendap/docs''
+|
+| Contains the default error page that Hyrax will return when the client request generates a '''Forbidden''' error. (Associated with an HTML status of 403) &lt;br/&gt;&lt;br/&gt;
+|-
+| '''error404.html'''
+|
+| ''$CATALINA_HOME/content/opendap/docs''
+|
+| Contains the default error page that Hyrax will return when the client request generates a '''Not Found''' error. (Associated with an HTML status of 404) &lt;br/&gt;&lt;br/&gt;
+|-
+| '''error500.html'''
+|
+| ''$CATALINA_HOME/content/opendap/docs''
+|
+| Contains the default error page that Hyrax will return when the client request generates an '''Internal Server Error'''. (Associated with an HTML status of 500) &lt;br/&gt;&lt;br/&gt;
+|-
+| '''error501.html'''
+|
+| ''$CATALINA_HOME/content/opendap/docs''
+|
+| Contains the default error page that Hyrax will return when the client request generates an '''Not Implemented'''. (Associated with an HTML status of 501) &lt;br/&gt;&lt;br/&gt;
+|-
+| '''error502.html'''
+|
+| ''$CATALINA_HOME/content/opendap/docs''
+|
+| Contains the default error page that Hyrax will return when the client request generates an '''Bad Gateway'''. (Associated with an HTML status of 502) &lt;br/&gt;&lt;br/&gt;
+|-
+|}
+=== CSS Files ===
+
+{|
+|&lt;u&gt;File&lt;/u&gt;
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+|&lt;u&gt;Location&lt;/u&gt;
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+|&lt;u&gt;Description&lt;/u&gt;
+|-
+| '''contents.css'''
+|
+| ''$CATALINA_HOME/content/opendap/docs/css''
+|
+| The contents.css style sheet provides the default colors and fonts used in the Hyrax site. It is referenced by all of the HTML and XSL files to coordinate the visual aspects of the site.&lt;br/&gt;&lt;br/&gt;
+|-
+| '''thredds.css'''
+|
+| ''$CATALINA_HOME/content/opendap/docs/css''
+|
+| The thredds.css style sheet provides the default colors and fonts used by the THREDDS component of Hyrax. &lt;br/&gt;&lt;br/&gt;
+|-
+|}
+=== Image Files ===
+
+There are a number of image files shipped with Hyrax. Simply replacing key image files will allow you to customize the icons and logos associated with the Hyrax server.
+{|
+|&lt;u&gt;File&lt;/u&gt;
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+|&lt;u&gt;Location&lt;/u&gt;
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+|&lt;u&gt;Description&lt;/u&gt;
+|-
+| '''logo.gif'''
+|
+| ''$CATALINA_HOME/content/opendap/docs/images''
+|
+| Main Logo for the directory view (produced by contents.css and contents.xsl)
+|-
+| '''favicon.ico'''
+|
+| ''$CATALINA_HOME/content/opendap/docs/images''
+|
+| The cute little icon preceding the URL in the address bar of your browser. To be used this file needs to be installed into Tomcat:cp -r $CATALINA_HOME/webapps/opendap/docs/images/favicon.ico to $CATALINA_HOME/webapps/ROOT/  (OR this is where you can pick another image of your choosing and place in this directory.)
+|-
+| '''BadDapRequest.gif, BadGateway.png,&lt;br/&gt; favicon.ico, folder.png,&lt;br/&gt;  forbidden.png, largeEarth.jpg,&lt;br/&gt;  logo.gif, nasa-logo.jpg,&lt;br/&gt;  noaa-logo.jpg, nsf-logo.png,&lt;br/&gt;  smallEarth.jpg, sml-folder.png,&lt;br/&gt;  superman.jpg'''
+|
+| ''$CATALINA_HOME/content/opendap/docs/images''
+|
+| These files are referenced by the default collection of web content files (described above) that ship with Hyrax.
+|}
+
+&lt;br /&gt;
+&lt;br /&gt;
+
+&lt;br/&gt;
+&lt;br/&gt;
+
+&lt;br/&gt;
+&lt;br/&gt;</text>
+      <sha1>5affv0jp0m13658fb4v4f9hzojhp9yo</sha1>
+    </revision>
+  </page>
+</mediawiki>

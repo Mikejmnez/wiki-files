@@ -1,0 +1,645 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP Service Terminus</title>
+    <ns>0</ns>
+    <id>708</id>
+    <revision>
+      <id>9274</id>
+      <parentid>8479</parentid>
+      <timestamp>2012-08-31T19:13:45Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>9274</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="39420" sha1="edp7qn5van829zhzuxuaxq2f7qvqytt" xml:space="preserve">[[Category:Development|Development]] [[Category:DAP4|DAP4]]
+&lt;font size="+1" color="red"&gt;This is an old document that captures the starting point of the OPULS design work. It's out of date and should be referenced only as a baseline for the work.&lt;/font&gt;
+
+[[OPULS_Development | &lt;-- back to OPULS Development]]
+
+Author: NDP
+== Overview ==
+
+We intend to provide a 'Services' or 'Capabilities' response for DAP4.
+
+Currently DAP servers provide a number of  dataset level responses (services). These include DAP services such as the DDS, DAS, and DDX, plus other services that have been added over time such as the RDF and ISO responses. There is currently no way for a user (or software agent) to discover which of these many services might be available for a particular dataset.  While THREDDS catalogs do provide a mechanism for determining which services are associated with which datasets, they don't actually provide a mechanism for discovering the details of the various service URLs. A THREDDS catalog might identify a DAP service, but the URL that can be assembled from the THREDDS catalog for that service is limited to just the base dataset URL. Typically dereferencing this URL will provide one of two things - either the underlying data file (for example a netcdf file) or an HTTP 403 error if direct access to the underlying files has been disabled in the server configuration.
+
+'''Example:'''
+
+This URL points to a dataset on a DAP server:
+&lt;font size="2"&gt;
+ http://test.opendap.org:8080/opendap/data/nc/fnoc1.nc
+&lt;/font&gt;
+
+Dereferencing the link will not connect you to a DAP service or DAP response. It will only return the underlying netcdf file. The only way to know that DAP services exist for this is by reading the URL path and recognizing that it is likely an instance of a DAP server based on the position of the 'opendap' string in the URL. 
+
+There is no guarantee that dereferencing this URL will even yield the underlying file, as that behavior is a configuration option for the server. If that access is not allowed in the configuration, then dereferencing the URL will simply return an HTTP 403 (forbidden) error.
+
+== Possible Technologies ==
+
+I looked at [http://en.wikipedia.org/wiki/Web_Services_Description_Language Web Services Description Language (WSDL)],    [http://en.wikipedia.org/wiki/Web_Application_Description_Language Web Application Description Language (WADL)], and  OGC GetCapabilities as possible syntaxes to leverage. All three make assumptions about the structure of the URL and constraint expression (aka query string) that would require an extension to an existing standard be written to support our existing syntax.
+
+== Proposal ==
+
+I propose that base DAP URLs should return an XML document describing the DAP services available for the dataset. 
+
+At minimum this document should provide:
+
+* A human readable title of the service (DDX, DDS, etc.)
+* A link that can be dereferenced to get the service response for the dataset in question.
+* An unambiguous, unique to the service, xlink:role identifier that serves as a way to clearly identify which service on the list purports to do what well know thing.
+* A brief description of the service
+* A link to a complete, human readable, description of the service response and it's semantics
+* A reference to an XSLT that a browser would use to render the description into HTML for a presentation view.
+
+[[User:Jimg|Jimg]] 12:47, 3 February 2012 (PST) This proposed feature is an example of [http://tools.ietf.org/html/draft-ietf-httpbis-p3-payload-16#section-5.2 agent-driven content negotiation]. To wit: 
+&lt;blockquote&gt;With agent-driven negotiation, selection of the best representation for a response is performed by the user agent after receiving an initial response from the origin server.  Selection is based on a list of the available representations of the response included within the header fields or body of the initial response, with each representation identified by its own URI.&lt;/blockquote&gt;
+
+Additionally this dataset services description document might contain:
+
+* Descriptions and syntax of server side functions available for the dataset
+
+=== Static or Dynamic Response? ===
+
+As the DAP servers evolve to support user authentication and sessions the content of the dataset services description document should become dynamic. By this I mean that some services and server functions might be available only to certain users. If an authenticated user asks for a particular dataset services description document they would see all the the services available to them, which might differ significantly from those available to a different user.  As powerful server side functions such as re-gridding and re-projection become available we anticipate that data providers may not wish to allow just anyone to utilize them because of the potential burden they may place on the data center's computing resources.
+
+It may be that some services may not be available for all datasets. This argues (along with the previous comment about users and roles) that the service description needs to be generated dynamically and that it should be context sensitive w.r.t. user, role, and dataset.
+
+Implementation of a ''dynamic'' services response implies that the software generating that response ''can'' get information about what is applicable for a given user and a given dataset, where the latter could be quite complicated. The alternative is to have all possible responses described in the services description with the understanding that they might return an error code under one set of circumstances. This would be far easier for servers, and likely require no additional logic in clients (because they will have to account that unforeseen errors will happen in any case). The opposing argument is that presenting information known to be false is a poor practice - and it's hard not to agree.
+
+I suggest that we split this into two cases:
+; Authenticated/privileged versus anonymous users: For this case, the response should be dynamic and reflect what the user can actually do.
+; Datasets for which server-side functions are/are-not applicable: For this case, however, the response should not attempt to determine what is applicable to a particular dataset, but that it optionally can indicate that a particular function ''can'', with certainty, be applied.
+
+These are two fundamentally different cases because the semantics or the first are under our control, while those of the latter are not. In the first cases, the server defines the classes of users and the sets that describe their capabilities. It is possible for the server to know that a given user can never run a regridding operation, for example, because they lack the authorization to do so. However, for datasets, determining which functions are applicable, for example, requires ''understanding the semantics of the metadata bound to that dataset'' which can be done in some cases, but not all.
+
+==== How this limits the response's utility, plus a solution ====
+
+The problem with not providing a list of functions that is known to be applicable to a dataset, is that limits an important source of semantic information about those datasets. If we know that a regridding function can be allied to dataset X, then we know a fair amount that dataset. In addition, it is possible that the service response could include, at some future time, either directly or via inference, semantic information based on server-side operations that were known to be possible. 
+
+If we extend the ''Function'' element of the service response so that the element listing a function contains an attribute that indicates that the server knows that this function can definitely be used with the dataset, then we can support semantic systems without forcing the server to know about the applicability of each function to each dataset. I would suggest that we add the attribute ''applicability'' and support the three values of ''yes'', ''no'', and ''unknown'' with the latter being the default value.
+
+==  [[DAP4_Web_Services | Services]]  == 
+
+A Service is represented by:
+* A simple human readable name called 'title'.
+* An access URL and an associated media-type returned by that URL.
+* A unique "namespace" like id that is used to define an xlink:role attribute. This is intended to allow people and software to unambiguously identify specific services, irrespective of their human readable title. The idea is that that the xlink:role tells you what is going to happen when you go to xlink:href.
+* An optional description.
+
+A service is accessed by dereferencing its access URL, which is typically constructed by adding some type of suffix to  the dataset's referent (aka base) URL. The way in which the query string (aka constraint expression) is used is defined by each service, and there is no requirement for inter-service query string API conformity.
+
+A more extensive discussion of the various services that might appear in a DatasetServices document can be found on the [[DAP4 Web Services]] page.
+
+== Prototype #1 ==
+
+I implemented a prototype DatasetServices document for Hyrax. It is not dynamic - all datasets and all users get the same basic response (delta the embedded URL's that return the various service responses).
+
+It looks like this:
+&lt;font size="2"&gt;
+&lt;source lang="xml" &gt;
+
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="/opendap/xsl/serviceDescription.xsl"?&gt;
+&lt;DatasetServices 
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
+    xml:base="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml"&gt;
+    
+    &lt;Service title="Data Request Form" &gt;
+        &lt;link type="text/xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.html" 
+             xlink:role="http://services.opendap.org/dap4/data-request-form#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_HTML_DATA_Request_Form_Service"&gt;OPeNDAP HTML Data Request Form for data sub-setting and access.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="Dataset"&gt;
+        &lt;link type="text/xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xml" 
+             xlink:role="http://services.opendap.org/dap4/dataset#"&gt;
+        &lt;link type="application/json" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xml.json" 
+             xlink:role="http://services.opendap.org/dap4/dataset#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Dataset_Service_-_The_metadata"&gt;DAP4 Dataset Description and Attribute XML Document.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAP4 Data"&gt;
+        &lt;link type="multipart/mixed" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dap" 
+             xlink:role="http://services.opendap.org/dap4/data#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Data_Service"&gt;DAP4 Data object.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAP2 Data"&gt;
+        &lt;link type="application/octet-stream" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dods"
+             xlink:role="http://services.opendap.org/dap2/dods#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_Data_Service"&gt;DAP2 Data Object.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="ASCII Data"&gt;
+        &lt;link type="text/plain" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.asc"
+             xlink:role="http://services.opendap.org/dap4/ascii#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_ASCII_Data_Service"&gt;The DAP4 Data response in ASCII form.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="NetCDF-File"&gt;
+        &lt;link type="application/x-netcdf" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.nc"
+             xlink:role="http://services.opendap.org/dap4/netcdf-3#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_NetCDF_File-out_Service"&gt;NetCDF file-out response.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="XML Data Response"&gt;
+         &lt;link type="text/xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xdap"
+             xlink:role="http://services.opendap.org/dap4/xml-data#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_XML_Data_Service"&gt;An XML document containing both the dataset's structural metadata along with data values.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DDX"&gt;
+        &lt;link type="text/xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.ddx"
+             xlink:role="http://services.opendap.org/dap2/ddx#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_DDX_Service"&gt;OPeNDAP Data Description and Attribute XML Document.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DDS"&gt;
+        &lt;link type="text/plain" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dds"
+             xlink:role="http://services.opendap.org/dap2/dds#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_DDS_Service"&gt;OPeNDAP Data Description Structure.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAS"
+        &lt;link type="text/plain" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.das"
+             xlink:role="http://services.opendap.org/dap2/das#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_DAS_Service"&gt;OPeNDAP Dataset Attribute Structure.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="RDF"&gt;
+        &lt;link type="application/rdf+xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.rdf"
+             xlink:role="http://services.opendap.org/dap4/rdf#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_RDF_Service"&gt;An RDF representation of the Dataset response (DDX) document.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="INFO"&gt;
+        &lt;link type="text/html" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.info"
+             xlink:role="http://services.opendap.org/dap2/info#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_Info_Service"&gt;OPeNDAP Dataset Information Page.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="Server Version"&gt;
+        &lt;link type="text/xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.ver"
+             xlink:role="http://services.opendap.org/dap4/version#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Server_Version_Service"&gt;An XML document containing information about the software version of the server..&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="ISO-19115"&gt;
+        &lt;link type="text/xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.iso"
+             xlink:role="http://services.opendap.org/dap4/iso-19115-metadata#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_ISO_19115_Service"&gt;ISO 19115 Metadata Representation of the Dataset (DDX) response.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="ISO-19115-Score"&gt;
+        &lt;link type="text/html" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.rubric"
+             xlink:role="http://services.opendap.org/dap4/iso-19115-score#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_ISO_Conformance_Score_Service"&gt;ISO 19115 Metadata Representation conformance score for this dataset.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="File Access"
+        &lt;link type="text/xml"  ## This value depends on the file being accessed.
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.file"
+             xlink:role="http://services.opendap.org/dap4/file#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Native_File_Access_Service"&gt;Access to dataset file.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="Dataset Services Description"&gt;
+        &lt;link type="text/xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml" 
+             xlink:role="http://services.opendap.org/dap4/dataset#"&gt;
+        &lt;link type="application/json" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.json" 
+             xlink:role="http://services.opendap.org/dap4/dataset#"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Dataset_Services_Description_Service"&gt;An XML document itemizing the Services available for this dataset.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;ServerSideFunctions&gt;
+        &lt;Function name="geogrid"
+          xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#geogrid"&gt;
+            &lt;Description&gt;Allows a DAP Grid variable to be sub-sampled using georeferenced values.&lt;/Description&gt;
+        &lt;/Function&gt;
+        &lt;Function name="grid"
+          xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#grid"&gt;
+            &lt;Description&gt;Allows a DAP Grid variable to be sub-sampled using the values of the coordinate axes.&lt;/Description&gt;
+        &lt;/Function&gt;
+        &lt;Function name="linear_scale"
+          xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#linear_scale"&gt;
+            &lt;Description&gt;Applies a linear scale transform to the named variable.&lt;/Description&gt;
+        &lt;/Function&gt;
+        &lt;Function name="version"
+          xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#version"&gt;
+            &lt;Description&gt;Returns version information for each server side function.&lt;/Description&gt;
+        &lt;/Function&gt;
+    &lt;/ServerSideFunctions&gt;
+&lt;/DatasetServices&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+
+I also put together a simple XSLT to make this a human friendly HTML. I added a reference to it in the XML document. When you point a browser at the resource URL (For example http://localhost:8080/opendap/data/nc/fnoc1.nc ) the Service Description response is returned as an XML file (above), the browser detects the xml-stylesheet reference, grabs the XSLT, uses it to convert the XML to HTML and renders it like this:
+
+[[File:ServiceDescriptionPrototype-01.png]]
+
+== &lt;strike&gt;&lt;font color="grey"&gt;Prototype #2&lt;/font&gt;  &lt;/strike&gt;==
+ &lt;strike&gt;
+&lt;font color="grey"&gt;
+This prototype response is based on the OGC Web Services Common Standard (OWS) GetCapabilities response.
+
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;Capabilities xmlns="http://www.opengis.net/wcs/1.1" updateSequence="1288821006000"&gt;
+    &lt;!--
+    
+    
+    Service Identification
+    
+    
+    --&gt;
+    &lt;ows:ServiceIdentification xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+        &lt;ows:Title&gt;OPeNDAP DAP Service&lt;/ows:Title&gt;
+        &lt;ows:Abstract&gt;A server to DAP access to datasets datasets&lt;/ows:Abstract&gt;
+        &lt;ows:Keywords&gt;
+            &lt;ows:Keyword&gt;OPeNDAP&lt;/ows:Keyword&gt;
+            &lt;ows:Keyword&gt;nectcdf&lt;/ows:Keyword&gt;
+            &lt;ows:Keyword&gt;DAP&lt;/ows:Keyword&gt;
+        &lt;/ows:Keywords&gt;
+        &lt;ows:ServiceType&gt;DAP&lt;/ows:ServiceType&gt;
+        &lt;ows:ServiceTypeVersion&gt;4.0.0&lt;/ows:ServiceTypeVersion&gt;
+        &lt;ows:Fees&gt;NONE&lt;/ows:Fees&gt;
+        &lt;ows:AccessConstraints&gt;NONE&lt;/ows:AccessConstraints&gt;
+    &lt;/ows:ServiceIdentification&gt;
+    &lt;ows:ServiceProvider xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+        &lt;ows:ProviderName&gt;OPeNDAP Inc.&lt;/ows:ProviderName&gt;
+        &lt;ows:ProviderSite xlink:href="http://www.opendap.org"/&gt;
+        &lt;ows:ServiceContact&gt;
+            &lt;ows:IndividualName&gt;Anonymous Smith&lt;/ows:IndividualName&gt;
+            &lt;ows:PositionName&gt;Sys. Admin.&lt;/ows:PositionName&gt;
+            &lt;ows:ContactInfo&gt;
+                &lt;ows:Phone&gt;
+                    &lt;ows:Voice&gt;123-456-7890&lt;/ows:Voice&gt;
+                    &lt;ows:Facsimile&gt;234-567-8901&lt;/ows:Facsimile&gt;
+                &lt;/ows:Phone&gt;
+                &lt;ows:Address&gt;
+                    &lt;ows:DeliveryPoint&gt;165 Fictitious Dr.&lt;/ows:DeliveryPoint&gt;
+                    &lt;ows:City&gt;AnywhereButHere&lt;/ows:City&gt;
+                    &lt;ows:AdministrativeArea&gt;Rhode Island&lt;/ows:AdministrativeArea&gt;
+                    &lt;ows:PostalCode&gt;02882&lt;/ows:PostalCode&gt;
+                    &lt;ows:Country&gt;USA&lt;/ows:Country&gt;
+                    &lt;ows:ElectronicMailAddress&gt;support[a.t]opendap[d.o.t]org&lt;/ows:ElectronicMailAddress&gt;
+                &lt;/ows:Address&gt;
+                &lt;ows:OnlineResource xlink:href="http://your.domain.org/"/&gt;
+                &lt;ows:HoursOfService&gt;24x7x365&lt;/ows:HoursOfService&gt;
+                &lt;ows:ContactInstructions&gt;email&lt;/ows:ContactInstructions&gt;
+            &lt;/ows:ContactInfo&gt;
+            &lt;ows:Role&gt;Developer&lt;/ows:Role&gt;
+        &lt;/ows:ServiceContact&gt;
+    &lt;/ows:ServiceProvider&gt;
+    &lt;!--
+    
+    
+    Operations Metadata
+    
+    
+    --&gt;
+    &lt;ows:OperationsMetadata xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+        &lt;ows:Operation name="DAP4 Data"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.dap"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+            &lt;ows:Parameter name="Format"&gt;
+                &lt;ows:AllowedValues&gt;
+                    &lt;ows:Value&gt;application/x-netcdf-cf1.0&lt;/ows:Value&gt;
+                    &lt;ows:Value&gt;application/x-dap-3.2&lt;/ows:Value&gt;
+                &lt;/ows:AllowedValues&gt;
+            &lt;/ows:Parameter&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="DAP2 Data"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.dods"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetDDX"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.ddx"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetDDS"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.dds"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetDAS"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.das"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetHtmlDataRequestForm"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.html"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetInfoPage"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.info"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetRDF"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.rdf"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetNetcdfFile"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.nc"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetIso"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.iso"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetIsoRubric"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.rubric"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="DataFileAccess"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc.file"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+        &lt;ows:Operation name="GetCapabilities"&gt;
+            &lt;ows:DCP&gt;
+                &lt;ows:HTTP&gt;
+                    &lt;ows:Get xlink:href="http://test.opendap.org:8090/opendap/data/nc/fnoc1.nc"/&gt;
+                &lt;/ows:HTTP&gt;
+            &lt;/ows:DCP&gt;
+        &lt;/ows:Operation&gt;
+    &lt;/ows:OperationsMetadata&gt;
+    &lt;!--
+    
+    
+    Contents 
+        
+    
+    --&gt;
+    &lt;Contents&gt;
+        &lt;Dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xml.opendap.org/ns/DAP2" name="fnoc1.nc" xsi:schemaLocation="http://xml.opendap.org/ns/DAP2 http://xml.opendap.org/dap/dap2.xsd"&gt;
+            &lt;Attribute name="NC_GLOBAL" type="Container"&gt;
+                &lt;Attribute name="base_time" type="String"&gt;
+                    &lt;value&gt;88- 10-00:00:00&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="title" type="String"&gt;
+                    &lt;value&gt; FNOC UV wind components from 1988- 10 to 1988- 13.&lt;/value&gt;
+                &lt;/Attribute&gt;
+            &lt;/Attribute&gt;
+            &lt;Attribute name="DODS_EXTRA" type="Container"&gt;
+                &lt;Attribute name="Unlimited_Dimension" type="String"&gt;
+                    &lt;value&gt;time_a&lt;/value&gt;
+                &lt;/Attribute&gt;
+            &lt;/Attribute&gt;
+            &lt;Array name="u"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;meter per second&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="long_name" type="String"&gt;
+                    &lt;value&gt;Vector wind eastward component&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="missing_value" type="String"&gt;
+                    &lt;value&gt;-32767&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="scale_factor" type="String"&gt;
+                    &lt;value&gt;0.005&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="DODS_Name" type="String"&gt;
+                    &lt;value&gt;UWind&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="b" type="Byte"&gt;
+                    &lt;value&gt;128&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="i" type="Int32"&gt;
+                    &lt;value&gt;32000&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="WOA01" type="Url"&gt;
+                    &lt;value&gt;"http://localhost/junk"&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Int16/&gt;
+                &lt;dimension name="time_a" size="16"/&gt;
+                &lt;dimension name="lat" size="17"/&gt;
+                &lt;dimension name="lon" size="21"/&gt;
+            &lt;/Array&gt;
+            &lt;Array name="v"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;meter per second&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="long_name" type="String"&gt;
+                    &lt;value&gt;Vector wind northward component&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="missing_value" type="String"&gt;
+                    &lt;value&gt;-32767&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="scale_factor" type="String"&gt;
+                    &lt;value&gt;0.005&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="DODS_Name" type="String"&gt;
+                    &lt;value&gt;VWind&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Int16/&gt;
+                &lt;dimension name="time_a" size="16"/&gt;
+                &lt;dimension name="lat" size="17"/&gt;
+                &lt;dimension name="lon" size="21"/&gt;
+            &lt;/Array&gt;
+            &lt;Array name="lat"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degree North&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float32/&gt;
+                &lt;dimension name="lat" size="17"/&gt;
+            &lt;/Array&gt;
+            &lt;Array name="lon"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degree East&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float32/&gt;
+                &lt;dimension name="lon" size="21"/&gt;
+            &lt;/Array&gt;
+            &lt;Array name="time"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;hours from base_time&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float32/&gt;
+                &lt;dimension name="time" size="16"/&gt;
+            &lt;/Array&gt;
+            &lt;dataBLOB href=""/&gt;
+        &lt;/Dataset&gt;
+    &lt;/Contents&gt;
+&lt;/Capabilities&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+
+The first section ows:ServiceIdentification preserves the intended semantics of GetCapabilities very well, as the section really has little to do with any particular web service (REST or otherwise) and everything to do with who to contact about the service instance. Populating the Contents section with the DDX object is similarly well mapped to the original intent: "''The Contents section of a service metadata document normally contains metadata about the data served by this server''" (OGC 06-121r9 section 7.4.8)
+
+However, while this document does supply the necessary links to get to the various products associated with the DAP service it does so at the expense of changing the semantics of the components of the OperationsMetadata part of the response.  As far as I can tell in OGC parlance each operation in this section would be bound to the request parameter in the constraint expression. Consider this DescribeCoverage request:
+
+&lt;code&gt;&lt;font size="2"&gt;
+&lt;nowiki&gt;http://test.opendap.org:8090/WCS?service=WCS&amp;version=1.1.2&amp;&lt;/nowiki&gt;'''request=DescribeCoverage'''&amp;identifiers=S1/opendap/ioos/200803061600_HFRadar_USEGC_6km_rtv_SIO.ncml
+&lt;/font&gt;&lt;/code&gt;
+
+Obviously this interpretation of the semantics of the ows:Operation elements doesn't fit with the intended semantics in our example. 
+
+Also, the OWS allows for the optional inclusion of any number of ows:Parameter and ows:Constraint elements that can be used with each operation. In the schema these parameter and constraint objects are both of type ows:DomainType. The DomainType contains a description of a domain using the following terms:
+* PossibleValues
+** AllowedValues - expressed as a list of allowed values and/or range(s) of allowed values.
+** AnyValue - Any value is allowed
+** NoValues - no values allowed
+** ValuesReference - Reference to externally specified list of all the valid values and/or ranges of values for this quantity.
+* Meaning - Some kind of annotation about what the "meaning" of this parameter/constraint expression is.
+* DataType (where data type is expressed as a an "xlink:href attribute that references a URN for a well-known data type", 
+* ValuesUnit - The units of the values of this parameter/constraint expression expressed as an "xlink:href attribute that references a URN for a well-known unit of measure (uom).
+* Metadata - where metadata is defined as either links to metadata documents or simply as text embedded in ows:Metadata elements.  
+
+I am not at all clear the distinction is between the ows:Parameter and ows:Constraint. It is my thinking that each of them represent a possible term in the query part of a URL. For exampleL ''?p=43&amp;z=foobar'' could be seen as an ows:Parameter with name "p" and an ows:Constraint with name "z". 
+
+
+In DAP our constraint expressions (CEs) are fluid*: Every dataset has it's own set of left-operands (the names of the variables in the dataset) and valid parameters for server side functions (the names of the variables in the dataset). 
+
+The projection section of the DAP CE doesn't make use of an equals sign, but instead uses a comma separated list of these things:
+
+* some/all the names of the variables in the dataset which may be followed by array/sequence subset markup on some/all variables
+* server side functions which may take variable names and other explicit values as parameters. The acceptable range of these explicitly valued parameters may be a function of some variables range, or not.
+
+to make the projection. 
+
+Since the names, types, and ranges of variables typically change from one dataset to another the acceptable values in the query part of the request URL is different for every dataset.
+
+After reading over the schema and the supporting documentation at OGC I do not see how the syntax provided for parameters and constraints can be used to express the details of the DAP Constraint Expression.
+
+Where does this leave us? While many developers are already familiar with the layout and content of the OWS GetCapabilities response, I think that the semantics of it's components don't lend themselves to describing the existing DAP REST service. We can make a valid document using the OGC components and schemas that contains the information that we want, but the meaning of the parts will fail to adhere to the meanings assigned in the OGC schemas and documentation. I fear this would probably cause more confusion, consternation, and gnashing of teeth than Prototype #1 where we simply created the minimum document needed to achieve our goal for providing a service description that itemizes all of the data products and services available for a particular dataset.
+
+[[User:Jimg|Jimg]] 09:29, 31 January 2012 (PST) I agree. GetCapabilities is not a good fit for this feature.
+
+&lt;nowiki&gt;*&lt;/nowiki&gt;[[User:Jimg|Jimg]] 20:57, 14 February 2012 (PST) I started to write an explanation of the differences between our constraint expressions and the WCS query string, but I think the most important aspect is that the the two use a different syntax and the description of that series of tokens (some of which are a function of the service and some of which are a function of the data being served - in both cases ) is heavily tied to the syntax of the URL and it's Query String component.
+
+&lt;/font&gt;
+&lt;/strike&gt;
+
+== Comments ==
+
+[[User:Jimg|Jimg]] 16:22, 14 November 2011 (PST) 
+:We should think about making this a JSON response, or think about having ''http://server/file.nc'' return the XML and ''http://server/file.nc.json'' return JSON using an XSLT transform.
+[[User:Jimg|Jimg]] 16:22, 14 November 2011 (PST) 
+: Nathan and I both conclude that the XML response should include the full URL and not do some weird hack where URLs are 'built'.
+
+:While this might be specific to HTTP and the web, I think we should include in the design that a JSON version of this document will be returned if the client announces that it understands such thing (the default response will be XML with an embedded XSL stylesheet that provides a transform to HTML). The HTTP/1.1 request and response would look like:
+&lt;pre&gt;
+GET / HTTP/1.1
+Host: api.example.com
+Accept: application/vnd.example.link_templates+json
+
+HTTP/1.1 200 OK
+Content-Type: application/vnd.example.link_templates+json
+Cache-Control: max-age=3600
+Connection: close
+&lt;/pre&gt;
+
+:Where the request header ''Accept:'' is the key bit. See the post Ethan referenced for more information about this: [http://www.mnot.net/blog/2011/10/25/web_api_versioning_smackdown Web API Versioning Smackdown]
+
+
+[[User:dmh|Dennis]] 4/12/2012
+: I would like to propose an (possibly off-the-wall) alternate response format based on treating the service terminus as a DAP4 dataset more or less like any other dataset. This means that the response would be a DDX plus content. The DDX would encode the capabilities of the server using the DAP4 notions of group, variable, attribute, etc. The specific values would be returned as the associated content. This would allow us to use our (yet to be defined) query capability to extract specific capability values. It would also (IMO) simplify programmatic access to the server capability information.
+
+
+[[User:Ndp|ndp]] 20:17, 19 April 2012 (PDT)
+
+: I stood up  a prototype of the Dataset Services (a.k.a. the Service Terminus) on test.o.o. I quickly discovered the following mixed result: Now that the web pages contain links to all of the services, the crawler bots find them all! 
+
+: This is great news because, well, the services are exposed and our experiment in improving  our servers RESTfulness succeeded.
+
+: This is bad news because the bots are asking for the ASCII, NetCDF file out, and XML data responses for everything on the server. Which is trashing it. By which I mean all of the servers memory and CPU resources are being consumed by bots. The server logs are full of BES client timeouts and broken pipes. Response times are in the gutter.
+
+: This is an unintended consequence to our new Dataset Services response and I think we need to carefully consider how we might remediate this problem.
+
+: On the one hand I think we want the catalog/web pages to be crawled and indexed. On the other we really don't want bots asking for all of the data in all of the ways it can be transmitted.
+
+== Issues ==
+
+* This a change in server behavior that will change the response content of file access URLs. These URLs are not part of the regular DAP URL pattern and their current behavior is a function of server configuration.
+* How might we describe the way to elicit DAP3.x and DAP4 versions of the responses in this description given that we currently rely on the XDAP-Accept HTTP header to inform the server of the version being requested? [[User:Jimg|Jimg]] 16:18, 14 November 2011 (PST) We can define a new set of extensions for these responses, especially since there are only two (ddx4 and dap4, e.g.). There are several other syntaxes that put this information in the URL, but if we use unique URLs to reference these new responses, then we don't break REST. This would mean that the XDAP-Accept: header would be dropped, but that's a separate discussion.
+* [[User:Jimg|Jimg]] 10:42, 26 January 2012 (PST) I am now leaning toward using ''.ddx'' and ''.dap'' to be the way that DAP4 metadata and data are accessed, period. This means dropping the idea of version negotiation, which I think is a poor design for a web service. the extensions ''.das'', ''.dds'' and ''.dods''  woud return the tried and true DAP2 response objects and any server hat support the five extensions clearly support DAP2 and DAP4. No client will every ask for a DAP2 DDX and be surprised by getting DAP4 (which it won't be able to parse) because to do so would be nonsensical (and anti-causal, sort of...). The one hitch with this idea is that there are some DAP2++ clients out there that gobble up DDX responses...
+*''&lt;font color="red"&gt;I know we discussed additional issues, but I can't recall them. Please add them if you do!&lt;/font&gt;''</text>
+      <sha1>edp7qn5van829zhzuxuaxq2f7qvqytt</sha1>
+    </revision>
+  </page>
+</mediawiki>

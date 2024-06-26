@@ -1,0 +1,75 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>LocalFileCatalog</title>
+    <ns>0</ns>
+    <id>555</id>
+    <revision>
+      <id>5260</id>
+      <parentid>5259</parentid>
+      <timestamp>2010-01-13T20:59:08Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Overview */</comment>
+      <origin>5260</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1832" sha1="9mgxpvcyib8m25sah2psr321hyyl18z" xml:space="preserve">[[Category:WCS]]
+
+
+==Overview==
+The LocalFileCatalog is an implementation of the opendap.wcs.v_1_1_2.WcsCatalog interface. It was designed as a temporary implementation  of WcsCatalog that would give developers a simple catalog from which to work so that they could to proceed with work on other parts of the service.
+
+The WCS Service project's  original intent (and the goal for the future) is to provide a catalog implementation that utilizes semantic web technologies to generate the WCS catalog content from existing (and probably supplemented) metadata from within the existing OPeNDAP data framework. 
+
+However in there are many more fish to fry with respect to WCS than just the catalog issue, so in an effort to move that part of the process forward we have implemented a simple catalog that reads wcs:CoverageDescription elements local files.
+
+;Catalog Implementation Class Name
+: opendap.wcs.v1_1_2.LocalFileCatalog
+
+The ''LocalFileCatalog'' is implemented to use a directory in the local file system. It assumes that every file in the directory is an XML document that contains a single wcs:CoverageDescription element. The files are ingested and QC'd at start up.
+
+If you haven't noticed by now, this implementation requires that for each ''Coverage'' its  wcs:CoverageDescription must be written by another entity - quite probably a human.
+
+=== Configuration (wcs_service.xml)===
+The local file catalog takes as a configuration element the path to the directory containing the prebuilt wcs:CoverageDescription documents.
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ &lt;WcsService&gt;
+     &lt;b&gt;
+    &lt;WcsCatalog className="opendap.wcs.v1_1_2.LocalFileCatalog"&gt;
+         &lt;CoveragesDirectory&gt;/absolute/path/to/the/directory/containing/the/wcs:CoverageDescription/documents&lt;/CoveragesDirectory&gt;
+     &lt;/WcsCatalog&gt;
+ &lt;/b&gt;
+ &lt;/WcsService&gt;</text>
+      <sha1>9mgxpvcyib8m25sah2psr321hyyl18z</sha1>
+    </revision>
+  </page>
+</mediawiki>

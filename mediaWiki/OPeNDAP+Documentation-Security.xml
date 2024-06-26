@@ -1,0 +1,87 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Security</title>
+    <ns>0</ns>
+    <id>152</id>
+    <revision>
+      <id>8981</id>
+      <parentid>4271</parentid>
+      <timestamp>2012-08-08T21:28:51Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Working Documents */</comment>
+      <origin>8981</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3181" sha1="omt9snjvrheiy7hrercxie51omii9at" xml:space="preserve">== Security Working Group ==
+=== Motivation ===
+
+We want to develop a policy that helps both OPeNDAP and the people who run our software to be confident that using the software does not substantially increase the level of risk of a computer/network security problem. We know that risk is inherent in using computer networks, but it can be managed and reduced by avoiding certain behaviors. The policy we develop here should address those behaviors. As we do this, we can hopefully increase awareness about computer security in the OPeNDAP community to the point where more services become available for users.
+
+=== Statement of Work ===
+
+# Evaluate existing Computer and Network security policies
+# Distill from those elements which apply to OPeNDAP and its community of users
+# Determine if we need to address both Servers and Clients in separate policies or not, or if we only need to address Server security
+# Make recommendations to OPeNDAP regarding its Interim policy
+# Develop a Community policy if that's appropriate
+# Move on from policy to procedures, it that seems appropriate
+
+=== Working Documents ===
+
+# [[Strawman Security Policies]]
+# [http://scm.opendap.org/trac/wiki/NetworkServerSecurity OPeNDAP Security Policy and Procedures]
+
+=== Members ===
+# [mailto:jgallagher@opendap.org James Gallagher]
+# [mailto:pany@ornl.gov Jerry Pan]
+# [mailto:Christopher.S.Lynnes@nasa.gov Chris Lynnes]
+# [mailto:caron@unidata.ucar.edu John Caron]
+# [mailto:rob@pydap.org Rob De Almeida]
+
+=== Resources ===
+
+Most of these resources are aimed at sites running computers. We do that, but information targeted at developers of the software others run seems harder to find. See below for more comments.
+
+* [http://www.owasp.org/index.php/Main_Page OWASP] The Open Web Application Security Project has produced a [http://www.owasp.org/index.php/OWASP_Guide_Project Guide] [http://prdownloads.sourceforge.net/owasp/OWASPGuide2.0.1.pdf?download (pdf)] which is widely used as an introduction to security issues.
+* [http://www.cert.org/ cert.org] This is a good site for information about code standards for C and C++ (there's nothing here for Java I could find).
+* [http://www.cisecurity.org/ The Center for Internet Security]
+* [http://17799.denialinfo.com/whatisiso17799.htm ISO 17799] ISO 17799 (and its sister standard, whose number escapes me) are the 'big daddies' of security policies. They are certainly overkill for us, but [http://17799.denialinfo.com/chapter8.htm chapter 8] and [http://17799.denialinfo.com/chapter13.htm chapter 13] address software development and might have some interesting ideas. It would be a good idea to not contradict this standard, at the least.
+* [http://www.sans.org/resources/policies/ SANS] SANS seems like one of the best resources out there. I found this on my own and Jeff Ogata also recommended it. This is their section on policies, but they offer much more.
+* [http://www.information-security-policies-and-standards.com/ information-security-policies-and-standards.com]
+* Here's a paper on [http://www.dwheeler.com/oss_fs_why.html Free and/or Open Source Software] that has some interesting references.
+
+[[Category:Working Groups|Security]]</text>
+      <sha1>omt9snjvrheiy7hrercxie51omii9at</sha1>
+    </revision>
+  </page>
+</mediawiki>

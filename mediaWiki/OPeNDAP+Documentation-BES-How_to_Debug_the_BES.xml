@@ -1,0 +1,136 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>BES - How to Debug the BES</title>
+    <ns>0</ns>
+    <id>350</id>
+    <revision>
+      <id>4498</id>
+      <parentid>4497</parentid>
+      <timestamp>2009-07-14T02:13:17Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <comment>/* Start ''besctl'' with Debuging on */</comment>
+      <origin>4498</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3879" sha1="0vk1rvjoggjv3xb5ovnb2iw9dvkhat0" xml:space="preserve">== Tricks ==
+
+* Set the beslistener to run in single, not multiprocess, mode. Do this in the ''bes.conf'' file (use the ''BES.ProcessManagerMethod'' parameter).
+* Build the bes using ''developer'' mode (so it won't need to be root, among other things). Do this with ''./configure --enable-developer''
+
+== Use the BESDEBUG Macro ==
+
+Use the macro ''BESDEBUG'' defined in ''BESDebug.h''.
+
+Set the macro's 'context' as "bes" (nominally, or you can make up whatever you want) and then use the "cerr &lt;&lt; "text: " &lt;&lt; var &lt;&lt; endl" style output ''except'' that you should leave off the initial "cerr &lt;&lt;" and start with the first argument of the stuff to be output - the marco will take care of getting the output sink and using the output operator.
+
+Example:
+ #include &lt;BESDebug.h&gt;
+ ...
+ BESDEBUG( "h4", "File Id:" &lt;&lt; _file_id &lt;&lt; endl);
+
+Notes:
+# You'll need to include the BES_DAP_LIBS when you link an executable or a libtool library and you'll need BES_CPPFLAGS when you compile (for libdap code)
+# The trailing semicolon is not needed but including it makes automatic code indent software (eclipse, emacs, ...) much happier.
+
+== Start the BES with Debuging on ==
+
+Use the ''-d'' option to ''besctl'' and give ''-d'' one argument, a string, with two parts: "&lt;output sink&gt;,&lt;context&gt;". For example, 
+ besctl start -d "cerr,bes"
+would start up ''beslistener'' with the ''bes'' debug context active and write all the debugging info to ''cerr'', which is standard error. You can provide several contexts. For example, you could say
+ besctl start -d "./bes.dbg,bes,nc"
+This will send debug statements to the file ./bes.dbg for the context bes and nc (netcdf_handler). You can also specify the context ''all'', that will send debugging statements for all context.
+
+The BES has debug statements for ''bes'', ''ppt'' and ''server''. Each of the modules that you install will also have debug context. And, you can create your own context when writing your own module. In your Module class you would register your context, so as to be available with the help command, by using the following code:
+
+&lt;pre&gt;
+    BESDebug::Register( "&lt;context&gt;" ) ;
+&lt;/pre&gt;
+
+Where context is the string that will be used for your module's debug context. For example, nc for the netcdf_handler.
+
+To see what debug context is available, when you start the BES using ''besctl'', use the help option:
+ besctl help
+&lt;pre&gt;
+BES install directory: /Users/westp/opendap/opendap
+BES configuration file: /Users/westp/opendap/opendap/etc/bes/bes.conf
+Developer Mode: not testing if BES is run by root
+/Users/westp/opendap/opendap/bin/beslistener: -i &lt;INSTALL_DIR&gt; -c &lt;CONFIG&gt; -d &lt;STREAM&gt; -h -p &lt;PORT&gt; -s -u &lt;UNIX_SOCKET&gt; -v
+
+-i back-end server installation directory
+-c use back-end server configuration file CONFIG
+-d set debugging to cerr or &lt;filename&gt;
+-h show this help screen and exit
+-p set port to PORT
+-s specifies a secure server using SLL authentication
+-u set unix socket to UNIX_SOCKET
+-v echos version and exit
+
+Debug help:
+
+Set on the command line with -d "file_name|cerr,[-]context1,[-]context2,...,[-]contextn"
+  context with dash (-) in front will be turned off
+
+Possible context:
+  ascii: off
+  bes: off
+  dap: off
+  ff: off
+  h4: off
+  h5: off
+  nc: off
+  ppt: off
+  server: off
+  usage: off
+  www: off
+
+USAGE: besctl (help|start|stop|restart|status) [options]
+where [options] are passed to besdaemon; see besdaemon -h
+&lt;/pre&gt;
+
+== Send Commands to the BES ==
+
+Now run some commands using bescmdln. You should see debugging being output to either cerr, or the file you specified when you started the BES. Here's an example:
+&lt;pre&gt;
+BESClient&gt; set context dap_format to dap2;
+BESClient&gt; set container in catalog values c,/data/nc/fnoc1.nc;
+BESClient&gt; define d as c;
+BESClient&gt; get das for d;
+Attributes {
+    u {
+        String units "meter per second";
+        String long_name "Vector wind eastward component";
+&lt;/pre&gt;</text>
+      <sha1>0vk1rvjoggjv3xb5ovnb2iw9dvkhat0</sha1>
+    </revision>
+  </page>
+</mediawiki>

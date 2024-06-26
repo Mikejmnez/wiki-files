@@ -1,0 +1,282 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Report on the 2007 OPeNDAP Developer's Workshop</title>
+    <ns>0</ns>
+    <id>51</id>
+    <revision>
+      <id>981</id>
+      <parentid>980</parentid>
+      <timestamp>2007-05-24T00:05:44Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Authentication/Authorization */</comment>
+      <origin>981</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="30689" sha1="puunbrb9e2cg7z59lkh52logny42a7o" xml:space="preserve">James Gallagher, et al.
+1 March 2007
+
+Updated with feedback from Dan Holloway on 14 March 2007.
+
+==Executive Summary ==
+
+This report covers the 2007 OPeNDAP Develeoper's Workshop held at the NCAR campus in Boulder Colorado on February 21st to 23rd, 2007. Over sixty people attended the workshop, representing government and university laboratories from the worldwide OPeNDAP community. 
+
+The workshop format was a series of plenary sessions where open discussion was encouraged. The [[Workshop_Abstracts | abstracts]] and [[OPeNDAP_Developer%27s_Workshop%2C_Winter_2007|presentations]] are available online (one presentation used live access to data sites, so there's no static set of slides to distribute for it). Instead of reproducing that material here, this report will present a narrative of the discussions which followed from those presentations.
+
+This report is being made available on a wiki maintained by OPeNDAP, Inc. Meeting participants are encouraged to contribute to the report by either editing its text or by adding comments using the 'Discussion' tab at the top of the page.
+
+==Formulation of Working Groups ==
+
+Community forums for deciding on standards/processes within (and  beyond) the OPeNDAP community
+
+Process developed at the February 2007 OPeNDAP Developer Meeting, in  Boulder CO.
+
+The OPeNDAP community process draws on experience from other  community processes: e.g. IETF,
+OGC, ISO, JCP, Unidata.
+
+To meet the needs of the OPeNDAP community, the following attributes of the process had broad agreement:
+
+# OPeNDAP working groups (OWG) should be formed with a specific focus, deliverables, timeframe and minimum membership. OPeNDAP would welcome agency, project or institutional sponsorship and/or co-sponsorship.
+## Specific focus - The working groups must define the areas of their work efforts as covering a) OPeNDAP the software, b) OPeNDAP (DAP) the reference  implementation, or c) both. Working Groups should only be formed for well-defined topics where the community feels the development of a deliverable is a high priority.
+## Deliverables/outcomes - Deliverables produced by a OWG fall into two categories. First, an OWG may produce software, either prototype or production. Second, an OWG may produce documentation including: Software specifications; Standard Operating Procedure documents; Best Practices documents; and Technical Notes. In some cases the OWG may reccommend that the ideas developed be taken to a more formal standards organization to be developed further.
+## Timeframe - OWGs should aim to complete their discussions, white papers, documents/proposals within a nominal 3 month timeframe. In cases where prototypes/software are to be produced the timeframe can be extended with OWG executive (see next item) approval), especially where funding is sought to complete the project. The intent is not to have stagnant or dormant efforts.
+## Minimum membership is 3 people.
+# The OWG executive is nominated by the community and appointed by the OPeNDAP advisory board, with membership of 5-7 people, a nominal term limit for membership is 2 years. Members may serve more than one term (with board approval). The first task of the executive is to formalize the OWG Terms of Reference.
+# The OWG executive will make recommendations on how to take OWG outcomes to standards processes and other relevant organizations for  broader community comment, adoption, etc.
+# The OPeNDAP advisory board membership will be broadened (serves  OPeNDAP Inc.) to accommodate this expanded role and term limits will be applied to the board.
+# OWGs can be proposed by anyone but must be chartered within the  OPeNDAP community by the OWG executive. 
+# OWG forums should be public (via opendap.org supported wiki) EXCEPT  for any OWG which addresses security of data service systems (discussion on if we can/should use  US-CERT as an announcement forum for security matters is an item to be pursued).
+# The only requirement for participation and comment on OWG forums is  to be a registered user on the opendap.org provided wiki.
+# The approval and decision making process may vary depending on the  scope of the subject area. The OWG proposers must identify a suitable decision making process (if it  is required) and the OWG executive must approve that process before the OWG can be chartered. In some  cases, standards and specifications must have broad community comment and consensus before being adopted.
+
+Possible OWGs:
+
+* Virtualization (Aggregation)
+* Server-side processing
+* Geospatial Interoperability
+* Security
+* Hyrax and *DS (TDS, GDS, FDS, etc.)
+* Semantics
+* DAPPER
+* netCDF C++ client
+* Response types
+* Metrics
+* Asynchronous transactions
+* DAP4
+
+==Topics ==
+
+===Hyrax ===
+
+After an opening presentation on OPeNDAP's structure and some working definitions for the meeting, the first topic was OPeNDAP's new data server, dubbed 'Hyrax.' As the workshop progressed, some presentations discussed using other servers such as the THREDDS Data Server (TDS), GrADS Data Server or Ferret Data Server. Of these, the TDS sparked the most comments and comparisons to Hyrax because of the differences in the features that each supports. It was proposed that a working group be formed to evaluate the differences between TDS and Hyrax. Should the two efforts merge? Can the TDS serve as a front-end for Hyrax? Could it work as a handler in the existing Hyrax front-end? Implementing features such as multi-protocol support, aggregation, et c., in the front-end of Hyrax appears to be favored since it provides a way to use the back-end in lots of different configurations and with many different handlers.
+
+One clear consensus from the meeting was that three highly desirable features of the TDS are:
+# Aggregation: Defined for practical purposes as combining a set of two-dimensional arrays into a three-dimensional structure, although there are other possible types of aggregation (TDS supports two others: tiling and 'by-parameter').
+# WCS: Support for the web services defined by OGC is important. Even though the data typically served by DAP servers is often not really GIS data, it's often interesting to GIS data users, especially when used in combination with other GIS data sources. The OGC web services make it (relatively) easy to combine 'science' and 'GIS' data. This appears to be the case because GIS place more requirements on georeferencing metadata and operations.
+# NcML/AIS: The TDS has an operational tool that can be used to augment the contents of data files which are served. If metadata are missing, they can be added. Also, NcML can be used to form 'remote aggregations' of data.
+
+The question of resources and merging of efforts is a complex one. For example, while the TDS offers aggregation, it does not work with HDF4 which is one of a number of file types Hyrax does serve and which people want to aggregate. But Hyrax does not support aggregation. Thus the argument for merging the efforts. However, there is utility in maintaining several independent groups' projects, even if they do wind up duplicating effort in the large sense, because several smaller projects may be more responsive to individual users.
+
+Other issues discussed:
+# Implementation issues for servers imply that OPeNDAP should promote documents that fill the gap between the kinds of information in the DAP specification (and other similar documents), which covers protocols, network interfaces and wire representations, and the ways data should be organized to best take advantage of the features of a particular server. These could be Technical Notes, Best Practices or Standard Operating Procedure documents.
+# In the current OPeNDAP server, some server-side tools are making use of the GET method of HTTP and passing in large amounts of data to be used by the request in the 'POST part' of the request. They are using the Query String of a GET request in combination with the Request Document Body because the latter is not limited in size. This behavior needs to be written down and needs to be accounted for as the DAP evolves.
+# Server-side operations affect the features needed in the DAP. At the minimum there needs to be some sort of discovery mechanism for server-side functions. This is clearly related to the previous set of issues.
+# There is the potential that a server such as Hyrax might result in a proliferation of protocols, effectively dividing the community of users.
+
+====Data Aggregation ====
+
+''Even though the aggregation discussion was covered in the above, there was so much discussion, it gets its own section here''.
+
+A vast amount of gridded data are available through OPeNDAP in an ''unaggregated'' form, creating barriers to the usability of the data. The majority of these data are in two-dimensional arrays and represent collections of satellite data which have undergone extensive processing so that each file contains data which cover the same area of the Earth (i.e., NASA Level-3 processing). There are other types of data, such as HDF-EOS swath data, but the most useful from the standpoint of aggregation is the Level-3 (or equivalent) data. Because these collections are 'regular' in spatial extent and vary in time only, they are prime candidates for aggregation.
+
+Similarly, a vast amount of in-situ (station) data also have the same requirement. That is, it would make these data far easier to use if they were aggregated. However, Aggregation can be very complicated for these data because there are some many different 'data structures' used to store them (N.B.: Data Structure is a synonym for Data Type, at least in this context). Compare the in situ data with typical satellite data collections. Almost all of the satellite data are held in two-dimensional arrays, one dimension for latitude and one for longitude. In situ data, on the other hand use many different datatypes even though the conceptual organization falls into a small set of patterns. Often these data are organized by latitude and longitude and measurement, with N measurements at each lat/lon point. However, even though the pattern is obvious to a person, to a computer it becomes inscrutable because the exact set of fields varies for each data set. Each different set of fields is different data structure (or data type).
+
+The vision of OPeNDAP is to leave "files" behind as relics of data management, and to shift the focus to "datasets". Because so many of the large-volume data sets represent time-series satellite data, it follows that we will not make significant progress on this objective until those datasets can be 'aggregated in time'. That is, until the collections of files, each of which holds one or more two-dimensional arrays of data can be combined to make a single data set with one or more three-dimensional structures, where in virtually all cases the dimensions will be Latitude, Longitude and Time. The TDS developed at Unidata already provides this feature and it was noted many times that it is of great value.
+
+We need to identify the barriers to building aggregations. Are they technical? Financial? It seems that for satellite data they are no longer technical since there is one example already which runs. For in situ data, maybe DAPPER provides one solution? 
+
+There were some suggestions put forth, notably by Benno, to generalize what aggregation provides using RDF.  Possibly we could use those ideas to (ultimately) determine when aggregation is possible and, in addition,  how to use the DAP to express that information.  Aggregation also presents the problem of how to carry-along the original metadata associated with a particular field into the aggregated data set. Should fields with values that vary over discrete elements be 'promoted' to variables? Should we expand the types of attributes?
+
+===Security ===
+
+This topic really covers two sub topics: Machine/Site Integrity and Authentication/Authorization, with secure data transmission lumped into the latter.
+
+====Machine/Site Integrity ====
+
+This issue is becoming more important as government agencies begin to formalize their security policies and agencies like NIST develop standard documents describing these practices. Since many agencies will not run software that does not meet minimum guidelines, we need to understand those and work with the agencies so that their 'audit' of the software does not bog down. It was mentioned that NOAA actually appears like a collection of agencies WRT to software/server security, with each line office using a slightly different set of guidelines. We might work with the agency to address this by forming a single consistent policy. Relevant government standards are:
+# NIST 800-53 - Recommended Security Controls for Federal Information Systems
+# NIST 800-27A - Engineering Principles for Information Technology Security (A Baseline for Achieving Security)
+# NIST 800-53 alpha - Some sort of a security audit checklist
+
+We may need to develop some sort of developer guidelines and apply them using a peer-review process. It appear that such a process, especially if its result is part of the software's documentation, will ease a security audit from a government agency.
+
+There was also significant frustration with the security process because it did not seem to take into account the balance between the cost of providing services that can be compromised (and the likelihood of a compromise) and the cost of not providing services. That is, some of the security information appears to exist as an end in itself and not a means to provide better service overall, even though that is certainly not anyone's intent.
+
+The [http://www.cisecurity.org/ Center for Internet Security] provides information on running various operating systems so that they are less likely to be broken into.
+
+====Authentication/Authorization ====
+
+The general consensus here was that a working group should be formed to produce a paper describing both best practices and the standards by which OPeNDAP and the DAP accommodate security (on access and secure data transmission). The WG will need to define some terminology, too.
+
+Several techniques for secure access were examined (see John Caron's presentation) and other presentations echoed many of his conclusions: 
+* Digest (and even, gasp, Basic) HTTP authentication will be good enough for some sites; 
+* Supporting HTTP is important; 
+* HTTPS is a solution to the Ac/Az and secure data transmission problem if the costs of server (required) and client (optional) certificates and CPU-intensive encryption/decryption are acceptable; 
+* Central Authentication Service (CAS) Single Sign On (SSO): HTTPS-Redirect with sessions may be a good compromise but the session must check the IP address to avoid a common spoofing technique.
+
+Issues raised include:
+# This introduces state to the client.
+# All of these break caching, which provides a huge performance boost. This is a hidden cost of Ac/Az.
+# Basic agreement that Ac/Az should be handled using 'ticket/credential' with authorization information in a (THREDDS?) catalog.
+
+See paper "Performance analysis of TLS Web Services," Cristian Coarfer, et al., ACM Transactions on Computer Systems, Vol. 24, No. 1, Feb 2006.
+
+===Semantics ===
+
+In the section on semantics, the primary focus was on Semantics Web technologies such as RDF/OWL and collections of ontologies that use those technologies. 
+
+How can RDF be used by OPeNDAP/DAP? RDF can be used to provide a formal way to link different parts of a data set. In a sense, RDF can be used to formalize relationships that were previously only part of conventions. For example, RDF can be used to denote shared dimensions without relying on the 'rule' that dimensions of an array (which can be named) are associated with vectors which share those names (this convention is part of COARDS and is widely used by netCDF files). RDF might also be used to encode some metadata which the OPeNDAP software doesn't recognize in a 'semantically-valid' way. That is, the encoded metadata could be used by other processing engines without any new DAP operations. 
+
+There is an [http://wiki.opendap.org/twiki/bin/view/Sandbox/SemanticWebAndOPeNDAP on-going discussion] of just how to embed RDF in the DAP. Since the DAP supports URLs as bother a variable and an attribute type, this may be fairly easy. It appears likely that RDF can be embedded in DAP2 and that changes can be made to DAP4's DDX object to make that even easier.
+
+Another topic brought up in this section was the use of the AIS to provide a way to add new attributes to data sets. This was germane because attributes are the DAP's semantic metadata store. The short answer is, Yes, the AIS can be used to provide this functionality. However, there are several issues. First, the AIS as deployed now works only on the client side, so each client needs its own 'AIS database.' It is possible to use the AIS as a handler for Hyrax, but that software has not been developed to a point where it handles many common errors, et c., well enough to be used as anything other than a demonstration. Another option is to use ncML, although only the TDS supports its use and ncML introduces a new syntax into the mix (so does the AIS in the sense that while AIS records are DAS objects, the AIS uses a database which has a specific schema).
+
+===APIs and Clients ===
+
+The section on APIs and Clients covered a lot of ground; here are some areas where there was some significant discussion.
+
+====PyDAP ====
+
+PyDAP is an implementation of the DAP (version 2) in Python using the NASA/ESE specification. The pyDAP software also contains a server with handlers for Matlab, CSV data and relational databases as well as a client. One question raised was how a relatively small body of software was able to provide a replacement for the much larger libdap, TDS, Hyrax, et cetera. Robert De Almeida's answer was that he is unencumbered by the need to be responsive to a large group. It was also noted that Python is very flexible, high-level language with a user-community that produces many different library packages. In many aspects the Python community is similar to the Perl community, although the languages are quite different in their 'tone.' 
+
+====DAPPER ====
+
+'''WARNING''' I am not sure anything in the following paragraph is correct. Please fix if needed. jhrg
+
+DAPPER is a server for in situ data stored in collections of netCDF files which follow the EPIC conventions. It is also a way to organize the in situ data using DAP Sequence variables. DAPPER presents in situ data as two nested Sequences where the outermost Sequence holds the goespatial data and maybe constrained. The inner-most Sequence may not be constrained. DAPPER is being used by several sites because it presents a good balance of features.
+
+DAPPER is both an implementation and a specification; there is interest in developing the specification further. Steve Hankin volunteered the CF-development forum (at PCMDI) for this purpose and will help to get the issues tracking started there. Along these lines a question was raised about DAPPER and other standards from the OGC, particularly if the 'Simple Features' specification covered the same, or similar area. It was also brought up that the DAPPER convention/specification presents implications at the 'OPeNDAP level.' 
+
+''From Dan Holloway'': I recall discussing whether or not Dapper's results could be expressed in a WxS response, and the consensus was no, at least not  using a WCS.  Logically, in WxS space the Dapper response is a Coverage of Feature types, which we couldn't see how to express in those specifications.
+
+====NetCDF Client library ====
+
+The netCDF client-library is used fairly widely and it offers a limited facility to translate from data types that don't fit into the netCDF3 data model into ones that do. In practice this means translating Structures and Sequences (and Grids, although that is easy and has been handled well for some time). The translation capabilities that exist are limited in several important respects:
+* Problems have shown up with Sequence variables
+* two-level Sequences are not supported at all (which means there's no way to read data from DAPPER into a client which uses the netCDF client library.
+* There may be problems with the HDF gridded files (HDF EOS?)
+
+Comment: The dual data model -- Arrays versus Sequences -- is a barrier to interoperability that we need to knock down.
+
+===Data Providers ===
+
+The presentations by data providers gave the developers at the workshop a direct connection to users with real-world requirements based on past (and expected future) use. Here's a summary of those, rank-ordered subjectively by the report authors:
+# Server-side Aggregation, particularly of time-series data held in arrays.
+# Interfaces that provide an abstraction so users don't have to make requests using machine terms. A particular request was that the geogrid()/geoarray() functions handle HDF-EOS files.
+# ncML/AIS: There needs to be some way to augment the metadata for specific data sets without fiddling with the files/database which holds the data themselves -- it's not clear if ncML was being used to control aggregations, to add new metadata or both.
+# GIS services. Specifically, the WxS services.
+# Security management w/SSO (or identity federation) over distributed OPeNDAP servers.
+# Catalogs: One catalog (THREDDS?). There are currently many different ways to look for data served using the DAP, and each holds a different subset of all of the servers. Move towards one (or fewer) catalog(s).
+# Asynchronous responses.
+
+More specific requests:
+# Cookbook docs: "How to configure Hyrax for HDF-EOS"
+# Access to data held in a Relational Database using Hyrax.
+# Solid clients (e.g., the Matlab ''loaddap'' client) with which to build sophisticated interfaces.
+# One OLFS talking to many BESs
+# Preview capability that returns JPEG, PNG, ..., from the server.
+# HTML Form: Group variables that share dimensions.
+# Easy configuration of the presentation layer for THREDDS so that the output is graphical.
+
+And one 'organizational' request:
+* Community collaboration: Certainly for the development of handlers, but also for other things like hosting model, community building, documentation generation.
+
+===Server-side Operations ===
+
+There seem to be several barriers to both implementing and using server-side processing. 
+
+Barriers to use:
+
+It has been the practice to provide server-side processing on a per-server basis (to free server implementors from the task of building a host of features which might not be relevant to the data they intend to serve), so each server presents a (potentially) unique set of features. Users of server-side processing have no good way to obtain from servers a 'features' or 'capabilities' document so those clients can know which server-side processing facilities are present. A technology such as XML is an ideal way to provide information about server capabilities. 
+
+Authors' observation: Another barrier to the use of server-side processing may be the mode in which those writing clients typically operate. A server is seen as a fixed set of features/capabilities and when a new capabilities is needed, it is built into a client -- where it can directly used. The alternative is to ask a server implementor to add a new feature which, even though it might be a very general and widely used capability, will take more time from the perspective of a single client application developer.
+
+Barriers to implementation:
+
+Implementors of server-side processing have one main issue to deal with: They need users. When users are present for a give server-side feature, the development of that processing capability proceeds at a normal pace. For example, Daniel Wang presented a very complex server-side processing system he has been developed in response to the needs of a research group where he is a graduate student. Similarly, OPeNDAP developed a set of server-side operations to read and select from catalogs; it has been in use for several years. Each of these sub-systems was developed quickly (relative to the size of the task) and has good use.
+
+The consensus was that we need to develop a plan for making server-side processing (like Wang's system or the geogrid/geoarray functions) discoverable and then push their use. If enough use develops, then server-side operations may gain wide-spread use.
+
+Note: the geogrid/geoarray functions are fairly general and could be installed in just about every server; it's not clear that a complex processing system like Wang's could be because many sites might not be able to support the computational load it can create.
+
+===Geospatial Interoperability ===
+
+There are several competing issues which surround the topic of geospatial interoperability. First, there are standards and conventions within the Earth-science community (e.g., CF, COARDS) which provide ways to use general-purpose APIs/formats to store and access geospatial data and there are combination implementation/standards such as HDF-EOS or DAPPER. Often the distinction between these are fuzzy in practice - DAPPER reads netCDF files and uses a convention called EPIC, for example. In practice netCDF combined with CF or COARDS, HDF4 used with HDF-EOS or DAPPER all solve their target problems well.
+
+However, these solutions have generally been developed without much regard for parallel developments that have taken place in the GIS community. The OPeNDAP community needs to for a working group to consider how the OGC Abstract Specifications (distinct from the WxS specifications) might be used for tasks such as geospatial selection.
+
+At the same time, it was reported at the workshop that there are efforts within the Earth-science community to develop an unstructured mesh standard. Within this effort, the opinion was that swath data models are starting to take shape. All of these separate models need to be brought together under a unified data model that recognizes the "mutability" of the different outlooks, for example the equivalence of a profile and a Z line of a grid. Beyond this, an API must be developed for this model.
+
+If was proposed that the OPeNDAP community turn to Unidata to extend their CDM to meet this goal, with the understanding that the Java and C APIs which implement the CDM would be modified to match those changes.
+
+''From Dan Holloway'': I recall from the discussion that referring the OGC abstract specifications would be useful to determine what information is necessary, and how it might be encoded using the DAP, to support geospatial operations on the data including basic subsetting operations like geogrid()/geoarray().
+
+===Other topics ===
+
+====Response Types ====
+
+The DAP needs to support a 'Get Capabilities' response. That is, there needs to be some way to ask a specific DAP server about server-side operations, beyond the regular constraint expression syntax, it supports. It was noted that the ''GetCapabilities'' response of WxS returns information about not only what a server can do, but also the specific data it serves. Maybe the WxS GetCapabilities response is not the best model for us? Maybe OPeNDAP should at extended THREDDS to provide this information.
+
+The URL/GET mechanism that is the basis for DAP2 has been showing its age for some time. That is, many of the server-side processing extensions being developed by the community are making use of both the information passed in using HTTP's ''GET'' and ''POST'' simultaneously. The suggestion was made that the protocol should evolve in ways that will support this or, at the minimum, not hinder it.
+
+A Working Group should be formed to look into solutions to these issues.
+
+====Metrics ====
+
+Most sites that are part of the government need some sort of metrics to demonstrate use. Similarly, OPeNDAP needs metrics for the same reason. That is, to justify funding. However, other work such as is being done in a collaboration between UCSB, URI and OPeNNDAP, has suggested that metrics might be useful as a way to direct system design. Metrics can reveal use patterns that are not initially obvious.
+
+====Asynchronous Responses ====
+
+Asynchronous responses provide a way for serves to start a process that will take some time to complete and notify clients that is the case. Clients can then retrieve the result at a later time. In general, clients cannot 'just wait' for the server to complete because the connection between client and server (there is a connection even in 'stateless' protocols such as HTTP) will either time out (TCP has a default time out of 900 seconds) or hold network resources until the process completes. 
+
+In the past the need to support asynchronous responses was nested solely with the use of near-line storage systems and as agencies such as NASA begin to move all of their data online, it is logical to think the requirement would go away. That is not the case. At the meeting other needs for asynchronous responses were brought up. For example, suppose an aggregation takes several minutes to compete or a server performing complex job management reduces the priority of a job so that clients with high-priority tasks can get their results quickly. In each case the server needs to tell the client their results ''will'' be ready, but not within the usual 5-30 second time window associated with an interactive request-response cycle.
+
+Several 'notification schemes' have been proposed over the years, but all have some drawbacks (e.g., using email). According to comments at the workshop, the OGC has developed a scheme where a server can return a URL as the result of a request and the client dereferences that URL at some later time to get the data result. Expanding on this, the return response could state when the URL will become 'live' or the client could poll the URL. If the response uses HTTP, the Expires header can indicate when the URL becomes stale.
+
+In the ''Clients and APIs'' section a point was raised that some systems which use tapes for data might be adversely affected by clients that scan the entire archive. Is this situation something that can benefit from an asynchronous response? Is a better solution to cache metadata objects and provide 'Error' (really an informational response; we can change the name from 'Error' if that bugs people) when such a client tries to get at data. If so, how does the server recognize the 'scan' attempt?
+
+It's clear from discussions at the workshop that solutions for this requirement are being implemented and that OPeNDAP should take the lead in establishing a mechanism. This is the sort of issue that a working group could address very effectively.</text>
+      <sha1>puunbrb9e2cg7z59lkh52logny42a7o</sha1>
+    </revision>
+  </page>
+</mediawiki>

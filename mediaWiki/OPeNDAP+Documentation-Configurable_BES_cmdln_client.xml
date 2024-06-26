@@ -1,0 +1,59 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Configurable BES cmdln client</title>
+    <ns>0</ns>
+    <id>568</id>
+    <revision>
+      <id>5400</id>
+      <timestamp>2010-03-10T16:12:18Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <comment>New page: Currently, only the commands that are available by default in the BES and the DAP modules are usable within the BES cmdln client when using the interactive string commands (set container i...</comment>
+      <origin>5400</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1617" sha1="su1606xl0v8q9t0ks4jwx3ogybhhpni" xml:space="preserve">Currently, only the commands that are available by default in the BES and the DAP modules are usable within the BES cmdln client when using the interactive string commands (set container in catalog values c,data/nc/fnoc1.nc;) These string commands are translated into the appropriate BES XML request documents.
+
+Considering that the BES is configurable, and new commands can be added to the BES, it would be advantageous if we could add translations to the BES cmdln client to be able to translate these new commands into their appropriate BES XML request documents.
+
+This would also apply to the BES standalone version considering that it also uses the same translation mechanism.
+
+Here's what needs to happen:
+# The BES command line client already has a requirement to use a configuration file IF secure authentication is required by the server. For this reason, we need to create a bes_client.conf file that can load configuration files from a directory much like the bes.conf file does (etc/bes/modules for bes.conf, and etc/bes/clients for the client) This client configuration could contain the key files, and modules to load for the cmd line client. This will also become handy when we develop different communication protocols for the BES.
+# These client command modules will be dynamically loaded, just as is the case for the BES, and will allow additional translations to be added to the command framework.
+# The CmdTranslation class already allows for the addition of translation functions.
+
+[[Category:Development|Configurable BES cmdln client]][[Category:Hyrax Development|Configurable BES cmdln client]]</text>
+      <sha1>su1606xl0v8q9t0ks4jwx3ogybhhpni</sha1>
+    </revision>
+  </page>
+</mediawiki>

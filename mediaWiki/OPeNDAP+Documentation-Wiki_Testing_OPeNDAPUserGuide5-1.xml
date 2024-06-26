@@ -1,0 +1,76 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/OPeNDAPUserGuide5-1</title>
+    <ns>0</ns>
+    <id>277</id>
+    <revision>
+      <id>1708</id>
+      <parentid>1707</parentid>
+      <timestamp>2008-01-05T12:45:53Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Documenting Your Data */</comment>
+      <origin>1708</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1828" sha1="enve22wgj2bg42pbbsqbsbxjccpjgm3" xml:space="preserve">===Documenting Your Data===
+
+OPeNDAP contains provisions for supplying documentation to users about a
+server, and also about the data that server provides.  When a server
+receives an information request (through the &lt;font color='green'&gt;info&lt;/font&gt; service that
+invokes the &lt;font color='green'&gt;usage&lt;/font&gt; program), it
+returns to the client an HTML document created from the DAS and DDS of
+the referenced data. It may also return information about the server,
+and more detail about the dataset.
+
+If you would like to provide more information about a dataset than is
+contained in the DAS and DDS, simply create an HTML document (without
+the &lt;font color='green'&gt;html&lt;/font&gt; and &lt;font color='green'&gt;body&lt;/font&gt; tags, which are supplied by the &lt;font color='green'&gt;info&lt;/font&gt; service), and store it in the same directory as the dataset, with a name corresponding to the dataset filename.  For
+example, the datasets &lt;font color='green'&gt;fnoc1.nc&lt;/font&gt;, &lt;font color='green'&gt;fnoc2.nc&lt;/font&gt;, and &lt;font color='green'&gt;fnoc3.nc&lt;/font&gt; might be documented with a file called &lt;font color='green'&gt;fnoc.html&lt;/font&gt;.
+
+
+You may prefer to override this method of creating documentation and
+simply provide a single, complete HTML document that contains general
+information for the server or for a group of datasets.  For example,
+to force the info server to return a particular HTML document for all
+its datasets, you would create a complete HTML document and give it
+the name dataset &lt;font color='green'&gt;.ovr&lt;/font&gt;, where dataset is the dataset
+name.
+
+
+More information about providing user information, including sample
+HTML files, and a complete description of the search procedure for
+finding the dataset documentation, is to be found in [http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;].</text>
+      <sha1>enve22wgj2bg42pbbsqbsbxjccpjgm3</sha1>
+    </revision>
+  </page>
+</mediawiki>

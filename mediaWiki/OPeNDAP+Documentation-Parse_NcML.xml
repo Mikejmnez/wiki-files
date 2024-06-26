@@ -1,0 +1,115 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Parse NcML</title>
+    <ns>0</ns>
+    <id>467</id>
+    <revision>
+      <id>4688</id>
+      <parentid>4687</parentid>
+      <timestamp>2009-08-21T19:26:38Z</timestamp>
+      <contributor>
+        <username>Mjohnson</username>
+        <id>42</id>
+      </contributor>
+      <minor/>
+      <comment>/* Notes on NcML */</comment>
+      <origin>4688</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6988" sha1="1593yzg1m8hqvbtsnjl4kid38u7l44k" xml:space="preserve">Back: [[AIS Using NcML]]
+
+Since we are interested in only the part of NcML which adds attributes and variables to a data set, build a parser for those parts of NcML and ignore the parts for aggregation.
+
+The [http://www.unidata.ucar.edu/software/netcdf/ncml/v2.2/AnnotatedSchema.html NcML schema].
+
+== How to treat NcML elements relative to the DAP ==
+
+NcML can be used to both add new attributes to existing variables in a data set, add new variables to a data set, create new data sets and define aggregations of any of these three this (exiting variables, new variables or new data sets). For the purposes of the NcML AIS for Hyrax, the initial version of this handler will be limited to adding attributes to existing variables in existing data sets. Subsequent versions will add support for defining new variables and new data sets (really those two capabilities are very similar) and a separate project will add support for NcML's ''&lt;aggregation&gt;'' element.
+
+In the following subsections, each of the NcML elements are described with respect to how they should be interpreted by this handler. The elements are: '''&lt;netcdf&gt;''', '''&lt;readMetadata&gt;''', '''&lt;explicit&gt;''', &lt;group&gt;, '''&lt;variable&gt;''', &lt;dimension&gt;, '''&lt;attribute&gt;''', &lt;remove&gt;. Those listed in bold must be handled by the first version of the handler. Note that either ''&lt;readMetadata&gt;'' or ''&lt;explicit&gt;'' must be given, but never both.
+
+=== netcdf ===
+
+The design of NcML is such that using it as an AIS - augmenting an existing dataset - is really exploiting one of its optional features. When the ''&lt;netcdf&gt;'' element has a ''netcdf@localtion'' attribute, then the NcML file is providing information that will augment the stuff in the data set named by ''location''. The original NcML design intended for ''location'' to name a netCDF file, but we are going to generalize that to be any file served by the BES running this handler (for ''location'' that is a ''file:/'' URL) or any remote Hyrax server (when ''location'' is a DAP URL).
+
+In most uses foreseen for this handler, the ''netcdf@location'' attribute will always be present.
+
+'''In the initial version of the handler, we might require this attribute be present and we might not allow new variables to be defined, and instead only allow attributes to be specified for existing variables.'''
+
+=== readMetadata ===
+
+If present read the metadata from the data source and augment with the information supplied in this file. This will normally be present.
+
+=== explicit ===
+
+If present, retain only the variables from the data set named by ''netcdf@location'' and then add the information included here.
+
+=== group ===
+
+'''A group will be ignored until we start supporting Groups in DAP (DAP 3.4?).'''
+
+=== variable ===
+
+The the ''&lt;variable&gt;'' element will be used to represent any of the scalar and array types of Bytes, integers, floats and strings/URLs. Note that the NcML ''&lt;variable&gt;'' element has a ''variable@type'' attribute and that attribute can have ''structure'' as its value. Form this handler we will use ''&lt;variable type="structure"&gt;'' elements to represent DAP Structures, Grids and Sequences
+
+=== dimension ===
+
+Dimensions are part of the netCDF common data model and bind a name with a size (but not a type). These will be part of DAP 3.3(?) but are not currently part of our software. When a dimension element is processed, it will be used to create a binding between the name and the size (an integer) and any used of that name in a 'dimension context' will be treated as the same as the integer size. In practice, dimensions are used to declare the sizes of an Array with the additional notion that all variables that use a particular dimension are related (as in a DAP Grid). However, in a data set served by DAP, an existing Grid will already be explicit, so the dimension element is not needed to establish this relation. 
+
+'''Because the ''&lt;dimension&gt;'' element encodes information that is redundant for a DAP2--3.2 data source, we might not support it in the initial version of this handler.'''
+
+=== attribute ===
+
+The ''&lt;attribute&gt;'' element is used to add new attributes, or replace existing attributes, of a variable.
+
+=== remove ===
+
+The ''&lt;remove&gt;'' element is used to remove attributes from a variable.
+
+=== Notes on NcML ===
+
+# NcML considers everything to have ''rank'' and thus does not name a special constructor type ''Array''. Instead scalars have rank zero, arrays have rank greater than zero. A rank of one or more is denoted using ''variable@shape'' which lists the dimension names. This difference is syntactic only, but worth keeping in mind.
+# Expand ''variable@shape'' so that it can contain integer dimension sizes in addition to names. This is the case in the code at Unidata, but it has not made it into the schema yet (April 2009).
+# Although not captured by the schema, it appears that a NcML file that modifies the attributes of an existing variable does not have to specify either the ''variable@type'' or ''variable@shape'' attributes. The ''variable@type'' and ''@shape'' attributes might only come into play when/if we use NcML/AIS to add new variables to the data set or to define a complete data set (without referencing an existing data set as a base to build onto). [mjohnson: this is basically what I did... if not required for an operation, lack of specification of type and shape means "use whatever is in the underlying data if the name exists"] 
+# The NcML 2.2 schema uses one ''DataType'' (&lt;nowiki&gt;&lt;xsd:simpleType name="DataType"&gt;&lt;/nowiki&gt;) for both variables and attributes; we can use the ''Structure'' data type value for attribute containers. [mjohnson: I have done this in current parser, so that if attribute@type==Structure, it refers to an attribute container and the values must be empty.  The current NcML 2.2 schema also fails to encapsulate nested attribute trees, but I allow them in our parser. ]
+# NcML does not have an ''otherXML'' ''attribute@type'' so we'll have to add that. Maybe we can overload the ''attribute@shape'' attribute so that it has the special dimension name ''otherXML''? This idea will make purists gag, and rightly so, but it might be a good way to try NcML out without changing the design at all.
+
+Longer-term:
+# Separate the ''attribute'' and ''variable'' element types so that there's a different type (xsd:simpleType) for each.
+# Add Grid and Sequence to the set of types for a ''variable'' element
+# Add ''otherXML'' to the set of types for ''attribute''.
+
+=== Notes on parser construction techniques ===
+
+I would favor building a SAX parser because I think that for an initial version of the handler, only the ''&lt;netcdf&gt;'' node will need to be parsed. Once that's done, a SAX parser is still the way to go because we don't need the information from the NcML doc to be examined more than once. What's likely is that as the NcML is parsed the C++ DDS object will be modified. Once the NcML document has been parsed once, the handler is not going to need it again.</text>
+      <sha1>1593yzg1m8hqvbtsnjl4kid38u7l44k</sha1>
+    </revision>
+  </page>
+</mediawiki>

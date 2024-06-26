@@ -1,0 +1,796 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Dataset List</title>
+    <ns>0</ns>
+    <id>588</id>
+    <revision>
+      <id>9634</id>
+      <parentid>9633</parentid>
+      <timestamp>2013-04-30T21:33:58Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* CDAWeb Data Holdings */</comment>
+      <origin>9634</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="106034" sha1="ea9w7imsb5vvqo7ue0oa2n1bkc3srfn" xml:space="preserve">This list is also available as a [[Special:Exportthredds |THREDDS catalog]].
+You can also import [[Special:Importthredds| THREDDS catalogs]].
+
+== GHRSST-PP and JPL PO.DAAC ==
+
+=== GHRSST L2P/L2P_GRIDDED/L4 sea surface temperature data === 
+: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/sea_surface_temperature/GHRSST/data/ dir] [http://ghrsst.jpl.nasa.gov info] 
+
+== Archiving, Validation and Interpretation of Satellite Oceanographic data (AVISO) / CNES (Centre National d'etudes Spatiales) ==
+
+=== Altimetry Data === 
+: [http://www.jason.oceanobs.com/html/presentation/aviso_uk.html info] 
+* Sea Level Anomalies: [http://www.jason.oceanobs.com/html/donnees/produits/sla_uk.html info] [http://gcmd.nasa.gov/getdif.htm?SLA-TOPEX-ERS&amp;interface=FROMDODS gcmd] 
+* Maps of Sea Level Anomalies: [http://www.jason.oceanobs.com/html/donnees/produits/msla_uk.html info] [http://opendap.aviso.oceanobs.com/thredds/dodsC/ dir] [http://las.aviso.oceanobs.com/las/servlets/dataset las] [http://gcmd.nasa.gov/getdif.htm?MSLA&amp;interface=FROMDODS gcmd] 
+* Absolute Dynamic Topography: [http://www.jason.oceanobs.com/html/donnees/produits/adt_uk.html info] [http://gcmd.nasa.gov/getdif.htm?NRT_ADT&amp;interface=FROMDODS gcmd] 
+* Maps of Absolute Dynamic Topography: [http://www.jason.oceanobs.com/html/donnees/produits/madt_uk.html info] [http://opendap.aviso.oceanobs.com/thredds/dodsC/ dir] [http://las.aviso.oceanobs.com/las/servlets/dataset las] [http://gcmd.nasa.gov/getdif.htm?NRT_MADT&amp;interface=FROMDODS gcmd] 
+* Geophysical Data Records: [http://www.jason.oceanobs.com/html/donnees/produits/gdr_uk.html info] [http://gcmd.nasa.gov/getdif.htm?GDR-Ms&amp;interface=FROMDODS gcmd] 
+* Wind / Wave products: [http://www.jason.oceanobs.com/html/donnees/produits/windwave_uk.html info] [http://gcmd.nasa.gov/getdif.htm?aviso_wave&amp;interface=FROMDODS gcmd] 
+* Gridded Wind / Wave products: [http://las.aviso.oceanobs.com/las/servlets/dataset las] [http://opendap.aviso.oceanobs.com/thredds/dodsC/ dir] [http://www.jason.oceanobs.com/html/donnees/produits/windwave_grid_uk.html info] 
+* Sensor Geophysical products: [http://www.jason.oceanobs.com/html/donnees/produits/waveform_uk.html info] [http://gcmd.nasa.gov/getdif.htm?aviso_sensor&amp;interface=FROMDODS gcmd] 
+
+
+== Antarctic Cooperative Research Centre, Tasmanian Partnership for Advanced Computing (TPAC) ==
+
+=== Digital Library for Oceans and Climate === 
+* TPAC/CSIRO Climatologies: [http://www.marine.csiro.au/%7Emansbrid/dods/climatology.html info] [http://www.marine.csiro.au/dods/nph-dods/dods-data/climatology-netcdf/ dir] 
+* TPAC/CSIRO Satellite Altimetry: [http://www.marine.csiro.au/%7Ewhi359/dods/sat_altimetry.html info] 
+* NCEP - DOE Reanalysis 2: [http://www.antcrc.utas.edu.au/tpac/datasets/ncep_reanal2.htm info] 
+* WOCE Global Data Version 3.0: [http://www.antcrc.utas.edu.au/dods-woce3/dvd1/index.htm info] 
+
+
+== Carolinas Coastal Ocean Observing and Prediction System (Caro-COOPS) ==
+
+=== Storm Surge Data === 
+: [http://trident.baruch.sc.edu/cgi-bin/nph-dods/storm_surge_data/ dir] [http://gcmd.nasa.gov/getdif.htm?Caro-COOPS&amp;interface=FROMDODS gcmd] [http://caro-coops.org/index.htm info] 
+=== SEACOOS In-site Sea Surface Temperature Observations === 
+: [http://trident.baruch.sc.edu/dods/seacoos/ dir] [http://caro-coops.org/index.htm info] 
+
+== Center for Ocean Land Atmosphere Studies (COLA) ==
+
+=== COLA AGCM Model Data === 
+: [http://cola8.iges.org:9090/dods/ dir] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/COLA+AGCM+Model+Data las] 
+=== COLA AVN Model Data === 
+: [http://cola8.iges.org:9090/dods/ dir] 
+=== COLA Eta Model Data === 
+: [http://cola8.iges.org:9090/dods/ dir] 
+=== COLA MRF Model Data === 
+: [http://cola8.iges.org:9090/dods/ dir] 
+
+== Columbia University/LDEO - International Research Institute (IRI/LDEO) ==
+
+=== ARCTIC === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ARCTIC/.STATION/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ARCTIC/.STATION/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ARCTIC/.STATION/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_ARCTIC_STATION&amp;interface=FROMDODS gcmd] 
+=== Biosphere - A Global Change Laboratory === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.Biosphere/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Biosphere/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Biosphere/dods baseURL] 
+=== CAC - Climate Analysis Center monthly observed SST, anomalies and climatology === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.CAC/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CAC/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CAC/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_CAC&amp;interface=FROMDODS gcmd] 
+=== CARDONE- ECMWF five day average wind stress; Cardone Level 2B data === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.CARDONE/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CARDONE/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CARDONE/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_CORDONE&amp;interface=FROMDODS gcmd] 
+=== CAYAN - Cayan Analysis of COADS === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.CAYAN/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CAYAN/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CAYAN/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_CAYAN&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/Cayan+Analysis+of+COADS las] 
+=== Carbon Dioxide Information Analysis Center === 
+* CDIAC - A Coastal Hazards Data Base (ndp043a): [http://ingrid.ldeo.columbia.edu/SOURCES/CDIAC/.ndp043a/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CDIAC/.ndp043a/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CDIAC/.ndp043a/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?CDIAC_NDP43A&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/CDIAC+ndp043a+Coastal+Hazards+Database+US+East+Coast(1992) las] 
+* CDIAC - A Comprehensive Precipitation Data Set (tr051): [http://ingrid.ldeo.columbia.edu/SOURCES/CDIAC/.tr051/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CDIAC/.tr051/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CDIAC/.tr051/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?CDIAC_TR051&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/CDIAC+tr051+Seasonal+precipitation+anomalies+(1851-1989) las] 
+* CDIAC - Major World Ecosystem Complexes: [http://ingrid.ldeo.columbia.edu/SOURCES/.CDIAC/.ndb017/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CDIAC/.ndb017/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CDIAC/.ndb017/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?CDIAC_NDP17&amp;interface=FROMDODS gcmd] 
+* CDIAC - MSU Precipitation (Microwave Sounding Units): [http://ingrid.ldeo.columbia.edu/SOURCES/CDIAC/.msu/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CDIAC/.msu/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CDIAC/.msu/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?msupptdl93&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/MSU las] 
+
+=== CLIMAP - Modern and Last Glacial Maximum (18KBP) comparison === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.CLIMAP/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CLIMAP/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CLIMAP/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?FE01020&amp;interface=FROMDODS gcmd] 
+=== COADS - Comprehensive Ocean-Atmosphere data set: Trimmed Monthly Summaries === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.COADS/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.COADS/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.COADS/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?COADS_RELEASE1&amp;interface=FROMDODS gcmd] 
+=== CORAL - Seychelles coral data === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.CORAL/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CORAL/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CORAL/dods baseURL] 
+=== CORAL - Tarawa coral data === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.CORAL/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.CORAL/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.CORAL/dods baseURL] 
+=== DASILVA - Atlas of Surface Marine Data 1994 === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.DASILVA/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.DASILVA/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.DASILVA/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?NOAA_ATLAS_SURFACE_MARINE_DATA&amp;interface=FROMDODS gcmd] 
+=== Deep_Sea_Core === 
+: [http://ingrid.ldgo.columbia.edu/SOURCES/.LDEO/.Deep_Sea_Core.cuf/dods.info info] [http://ingrid.ldgo.columbia.edu/SOURCES/.LDEO/.Deep_Sea_Core.cuf/dods.dds dds] [http://ingrid.ldgo.columbia.edu/SOURCES/.LDEO/.Deep_Sea_Core.cuf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_DEEPSEA_CORE&amp;interface=FROMDODS gcmd] 
+=== EC9293 - Zonal,Meridonal Wind Stress === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.EC9293/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.EC9293/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.EC9293/dods baseURL] 
+=== ECHAM - Surface stresses from ECHAM model run with observed SSTs, Jan. 1949-Dec.1990 === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ECHAM/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECHAM/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECHAM/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_ECHAM&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/ECHAM+surface+stresses las] 
+=== ECMWF - Gridded Global Analysis: 1985-1992 === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ECMWF/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECMWF/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECMWF/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_ECMWF&amp;interface=FROMDODS gcmd] 
+=== ECOSYSTEMS - Holdridge Life Zones data set === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ECOSYSTEMS/.Holdridge/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECOSYSTEMS/.Holdridge/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECOSYSTEMS/.Holdridge/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?GNV00005&amp;interface=FROMDODS gcmd] 
+=== ECOSYSTEMS - Matthews Global Distribution of Vegetation === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ECOSYSTEMS/.Matthews/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECOSYSTEMS/.Matthews/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECOSYSTEMS/.Matthews/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?VEG1X1&amp;interface=FROMDODS gcmd] 
+=== ECOSYSTEMS- Olson Vegetation data set === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ECOSYSTEMS/.Olson/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECOSYSTEMS/.Olson/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECOSYSTEMS/.Olson/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?CDIAC_NDP17&amp;interface=FROMDODS gcmd] 
+=== ECP9293 - Zonal,Meridonal Wind Stress === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ECP9293/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECP9293/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ECP9293/dods baseURL] 
+=== ENSOFORECAST - LDEO1: Forecasts of Equatorial Pacific SSTA at 3-12 month lead times === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ENSOFORECAST/.LDEO1/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ENSOFORECAST/.LDEO1/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ENSOFORECAST/.LDEO1/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_ENSOFORECAST&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/Zebiak+and+Cane+ENSO+forecast+LDEO1 las] 
+=== ENSOFORECAST - LDEO2: Forecasts of Equatorial Pacific SSTA at 3-12 month lead times === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ENSOFORECAST/.LDEO2/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ENSOFORECAST/.LDEO2/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ENSOFORECAST/.LDEO2/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_ENSOFORECAST&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/Zebiak+and+Cane+ENSO+forecast+LDEO2 las] 
+=== EPCU - Eastern Pacific Coastal Upwelling === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.EPCU/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.EPCU/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.EPCU/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?LDEO_UPWELLING&amp;interface=FROMDODS gcmd] 
+=== ERBE - Shortwave Radiation Budgets at Surface and in Atmosphere Derived from ERBE Measurements === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ERBE/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ERBE/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ERBE/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_ERBESW&amp;interface=FROMDODS gcmd] 
+=== FSU - Monthly Tropical Pacific Ocean Gridded Pseudo-stress Analysis === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.FSU/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.FSU/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.FSU/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?FSU_PSEUDO_STRESS_PACIFIC&amp;interface=FROMDODS gcmd] 
+=== GEDEX - Greenhouse Effect Detection Experiment (Cloud Product) === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.GEDEX/.isccp_c2.cdf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.GEDEX/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.GEDEX/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?ISCCP_CDROM&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/GEDEX:+ISCCP-C2+Monthly+Mean+Cloud+Product las] 
+=== GEOSECS - Geochemical Ocean Sections Study === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.GEOSECS/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.GEOSECS/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.GEOSECS/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_GOSECS&amp;interface=FROMDODS gcmd] 
+=== GISS - ABSORBED SOLAR RADIATION at SURFACE from GISS AMIP === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.GISS/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.GISS/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.GISS/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_GISS_MODELS&amp;interface=FROMDODS gcmd] 
+=== HELLERMAN - Hellerman Wind Stress Dataset === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.HELLERMAN/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.HELLERMAN/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.HELLERMAN/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?HELLERMAN&amp;interface=FROMDODS gcmd] 
+=== ICE CORE Data Sets === 
+* GRIP Methane - chemical measurements: [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.GRIP.cdf/.ch4/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.GRIP.cdf/.ch4/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.GRIP.cdf/.ch4/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?NGDC_WDCA_PALEO_GRIP_CH4&amp;interface=FROMDODS gcmd] 
+* GRIP Oxygen 18 isotopic ratio - chemical measurements: [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.GRIP.cdf/.o18/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.GRIP.cdf/.o18/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.GRIP.cdf/.o18/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?NGDC_WDCA_PALEO_GRIP_O18&amp;interface=FROMDODS gcmd] 
+* QUELCCAYA ice data: [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.QUELCCAYA.cdf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.QUELCCAYA.cdf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.QUELCCAYA.cdf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?EARTH_LAND_NGDC_PALEOCL_QUELCCA&amp;interface=FROMDODS gcmd] 
+* VOSTOK ice data: [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.VOSTOK/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.VOSTOK/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ICE/.CORE/.VOSTOK/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?EARTH_LAND_NGDC_PALEO_VOSTOK1&amp;interface=FROMDODS gcmd] 
+
+=== Integrated Global Ocean Services System Products (IGOSS) === 
+* IGOSS - Australia Global Surface Winds: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.australia/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.australia/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.australia/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_SURFACEWINDS&amp;interface=FROMDODS gcmd] 
+* IGOSS - ERS-1 Blended Sea Level Anomoly: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.ers1/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.ers1/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.ers1/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_ERS1&amp;interface=FROMDODS gcmd] 
+* IGOSS - FSU Pacific Surface Currents and Equatorial Thermocline Depth: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.fsu/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.fsu/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.fsu/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_FSU&amp;interface=FROMDODS gcmd] 
+* IGOSS - Leetman Pacific Equatorial Thermocline Depth: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.d20C/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.d20C/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.d20C/dods baseURL] 
+* IGOSS - Leetman Pacific Surface Currents - Meridional Velocity: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.v/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.v/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.v/dods baseURL] 
+* IGOSS - Leetman Pacific Surface Currents - Speed: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.|u|/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.|u|/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.|u|/dods baseURL] 
+* IGOSS - Leetman Pacific Surface Currents - Zonal Velocity: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.u/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.u/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.leetma/.u/dods baseURL] 
+* IGOSS - Pentad SST Climatology: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.pentad-climatology/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.pentad-climatology/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.pentad-climatology/dods baseURL] 
+* IGOSS - Weekly NMC SST Analyzed Fields: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.weekly/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.weekly/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.weekly/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_NMC_WEEKLYSST&amp;interface=FROMDODS gcmd] 
+* IGOSS - Monthly NMC Sea Surface Temperature Data: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.monthly/.sst/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.monthly/.sst/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.monthly/.sst/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_NMC_MONTHLYSST&amp;interface=FROMDODS gcmd] 
+* IGOSS - Monthly NMC Monthly Sea Surface Temperature Anomaly Data: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.monthly/.ssta/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.monthly/.ssta/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.monthly/.ssta/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_NMC_MONTHLYANOMSST&amp;interface=FROMDODS gcmd] 
+* IGOSS - Reynolds and Smith 1994 Monthly AOI SST Climatology: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.climatology/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.climatology/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.climatology/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_NMC_MONTHLYCLIMSST&amp;interface=FROMDODS gcmd] 
+* IGOSS - SIO Upper Ocean Temperature Climatology (Temperature): [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.climatology/.temp/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.climatology/.temp/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.climatology/.temp/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?IGOSS_TEMPERATURE_CLIM&amp;interface=FROMDODS gcmd] 
+* IGOSS - SIO Upper Ocean Temperature Climatology (Mixed Layer Depth): [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.climatology/.mld/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.climatology/.mld/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.climatology/.mld/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?IGOSS_MLD_CLIM&amp;interface=FROMDODS gcmd] 
+* IGOSS - SIO Upper Ocean Temperature Climatology (Heat Storage): [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.climatology/.heat_storage/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.climatology/.heat_storage/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.climatology/.heat_storage/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?IGOSS_HEATSTORAGE_CLIM&amp;interface=FROMDODS gcmd] 
+* IGOSS - SIO Coastal Temperature and Winds: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.coastal/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.coastal/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.coastal/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?IGOSS_SB_CHANNEL_BUOYS&amp;interface=FROMDODS gcmd] 
+* IGOSS - SIO Upper Ocean Temperature Anomalies Climatology (Heat Storage): [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.monthly/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.monthly/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.sio/.monthly/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_HEAT_STORAGE&amp;interface=FROMDODS gcmd] 
+* IGOSS - TOGA-TAO Quarterly SST and Winds: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.TOGA-TAO.cdf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.TOGA-TAO.cdf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.TOGA-TAO.cdf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?IGOSS_TOGA_TAO&amp;interface=FROMDODS gcmd] 
+* IGOSS - TOPEX/POSEIDON Altimeter Gridded Sea Level Anomalies and Deviations: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.TOPEX/.NOAA/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.TOPEX/.NOAA/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.TOPEX/.NOAA/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_NOAA_TOPEX&amp;interface=FROMDODS gcmd] 
+* IGOSS - UTCSR TOPEX/POSEIDON Gridded Sea Level Anomalies: [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.TOPEX/.UTCSR/.ssha/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.TOPEX/.UTCSR/.ssha/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IGOSS/.TOPEX/.UTCSR/.ssha/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_IGOSS_UTCSR_TOPEX&amp;interface=FROMDODS gcmd] 
+
+=== Indices === 
+* Indices: Darwin Sea Level Pressure: [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.Darwin/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.Darwin/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.Darwin/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?LDEO_INDICES_DARWIN&amp;interface=FROMDODS gcmd] 
+* Indices: Easter Island Sea Level Pressure: [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.Easter/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.Easter/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.Easter/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?LDEO_INDICES_EASTER&amp;interface=FROMDODS gcmd] 
+* Indices: HANSEN Global Temperature(Annual, Monthly, Seasonal): [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.HANSEN/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.HANSEN/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.HANSEN/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?LDEO_INDICES_HANSEN&amp;interface=FROMDODS gcmd] 
+* Indices: All-India Monsoon Index: [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.india/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.india/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.india/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_INDICIES_INDIA&amp;interface=FROMDODS gcmd] 
+* Indices: North Atlantic Oscillation Index: [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.nao/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.nao/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.nao/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_INDICIES_NAO&amp;interface=FROMDODS gcmd] 
+* Indices: NINO indices: [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.nino/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.nino/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.nino/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?indices_nino&amp;interface=FROMDODS gcmd] 
+* Indices: Southern Oscillation Index: [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.soi/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.soi/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.soi/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_INDICIES_SOI&amp;interface=FROMDODS gcmd] 
+* Indices: Standardized SOI: [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.standardized/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.standardized/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.standardized/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_INDICIES_SOI&amp;interface=FROMDODS gcmd] 
+* Indices: Tahiti Sea Level Pressure: [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.Tahiti/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.Tahiti/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Indices/.Tahiti/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?LDEO_INDICES_TAHITI&amp;interface=FROMDODS gcmd] 
+
+=== IRI - Easter Pacific Pelagic Fisheries === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.EPPF/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.EPPF/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.EPPF/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?iri_eppf&amp;interface=FROMDODS gcmd] 
+=== IRI - Forecast Division Temperature === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.FD/.Seasonal_Forecast/.Temperature/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.FD/.Seasonal_Forecast/.Temperature/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.FD/.Seasonal_Forecast/.Temperature/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?iri_forecast&amp;interface=FROMDODS gcmd] 
+=== IRI - Forecast Division Precipitation === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.FD/.Seasonal_Forecast/.Precipitation/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.FD/.Seasonal_Forecast/.Precipitation/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.FD/.Seasonal_Forecast/.Precipitation/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?iri_forecast&amp;interface=FROMDODS gcmd] 
+=== Modeling Prediction Research === 
+* IRI - Modeling/Prediction Research Atmosphere Global CCM: [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.MP/.RESEARCH/.ATMOSPHERE/.GLOBAL/.CCM/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.MP/.RESEARCH/.ATMOSPHERE/.GLOBAL/.CCM/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.MP/.RESEARCH/.ATMOSPHERE/.GLOBAL/.CCM/dods baseURL] 
+* IRI - Modeling/Prediction Research Atmosphere Regional East_Africa: [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.MP/.RESEARCH/.ATMOSPHERE/.REGIONAL/.East_Africa/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.MP/.RESEARCH/.ATMOSPHERE/.REGIONAL/.East_Africa/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.MP/.RESEARCH/.ATMOSPHERE/.REGIONAL/.East_Africa/dods baseURL] 
+* IRI - Modeling/Prediction Research Atmosphere Regional East_Africa: [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.MP/.RESEARCH/.ATMOSPHERE/.REGIONAL/.East_Africa/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.MP/.RESEARCH/.ATMOSPHERE/.REGIONAL/.East_Africa/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.IRI/.MP/.RESEARCH/.ATMOSPHERE/.REGIONAL/.East_Africa/dods baseURL] 
+
+=== ISCCP - International Satellite Cloud Climatology Project: Solar Radiation and cloudiness === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ISCCP/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ISCCP/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ISCCP/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_ISCCP&amp;interface=FROMDODS gcmd] 
+=== JONES - Jones' Surface Temperature Anomaly data set === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.JONES/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.JONES/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.JONES/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_JONES&amp;interface=FROMDODS gcmd] 
+=== KAPLAN === 
+* Global Sea Level Pressure Anomalies - Reduced Space Optimal Interpolation of the COADS: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.RSA_COADS_SLPold.cuf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.RSA_COADS_SLPold.cuf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.RSA_COADS_SLPold.cuf/dods baseURL] 
+* Global Sea Level Pressure - Climatological Anomalies: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.COADS_SLPclim.cuf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.COADS_SLPclim.cuf/dods.dds dds] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_COADS_SLP&amp;interface=FROMDODS gcmd] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.COADS_SLPclim.cuf/dods baseURL] 
+* Global Sea Level Pressure - Reduced Space Optimal Interpolation Analysis: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.RSA_COADS_SLP1.cuf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.RSA_COADS_SLP1.cuf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.RSA_COADS_SLP1.cuf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_COADS_SLP&amp;interface=FROMDODS gcmd] 
+* Sea Level Anomaly Fields - TGsm : [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.TGsm.cdf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.TGsm.cdf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.TGsm.cdf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_SEALEVEL&amp;interface=FROMDODS gcmd] 
+* Sea Level Anomaly Fields - TPsm: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.TPsm.cdf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.TPsm.cdf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.TPsm.cdf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_SEALEVEL&amp;interface=FROMDODS gcmd] 
+* Sea Level Anomaly Fields - TPTGsm: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.TPTGsm.cdf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.TPTGsm.cdf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.TPTGsm.cdf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_SEALEVEL&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Anomalies - Reduced Space Optimal Analysis of the MOHSST5: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.RSA_MOHSST5.cuf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.RSA_MOHSST5.cuf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.RSA_MOHSST5.cuf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?mohsst5_kaplan&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Extension - OS by NCEP OI Analysis: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.EXTENDED/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.EXTENDED/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.EXTENDED/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_EXTENDED&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - Equatorial North Atlantic average: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.EqNA/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.EqNA/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.EqNA/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - Global Mean : [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.GL/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.GL/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.GL/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - Global Equatorial Mean: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.GT/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.GT/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.GT/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - Global Tropical Mean: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.GT30/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.GT30/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.GT30/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - North Atlantic (caption) : [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NAc/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NAc/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NAc/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - North Atlantic (figure): [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NAf/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NAf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NAf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - North Atlantic (intended): [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NAi/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NAi/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NAi/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - NINO3 index: [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NINO3/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NINO3/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NINO3/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - NINO3.4 index : [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NINO34/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NINO34/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NINO34/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - North Pacific NP index : [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NP/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NP/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.NP/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+* Sea Surface Temperature Indices - Western Pacific (or Warm Pool): [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.WP/ info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.WP/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KAPLAN/.Indices/.WP/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_KAPLAN_INDICES&amp;interface=FROMDODS gcmd] 
+
+=== KEELING - Mauna Loa CO2 data === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.KEELING/.MAUNA_LOA.cdf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.KEELING/.MAUNA_LOA.cdf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.KEELING/.MAUNA_LOA.cdf/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?CDIAC_NDP1&amp;interface=FROMDODS gcmd] 
+=== LDEO - Deep Sea Core === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.LDEO/.Deep_Sea_Core/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.LDEO/.Deep_Sea_Core/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.LDEO/.Deep_Sea_Core/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_INDICES_INDIA&amp;interface=FROMDODS gcmd] 
+=== LDEO - Takahashi,Global air-sea flux of CO2 === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.LDEO/.Takahashi/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.LDEO/.Takahashi/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.LDEO/.Takahashi/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?LDEO_SEAAIR_PCO2_DIFF_GLOBAL&amp;interface=FROMDODS gcmd] 
+=== Levitus(1982) === 
+* Levitus(1982) - Annual(NO3,sal,O2SAT,po4,temp,O2,SIO2), quality-controlled NODC Station Data, superceded by Levitus94: [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS/.ANNUAL/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS/.ANNUAL/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS/.ANNUAL/dods baseURL] 
+* Levitus(1982) - Monthly(temp), quality-controlled NODC Station Data, superceded by Levitus94: [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS/.MONTHLY/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS/.MONTHLY/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS/.MONTHLY/dods baseURL] 
+* Levitus(1982) - Seasonal(sal,temp) quality-controlled NODC Station Data, superceded by Levitus94: [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS/.SEASONAL/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS/.SEASONAL/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS/.SEASONAL/dods baseURL] 
+
+=== World Ocean Atlas 1994 (Levitus) === 
+* World Ocean Atlas 1994 (Levitus) Annual(PO4,NO3,theta,O2SAT,SIO2,rhoa,sal,temp,AOU,O2,po4): [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS94/.ANNUAL/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS94/.ANNUAL/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS94/.ANNUAL/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?OCEAN_ATLAS_1994&amp;interface=FROMDODS gcmd] 
+* World Ocean Atlas 1994 (Levitus) Monthly(theta,Zmix,sal,temp): [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS94/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS94/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS94/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?OCEAN_ATLAS_1994&amp;interface=FROMDODS gcmd] 
+* World Ocean Atlas 1994 (Levitus) Seasonal(O2SAT,sal,temp,O2,AOU): [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS94/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS94/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.LEVITUS94/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?OCEAN_ATLAS_1994&amp;interface=FROMDODS gcmd] 
+
+=== Lithosphere === 
+* Lithosphere - Earthquate: [http://ingrid.ldeo.columbia.edu/SOURCES/.Lithosphere/.Earthquake.cuf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Lithosphere/.Earthquake.cuf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Lithosphere/.Earthquake.cuf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_LITHOSPHERE&amp;interface=FROMDODS gcmd] 
+* Lithosphere - Volcano: [http://ingrid.ldeo.columbia.edu/SOURCES/.Lithosphere/.Volcano.cuf/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Lithosphere/.Volcano.cuf/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Lithosphere/.Volcano.cuf/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_LITHOSPHERE&amp;interface=FROMDODS gcmd] 
+
+=== MODELRUNS - MEQSFC === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.MODELRUNS/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.MODELRUNS/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.MODELRUNS/dods baseURL] 
+=== Models - AMIP === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.Models/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Models/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Models/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_MODELSST_AMIP&amp;interface=FROMDODS gcmd] 
+=== Morliere Wind Stress === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.Morliere/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Morliere/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Morliere/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_MORLIERE&amp;interface=FROMDODS gcmd] 
+=== NCAR CGD CAS Indices PSDI - Palmer Drought Severity Index Data === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.NCAR/.CGD/.CAS/.Indices/.PDSI/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.NCAR/.CGD/.CAS/.Indices/.PDSI/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.NCAR/.CGD/.CAS/.Indices/.PDSI/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_PDSI&amp;interface=FROMDODS gcmd] 
+=== NOAA NCDC Global Historical Climatology Network - Monthly Weather Station Data === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NCDC/.GHCN/.v2/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NCDC/.GHCN/.v2/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NCDC/.GHCN/.v2/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?NOAA_NCDC_GHCN_VERSION2&amp;interface=FROMDODS gcmd] 
+=== NOAA NCEP EMC CMB Pacific === 
+* NOAA NCEP EMC CMB Pacific Weekly - Weekly Pacific Ocean Hindcast: [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CMB/.Pacific/.weekly/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CMB/.Pacific/.weekly/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CMB/.Pacific/.weekly/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?IGOSS_WEEKLY_THERMOCLINE&amp;interface=FROMDODS gcmd] 
+* NOAA NCEP EMC CMB Pacific Monthly - Monthly Pacific Ocean Hindcast: [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CMB/.Pacific/.monthly/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CMB/.Pacific/.monthly/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.EMC/.CMB/.Pacific/.monthly/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?IGOSS_NMC_PACMON_THERMOCLINE&amp;interface=FROMDODS gcmd] 
+
+=== World Ocean Atlas 1998 (Levitus) === 
+* World Ocean Atlas 1998 (Levitus) Annual: [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NODC/.WOA98/.ANNUAL/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NODC/.WOA98/.ANNUAL/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NODC/.WOA98/.ANNUAL/dods baseURL] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/World+Ocean+Atlas+1998+Annual las] [http://gcmd.gsfc.nasa.gov/getdif.htm?OCEAN_ATLAS_1998&amp;interface=FROMDODS gcmd] 
+* World Ocean Atlas 1998 (Levitus) Monthly: [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NODC/.WOA98/.MONTHLY/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NODC/.WOA98/.MONTHLY/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NODC/.WOA98/.MONTHLY/dods baseURL] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/World+Ocean+Atlas+1998+Monthly las] [http://gcmd.gsfc.nasa.gov/getdif.htm?OCEAN_ATLAS_1998&amp;interface=FROMDODS gcmd] 
+* World Ocean Atlas 1998 (Levitus) Seasonal: [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NODC/.WOA98/.SEASONAL/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NODC/.WOA98/.SEASONAL/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.NOAA/.NODC/.WOA98/.SEASONAL/dods baseURL] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/World+Ocean+Atlas+1998+Seasonal las] [http://gcmd.gsfc.nasa.gov/getdif.htm?OCEAN_ATLAS_1998&amp;interface=FROMDODS gcmd] 
+
+=== OBERHUBER - ice age paleotopography from a gravitationally self-consistent theory. === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.OBERHUBER/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.OBERHUBER/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.OBERHUBER/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?MPI_FLUX&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/Oberhuber+heat+flux+climatology las] 
+=== OORT - Geophysical Fluid Dynamics Laboratory (GFDL) Global Atmospheric Circulation === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.OORT/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.OORT/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.OORT/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?NCAR_CIRC&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/OORT+-+Geophysical+Fluid+Dynamics+Laboratory+(GFDL)+Global+Atmospheric+Circulation las] 
+=== OSUSFC - global ocean heat flux and wind stress from Oregon State University Climate. === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.OSUSFC/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.OSUSFC/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.OSUSFC/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?NCAR_OSU&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/Global+Ocean+Heat+Flux+and+Wind+Stress+from+Oregon+State+University+Climate las] 
+=== PELTIER - ice age paleotopography from a gravitationally self-consistent theory. === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.PELTIER/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.PELTIER/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.PELTIER/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?EARTH_LAND_NGDC_PALEO_SEALEVEL1&amp;interface=FROMDODS gcmd] 
+=== Rasmussen - Carpenter === 
+* Sea Surface Temperature: [http://ingrid.ldeo.columbia.edu/SOURCES/.RC/.sst/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.RC/.sst/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.RC/.sst/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?ds274.0&amp;interface=FROMDODS gcmd] 
+* Meridional  Wind Stress: [http://ingrid.ldeo.columbia.edu/SOURCES/.RC/.tauy/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.RC/.tauy/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.RC/.tauy/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?ds274.0&amp;interface=FROMDODS gcmd] 
+* Zonal Wind Stress: [http://ingrid.ldeo.columbia.edu/SOURCES/.RC/.taux/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.RC/.taux/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.RC/.taux/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?ds274.0&amp;interface=FROMDODS gcmd] 
+
+=== REVERDIN - Tropical Pacific 15m Current Data. === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.REVERDIN/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.REVERDIN/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.REVERDIN/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_REVERDIN&amp;interface=FROMDODS gcmd] 
+=== River - Flow, Australia === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.River/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.River/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.River/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_RIVER_AUSTRALIA&amp;interface=FROMDODS gcmd] 
+=== Sandwell - seafloor === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.Sandwell/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.Sandwell/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.Sandwell/dods baseURL] [http://gcmd.gsfc.nasa.gov/getdif.htm?SIO_NOAA_SEAFLOORTOPO&amp;interface=FROMDODS gcmd] 
+=== SERVAIN === 
+* SERVAIN - CLIMATOLOGY:Servain Winds averaged over 25 years(64-88): [http://ingrid.ldeo.columbia.edu/SOURCES/.SERVAIN/.CLIMATOLOGY/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.SERVAIN/.CLIMATOLOGY/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.SERVAIN/.CLIMATOLOGY/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?WOCE_PSEUDO_STRESS_ATLANTIC&amp;interface=FROMDODS gcmd] 
+* SERVAIN - Variables(taux,tauy,sst): [http://ingrid.ldeo.columbia.edu/SOURCES/.SERVAIN/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.SERVAIN/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.SERVAIN/dods baseURL] 
+
+=== ShipDrift === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.ShipDrift/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.ShipDrift/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.ShipDrift/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_SHIPDRIFT&amp;interface=FROMDODS gcmd] 
+=== SOC - Global Air-Sea Heat and Momentum Flux Climatology === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.SOC/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.SOC/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.SOC/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_SOC&amp;interface=FROMDODS gcmd] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/SOC+Heat+Flux+Climatology las] 
+=== STEVE - Zonal and Meridional Wind Stress Data for Atlantic Ocean, 1970-1986 === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.STEVE/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.STEVE/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.STEVE/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_STEVE_WINDSTRESS&amp;interface=FROMDODS gcmd] 
+=== TRENBERTH - Global Ocean Wind Stress Climatology based on ECMWF analyses === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.TRENBERTH/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.TRENBERTH/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.TRENBERTH/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?TRENB_WIND&amp;interface=FROMDODS gcmd] 
+=== University of East Anglia (UEA) - Climate Research Unit  === 
+* UEA - Global Monthly Precipitation : [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.Global/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.Global/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.Global/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?UK_CRU_GLOBAL_PRECIP&amp;interface=FROMDODS gcmd] 
+* UEA - Global (Hulme) Monthly Precipitation: [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.Hulme/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.Hulme/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.Hulme/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?CLIMATE_PRECIP&amp;interface=FROMDODS gcmd] 
+* UEA - New CRU05 Global 30-Year Mean Monthly Climatology : [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.New/.CRU05/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.New/.CRU05/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.New/.CRU05/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?CRU05&amp;interface=FROMDODS gcmd] 
+* UEA - Jones and Parker Global and Hemispheric Temperatures: [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.Jones/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.Jones/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.UEA/.CRU/.Jones/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?CRU_JONES&amp;interface=FROMDODS gcmd] 
+
+=== UMD - Carton Global Ocean Analysis === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.UMD/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.UMD/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.UMD/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?LDEO_CARTON&amp;interface=FROMDODS gcmd] 
+=== USGS - Hydro-Climate Data Network === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.USGS/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.USGS/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.USGS/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?EARTH_LAND_USGS_HCDN_STREAMFLW1&amp;interface=FROMDODS gcmd] 
+=== USTOPO - NOAA US Topography with 1/120 degree resolution === 
+: [http://ingrid.ldeo.columbia.edu/SOURCES/.USTOPO/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.USTOPO/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.USTOPO/dods baseURL] [http://www.ferret.noaa.gov/nvods?dset=by+Dataset+Name/America+topography+at+1/120+degree las] 
+=== Weare's Tropical Pacific Heat Budget Dataset (Monthly 1957-1976)  === 
+* WEARE - Climatology: [http://ingrid.ldeo.columbia.edu/SOURCES/.WEARE/.CLIMO/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.WEARE/.CLIMO/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.WEARE/.CLIMO/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?ds209.1&amp;interface=FROMDODS gcmd] 
+* WEARE - Mean: [http://ingrid.ldeo.columbia.edu/SOURCES/.WEARE/.MEAN/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.WEARE/.MEAN/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.WEARE/.MEAN/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?ds209.1&amp;interface=FROMDODS gcmd] 
+* WEARE - Monthly: [http://ingrid.ldeo.columbia.edu/SOURCES/.WEARE/.MONTHLY/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.WEARE/.MONTHLY/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.WEARE/.MONTHLY/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?ds209.1&amp;interface=FROMDODS gcmd] 
+
+=== Navy Bathymetry === 
+* WORLDBATH - ETOPO5 5x5 minute Navy bathymetry: [http://ingrid.ldeo.columbia.edu/SOURCES/.WORLDBATH/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.WORLDBATH/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.WORLDBATH/dods baseURL] [http://gcmd.nasa.gov/getdif.htm?FE00931&amp;interface=FROMDODS gcmd] 
+* WORLDBATH432 - ETOPO5 5x5 minute Navy bathymetry: [http://ingrid.ldeo.columbia.edu/SOURCES/.WORLDBATH432/dods.info info] [http://ingrid.ldeo.columbia.edu/SOURCES/.WORLDBATH432/dods.dds dds] [http://ingrid.ldeo.columbia.edu/SOURCES/.WORLDBATH432/dods baseURL] 
+
+
+== Federal University of Campina Grande, Department of Atmospheric Sciences, Brazil (UFCG/DCA) ==
+
+=== SegHidro Project - Climate and Weather Forecasting Datasets (Brazilian Northeast) === 
+* Climate Prediction Datasets - 40km Resolution (Brazilian Northeast): [http://portalseghidro.lsd.ufcg.edu.br/ info] [http://lula.lsd.ufcg.edu.br:3085/opendagportal/index.jsp?page=searcher.jsp url] [http://gds.dca.ufcg.edu.br:8080/dods/ufcg/clima/brams/brams40km dir] 
+* Weather Forecasting Datasets - 20km Resolution (Brazilian Northeast): [http://portalseghidro.lsd.ufcg.edu.br/ info] [http://lula.lsd.ufcg.edu.br:3085/opendagportal/index.jsp?page=searcher.jsp url] [http://gds.dca.ufcg.edu.br:8080/dods/ufcg/tempo/brams/brams20km dir] 
+* Weather Forecasting Datasets - 5km Resolution (Brazilian Northeast): [http://portalseghidro.lsd.ufcg.edu.br/ info] [http://lula.lsd.ufcg.edu.br:3085/opendagportal/index.jsp?page=searcher.jsp url] [http://gds.dca.ufcg.edu.br:8080/dods/ufcg/tempo/brams/brams5km dir] 
+
+
+== George Mason University - Seasonal to Interannual Earth Science Information Partner (SIESIP) ==
+
+=== Precipitation - South America Monthly Mean, Gridded === 
+: [http://dods.gso.uri.edu/cgi-bin/nph-dods/catalog/sa_precip.dat.ascii?DODS_URL,DODS_Date_Time() catalog] [http://gcmd.gsfc.nasa.gov/getdif.htm?UDEL_47YR_CLIM_ARCH&amp;interface=FROMDODS gcmd] 
+
+== Gulf of Maine Ocean Observing System (GoMOOS) ==
+
+=== GoMOOS Buoy Data === 
+: [http://www.gomoos.org/cgi-bin/dods/nph-dods/buoy/dods/ dir] [http://gomoos.org/buoy/dods.shtml info] 
+
+== Monterey Bay Aquarium Research Institute (MBARI) ==
+
+=== OASIS Mooring Data === 
+: [http://www.mbari.org/oasis/ info] [http://dods.mbari.org/cgi-bin/nph-nc/data/oasis/netcdf/ dir] [http://gcmd.nasa.gov/getdif.htm?OASIS&amp;interface=FROMDODS gcmd] [http://dods.mbari.org/lasOASIS las] 
+
+== NASA/GSFC Goddard Earth Sciences Data and Information Services Center (GES-DISC) ==
+
+=== GES-DISC Data Holdings === 
+: [http://disc.sci.gsfc.nasa.gov/ info] 
+* Aqua AIRS Level 3: [http://disc.sci.gsfc.nasa.gov/AIRS/index.html info] [http://acdisc.gsfc.nasa.gov/opendap/Aqua_AIRS_Level3/contents.html dir] 
+* Aqua MODIS Level 3: [http://disc.sci.gsfc.nasa.gov/oceancolor/docs/modis_info.shtml info] [http://acdisc.gsfc.nasa.gov/opendap/Aqua_MODIS_Level3/contents.html dir] 
+* Aura OMI Level 3: [http://disc.sci.gsfc.nasa.gov/Aura/index.shtml/ info] [http://acdisc.gsfc.nasa.gov/opendap/Aura_OMI_Level3/contents.html dir] 
+* Meteor_3 TOMS Level 3: [http://disc.sci.gsfc.nasa.gov/guides/GSFC/guide/tomsl3_dataset.gd.shtml/ info] [http://acdisc.gsfc.nasa.gov/opendap/Meteor_3_TOMS_Level3/contents.html dir] 
+* Nimbus_7 TOMS Level 3: [http://disc.sci.gsfc.nasa.gov/guides/GSFC/guide/tomsl3_dataset.gd.shtml info] [http://acdisc.gsfc.nasa.gov/opendap/Nimbus_7_TOMS_Level3/contents.html dir] 
+* SORCE Level 3: [http://disc.sci.gsfc.nasa.gov/SORCE/index.shtml info] [http://acdisc.gsfc.nasa.gov/opendap/SORCE_Level3/contents.html dir] 
+* Atmospheric Infrared Sounder (AIRS) Data Products (Collection 3) : [http://disc.gsfc.nasa.gov/services/opendap/airs_dp.shtml dir] [Hongliang.Fang.1@nasa.gov email] 
+* Global Land Data Assimilation System (GLDAS) Gridded Data (GrADS Data Server) : [http://disc.gsfc.nasa.gov/services/grads-gds/gldas.shtml dir] [Hongliang.Fang.1@nasa.gov email] 
+* Global Land Data Assimilation System (GLDAS) Gridded Data (GrADS Data Server) : [http://disc.gsfc.nasa.gov/services/grads-gds/gldas.shtml dir] [Hongliang.Fang.1@nasa.gov email] 
+* Microwave Sounding Unit (MSU) Deep Layer Temperatures and Ocean Precipitation Data : [http://disc.gsfc.nasa.gov/services/opendap/msu.shtml dir] [Hongliang.Fang.1@nasa.gov email] 
+* Total Ozone Mapping Spectrometer (TOMS) Daily Gridded Data : [http://disc.gsfc.nasa.gov/services/opendap/toms.shtml dir] [Hongliang.Fang.1@nasa.gov email] 
+* Tropical Rainfall Measuring Mission (TRMM) Gridded Rainfall Data : [http://disc.gsfc.nasa.gov/services/opendap/trmm.shtml dir] [Hongliang.Fang.1@nasa.gov email] 
+
+
+== NASA/GSFC Space Physics Data Facility ==
+
+=== CDAWeb Data Holdings === 
+: [http://cdaweb.gsfc.nasa.gov/istp_public/ info] 
+* ACE: [http://cdaweb.gsfc.nasa.gov/misc/NotesA.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/ace dir] 
+* ALOUETTE: [http://cdaweb.gsfc.nasa.gov/misc/NotesA.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/alouette/ dir] 
+* Apollo: [http://cdaweb.gsfc.nasa.gov/misc/NotesA.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/apollo dir] 
+* CANOPUS: [http://cdaweb.gsfc.nasa.gov/misc/NotesC.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/canopus dir] 
+* C/NOFS: [http://cdaweb.gsfc.nasa.gov/misc/NotesC.html info] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/cnofs dir]
+* Cluster: [http://cdaweb.gsfc.nasa.gov/misc/NotesC.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/cluster dir] 
+* CRRES: [http://cdaweb.gsfc.nasa.gov/misc/NotesC.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/crres dir] 
+* DARN: [http://cdaweb.gsfc.nasa.gov/misc/NotesD.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/darn dir] 
+* DE: [http://cdaweb.gsfc.nasa.gov/misc/NotesD.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/de dir] 
+* Equator-S: [http://cdaweb.gsfc.nasa.gov/misc/NotesE.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/equator-s dir] 
+* FAST: [http://cdaweb.gsfc.nasa.gov/misc/NotesF.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/fast dir] 
+* Genesis: [http://cdaweb.gsfc.nasa.gov/misc/NotesG.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/genesis dir] 
+* Geotail: [http://cdaweb.gsfc.nasa.gov/misc/NotesG.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/geotail dir] 
+* Geosynchronous Investigations&gt;GOES: [http://cdaweb.gsfc.nasa.gov/misc/NotesG.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/goes dir]
+* GPS: [http://cdaweb.gsfc.nasa.gov/misc/NotesG.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/gps dir]
+* Hawkeye: [http://cdaweb.gsfc.nasa.gov/misc/NotesH.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/hawkeye dir] 
+* IMAGE: [http://cdaweb.gsfc.nasa.gov/misc/NotesI.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/image dir] 
+* IMP (All): [http://cdaweb.gsfc.nasa.gov/misc/NotesI.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/imp8 dir] 
+* Interball: [http://cdaweb.gsfc.nasa.gov/misc/NotesI.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/interball dir] 
+* ISIS: [http://cdaweb.gsfc.nasa.gov/misc/NotesI.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/isis dir] 
+* Geosynchronous Investigations&gt;LANL: [http://cdaweb.gsfc.nasa.gov/misc/NotesL.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/lanl dir] 
+* NOAA: [http://cdaweb.gsfc.nasa.gov/misc/NotesN.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/noaa dir] 
+* OMNI: [http://cdaweb.gsfc.nasa.gov/misc/NotesO.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/omni dir] 
+* Pioneer: [http://cdaweb.gsfc.nasa.gov/misc/NotesP.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/pioneer dir] 
+* Polar: [http://cdaweb.gsfc.nasa.gov/misc/NotesP.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/polar dir] 
+* ROCSAT-1(FORMOSAT-1)/IPEI: [http://cdaweb.gsfc.nasa.gov/misc/NotesR.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/rocsat dir]
+* SAMPEX: [http://cdaweb.gsfc.nasa.gov/misc/NotesS.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/sampex dir] 
+* SESAME: [http://cdaweb.gsfc.nasa.gov/misc/NotesS.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/sesame dir] 
+* SNOE: [http://cdaweb.gsfc.nasa.gov/misc/NotesS.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/snoe dir] 
+* SOHO: [http://cdaweb.gsfc.nasa.gov/misc/NotesS.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/soho dir] 
+* Sondestrom [http://cdaweb.gsfc.nasa.gov/misc/NotesS.html info] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/sondestrom dir]
+* STEREO: [http://cdaweb.gsfc.nasa.gov/misc/NotesS.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/stereo dir] 
+* THEMIS: [http://cdaweb.gsfc.nasa.gov/misc/NotesT.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/themis dir] 
+* TIMED: [http://cdaweb.gsfc.nasa.gov/misc/NotesT.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/timed dir] 
+* TWINS: [http://cdaweb.gsfc.nasa.gov/misc/NotesT.html info] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/twins dir]
+* Ulysses: [http://cdaweb.gsfc.nasa.gov/misc/NotesU.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/ulysses dir] 
+* Voyager: [http://cdaweb.gsfc.nasa.gov/misc/NotesV.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/voyager dir] 
+* Wind: [http://cdaweb.gsfc.nasa.gov/misc/NotesW.html info] [http://spdf.gsfc.nasa.gov gcmd] [http://cdaweb.gsfc.nasa.gov/opendap/hyrax/wind dir]
+
+== NASA/JPL - Physical Oceanography Distributed Active Archive Center (PODAAC) ==
+
+=== SSM/I derived global heat and momentum fluxes (Atlas, Jusem, Ardizzone); Product #004 === 
+: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/heat_flux/ssmi/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?PODAAC_SSMI_Heat_Flux_004&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/ssmi_flux.html info] 
+=== SSM/I Pathfinder gridded atmospheric moisture level 3 (NOAA, NASA, MSFC, Wentz); Product #077 === 
+: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/atmospheric_moisture/ssmi/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?SSMI_Pathfinder_moist_atm_L3&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/ssmi_pathfindr_am.html info] 
+=== Ocean Wind === 
+* SSM/I Pathfinder gridded ocean wind speed level 3 (NOAA, NASA, MSFC, Wentz); Product #057: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/ssmi/msfc_pathfinder/level3/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?PODAAC_SSMI_gridded_wind_057&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/ssmi_pathfindr_wind.html info] 
+* NSCAT scatterometer science product, levels 1.7, 2, 3 (JPL); Product #066: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/nscat/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?JPL_PODAAC_NSCAT_Product_066&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/nscat_nsp.html info] 
+* SSM/I Pathfinder EASE-Grid ocean geophysical products (NOAA, NASA,NSIDC, Wentz); Product #078: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/ssmi/nsidc_pathfinder/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?PODAAC_SSMIocean_geophysl__78&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/ssmi_pathfindr_ease.html info] 
+* SSM/I Derived Global Ocean Surface Wind Components (Atlas et al.), Product #079: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/ssmi/atlas_ssmi_ver10/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?JPL_PODAAC_PRODUCT_079&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/ssmi_atlas_wind.html info] 
+* NSCAT scatterometer ocean wind products CD-ROM (JPL); Product #085: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/nscat/sampleCD/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?PODAAC_NSCAT_Ocean_Wind_085&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/nscat_cdrom.html info] 
+* SeaWinds on QuikSCAT Level 2B Ocean Wind Vectors in 25 Km Swath Grid (JPL); Product #108: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/quikscat/L2B/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?QSCAT_L2b_Ocean_Wind_25km_108&amp;interface=FROMDODS gcmd] [http://dods.jpl.nasa.gov/dods-bin/nph-dods/catalogs/quikscat/L2B/quikscat_L2.dat.ascii?DODS_URL,DODS_Date_Time(QuikSCAT_L2B) catalog] [http://podaac.jpl.nasa.gov/quikscat/index.html info] 
+* SeaWinds on QuikSCAT Level 3 Daily Gridded Ocean Wind Vectors (JPL); Product #109: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/quikscat/L3/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?QuikSCAT_L3A_109&amp;interface=FROMDODS gcmd] [http://dods.jpl.nasa.gov/dods-bin/nph-dods/catalogs/quikscat/L3/quikscat_L3.dat.ascii?DODS_URL,DODS_Date_Time(QuikSCAT_L3) catalog] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/qscat_L3.html info] 
+* SeaWinds on ADEOS-II Level 2B Ocean Wind Vectors in 25 Km Swath; Product #141: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/seawinds/L2B/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?SWS_L2b_Ocean_Wind_25km_141&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/sws_L2B.html info] 
+* SeaWinds on ADEOS-II Level 3 Daily Gridded Ocean Wind Vectors; Product #142: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/seawinds/L3/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?SWS_L3_Ocean_Wind_142&amp;interface=FROMDODS gcmd] [http://dods.jpl.nasa.gov/dods-bin/nph-dods/catalogs/seawinds/L3/seawinds_L3.dat.ascii?DODS_URL,DODS_Date_Time(seawinds_L3) catalog] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/sws_L3.html info] 
+* SeaWinds on QuikSCAT Level 2B-Derived Multialgorithm Surface Wind Stress (JPL); Product #182: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/quikscat/stress/L2B/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?QSCAT_L2b_derived_windstress182&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/qscat_L2Bstress_rose.html info] 
+* SeaWinds on QuikSCAT Level 3-Derived Multialgorithm Surface Wind Stress (JPL); Product #183: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/quikscat/stress/L3/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?QSCAT_L3_derived_windstress183&amp;interface=FROMDODS gcmd] [http://dods.jpl.nasa.gov/dods-bin/nph-dods/catalogs/quikscat/L3/quikscat_L3_stress.dat.ascii?DODS_URL,DODS_Date_Time(QuikSCAT_L3_stress) catalog] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/qscat_L3stress.html info] 
+* SeaWinds on ADEOS-II Level 2B Derived Multialgorithm Surface Wind Stress (JPL); Product #195: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/seawinds/stress/L2B/data/ dir] [http://gcmd.nasa.gov/getdif.htm?Seawind_L2b_derivedwindstres195&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/sws_L2Bstress.html info] 
+* SeaWinds on ADEOS-II Level 3 Derived Multialgorithm Surface Wind Stress (JPL); Product #196: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/ocean_wind/seawinds/stress/L3/data/ dir] [http://gcmd.gsfc.nasa.gov/getdif.htm?SeaWind_L3_derivedwindstress196&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/sws_L3stress.html info] 
+
+=== Sea Surface Temperature === 
+* AVHRR weekly global 18km gridded MCSST (Miami); Product #016: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/sea_surface_temperature/avhrr/mcsst/data/weekly/ dir] [http://gcmd.nasa.gov/getdif.htm?AVHRR_18km_Weekly_MCSST_16&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/avhrr_wkly_mcsst.html info] 
+* Global Ocean Surface Temperature Atlas Plus, GOSTAplus (MIT, UKMO, JPL); Product #087: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/sea_surface_temperature/buoy/gostaplus/hdf/Data/ dir] [http://gcmd.nasa.gov/getdif.htm?Global_Ocean_Surface_Temperatur&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/gosta_cdrom.html info] 
+* AVHRR Oceans Pathfinder global equal-angle best SST values (NOAA, NASA); Product #102: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/sea_surface_temperature/avhrr/pathfinder/data_v4.1/best_sst/ dir] [http://gcmd.nasa.gov/getdif.htm?JPL_AVHRR_PATHFDR_BestSST_V4.1&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/avhrr_pathfinder_sst.html info] [http://dods.jpl.nasa.gov/dods-bin/nph-dods/catalogs/pathfinder/daily-09km.dat.ascii?DODS_URL,DODS_Date_Time(Pathfinder) catalog] 
+* MODIS Terra Global Level 3 Mapped Thermal IR SST; Product #162: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/sea_surface_temperature/modis/data/terra/L3_mapped/sst/ dir] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/modis_sst.html info] [http://gcmd.nasa.gov/getdif.htm?MODIS_L3_MAPPED_SST_162&amp;interface=FROMDODS gcmd] 
+* MODIS Terra Global Level 3 Mapped Mid-IR SST; Product #163: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/sea_surface_temperature/modis/data/terra/L3_mapped/sst4/ dir] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/modis_sst.html info] [http://gcmd.nasa.gov/getdif.htm?MODIS_L3_MAPPED_SST4_163&amp;interface=FROMDODS gcmd] 
+* MODIS Aqua Global Level 3 Mapped Thermal IR SST; Product #184: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/sea_surface_temperature/modis/data/aqua/L3_mapped/sst/ dir] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/modis_sst.html info] [http://gcmd.nasa.gov/getdif.htm?MODIS_AQUA_L3_MAPPED_SST_184&amp;interface=FROMDODS gcmd] 
+* MODIS Aqua Global Level 3 Mapped Mid-IR SST; Product #185: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/sea_surface_temperature/modis/data/aqua/L3_mapped/sst4/ dir] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/modis_sst.html info] [http://gcmd.nasa.gov/getdif.htm?MODIS_AQUA_L3_MAPPED_SST4_185&amp;interface=FROMDODS gcmd] 
+
+=== Multi-Parameter === 
+* Sea Surface Temperature and Height, Global 0.5 and 1.0 deg grids (JPL, WOCE v3); Product #172: [http://dods.jpl.nasa.gov/dods-bin/nph-hdf/pub/data_collections/woce_v3/ dir] [http://gcmd.nasa.gov/getdif.htm?WOCE_V3_JPL_PODAAC&amp;interface=FROMDODS gcmd] [http://podaac.jpl.nasa.gov:2031/DATASET_DOCS/woce_v3.html info] 
+
+
+== NASA/JPL - Ocean Earth Science Information Partner (OceanESIP) ==
+
+=== WOCE - TOPEX/POSEIDON 0.5Degree Gridded Sea Surface Height === 
+: [http://dods.jpl.nasa.gov/dods-bin/nph-ff/catalogs/woce/topex/topex_05deg.catalog.ascii?DODS_URL,DODS_Date_Time(time) catalog] [http://dods.jpl.nasa.gov/dods-bin/nph-nc/pub/data_collections/woce_v3/topex/data/05_deg/ dir] [http://oceanesip.jpl.nasa.gov/sealevel/ info] 
+=== WOCE - TOPEX/POSEIDON 1.0Degree Gridded Sea Surface Height === 
+: [http://dods.jpl.nasa.gov/dods-bin/nph-ff/catalogs/woce/topex/topex_10deg.catalog.ascii?DODS_URL,DODS_Date_Time(time) catalog] [http://dods.jpl.nasa.gov/dods-bin/nph-nc/pub/data_collections/woce_v3/topex/data/10_deg/ dir] [http://oceanesip.jpl.nasa.gov/sealevel/ info] [http://gcmd.nasa.gov/getdif.htm?JPL_OCEANESIP_SSHR_GRID&amp;interface=FROMDODS gcmd] 
+
+== NOAA - National Climatic Data Center (NCDC) ==
+
+=== NCEP AWIPS Eta Model Data === 
+: [http://nomads.ncdc.noaa.gov:9090/dods/NCDC_NOAAPort_ETA/ dir] [http://gcmd.gsfc.nasa.gov/servlets/md/getdif.py?xsl=brief_display.xsl&amp;entry_id=ncdc_opendap_eta&amp;interface=FROMDODS gcmd] 
+=== NCEP AWIPS RUC Model Data === 
+: [http://nomads.ncdc.noaa.gov:9090/dods/NCDC_NOAAPort_RUC/ dir] [http://gcmd.gsfc.nasa.gov/servlets/md/getdif.py?xsl=brief_display.xsl&amp;entry_id=ncdc_opendap&amp;interface=FROMDODS gcmd] 
+=== NCEP AWIPS GFS Model Data === 
+: [http://gcmd.nasa.gov/getdif.htm?ncdc_GFS-avn&amp;interface=FROMDODS gcmd] [http://nomads.ncdc.noaa.gov:9090/dods/NCDC_NOAAPort_GFS/ dir] 
+=== NCEP Reanalysis === 
+* Surface Gauss: [http://www.cdc.noaa.gov/cgi-bin/nph-nc/Datasets/ncep.reanalysis/surface_gauss/ dir] 
+* surface: [http://www.cdc.noaa.gov/cgi-bin/nph-nc/Datasets/ncep.reanalysis/surface/ dir] 
+* Gaussian Grid: [http://www.cdc.noaa.gov/cgi-bin/nph-nc/Datasets/ncep.reanalysis2/gaussian_grid/ dir] 
+
+
+== NOAA/SWFSC Environmental Research Division  ==
+
+=== ERD OceanWatch data server === 
+: [http://oceanwatch.pfeg.noaa.gov/thredds/catalog.html dir] [Roy.Mendelssohn@noaa.gov email] 
+
+== NOAA - Northeast Fisheries Science Center (NMFS/NEFSC) ==
+
+=== Environmental Monitors on Lobster Traps ===
+: [http://gisweb.wh.whoi.edu:8080/dods/whoi/ dir] [http://gcmd.gsfc.nasa.gov/KeywordSearch/Metadata.do?Portal=gomodp&amp;KeywordPath=Freetext='eMOLT'&amp;OrigMetadataNode=GCMD&amp;EntryId=emolt&amp;MetadataView=Brief&amp;MetadataType=0&amp;lbnode=gcmd3a gcmd] [http://emolt.org info]
+=== Drifter tracks ===
+: [http://gisweb.wh.whoi.edu:8080/dods/whoi/ dir] [http://www.nefsc.noaa.gov/drifter info]
+=== Temperature and Salinity Profiles ===
+: [http://gisweb.wh.whoi.edu:8080/dods/whoi/ dir] [http://www.nefsc.noaa.gov/epd/ocean/MainPage/ShelfProperties.html info]
+
+== NOAA - Pacific Marine Environmental Laboratory (PMEL) ==
+
+=== EPIC in situ Oceanographic Datasets === 
+: [http://dapper.pmel.noaa.gov/dchart/index url] [http://dapper.pmel.noaa.gov/dapper/epic/ dir] [http://www.epic.noaa.gov/epic info] 
+* AFSC/RACE Bering Sea MBT Data: [http://www.epic.noaa.gov:10100/dods/epic/race_beringsea_prof_mbt.cdp.dds dds] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Alaska (FOCI) Time Series Ocean Subsurface Data: [http://www.epic.noaa.gov:10100/dods/epic/foci_alaska_time_ocean.cdp.dds dds] [http://www.pmel.noaa.gov/foci/home.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Alaska (FOCI) time series surface meteorology data: [http://www.epic.noaa.gov:10100/dods/epic/foci_alaska_time_met.cdp.dds dds] [http://www.pmel.noaa.gov/foci/home.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_seltime.htm las] 
+* Alaska CTD (data rescue): [http://www.epic.noaa.gov:10100/dods/epic/alaska_prof_ctd.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Arctic Bottle (data rescue): [http://www.epic.noaa.gov:10100/dods/epic/arctic_prof_bot.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Arctic CTD (data rescue): [http://www.epic.noaa.gov:10100/dods/epic/arctic_prof_ctd.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Arctic Time Series Drifter Buoy Data: [http://www.epic.noaa.gov:10100/dods/epic/arctic_time_drf.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_seltime.htm las] 
+* Arctic Time Series Ocean Subsurface Data: [http://www.epic.noaa.gov:10100/dods/epic/arctic_time_ocean.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_seltime.htm las] 
+* Asia Region CTD (data rescue): [http://www.epic.noaa.gov:10100/dods/epic/asia_prof_ctd.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Asia Time Series Ocean Subsurface Data: [http://www.epic.noaa.gov:10100/dods/epic/asia_time_ocean.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_seltime.htm las] 
+* Atlantic bottle data provided by Dr. Reid at Scripps: [http://www.epic.noaa.gov:10100/dods/epic/reid_atl_prof_bot.cdp.dds dds] [http://www.epic.noaa.gov/epic/select/reid.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* FOCI Alaska Bottle: [http://www.epic.noaa.gov:10100/dods/epic/foci_alaska_prof_bot.cdp.dds dds] [http://www.pmel.noaa.gov/foci/home.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] [http://gcmd.nasa.gov/getdif.htm?OAR0065&amp;interface=FROMDODS gcmd] 
+* FOCI Alaska CTD: [http://www.epic.noaa.gov:10100/dods/epic/foci_alaska_prof_ctd.cdp.dds dds] [http://www.pmel.noaa.gov/foci/home.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] [http://gcmd.nasa.gov/getdif.htm?OAR0065&amp;interface=FROMDODS gcmd] 
+* Global Carbon Cycle (GCC) CO2 Bottle Data: [http://www.epic.noaa.gov:10100/dods/epic/co2_prof_bot.cdp.dds dds] [http://www.pmel.noaa.gov/co2/co2-home.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Indian bottle data provided by Dr. Reid at Scripps: [http://www.epic.noaa.gov:10100/dods/epic/reid_ind_prof_bot.cdp.dds dds] [http://www.epic.noaa.gov/epic/select/reid.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Pacific bottle data provided by Dr. Reid at Scripps: [http://www.epic.noaa.gov:10100/dods/epic/reid_pacific_prof_bot.cdp.dds dds] [http://www.epic.noaa.gov/epic/select/reid.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Pacific CTD (data rescue): [http://www.epic.noaa.gov:10100/dods/epic/pacific_prof_ctd.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Puget Sound CTD (data rescue): [http://www.epic.noaa.gov:10100/dods/epic/puget_prof_ctd.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* Puget Sound Time Series Ocean Subsurface Data: [http://www.epic.noaa.gov:10100/dods/epic/puget_time_ocean.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_seltime.htm las] 
+* Underway pCO2 Data: [http://www.epic.noaa.gov:10100/dods/epic/uwpco2_time_track.cdp.dds dds] [http://www.pmel.noaa.gov/co2/uwpco2 info] [http://www.pmel.noaa.gov/co2/uwpco2 las] 
+* VENTS CTD data: [http://www.epic.noaa.gov:10100/dods/epic/vents_prof_ctd.cdp.dds dds] [http://www.pmel.noaa.gov/vents/ info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* West Coast CTD (data rescue): [http://www.epic.noaa.gov:10100/dods/epic/wcoast_prof_ctd.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_selprof.htm las] 
+* West Coast Time Series Ocean Subsurface Data: [http://www.epic.noaa.gov:10100/dods/epic/wcoast_time_ocean.cdp.dds dds] [http://www.pmel.noaa.gov/data_rescue/data_rescue.html info] [http://www.epic.noaa.gov/epic/ewb/ewb_seltime.htm las] 
+* WOCE Sea Level data from UHSLC: [http://www.epic.noaa.gov:10100/dods/epic/woce_sl_time_monthly.cdp.dds dds] [http://uhslc.soest.hawaii.edu info] [http://www.epic.noaa.gov/epic/ewb/ewb_seltime.htm las] [http://gcmd.nasa.gov/getdif.htm?UHSLC_WOCE_FAST_SEALEVEL&amp;interface=FROMDODS gcmd] 
+
+=== OSCAR - Ocean Surface Current Analyses - Real time === 
+: [http://dapper.pmel.noaa.gov/dapper/oscar/ dir] [http://www.oscar.noaa.gov/ url] [http://www.oscar.noaa.gov info] 
+* Tropical Pacific Sea Surface Velocity - filtered: [http://dapper.pmel.noaa.gov/dapper/oscar/ dir] [http://www.oscar.noaa.gov/index url] [http://www.epic.noaa.gov/dapper/oscar/5d-filter.nc.dds dds] [http://www.epic.noaa.gov/dapper/oscar/5d-filter.nc baseURL] [http://www.oscar.noaa.gov/methodology.html info] 
+* Tropical Pacific Sea Surface Velocity - unfiltered: [http://dapper.pmel.noaa.gov/dapper/oscar/ dir] [http://www.oscar.noaa.gov/index url] [http://www.epic.noaa.gov/dapper/oscar/5d-unfilter.nc.dds dds] [http://www.epic.noaa.gov/dapper/oscar/5d-filter.nc baseURL] [http://www.oscar.noaa.gov/methodology.html info] 
+
+=== Realtime Global Argo data === 
+: [http://dapper.pmel.noaa.gov/dchart/index url] [http://dapper.pmel.noaa.gov/dapper/argo/ dir] 
+=== Realtime NDBC meteorology === 
+: [http://dapper.pmel.noaa.gov/dchart/index url] [http://dapper.pmel.noaa.gov/dchart/dchart?action=info&amp;dsetid=c318f3838a5f4895395317ff2f0ab65 info] [http://dapper.pmel.noaa.gov/dapper/epic/ dir] 
+=== Realtime TAO El Nino data === 
+: [http://dapper.pmel.noaa.gov/dchart/index url] [http://dapper.pmel.noaa.gov/dapper/epic/ dir] 
+
+== North Carolina Ocean Observing System (NC-COOS) ==
+
+=== NC-COOS Data === 
+: [http://nccoos.unc.edu/ info] 
+
+== Science Applications International Corporation (SAIC) ==
+
+=== De Soto Canyon Moorings - Eddy Intrusion Study === 
+: [http://gcmd.nasa.gov/getdif.htm?DeSoto_Canyon_Time_Series&amp;interface=FROMDODS gcmd] [http://saicdods.saicocean.com/ info] 
+
+== Skidaway Institute of Oceanography (SKIO) ==
+
+=== South Atlantic Bight Synoptic Offshore Observational Network (SABSOON) === 
+: [http://seacoos.skio.peachnet.edu/cgi-bin/nph-dods/proc_data/ dir] 
+
+== Texas A&amp;M University (TAMU) ==
+
+=== LATEX - Louisiana-Texas Physical Oceanography Program (1992-1994) === 
+* LaTex CTD Data: [http://gcmd.nasa.gov/getdif.htm?NOAA_NODC_LATEX_A_CDROM&amp;interface=FROMDODS gcmd] [http://seawater.tamu.edu/noppdodsgom/data.html info] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/hydro/latex/ dir] 
+* LaTex Current Meter Data: [http://gcmd.nasa.gov/getdif.htm?NOAA_NODC_LATEX_A_CDROM&amp;interface=FROMDODS gcmd] [http://seawater.tamu.edu/noppdodsgom/data.html info] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/currents/latex/ dir] 
+
+=== NEGOM - Northeastern Gulf of Mexico Physical Oceanography Program (1997-1999) === 
+* NeGOM CTD Data: [http://seawater.tamu.edu/noppdodsgom/data.html info] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/hydro/negom/ dir] 
+
+=== DEEPWATER REANALYSIS === 
+* Deepwater Current Meter Data: [http://seawater.tamu.edu/noppdodsgom/data.html info] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/currents/DWCURRENT/ dir] 
+* Deepwater CTD Data (accepted): [http://seawater.tamu.edu/noppdodsgom/data.html info] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/hydro/deepwater/ctd_std/accepted/ dir] 
+* Deepwater CTD Data (rejected): [http://seawater.tamu.edu/noppdodsgom/data.html info] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/hydro/deepwater/ctd_std/rejected/ dir] 
+* Deepwater XBT Data: [http://seawater.tamu.edu/noppdodsgom/data.html info] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/hydro/deepwater/xbt/ dir] 
+* Deepwater XCP Data (expendable current profiler): [http://seawater.tamu.edu/noppdodsgom/data.html info] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/hydro/deepwater/xcp/ dir] 
+
+=== USGS River Discharge Data for the northeastern Gulf of Mexico === 
+* Alabama River at Claiborne L&amp;D Near Monroeville, AL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02428400.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02428400.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Alabama River at Millers Ferry L&amp;D Near Camden, AL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02427506.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02427506.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Tombigbee River at Coffeeville L&amp;D Near Coffeeville, AL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02469761.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02469761.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Apalachicola River Near Sumatra, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02359170.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02359170.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Tombigbee River at Demopolis L&amp;D Near Coatopa, AL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/0246700.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/0246700.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Pascagoula River at Graham Ferry, MS: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02479310.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02479310.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Escambia River Near Molino, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02376033.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02376033.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Choctawhatchee River Near Bruce, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02366500.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02366500.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Suwannee River at Branford, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02320500.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02320500.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Pearl River Near Monticello, MS: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02488500.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02488500.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Escambia River Near Century, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02375500.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02375500.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Ochlockonee River Near Bloxham, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02330000.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02330000.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Yellow River at Milligan, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02368000.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02368000.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Perdido River at Barrineay Park, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02376500.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02376500.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Aucilla River Near Scanlon, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02326512.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02326512.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Blackwater River Near Baker, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02370000.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02370000.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Steinhatchee River Near Cross City, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02324000.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02324000.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Echofina River Near Perry, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02326000.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02326000.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+* Fenholloway River Near Foley, FL: [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02324400.nc url] [http://seawater.tamu.edu/cgi-bin/nph-nc/noppdodsgom/data/rivers/02324400.nc baseURL] [http://seawater.tamu.edu/noppdodsgom/data.html info] 
+
+
+== UNAVCO - Using Global Positioning System (GPS) technology for Earth sciences research ==
+
+=== Velocity Fields from Global Positioning System(GPS) === 
+: [http://jules.unavco.org/DODS/nph-ff/data/dxdt/gpsvel/gpsvel_0_0.dat url] 
+
+== UCAR - Data Portal ==
+
+=== ASSIMtF_CAMAMOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/ASSIMtF_CAMAMOM3/ dir] 
+=== ASSIMtF_CAMMOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/ASSIMtF_CAMMOM3/ dir] 
+=== ASSIMtF_COLACAMMOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/ASSIMtF_COLACAMMOM3/ dir] 
+=== ASSIMtF_COLAMOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/ASSIMtF_COLAMOM3/ dir] 
+=== ASSIMt_MOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/ASSIMt_MOM3/ dir] 
+=== C20C === 
+: [http://dataportal.ucar.edu:9191/dods/C20C/ dir] 
+=== CAM3_T42_B30_004 === 
+: [http://dataportal.ucar.edu:9191/dods/CAM3_T42_B30_004/ dir] 
+=== CAM3_T85_B30_009 === 
+: [http://dataportal.ucar.edu:9191/dods/CAM3_T85_B30_009/ dir] 
+=== CAM_COLA_MOM3_6IE === 
+: [http://dataportal.ucar.edu:9191/dods/CAM_COLA_MOM3_6IE/ dir] 
+=== CAM_lhfCOLA_MOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/CAM_lhfCOLA_MOM3/ dir] 
+=== COLA2.2_MOM3_MPI_SW_SF_ACe2_def === 
+: [http://dataportal.ucar.edu:9191/dods/COLA2.2_MOM3_MPI_SW_SF_ACe2_def/ dir] 
+=== COLA2.2_MOM3_MPI_SW_SF_ACe2_newdef === 
+: [http://dataportal.ucar.edu:9191/dods/COLA2.2_MOM3_MPI_SW_SF_ACe2_newdef/ dir] 
+=== COLA_lhfCAM_MOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/COLA_lhfCAM_MOM3/ dir] 
+=== ECH4_CMIP === 
+: [http://dataportal.ucar.edu:9191/dods/ECH4_CMIP/ dir] 
+=== ECH4_SENSE === 
+: [http://dataportal.ucar.edu:9191/dods/ECH4_SENSE/ dir] 
+=== Perfect_10AGCM === 
+: [http://dataportal.ucar.edu:9191/dods/Perfect_10AGCM/ dir] 
+=== SALLJEX === 
+: [http://dataportal.ucar.edu:9191/dods/SALLJEX/ dir] 
+=== UNCOUPLED_COLA2.2_ObsSST === 
+: [http://dataportal.ucar.edu:9191/dods/UNCOUPLED_COLA2.2_ObsSST/ dir] 
+=== c270 === 
+: [http://dataportal.ucar.edu:9191/dods/c270/ dir] 
+=== cam3_aquaplanet === 
+: [http://dataportal.ucar.edu:9191/dods/cam3_aquaplanet/ dir] 
+=== ccsm3 === 
+: [http://dataportal.ucar.edu:9191/dods/ccsm3/ dir] 
+=== cfs === 
+: [http://dataportal.ucar.edu:9191/dods/cfs/ dir] 
+=== cfs_def === 
+: [http://dataportal.ucar.edu:9191/dods/cfs_def/ dir] 
+=== cfsie === 
+: [http://dataportal.ucar.edu:9191/dods/cfsie/ dir] 
+=== control_0627 === 
+: [http://dataportal.ucar.edu:9191/dods/control_0627/ dir] 
+=== flat1_0627 === 
+: [http://dataportal.ucar.edu:9191/dods/flat1_0627/ dir] 
+=== flat2_0627 === 
+: [http://dataportal.ucar.edu:9191/dods/flat2_0627/ dir] 
+=== pacemaker === 
+: [http://dataportal.ucar.edu:9191/dods/pacemaker/ dir] 
+=== peak_0627 === 
+: [http://dataportal.ucar.edu:9191/dods/peak_0627/ dir] 
+=== poseidon === 
+: [http://dataportal.ucar.edu:9191/dods/poseidon/ dir] 
+=== sl_c_0620 === 
+: [http://dataportal.ucar.edu:9191/dods/sl_c_0620/ dir] 
+=== sl_c_Consol_Gaus0209lat === 
+: [http://dataportal.ucar.edu:9191/dods/sl_c_Consol_Gaus0209lat/ dir] 
+=== sl_c_Gausolin === 
+: [http://dataportal.ucar.edu:9191/dods/sl_c_Gausolin/ dir] 
+=== slab_control_test1 === 
+: [http://dataportal.ucar.edu:9191/dods/slab_control_test1/ dir] 
+=== slab_control_test2 === 
+: [http://dataportal.ucar.edu:9191/dods/slab_control_test2/ dir] 
+=== symmetric_default_control === 
+: [http://dataportal.ucar.edu:9191/dods/symmetric_default_control/ dir] 
+=== symmetric_default_flat1 === 
+: [http://dataportal.ucar.edu:9191/dods/symmetric_default_flat1/ dir] 
+=== symmetric_default_flat2 === 
+: [http://dataportal.ucar.edu:9191/dods/symmetric_default_flat2/ dir] 
+=== symmetric_default_peak === 
+: [http://dataportal.ucar.edu:9191/dods/symmetric_default_peak/ dir] 
+=== tCAM_rCOLA_MOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/tCAM_rCOLA_MOM3/ dir] 
+=== tCAM_rsCOLA_MOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/tCAM_rsCOLA_MOM3/ dir] 
+=== tCOLA_rCAM_MOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/tCOLA_rCAM_MOM3/ dir] 
+=== tCOLA_rsCAM_MOM3 === 
+: [http://dataportal.ucar.edu:9191/dods/tCOLA_rsCAM_MOM3/ dir] 
+=== taudiff === 
+: [http://dataportal.ucar.edu:9191/dods/taudiff/ dir] 
+=== v270 === 
+: [http://dataportal.ucar.edu:9191/dods/v270/ dir] 
+=== v270a === 
+: [http://dataportal.ucar.edu:9191/dods/v270a/ dir] 
+
+== United States Geological Survey (USGS) - Woods Hole Field Center ==
+
+=== WHFC Moored Time Series Data === 
+: [http://stellwagen.er.usgs.gov/ info] 
+* Argo Merchant Experiment: [http://stellwagen.er.usgs.gov/argo_merchant.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/ARGO_MERCHANT/ dir] 
+* Currents and Sediment Transport in Buzzards Bay: [http://stellwagen.er.usgs.gov/buzz_bay.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/BUZZ_BAY/ dir] 
+* California Area Monitoring Program (CAMP): [http://stellwagen.er.usgs.gov/camp.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/CAMP/ dir] 
+* Currents and Sediment Transport in Cape Cod Bay: [http://stellwagen.er.usgs.gov/cape_cod_bay.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/CAPE_COD_BAY/ dir] 
+* Cape Cod Misc.: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/CC_MISC/ dir] 
+* Deep Reef: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/DEEP_REEF/ dir] 
+* Deep Water Dump Site 106: [http://stellwagen.er.usgs.gov/dwds_106.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/DWDS_106/ dir] 
+* Ecology of Harmful Algal Blooms I (ECOHAB): [http://stellwagen.er.usgs.gov/ecohab_i.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/ECOHAB_I/ dir] 
+* Ecology of Harmful Algal Blooms II (ECOHAB): [http://stellwagen.er.usgs.gov/ecohab_ii.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/ECOHAB_II/ dir] 
+* Euro Strataform: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/EUROSTRATAFORM/ dir] 
+* Farallones: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/FARALLONES/ dir] 
+* Currents and Sediment Transport Studies on Georges Bank: [http://stellwagen.er.usgs.gov/gb_sed.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/GB_SED/ dir] 
+* U.S. GLOBEC Georges Bank Program: [http://stellwagen.er.usgs.gov/globec_gb.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/GLOBEC_GB/ dir] 
+* U.S. GLOBEC Great South Channel Circulation Experiment: [http://stellwagen.er.usgs.gov/globec_gsc.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/GLOBEC_GSC/ dir] 
+* Deep Circulation in the Gulf of Maine: [http://stellwagen.er.usgs.gov/gulf_maine.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/GULF_MAINE/ dir] 
+* Circulation and Sediment Transport in the Hudson Shelf Valley: [http://stellwagen.er.usgs.gov/hudson_svalley.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/HUDSON_SVALLEY/ dir] 
+* Karin Ridge: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/KARIN_RIDGE/ dir] 
+* Lydonia Canyon Dynamics Experiment: [http://stellwagen.er.usgs.gov/lydonia_c.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/LYDONIA_C/ dir] 
+* Mamala Bay: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MAMALA_BAY/ dir] 
+* Sediment Transport Observations in the Middle Atlantic Bight: [http://stellwagen.er.usgs.gov/mab_sed.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MAB_SED/ dir] 
+* Massachusetts Bay Circulation Experiment: [http://stellwagen.er.usgs.gov/mbay_circ.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MBAY_CIRC/ dir] 
+* Massachusetts Bay Internal Wave Experiment: [http://stellwagen.er.usgs.gov/mbay_iwave.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MBAY_IWAVE/ dir] 
+* Long-Term Monitoring in Western Massachusetts Bay: [http://stellwagen.er.usgs.gov/mbay_lt.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MBAY_LT/ dir] 
+* Long-term Monitoring on Stellwagen Bank: [http://stellwagen.er.usgs.gov/mbay_stell.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MBAY_STELL/ dir] 
+* Currents and Sediment Transport in Western Massachusetts Bay: [http://stellwagen.er.usgs.gov/mbay_west.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MBAY_WEST/ dir] 
+* Mobile Bay: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MOBILE_BAY/ dir] 
+* Molokai: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MOLOKAI/ dir] 
+* Monterey Bay: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/MONTEREY/ dir] 
+* Currents on the New England Continental Slope: [http://stellwagen.er.usgs.gov/ne_slope.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/NE_SLOPE/ dir] 
+* Oceanographer Canyon Dynamics Experiment: [http://stellwagen.er.usgs.gov/oceanog_c.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/OCEANOG_C/ dir] 
+* Orange County, CA: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/ORANGE_COUNTY/ dir] 
+* Lake Ponchartrain Project: [http://stellwagen.er.usgs.gov/ponchartrain.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/PONCHARTRAIN/ dir] 
+* PV Shelf: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/PV_SHELF/ dir] 
+* Sediment Transport Studies in the Southern Atlantic Bight: [http://stellwagen.er.usgs.gov/sab_sed.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/SAB_SED/ dir] 
+* Sediment Transport: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/SED_TRANS/ dir] 
+* Southern California: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/SOUTHERN_CAL/ dir] 
+* Sediment Transport on Shelves and Slopes (STRESS): [http://stellwagen.er.usgs.gov/stress.html info] [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/DATAFILES/STRESS/ dir] 
+* Hudson Shelf Valley: [http://stellwagen.er.usgs.gov/hudson.htm info] 
+* Gulf of Maine Bathymetry: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/data/gom/ dir] 
+* Time Series - Raw: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/data/time_series/raw/ dir] 
+* Time Series - Hourly: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/data/time_series/hourly/ dir] 
+* Time Series - Lowpass: [http://stellwagen.er.usgs.gov/cgi-bin/nph-dods/data/time_series/low-pass/ dir] 
+
+
+== University of Hawaii/SOEST - Sea Level Center ==
+
+=== Sea Level (daily) === 
+: [http://uhslc1.soest.hawaii.edu/uhslc/fast.html info] [http://gcmd.gsfc.nasa.gov/getdif.htm?UHSLC_WOCE_FAST_SEALEVEL&amp;interface=FROMDODS gcmd] 
+=== Sea Level (monthly) === 
+: [http://uhslc1.soest.hawaii.edu/uhslc/fast.html info] [http://gcmd.gsfc.nasa.gov/getdif.htm?UHSLC_WOCE_FAST_SEALEVEL&amp;interface=FROMDODS gcmd] 
+
+== University of Massachusetts - School of Marine Science and Technology ==
+
+=== Gulf of Maine / Georges Bank Full-Resolution SST Satellite Images  === 
+: [http://celtic.cmast.umassd.edu/projects.html info] [http://rodan.smast.umassd.edu/cgi-bin/nph-dsp/globec_std/ dir] [http://rodan.smast.umassd.edu/cgi-bin/nph-ff/catalog/gom_std.dat.ascii?DODS_URL,DODS_Date_Time(time) catalog] 
+=== Gulf of Maine / Georges Bank Optimally-Interpolated SST Satellite Images  === 
+: [http://celtic.cmast.umassd.edu/projects.html info] [http://rodan.smast.umassd.edu/cgi-bin/nph-dsp/globec_oi_images/ dir] [http://rodan.smast.umassd.edu/cgi-bin/nph-ff/catalog/gom_oisst.dat.ascii?DODS_URL,DODS_Date_Time(time) catalog] 
+
+== University of Miami - Rosenstiel School of Marine and Atmospheric Science (RSMAS) ==
+
+=== WERA === 
+: [http://oceanlab.rsmas.miami.edu/cgi-bin/nph-dods/wera/ dir] 
+=== EFSIS === 
+: [http://oceanlab.rsmas.miami.edu/cgi-bin/nph-dods/efsis/ dir] 
+=== Explorer of the Seas === 
+: [http://oceanlab.rsmas.miami.edu/cgi-bin/nph-dods/explorer/ dir] 
+
+== University of Rhode Island - Graduate School of Oceanography ==
+
+=== 1.1km PathFinder AVHRR Archive  === 
+* Northwest Atlantic: [http://dods.gso.uri.edu/dods-3.4/nph-dods/Pathfinder/Northwest_Atlantic/ dir] 
+* Northeast Pacific: [http://dods.gso.uri.edu/dods-3.4/nph-dods/Pathfinder/Northeast_Pacific/ dir] 
+* Northwest Pacific: [http://dods.gso.uri.edu/dods-3.4/nph-dods/Pathfinder/Northwest_Pacific/ dir] 
+
+=== Pathfinder Eroded Global Climatology === 
+: [http://gcmd.nasa.gov/getdif.htm?PathEro_Global_Climatology_URI&amp;interface=FROMDODS gcmd] [http://dods.gso.uri.edu/cgi-bin/nph-dods/catalog/pathero.dat.ascii?DODS_URL,DODS_Date_Time(climatology) catalog] [http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/sst_clima_pathero/ dir] 
+=== Reynolds Monthly Climatology === 
+: [http://gcmd.nasa.gov/getdif.htm?Reynolds_Climatology_URI&amp;interface=FROMDODS gcmd] [http://dods.gso.uri.edu/cgi-bin/nph-dods/catalog/reynolds.dat.ascii?DODS_URL,DODS_Date_Time(climatology) catalog] [http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/sst_clima_reynolds/ dir] 
+=== GOSTA Global Atlas === 
+: [http://gcmd.nasa.gov/getdif.htm?ds289.1&amp;interface=FROMDODS gcmd] [http://dods.gso.uri.edu/cgi-bin/nph-dods/catalog/gosta.dat.ascii?DODS_URL,DODS_Date_Time(climatology) catalog] [http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/sst_clima_gosta/ dir] 
+=== Narragansett Bay === 
+: [http://dods.gso.uri.edu/cgi-bin/nph-dods/nbnerr url] [http://dods.gso.uri.edu/cgi-bin/nph-dods/nbnerr baseURL] 
+=== Rome Point Investigations: Narragansett Bay Icthyoplankton (FOCUS) === 
+: [http://dods.gso.uri.edu/cgi-bin/nph-dods/focuslocation url] [http://dods.gso.uri.edu/cgi-bin/nph-dods/focuslocation baseURL] 
+=== Vertical Acoustic Echo Time in Kuroshio Region off SW Japan === 
+* Inverted Echo Sounder Locations: [http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/ies_locations.dat url] [http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/ies_locations.dat baseURL] 
+* Inverted Echo Sounder Data: [http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/iess.dat url] [http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/iess.dat baseURL] 
+
+
+== University of South Florida - Institute for Marine Remote Sensing (USF/IMaRS) ==
+
+=== Sea Surface Temperature Imagery (AVHRR) / Full Swath === 
+: [http://www.imars.usf.edu/dods-bin/nph-dods/SST_NEW/husf/products/ dir] 
+=== SeaWiFS Imagery - Password Protected === 
+: [http://seawifs.imars.usf.edu/dods-bin/nph-dods/SWF/products/ dir] 
+=== SeaWiFS Imagery - Historical / Publically Accessible === 
+
+
+== University of South Florida - Coastal Ocean Monitoring and Prediction System (USF/COMPS) ==
+
+=== COMPS/SEA-COOS Data === 
+: [http://gcmd.nasa.gov/getdif.htm?COMPS&amp;interface=FROMDODS gcmd] [http://comps.marine.usf.edu/DODS/ info] 
+
+== US GODAE - Global Ocean Data Assimilation Experiment (USGODAE) ==
+
+=== NOAA NCEP GFS Model === 
+: [http://gcmd.nasa.gov/getdif.htm?NOAA_NCEP_GFS_Model&amp;interface=FROMDODS gcmd] [http://usgodae2.usgodae.org/las/servlets/dataset?catitem=741 las] [http://cola8.iges.org:9191/dods/gfs/ dir] 
+=== Coupled Ocean Atmosphere Mesoscale Prediction System (COAMPS) === 
+* COAMPS Central America: [http://www.nrlmry.navy.mil/coamps-web/web/home info] [http://usgodae2.usgodae.org/las/servlets/dataset?catitem=742 las] [http://gcmd.nasa.gov/getdif.htm?COAMPS&amp;interface=FROMDODS gcmd] [http://www.usgodae.org/dods/GDS/coamps_cent_am/ dir] 
+* COAMPS Continental United States: [http://www.nrlmry.navy.mil/coamps-web/web/home info] [http://usgodae2.usgodae.org/las/servlets/dataset?catitem=774 las] [http://gcmd.nasa.gov/getdif.htm?COAMPS&amp;interface=FROMDODS gcmd] [http://www.usgodae.org/dods/GDS/coamps_conus/ dir] 
+* COAMPS Eastern Pacific: [http://www.nrlmry.navy.mil/coamps-web/web/home info] [http://usgodae2.usgodae.org/las/servlets/dataset?catitem=805 las] [http://gcmd.nasa.gov/getdif.htm?COAMPS&amp;interface=FROMDODS gcmd] [http://www.usgodae.org/dods/GDS/coamps_e_pac/ dir] 
+* COAMPS Western Atlantic: [http://www.nrlmry.navy.mil/coamps-web/web/home info] [http://usgodae2.usgodae.org/las/servlets/dataset?catitem=838 las] [http://gcmd.nasa.gov/getdif.htm?COAMPS&amp;interface=FROMDODS gcmd] [http://www.usgodae.org/dods/GDS/coamps_w_atl/ dir] 
+
+=== Navy Operational Global Atmospheric Prediction System (NOGAPS) === 
+: [http://www.usgodae.org/cgi-bin/datalist.pl?summary=Go&amp;dset=fnmoc_forcing_nogaps info] [http://gcmd.nasa.gov/getdif.htm?NOGAPS&amp;interface=FROMDODS gcmd] [http://usgodae2.usgodae.org/las/servlets/dataset?catitem=933 las] [http://www.usgodae.org/dods/GDS/nogaps/ dir] 
+=== NOGAPS Computational Grids  === 
+: [http://www.usgodae.org/cgi-bin/datalist.pl?summary=Go&amp;dset=fnmoc_forcing_nogaps_comp info] [http://gcmd.nasa.gov/getdif.htm?NOGAPS_COMP&amp;interface=FROMDODS gcmd] [http://usgodae2.usgodae.org/las/servlets/dataset?catitem=741 las] [http://www.usgodae.org/dods/GDS/nogaps_comp/ dir] 
+=== Argo Profiling Temperature Salinity Floats === 
+: [http://www.usgodae.org/argo/argo.html info] [http://gcmd.nasa.gov/getdif.htm?ARGO&amp;interface=FROMDODS gcmd] [http://usgodae2.usgodae.org/las/servlets/dataset?catitem=1432 las]</text>
+      <sha1>ea9w7imsb5vvqo7ue0oa2n1bkc3srfn</sha1>
+    </revision>
+  </page>
+</mediawiki>

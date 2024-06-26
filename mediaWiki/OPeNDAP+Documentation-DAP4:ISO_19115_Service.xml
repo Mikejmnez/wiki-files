@@ -1,0 +1,66 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: ISO 19115 Service</title>
+    <ns>0</ns>
+    <id>781</id>
+    <revision>
+      <id>7714</id>
+      <parentid>7711</parentid>
+      <timestamp>2012-03-29T20:50:34Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>7714</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="793" sha1="128osbeptjyxa8z60ua9f1kk0nv441q" xml:space="preserve">== Overview ==
+
+This service provides ISO 19115 metadata for the Dataset, if any can be found.
+
+== Request ==
+
+The ISO 19115 service is invoked by appending the suffix &lt;font size="2"&gt;&lt;code&gt;.iso&lt;/code&gt;&lt;/font&gt; to the file part of the dataset's referent (aka base) URL and then dereferencing the new URL.
+
+The request a query string (constraint expression) is not required, but if present will obey the rules for constraints as would a [[DAP4:_Requests#Dataset_Request | DAP:4 Dataset Request]]
+
+== Response ==
+The ISO 19115 response is an XML document containing ISO 19115 metadata located in the  [[DAP4: Responses#Dataset_Response | DAP4: Dataset Response.]]
+
+== Errors ==
+
+[[DAP4: Responses#Error_Response | DAP4: Error Response.]]
+
+
+[[Category:Development|Development]][[Category:DAP4|DAP4]]</text>
+      <sha1>128osbeptjyxa8z60ua9f1kk0nv441q</sha1>
+    </revision>
+  </page>
+</mediawiki>

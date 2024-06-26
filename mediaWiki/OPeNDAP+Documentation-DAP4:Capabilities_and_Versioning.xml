@@ -1,0 +1,430 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Capabilities and Versioning</title>
+    <ns>0</ns>
+    <id>798</id>
+    <revision>
+      <id>8239</id>
+      <parentid>8040</parentid>
+      <timestamp>2012-05-10T20:48:45Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Discussion */</comment>
+      <origin>8239</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="18094" sha1="cdcrc55cpvp6pwaadcgvi5h7ka29zg5" xml:space="preserve">[[OPULS_Development | &lt;-- back to OPULS Development]]
+
+--[[User:EthanDavis|EthanDavis]] 13:32, 16 April 2012 (PDT)
+
+== Background ==
+
+Providing OPeNDAP clients with information on the particular capabilities of a given server and given dataset has been discussed many times. Types of capabilities include supported DAP versions, supported server-side functions. Another possible capability would be support for multiple encodings of the various OPeNDAP services. Providing capabilities documents can also make it easier to plan for extensibility and the future evolution of OPeNDAP.
+
+Negotiating versions using HTTP headers or URL keywords is described in [[DAP4:_DAP_Versions|DAP 4.0 Design doc]]. Advertising DAP protocol services is described in the [[DAP_Service_Terminus|DAP Service Terminus document]].
+
+== Problem addressed ==
+
+The proposal attempts to address the following requirements: 
+
+* Support for multiple versions of DAP protocol in a backwards compatible way
+* Support for extensibility and evolution of protocol
+* Support for multiple encoding formats (media types) for each resource type
+* Support description of server and dataset capabilities (e.g., server-side processing capabilities)
+
+== Proposed solution ==
+
+Provide dataset capabilities documents from the raw DAP dataset URL. A dataset's capabilities document includes links to the various OPeNDAP services for that dataset. Each link is described with a link relationship type and a media type. The link relationship type indicates what type of resource will be returned. The media type indicates the document type in which the returned resource will be encoded.
+
+Providing a dataset capabilities document with links to both DAP2 and DAP4 resources allows for DAP2 backward compatibility and will support protocol extensibility and future evolution of the protocol.
+
+=== Raw DAP Dataset URLs Return Capabilities Documents ===
+
+A GET request on a DAP dataset URL (e.g., '''&lt;nowiki&gt;http://server.org/some/path/data.nc&lt;/nowiki&gt;''') returns the capabilities document for the dataset. To take advantage of web caching, capabilities documents should try to be light weight (i.e., quick creation) and as stable as possible.
+
+A dataset capabilities document must contain a '''server''' section and a '''dataset''' section.
+
+The '''server''' section should include
+* a link to the full server capabilities document (if applicable)
+* a list of the DAP versions the server supports
+* the implementation version (e.g., "TDS 4.3.57" or "Hyrax 1.7.45")
+* a list of extensions the server supports
+
+The '''dataset''' section should include
+* a link to the full dataset capabilities document (this document)
+* links to all available OPeNDAP services for the dataset
+* a list of extensions supported for this dataset (links?)
+* a link to a constraint expression document detailing the constraint supported for this dataset
+* a list of the types of processing instructions supported for this dataset
+
+Dataset capabilities documents can be encoded in the following media types:
+
+* '''application/vnd.opendap.org.capabilities+xml'''
+* '''application/vnd.opendap.org.capabilities+json'''
+* '''application/vnd.opendap.org.capabilities+pbuf'''
+
+Definitions of these media types can be found in :
+
+* The DAP4 Capabilities XML schema (link) which is declared in the namespace '''&lt;nowiki&gt;http://opendap.org/ns/dap/capabilities&lt;/nowiki&gt;'''.
+* The DAP4 Capabilities JSON definition (link).
+* The DAP4 Capabilities protobuf definition (link).
+
+A link to a Dataset Capabilities document can be identified by the following link relationship type:
+
+* '''&lt;nowiki&gt;http://opendap.org/rel/dap/dataset&lt;/nowiki&gt;'''
+
+The URL of a link with this relation type can be used to GET the dataset capabilities document for the dataset.
+
+An example of an HTTP request for an XML encoded dataset capabilities document is given [[#Server Capabilities Document Request-Response|below]].
+
+=== DAP4 DDX ===
+
+A DAP4 DDX document describes the structure of a dataset and contains other metadata for that dataset. It must contain a link to the DAP4 Data and to a CE document that describes the constraints supported for this dataset.
+
+DAP4 DDX documents can be encoded in the following media types:
+
+* '''application/vnd.opendap.org.dap4.ddx'''
+* '''application/vnd.opendap.org.dap4.ddx+pbuf'''
+
+Definitions of these media types can be found in:
+
+* The DAP4 DDX XML schema (link) which is declared in the namespace '''&lt;nowiki&gt;http://opendap.org/ns/dap4/ddx&lt;/nowiki&gt;'''.
+* The DAP4 DDX JSON definition (link).
+* The DAP4 DDX protobuf definition (link).
+
+A link to a DAP4 DDX document can be identified by the following link relationship type:
+
+* '''&lt;nowiki&gt;http://opendap.org/rel/dap4/ddx&lt;/nowiki&gt;'''
+
+The URL of a link with this relation can be used to GET a DAP4 DDX resource. 
+
+=== DAP4 Data ===
+
+A DAP4 Data resource contains a subset of data from the dataset. They may be encoded in any of the following media types:
+
+* '''application/vnd.opendap.org.dap4.data'''
+* '''application/vnd.opendap.org.dap4.data+ascii'''
+* '''application/vnd.opendap.org.dap4.data+json'''
+* '''application/vnd.opendap.org.dap4.data+ncstream'''
+
+Definitions of these media types can be found in:
+
+* The DAP4 Data encoding specification (link).
+* The DAP4 Data ASCII/UTF-8 encoding specification (link).
+* The DAP4 Data JSON definition (link).
+* The DAP4 Data ncstream/cdmremote definition (link).
+
+A link to a DAP4 DDX document can be identified by the following link relationship type:
+
+'''&lt;nowiki&gt;http://opendap.org/rel/dap4/data&lt;/nowiki&gt;'''
+
+The URL of a link with this relation can be used to GET or POST a DAP4 data resource. (POST is used if a dataset session is desired, i.e., to freeze dynamically changing datasets, or if an asynchronous response is expected.)
+
+=== DAP4 Constraint Expression ===
+
+A DAP4 Constraint Expression document contains a constraint that is to be applied to the dataset. They may be encoded in any of the following media types:
+
+* '''application/vnd.opendap.org.dap4.ce''' (for GET, URL encoding)
+* '''application/vnd.opendap.org.dap4.ce+xml''' (for POST, request body encoding)
+
+Definitions of these media types can be found in:
+
+* The DAP4 CE URL encoding specification (link).
+* The DAP4 CE XML schema (link) which is declared in the namespace '''&lt;nowiki&gt;http://opendap.org/ns/dap4/ce&lt;/nowiki&gt;'''.
+* The DAP4 Data JSON definition (link).
+* The DAP4 Data ncstream/cdmremote definition (link).
+
+A link to a DAP4 CE document can be identified by the following link relationship type:
+
+* '''&lt;nowiki&gt;http://opendap.org/rel/dap4/ce&lt;/nowiki&gt;'''
+
+The URL of a link with this relation can be used to GET a DAP4 constraint expression document.
+
+Generally constraint expression are only used as part of a data request. This link relation type is given in case stand-alone constraint expression resources are found useful.
+
+&lt;blockquote&gt;NOTE: Could this document describe the types of constraints that can be applied to particular variables in a dataset? Is such a thing needed? If so, should it be a separate resource type.&lt;/blockquote&gt;
+
+=== DAP4 Server Capabilities Documents ===
+
+Do we need/want a server-level capabilities document? Or is a dataset-level one enough?
+
+
+Server capabilities documents are encoded in the same media types that are defined for the DAP4 Dataset Capabilities Documents (see [[#DAP4 Dataset Capabilities Documents|above]]).
+
+A link to a Server Capabilities document can be identified by the following link relationship type:
+
+* '''&lt;nowiki&gt;http://opendap.org/rel/dap/server&lt;/nowiki&gt;'''
+
+The URL of a link with this relation type can be used to GET the server capabilities document for the server.
+
+=== DAP2 DAS ===
+
+'''application/vnd.opendap.org.dap2.das'''
+
+A representation of this media type contains a DAP2 DAS document.
+
+=== DAP2 DDS ===
+
+'''application/vnd.opendap.org.dap2.dds'''
+
+A representation of this media type contains a DAP2 DDS document.
+
+=== DAP2 DDX ===
+
+'''application/vnd.opendap.org.dap2.ddx'''
+
+A representation of this media type contains a DAP2 DDX document declared in the namespace '''&lt;nowiki&gt;http://opendap.org/nc/dap2/ddx&lt;/nowiki&gt;'''.
+
+=== DAP2 Data ===
+
+* '''application/vnd.opendap.org.dap2.data'''
+* '''application/vnd.opendap.org.dap2.data+ascii'''
+
+A representation of one of these media types contains DAP2 data. See the DAP2 specification for details.
+
+=== DAP2 Constraint Expression ===
+
+* '''application/vnd.opendap.org.dap2.ce'''
+
+A representation of this media type contains a DAP2 constraint expression. Generally used as a DAP2 data URL query string. See the DAP2 specification for details.
+
+
+
+=== Extension Resource Types ===
+
+A number of extensions to the core DAP4 protocol have been discussed. Here are a few extensions and some resource types that we might consider:
+
+=== DAP4 Asynchronous Request/Response ===
+
+See [[DAP4: Asynchronous Request-Response Proposal]]
+
+=== DAP4 Server-Side Processing Instructions ===
+
+* '''application/vnd.opendap.org.dap4.processing+ferret'''
+* '''application/vnd.opendap.org.dap4.processing+grads'''
+* '''application/vnd.opendap.org.dap4.processing+jython'''
+* '''application/vnd.opendap.org.dap4.processing+jvm'''
+
+* '''&lt;nowiki&gt;http://opendap.org/rel/dap4/processing&lt;/nowiki&gt;'''
+
+== Rationale for the solution ==
+
+In an attempt to take advantage of the architecture of the web, this proposal is based on some RESTful ideas. REST targets networks of hypermedia resources connected to each other by the hyperlinks those resources contain. The links in the network can have link types that specify the type of resource that will be found at the end of the link. Link types define the set of information and the links that can be contained by a resource of that type. Each resource type can have multiple encodings in which a resource of that type can be represented.
+
+This architecture can make for a robust and extensible system. URLs can change and new links can be added without breaking the system.  The links in a resource provide an application the set of next available steps the application can take. Or another way of thinking about it, the network of hypermedia resources represent a virtual state machine for the web application.
+
+By specifying all URLs in links rather than defining them in a specification, the form of the URLs becomes an implementation detail, determined by the server, rather than a part of the specification. This helps remove some of the tight coupling often seen between client and server. (This does not, however, rule out the use of URL conventions, like file extensions to specify encoding forms. Some recommend support for both HTTP '''Accept''' headers and for file extensions [1].)
+
+By thinking in terms of link (resource) types and media types
+(encoding formats), specifications have a natural division into
+separate components.
+* The specification of a link/resource type defines the set of information and links allowed in a resources of that type.
+* The specification of a media type defines how the information and links allowed in the targetted resource type are encoded.
+* The specification of how the network application is bound to a specific transport protocol (like HTTP).
+
+To take advantage of the caching built into the web
+infrastructure, one should think about commonly used resources and
+whether they can be made somewhat stable and quick to return. Or at
+least be sure HTTP caching headers are used properly.
+
+The bottom line is that features of the chosen transport protocol should be used by web applications to the fullest extent possible to gain the advantages of the features of that transport protocol. A relevant quote from Wikipedia's REST page [2]:
+
+&lt;blockquote&gt;
+ RESTful applications maximize the use of the pre-existing,
+ well-defined interface and other built-in capabilities provided by
+ the chosen network protocol, and minimize the addition of new
+ application-specific features on top of it.
+&lt;/blockquote&gt;
+
+and another one specific to HTTP [2]:
+
+&lt;blockquote&gt;
+ HTTP, for example, has a very rich vocabulary in terms of verbs
+ (or "methods"), URIs, Internet media types, request and response
+ codes, etc. REST uses these existing features of the HTTP
+ protocol, and thus allows existing layered proxy and gateway
+ components to perform additional functions on the network such as
+ HTTP caching and security enforcement.
+&lt;/blockquote&gt;
+
+== Discussion ==
+
+[[User:Jimg|Jimg]] 13:48, 10 May 2012 (PDT) I would like to see this broken up into two or more papers where one specifies the proposed HTTP implementation of the requests and responses of DAP4. Others can specify the structure and interpretation of the Capabilities response and how a web service will support multiple versions of DAP, including DAP2 and DAP4 (and variants of those protocols, should we allow that).
+
+== Examples ==
+
+=== Server Capabilities Document Request-Response ===
+
+Client uses DAP dataset URL, '''&lt;nowiki&gt;http://server.org/dap/path/data.nc&lt;/nowiki&gt;''', to GET the dataset capabilities resource as an XML document:
+
+&lt;font size="2"&gt;&lt;pre&gt;
+GET /dap/path/data.nc HTTP/1.1
+Host: server.org
+Accept: application/vnd.opendap.org.capabilities+xml
+&lt;/pre&gt;&lt;/font&gt;
+
+The response might look like like:
+
+&lt;font size="2"&gt;&lt;source lang="xml"&gt;
+200 OK
+Content-Type: application/vnd.opendap.org.capabilities+xml;charset=UTF-8
+
+&lt;capabilities xmlns="http://opendap.org/ns/dap/capabilities"&gt;
+  &lt;server rel="http://opendap.org/rel/dap/server"
+          type="application/vnd.opendap.org.capabilities+xml,
+                application/vnd.opendap.org.capabilities+json,
+                application/vnd.opendap.org.capabilities+pbuf"
+          href="http://server/dap/capabilities"&gt;
+    &lt;protocolVersions&gt;
+      http://opendap.org/rel/dap2
+      http://opendap.org/rel/dap3
+      http://opendap.org/rel/dap4
+    &lt;/protocolVersions&gt;
+    &lt;implVersion&gt;TDS 4.3.54&lt;/implVersion&gt;
+    &lt;supportedExt&gt;...&lt;/supportedExt&gt;
+  &lt;/server&gt;
+  &lt;dataset rel="self"
+           type="application/vnd.opendap.org.capabilities+xml,
+                 application/vnd.opendap.org.capabilities+json,
+                 application/vnd.opendap.org.capabilities+pbuf"
+           href="http://server/dap/path/data.nc"&gt;
+    &lt;version name="dap2"&gt;
+
+      &lt;serviceLink rel="http://opendap.org/rel/dap2/das"
+                   type="application/vnd.opendap.org.dap2.das"
+                   href="http://server/some/path/data.nc.das"/&gt;
+      &lt;serviceLink rel="http://opendap.org/rel/dap2/dds"
+                   type="application/vnd.opendap.org.dap2.dds"
+                   href="http://server/dap/path/data.nc.dds"/&gt;
+      &lt;serviceLink rel="http://opendap.org/rel/dap2/ddx"
+                   type="application/vnd.opendap.org.dap2.ddx+xml"
+                   href="http://server/dap/path/data.nc.ddx"/&gt;
+      &lt;serviceLink rel="http://opendap.org/rel/dap2/dods"
+                   type="application/vnd.opendap.org.dap2.dods"
+                   href="http://server/dap/path/data.nc.dods"/&gt;
+      &lt;serviceLink rel="http://opendap.org/rel/dap2/dods"
+                   type="application/vnd.opendap.org.dap2.dods+ascii"
+                   href="http://server/dap/path/data.nc.ascii"/&gt;
+      &lt;constraintExp ...&gt;...&lt;/constraintExp&gt;
+      &lt;processing ...&gt;...&lt;/processing&gt;
+    &lt;/version&gt;
+    &lt;version name="dap4"&gt;
+      &lt;serviceLink rel="http://opendap.org/rel/dap4/description"
+                   type="application/vnd.opendap.org.dap4.description+xml,
+                         application/vnd.opendap.org.dap4.description+json,
+                         application/vnd.opendap.org.dap4.description+pbuf"
+                   href="http://server/dap/path/data.nc.ddx4"/&gt;
+      &lt;serviceLink rel="http://opendap.org/rel/dap4/data"
+                   type="application/vnd.opendap.org.dap4.data,
+                         application/vnd.opendap.org.dap4.data+ascii,
+                         application/vnd.opendap.org.dap4.data+json,
+                         application/vnd.opendap.org.dap4.data+ncstream"
+                   href="http://server/dap/path/data.nc.data"&gt;
+        &lt;constraintExp...&gt;...&lt;/constraintExp&gt;
+        &lt;processing ...&gt;...&lt;/processing&gt;
+      &lt;/serviceLink&gt;
+    &lt;/version&gt;
+  &lt;/dataset&gt;
+&lt;/capabilities&gt;
+&lt;/source&gt;&lt;/font&gt;
+
+=== Constrained Data Request-Response ===
+
+Request:
+&lt;font size="2"&gt;&lt;pre&gt;
+GET /dap/path/data.nc?x,y,temp HTTP/1.1
+Host: server.org
+Accept: application/vnd.opendap.org.dap4.data
+&lt;/pre&gt;&lt;/font&gt;
+
+Response:
+&lt;font size="2"&gt;&lt;source lang="xml"&gt;
+200 OK
+Content-Type: application/vnd.opendap.org.dap4.data
+ 
+&lt;ddx&gt;...&lt;/ddx&gt;...BINARY DATA...
+&lt;/source&gt;&lt;/font&gt;
+
+=== Create New Dataset with Constrained Data Request-Response ===
+
+Request:
+&lt;font size="2"&gt;&lt;pre&gt;
+POST /dap/path/data.nc HTTP/1.1
+Host: server.org
+Content-Type: application/vnd.opendap.org.dap4.ce+xml;charset=UTF-8
+ 
+&lt;constraintExp&gt;...&lt;/constraintExp&gt;
+&lt;/pre&gt;&lt;/font&gt;
+
+Response:
+&lt;font size="2"&gt;&lt;source lang="xml"&gt;
+201 Created
+Content-Type: application/vnd.opendap.org.dap4.capabilities+xml;charset=UTF-8
+ 
+&lt;capabilities xmlns="http://opendap.org/ns/dap/capabilities"&gt;
+  &lt;server ...&gt;...&lt;/server&gt;
+  &lt;dataset rel="self"
+           type="application/vnd.opendap.org.capabilities+xml,
+                 application/vnd.opendap.org.capabilities+json,
+                 application/vnd.opendap.org.capabilities+pbuf"
+           href="http://server/dap/path/data.nc-ABCD"&gt;
+    &lt;dap:source&gt;
+      &lt;dataset type="application/vnd.opendap.org.capabilities+xml,
+                     application/vnd.opendap.org.capabilities+json,
+                     application/vnd.opendap.org.capabilities+pbuf"
+               href="http://server/dap/path/data.nc" /&gt;
+      &lt;constraintExp&gt;
+        ...
+      &lt;/constraintExp&gt;
+    &lt;/dap:source&gt;
+    &lt;version name="dap2"&gt;
+      ...
+    &lt;/version&gt;
+    &lt;version name="dap4"&gt;
+      ...
+    &lt;/version&gt;
+  &lt;/dataset&gt;
+&lt;/capabilities&gt;
+&lt;/source&gt;&lt;/font&gt;
+
+== Some References ==
+
+[1] http://stackoverflow.com/a/385216
+* A stackoverflow answer to the question "Use 'Accept' header or extension to identify resource type?" Answer: the ideal would be to implement both.
+
+[2] http://en.wikipedia.org/wiki/Representational_state_transfer
+
+[3] http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm</text>
+      <sha1>cdcrc55cpvp6pwaadcgvi5h7ka29zg5</sha1>
+    </revision>
+  </page>
+</mediawiki>

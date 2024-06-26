@@ -1,0 +1,120 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>HAI Use Case: View/set user-roles and their mapping to URLs</title>
+    <ns>0</ns>
+    <id>615</id>
+    <revision>
+      <id>6035</id>
+      <parentid>6034</parentid>
+      <timestamp>2010-11-09T19:39:26Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>6035</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2885" sha1="ndz741xqpj7howcd5c34b9n25chjs9u" xml:space="preserve">[[Category:HAI]]
+'''Point Of Contact:''' ''[[User:ndp | Nathan Potter]]''
+
+== Description ==
+View/set user-roles and their mapping to URLs
+
+== Goal ==
+To provide Admin control of the relationships between user-roles and the URL's offered by the Hyrax server.
+
+== Summary == 
+The Admin logs into the HAI and navigates to the page (or portion thereof) that contains the user-roles interface. 
+There the Admin can:
+* create roles 
+* delete roles
+* edit the URL pattern(s) that are mapped to this role.
+* add a user to a role
+* remove a user from a role.
+
+== Actors ==
+* Admin
+* HAI
+* Users
+
+== Preconditions ==
+* A Hyrax service running with users and authentication enabled.
+* The Administrator has authentication privileges for the HAI.
+ 
+
+
+== Triggers ==
+The Admin needs to change the user-roles for an instance of Hyrax. This could arise from the need to add a new user, remove a user, change a user's access, etc.
+
+
+
+== Basic Flow ==
+# [[HAI_Use_Case:_Administrator_Logs_into_the_Hyrax_Admin_Interface  | The Admin logs into the HAI]]
+# The Administrator uses the HAI to navigate one or more pages to the user-roles interface. 
+# Hyrax returns a page (or portion thereof) with the user-roles interface. &lt;br/&gt;In the user-roles interface the Admin can:
+#* Create roles 
+#* Delete roles
+#* edit the URL pattern(s) that are mapped to this role.
+#* Add a user to a role
+#* Remove a user from a role.
+
+== Alternate Flow ==
+&lt;font size="-2" color="green"&gt;''Here we give any alternate flows that might occur. May include flows that involve error conditions. Or flows that fall outside of the basic flow.''&lt;/font&gt;
+
+== Post Conditions ==
+&lt;font size="-2" color="green"&gt;''Here we give any conditions that will be true of the state of the system after the use case has been completed.''&lt;/font&gt;
+
+== Activity Diagram ==
+&lt;font size="-2" color="green"&gt;''Here a diagram is given to show the flow of events that surrounds the use case.''&lt;/font&gt;
+
+== Notes ==
+&lt;font size="-2" color="green"&gt;''There is always some piece of information that is required that has no other place to go. This is the place for that information.''&lt;/font&gt;
+
+== Resources ==
+&lt;font size="-2" color="green"&gt;''In order to support the capabilities described in this Use Case, a set of resources must be available and/or configured.  These resources include data and services, and the systems that offer them.  This section will call out examples of these resources.''&lt;/font&gt;
+
+
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|&lt;font size="-2" color="green"&gt;''name''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Organization that owns/ manages resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Short description of the resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''How often the resource is available''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Name of system which provides resource''&lt;/font&gt;
+|}</text>
+      <sha1>ndz741xqpj7howcd5c34b9n25chjs9u</sha1>
+    </revision>
+  </page>
+</mediawiki>

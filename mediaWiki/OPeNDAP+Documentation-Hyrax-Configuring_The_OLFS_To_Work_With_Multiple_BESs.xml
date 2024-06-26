@@ -1,0 +1,338 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - Configuring The OLFS To Work With Multiple BES's</title>
+    <ns>0</ns>
+    <id>136</id>
+    <revision>
+      <id>10242</id>
+      <parentid>1410</parentid>
+      <timestamp>2013-12-19T20:45:22Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>10242</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="11670" sha1="jz1b4yg0g4mhg7iab4ym70wx6vvelaa" xml:space="preserve">Configuring Hyrax to use multiple BES backends is straight forward. It will require that you edit the '''olfs.xml''' file and possible the '''catalog.xml''' file.
+
+
+=Top Level (''root'') BES=
+
+Every installation of Hyrax requires a top level (or ''root'' level) BES.** This BES has a ''prefix'' of "/" (the forward slash character). The prefix is a URL token between the server address/port and catalog root used to designate a particular BES instance in the case that multiple Back-End-Servers are available to a single OLFS. The default (for a single BES) is no additional tag, designated by "/". The prefix is used to provide a mapping for each BES connected to the OLFS to URI space serviced by the OLFS.
+
+In a single BES deployment this BES would contain all of the data resources to be made visible in Hyrax. In the THREDDS ''catalog.xml'' file each top level directory/collection would have it's own &lt;''datasetScan''&gt; element.
+
+
+&lt;nowiki&gt;**&lt;/nowiki&gt;''Note:'' The word ''root'' here has '''absolutely nothing''' to do with the login account called root associated with the super user or system administrator.
+
+=Single BES Example (Default)=
+Here is the &lt;''Handler''&gt; element in an '''olfs.xml''' that defines the opendap.bes.BESManager file that configures the OLFS to use a single BES, the default configuration arrangement for Hyrax:
+&lt;pre&gt;
+    &lt;Handler className="opendap.bes.BESManager"&gt;
+        &lt;BES&gt;
+            &lt;prefix&gt;/&lt;/prefix&gt;
+            &lt;host&gt;localhost&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+    &lt;/Handler&gt;
+&lt;/pre&gt;
+The BES is running on the same system as the OLFS, and it's prefix is correctly set to "/". This BES will handle all data requests directed at the OLFS and will expose it's top level directory/collection/catalog in the URI space of the OLFS here:
+ http://localhost:8080/opendap/
+The THREDDS '''catalog.xml''' file for this should contain a &lt;''datasetScan''&gt; element for each of the top level directories | collections | catalogs that the BES exposes at the above URI.
+
+'''''Remember''''': There '''must''' be one (but only one) BES configured with the &lt;''prefix''&gt; set to "/" in your '''olf.xml''' file.
+
+=Multiple BES examples=
+Here is a BESManager &lt;''Handler''&gt; element that defines two BES's:
+&lt;pre&gt;
+    &lt;Handler className="opendap.bes.BESManager"&gt;
+
+        &lt;BES&gt;
+            &lt;prefix&gt;/&lt;/prefix&gt;
+            &lt;host&gt;localhost&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+        &lt;BES&gt;
+            &lt;prefix&gt;/sst&lt;/prefix&gt;
+            &lt;host&gt;comet.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+
+    &lt;/Handler&gt;
+&lt;/pre&gt;
+The first one is running on the same system as the OLFS,  the second on ''comet. test.org''. The second BES is mapped to the prefix /sst. So the URL:
+ http://localhost:8080/opendap/
+Will return the directory view at the top level of the first BES, running on the same system as the OLFS. The URL:
+ http://localhost:8080/opendap/sst
+Will return the directory view at the top level of the second BES, running on ''comet.test.org''.
+
+You can repeat this pattern to add more BES's to the configuration. This next example shows a configuration with 4 BES's: The ''root'' BES, and 3 others:
+&lt;pre&gt;
+    &lt;Handler className="opendap.bes.BESManager"&gt;
+
+        &lt;BES&gt;
+            &lt;prefix&gt;/&lt;/prefix&gt;
+            &lt;host&gt;server0.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+        &lt;BES&gt;
+            &lt;prefix&gt;/sst&lt;/prefix&gt;
+            &lt;host&gt;server1.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+
+        &lt;BES&gt;
+            &lt;prefix&gt;/chl-a&lt;/prefix&gt;
+            &lt;host&gt;server2.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+
+        &lt;BES&gt;
+            &lt;prefix&gt;/salinity&lt;/prefix&gt;
+            &lt;host&gt;server3.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+
+    &lt;/Handler&gt;
+&lt;/pre&gt;
+
+Note that in this example:
+# The ''root'' BES is not necessarily running on the same host as the OLFS.
+# Every BES has a different prefix.
+# The OLFS would direct requests so that requests to:
+#* http://localhost:8080/opendap/sst/* are handled by the BES at server1.test.org
+#* http://localhost:8080/opendap/chl-a/* are handled by the BES at server2.test.org
+#* http://localhost:8080/opendap/salinity/* are handled by the BES at server3.test.org
+#* The BES at server0.test.org would handle everything else.
+
+=Mount points=
+
+In a multiple BES installation each additional BES must have a ''mount point'' within the exposed hierarchy of collections for it to be visible in Hyrax. 
+
+Consider, if you have this configuration:
+
+&lt;pre&gt;
+    &lt;Handler className="opendap.bes.BESManager"&gt;
+
+        &lt;BES&gt;
+            &lt;prefix&gt;/&lt;/prefix&gt;
+            &lt;host&gt;server0.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+    &lt;/Handler&gt;
+&lt;/pre&gt;
+
+And the top level directory for the ''root'' BES looks like this:
+
+[[Image:topDir.png|Top Level Directory]]
+
+If you add another BES, like this:
+&lt;pre&gt;
+    &lt;Handler className="opendap.bes.BESManager"&gt;
+
+        &lt;BES&gt;
+            &lt;prefix&gt;/&lt;/prefix&gt;
+            &lt;host&gt;server0.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+        &lt;BES&gt;
+            &lt;prefix&gt;/sst&lt;/prefix&gt;
+            &lt;host&gt;server5.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+    &lt;/Handler&gt;
+&lt;/pre&gt;
+'''It will not appear in the top level directory unless you create a ''mount point''.''' This simply means that on the file system served by the ''root'' BES you would need to create a directory called "sst" in the top of the directory tree that the ''root'' BES is exposing. In other words, simply create a directory called "sst" in the same directory that contains the  "Test" and "data" directories on server0.test.org. After you did that your top level directory would look like this:
+
+[[Image:topDir2.png|Top Level Directory]]
+
+This holds true for any arrangement of BESs that you make. The location of the ''mount point'' will depend on your configuration, and how you organize things. Here is a more complex example.
+
+Consider this configuration:
+&lt;pre&gt;
+    &lt;Handler className="opendap.bes.BESManager"&gt;
+
+        &lt;BES&gt;
+            &lt;prefix&gt;/&lt;/prefix&gt;
+            &lt;host&gt;server0.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+        &lt;BES&gt;
+            &lt;prefix&gt;/GlobalTemperature &lt;/prefix&gt;
+            &lt;host&gt;server1.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+        &lt;BES&gt;
+            &lt;prefix&gt;/GlobalTemperature/NorthAmerica&lt;/prefix&gt;
+            &lt;host&gt;server2.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+        &lt;BES&gt;
+            &lt;prefix&gt;/GlobalTemperature/NorthAmerica/Canada &lt;/prefix&gt;
+            &lt;host&gt;server3.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+        &lt;BES&gt;
+            &lt;prefix&gt;/GlobalTemperature/NorthAmerica/USA &lt;/prefix&gt;
+            &lt;host&gt;server4.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+        &lt;BES&gt;
+            &lt;prefix&gt;/GlobalTemperature/Europe/France &lt;/prefix&gt;
+            &lt;host&gt;server4.test.org&lt;/host&gt;
+            &lt;port&gt;10022&lt;/port&gt;
+            &lt;ClientPool maximum="10" /&gt;
+        &lt;/BES&gt;
+        
+    &lt;/Handler&gt;
+&lt;/pre&gt;
+
+*The ''mount point'' "GlobalTemperature" must be in the top of the directory tree that the ''root'' BES  on server0.test.org is exposing.
+*The ''mount point'' "NorthAmerica" must be in the top of the directory tree that the BES on server1.test.org is exposing.
+*The ''mount point'' "Canada" must be in the top of the directory tree that the BES on server2.test.org is exposing.
+*The ''mount point'' "USA" must be in the top of the directory tree that the BES on server2.test.org is exposing.
+*The ''mount point'' "France" must be located at "GlobalTemperature/Europe/France" relative to the top of the directory tree that the BES on server0.test.org is exposing.
+
+=Complete olfs.xml with multiple BES installations example=
+
+
+&lt;pre&gt;
+&amp;lt;?xml version="1.0" encoding="UTF-8"?&amp;gt;
+&amp;lt;OLFSConfig&amp;gt;
+
+    &amp;lt;DispatchHandlers&amp;gt;
+
+        &amp;lt;HttpGetHandlers&amp;gt;
+
+            &amp;lt;Handler className="opendap.bes.BESManager"&amp;gt;
+
+                &amp;lt;BES&amp;gt;
+                    &amp;lt;prefix&amp;gt;/&amp;lt;/prefix&amp;gt;
+                    &amp;lt;host&amp;gt;server0.test.org&amp;lt;/host&amp;gt;
+                    &amp;lt;port&amp;gt;10022&amp;lt;/port&amp;gt;
+                    &amp;lt;ClientPool maximum="10" /&amp;gt;
+                &amp;lt;/BES&amp;gt;
+                
+                &amp;lt;BES&amp;gt;
+                    &amp;lt;prefix&amp;gt;/GlobalTemperature &amp;lt;/prefix&amp;gt;
+                    &amp;lt;host&amp;gt;server1.test.org&amp;lt;/host&amp;gt;
+                    &amp;lt;port&amp;gt;10022&amp;lt;/port&amp;gt;
+                    &amp;lt;ClientPool maximum="10" /&amp;gt;
+                &amp;lt;/BES&amp;gt;
+                
+                &amp;lt;BES&amp;gt;
+                    &amp;lt;prefix&amp;gt;/GlobalTemperature/NorthAmerica&amp;lt;/prefix&amp;gt;
+                    &amp;lt;host&amp;gt;server2.test.org&amp;lt;/host&amp;gt;
+                    &amp;lt;port&amp;gt;10022&amp;lt;/port&amp;gt;
+                    &amp;lt;ClientPool maximum="10" /&amp;gt;
+                &amp;lt;/BES&amp;gt;
+                
+                &amp;lt;BES&amp;gt;
+                    &amp;lt;prefix&amp;gt;/GlobalTemperature/NorthAmerica/Canada &amp;lt;/prefix&amp;gt;
+                    &amp;lt;host&amp;gt;server3.test.org&amp;lt;/host&amp;gt;
+                    &amp;lt;port&amp;gt;10022&amp;lt;/port&amp;gt;
+                    &amp;lt;ClientPool maximum="10" /&amp;gt;
+                &amp;lt;/BES&amp;gt;
+                
+                &amp;lt;BES&amp;gt;
+                    &amp;lt;prefix&amp;gt;/GlobalTemperature/NorthAmerica/USA &amp;lt;/prefix&amp;gt;
+                    &amp;lt;host&amp;gt;server4.test.org&amp;lt;/host&amp;gt;
+                    &amp;lt;port&amp;gt;10022&amp;lt;/port&amp;gt;
+                    &amp;lt;ClientPool maximum="10" /&amp;gt;
+                &amp;lt;/BES&amp;gt;
+                
+                &amp;lt;BES&amp;gt;
+                    &amp;lt;prefix&amp;gt;/GlobalTemperature/Europe/France &amp;lt;/prefix&amp;gt;
+                    &amp;lt;host&amp;gt;server4.test.org&amp;lt;/host&amp;gt;
+                    &amp;lt;port&amp;gt;10022&amp;lt;/port&amp;gt;
+                    &amp;lt;ClientPool maximum="10" /&amp;gt;
+                &amp;lt;/BES&amp;gt;
+
+            &amp;lt;/Handler&amp;gt;
+
+            &amp;lt;Handler className="opendap.coreServlet.SpecialRequestDispatchHandler" /&amp;gt;
+            
+            &amp;lt;Handler className="opendap.bes.VersionDispatchHandler" /&amp;gt;
+
+            &amp;lt;Handler className="opendap.bes.DirectoryDispatchHandler"&amp;gt;
+                &amp;lt;DefaultDirectoryView&amp;gt;OPeNDAP&amp;lt;/DefaultDirectoryView&amp;gt;
+            &amp;lt;/Handler&amp;gt;
+
+            &amp;lt;Handler className="opendap.bes.DapDispatchHandler" /&amp;gt;
+
+            &amp;lt;Handler className="opendap.bes.FileDispatchHandler" &amp;gt;
+                &amp;lt;!-- &amp;lt;AllowDirectDataSourceAccess /&amp;gt; --&amp;gt;
+            &amp;lt;/Handler&amp;gt;
+
+            &amp;lt;Handler className="opendap.bes.ThreddsDispatchHandler" /&amp;gt;
+
+        &amp;lt;/HttpGetHandlers&amp;gt;
+
+        &amp;lt;HttpPostHandlers&amp;gt;
+            &amp;lt;Handler className="opendap.coreServlet.SOAPRequestDispatcher" &amp;gt;
+                &amp;lt;OpendapSoapDispatchHandler&amp;gt;opendap.bes.SoapDispatchHandler&amp;lt;/OpendapSoapDispatchHandler&amp;gt;
+            &amp;lt;/Handler&amp;gt;
+        &amp;lt;/HttpPostHandlers&amp;gt;
+
+    &amp;lt;/DispatchHandlers&amp;gt;
+
+&amp;lt;/OLFSConfig&amp;gt;
+
+&lt;/pre&gt;</text>
+      <sha1>jz1b4yg0g4mhg7iab4ym70wx6vvelaa</sha1>
+    </revision>
+  </page>
+</mediawiki>

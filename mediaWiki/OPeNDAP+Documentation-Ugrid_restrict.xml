@@ -1,0 +1,94 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Ugrid restrict</title>
+    <ns>0</ns>
+    <id>836</id>
+    <revision>
+      <id>9038</id>
+      <parentid>9037</parentid>
+      <timestamp>2012-08-17T04:15:12Z</timestamp>
+      <contributor>
+        <username>ScottMoe</username>
+        <id>47</id>
+      </contributor>
+      <origin>9038</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3158" sha1="sa1y1xlwo4wv8rj1tyhoqiqz5e0s2k4" xml:space="preserve">ugrid_restrict is a function creates a grid object out of an input grid according to to an input restriction constraint. At this time the input grid is assumed to be an unstructured grid made up of counter-clockwise oriented triangles. 
+
+= Input Arguments =
+Calls to the function take the form '''ugrid_restrict(int dim,string constraint)'''. The first input must be an integer that denotes the dimension which will be restricted. For example, setting dim to be 0 would indicate the restriction condition applies to the data bound to the nodes (the
+&gt; 0-cells).The second input is a string which describes the constraint that should be enforced.
+
+= Examples =
+
+ugrid_restrict(0,"elevation&amp;gt;0.0")
+
+
+ugrid_restrict(0,"X&gt;-68.0&amp;X&lt;0&amp;Y&gt;41.5&amp;Y&lt;42.78&amp;elevation&gt;0.0&amp;elevation&lt;500")
+
+
+The first call is pretty basic. This call is restricting the mesh to the nodes such that elevation (some array bound to the nodes) is greater than 0.
+You can also have much more complicated constraints: The second call actually combines 6 constraints.
+
+= Requirements for the Input File =
+
+Following the UGRID standard being developed by the community,
+&gt; every array every array must have an attribute known as grid_location that can take two possible values. If grid_location="element" this indicates that data is associated with the triangular cell. Otherwise if grid_location="node" the data is associated with the nodes of the grid. 
+
+In addition, the array containing the connectivity information of the triangular grid must be an n by 3 array that has an attribute cell_type which is equal to "tri_ccw" which indicates the cells are counter clockwise oriented triangles. In addition, the connectivity array has an index_origin attribute which must be an integer that gives the value associated with the first cell (usually 1). Finally it must have an attribute coordinates_node that gives the coordinates that will be used for the nodes (for example "X Y").
+
+More about UGRID can be found on the google group: [https://groups.google.com/forum/#!forum/ugrid-interoperability UGRID]
+
+An example file is found [http://ec2-174-129-186-110.compute-1.amazonaws.com:8088/opendap/data/nc/test4.nc.nc? here]
+
+= Demo =
+A demo that allows easy experimentation with this function can be found [http://ec2-107-22-36-153.compute-1.amazonaws.com/graph here]
+The dataset for this demo is a restricted version of the usgs dataset found [http://geoport.whoi.edu/thredds/catalog/usgs/data1/rsignell/models/adcirc/catalog.html?dataset=usgs/data1/rsignell/models/adcirc/fort.64.nc here]
+= Possible URLs =
+
+Possible URLs -&gt; Example OPeNDAP URLs
+You can paste these into your browser to download the data.
+
+
+ec2-174-129-186-110.compute-1.amazonaws.com:8088/opendap/data/nc/test4.nc.nc?ugrid_restrict(0,"Y&gt;41.5&amp;Y&lt;42.75&amp;X&gt;-68.0&amp;X&lt;-66.0")
+
+ec2-174-129-186-110.compute-1.amazonaws.com:8088/opendap/data/nc/test4.nc.nc?ugrid_restrict(0,"nodedata&gt;0.0&amp;nodedata&lt;200")
+
+= Getting GridFields =
+The google code site is found [http://code.google.com/p/gridfields/ here]
+
+To checkout the C code necessary to run this function use the command
+
+svn co https://gridfields.googlecode.com/svn/tags/gridfieldsclib-0.7/</text>
+      <sha1>sa1y1xlwo4wv8rj1tyhoqiqz5e0s2k4</sha1>
+    </revision>
+  </page>
+</mediawiki>

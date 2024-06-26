@@ -1,0 +1,83 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>OPeNDAP Data Connector Tutorial</title>
+    <ns>0</ns>
+    <id>651</id>
+    <revision>
+      <id>6425</id>
+      <parentid>6418</parentid>
+      <timestamp>2011-05-06T19:49:46Z</timestamp>
+      <contributor>
+        <username>Nbathani</username>
+        <id>44</id>
+      </contributor>
+      <origin>6425</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3364" sha1="fpuu7kykuvqli7duxil471pgb0by325" xml:space="preserve">This tutorial walks you through the basic operations in the OPeNDAP Data Connector. It is highly recommended that new users do the tutorial to get oriented to the software. In the tutorial you will go through the steps to create the following plot:
+&lt;br&gt;[[image:tutorial.png]]&lt;br&gt;
+&lt;!-- how to --&gt;
+&amp;nbsp;&lt;b&gt;Step-By-Step&lt;/b&gt;
+Operating the ODC involves three steps:&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt; identify the dataset you want to use (Search)&lt;br&gt;
+&lt;li&gt; retrieve its structure and make a sub-selection of the data if desired (Retrieve)&lt;br&gt;
+&lt;li&gt; output or view the data (View)&lt;br&gt;
+&lt;/ul&gt;&lt;p&gt;
+The controls for these three steps are grouped onto three tabs accessible at the top of the screen.&lt;br&gt;
+&lt;/p&gt;&lt;p&gt;
+Follow along to learn how to do these steps. In some cases there will be a hyperlink if there are more detailed directions for a particular step on a different page.&lt;br&gt;
+&lt;/p&gt;&lt;p&gt;
+&lt;ol&gt;
+&lt;li&gt; go to Search / Dataset List tab
+&lt;li&gt; click once on the "+" to go into the "University of Rhode Island ..." folder
+&lt;li&gt; go into the "1.1km Northwest Atlantic AVHRR" folder
+&lt;li&gt; single click (DO NOT DOUBLE CLICK) on "Pathfinder SST"; your choice will highlight&lt;br&gt;[notice how the URL for the dataset is shown at right]
+&lt;li&gt; single click the red "To Retrieve" button at the top of the screen&lt;br&gt;[you should now move automatically to the retrieve panel]&lt;br&gt;[Pathfinder SST will be listed as one of your selected datasets]&lt;br&gt;[notice that it is highlighted; this means it is the active dataset]&lt;br&gt;[if you get an error, check your network connection]&lt;br&gt;
+&lt;li&gt; navigate the directory tree by double-clicking the folders to a month of your choice&lt;br&gt;[a list of data granules for the month will appear on the right]&lt;br&gt;[each sub-directory accessed will do a network hit]&lt;br&gt;
+&lt;li&gt; double click one of the granules; this will load its structure&lt;br&gt;[a "granule" is a file]&lt;br&gt;[the structure of the granule will appear in the pane below]&lt;br&gt;
+&lt;li&gt; click the radio button next to Grid and do likewise for the "dsp_band_1" variable&lt;br&gt;
+&lt;li&gt; modify the array ranges so they read "0:10:6143" (enter key "saves" the change)&lt;br&gt;[this specifies you only want every 10th value in the array]&lt;br&gt;[we subset the data like this because a 6143 x 6143 matrix &lt;br&gt;would take a lot longer to process without adding much more to see]&lt;br&gt;
+&lt;li&gt; select "Plotter" in the drop-down list next to the "Output to" button&lt;br&gt;
+&lt;li&gt; click the "Output to" button&lt;br&gt;[you will automatically move to the View/Plot pane]&lt;br&gt;[the data will automatically be loaded to the plot pane]&lt;br&gt;[this dataset is about 1.5 megabytes]&lt;br&gt;
+&lt;li&gt; single click [[Instructions_:_Generating_the_Plot | plot type]] "Pseudocolor" if it is not already selected&lt;br&gt;[the x and y values will automatically be picked for you]&lt;br&gt;
+&lt;li&gt; [[Instructions_:_Generating_the_Plot | single click the blue "Plot" button]]&lt;br&gt; [a plot of the data will appear in a separate window]&lt;br&gt;
+&lt;/ol&gt;
+Congratulations you have done a plot!&lt;br&gt;
+
+&lt;br&gt;&lt;b&gt;Extra Credit&lt;/b&gt; - If you want to add in the coastline go to the options tab and [[Instructions_:_ODC_Options | change]] 'Show Coastline' to yes [you have to reverse the y-axis to get the coast oriented correctly]&lt;br&gt;
+
+You can learn more about plotting by perusing the [[OPeNDAP_Data_Connector_Web_Guide#Check_out_the_ODC_Plot_Gallery | plot gallery]].&lt;br&gt;
+
+See our [http://www.opendap.org OPeNDAP home] for more information about OPeNDAP.</text>
+      <sha1>fpuu7kykuvqli7duxil471pgb0by325</sha1>
+    </revision>
+  </page>
+</mediawiki>

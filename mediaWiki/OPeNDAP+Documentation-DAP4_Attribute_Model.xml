@@ -1,0 +1,817 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4 Attribute Model</title>
+    <ns>0</ns>
+    <id>407</id>
+    <revision>
+      <id>4793</id>
+      <parentid>3154</parentid>
+      <timestamp>2009-09-23T18:25:03Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Background */</comment>
+      <origin>4793</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="34642" sha1="770vzhbc8wiwnn6c7umau13yiublf65" xml:space="preserve">== Add the concept of "relationship" to the DAP Attribute model ==
+
+=== Goal ===
+
+Provide a mechanism for explicitly describing the relationship of a DAP Attribute object to its parent DAP object (Be it a DAP  Variable or Attribute).
+
+=== Background ===
+
+Until now the DAP Attribute model has held the (not formally encoded) assumption that all DAP Attribute objects "belong" to the DAP Variable or DAP Attribute that contains them: "The variable ''x'' has an Attribute called ''foo''." This is what we will call a '''''has-a''''' relationship.
+
+:'''''has-a''''' expresses that the relationship its parent DAP object has towards it as "Has a". As in: My parent has the propert(y | ies) that I represent. 
+
+With the introduction of more complex metadata into the DAP the possibility for another relationship now exists: '''''is-a'''''  
+
+:'''''is-a''''' expresses that the relationship its parent DAP object has towards it as "Is a". As in: My parent is another representation of the thing that I represent.
+
+
+The discussion here: https://cf-pcmdi.llnl.gov/trac/ticket/27 is relevant.
+
+=== Design ===
+
+We will add a new, optional XML attribute named '''''relationship''''' to the Attribute element in the DAP 2 DDX. It may have the value of either "has-a" or "is-a", if omitted it's value defaults to "has-a".
+
+==== Schema Snippet ====
+   &lt;xs:complexType name="DASAttribute"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAS Attribute Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:sequence&gt;
+                &lt;xs:element name="value" type="xs:string" maxOccurs="unbounded"/&gt;
+            &lt;/xs:sequence&gt;
+            &lt;xs:sequence&gt;
+                &lt;xs:element ref="Attribute" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Alias" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;/xs:sequence&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="type" type="dap2:DataType" use="required"/&gt;
+        '''&lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;'''
+    &lt;/xs:complexType&gt;
+ 
+    &lt;!--
+        
+    --&gt;
+    '''&lt;xs:simpleType name="relationships"&gt;'''
+        '''&lt;xs:restriction base="xs:string"&gt;'''
+            '''&lt;xs:enumeration value="is-a"/&gt;'''
+            '''&lt;xs:enumeration value="has-a"/&gt;'''
+        '''&lt;/xs:restriction&gt;'''
+    '''&lt;/xs:simpleType&gt;'''
+
+== Add a DAP Attribute with type ''OtherXML''. ==
+
+=== Goal ===
+
+Provide a mechanism for including any XML markup from namespaces other than the DAP namespaces as metadata associated with any DAP variable.
+
+=== Background ===
+
+In order to create a more flexible metadata channel for the DAP we will add the new type "OtherXML" to the  Attribute objects to the DAP Attribute data model. 
+
+The ''OtherXML'' element is  allowed to contain any XML from a non DAP namespace. For example, XML content from the GML or WCS namespaces could be included here. Even an Open Office document describing the content would be legal.
+
+
+=== Design ===
+
+Add an new Attribute type, '''''OtherXML''''' to the DAP Attribute content model. The type is easy add to the DAP 2 schema, but it is not possible within the current DDX design to have the schema capture all of its semantics.:
+
+# This new type of Attribute does not need (and probably should be barred from having) a ''name'' attribute.
+# The use of the  ''relationship''  attribute for dap:Attribute objects of type OtherXML has subtly different semantics. They apply to the content of the Attribute, but not the Attribute itself.
+#* A value of  '''''has-a''''' expresses the relationship of the Attribute object's parent DAP object has towards the Attribute objects content as "Has A". As in: My parent has the propert(y | ies) that I contain. 
+#* A value of '''''is-a''''' expresses that the relationship of the Attribute object's parent DAP object has towards the Attribute objects content as "Is A". As in: My parent can be seen as having the same semantics as the thing(s) that I contain.
+
+The OtherXML type is essentially a nameless wrapper that defines the relationship between it's parent container and it's contents.  In a sense the OtherXML Attribute type is invisible (thus the reasoning behind it being nameless). 
+
+Both of these issues can be addressed in the proposed changes to the XML representation of Attributes below.
+
+(''Since this change is taking place in conjunction with re-factoring the XML representation of DAP Attribute objects this new Attribute type will be included those sections.'')
+
+==== Schema ====
+
+In the DAP2 DDX schema this change would be made by adding a new value to the DataType type enumeration used by the dap:Attribute element's ''type'' attribute:
+
+    &lt;xs:simpleType name="DataType"&gt;
+        &lt;xs:restriction base="xs:string"&gt;
+            &lt;xs:enumeration value="Byte"/&gt;
+            &lt;xs:enumeration value="Int16"/&gt;
+            &lt;xs:enumeration value="UInt16"/&gt;
+            &lt;xs:enumeration value="Int32"/&gt;
+            &lt;xs:enumeration value="UInt32"/&gt;
+            &lt;xs:enumeration value="Float32"/&gt;
+            &lt;xs:enumeration value="Float64"/&gt;
+            &lt;xs:enumeration value="String"/&gt;
+            &lt;xs:enumeration value="URL"/&gt;
+            &lt;xs:enumeration value="Container"/&gt;
+            '''&lt;xs:enumeration value="OtherXML"/&gt;'''
+        &lt;/xs:restriction&gt;
+    &lt;/xs:simpleType&gt;
+However, in the DAP2 schema no content rules are available for the Attribute elements. This makes it easy to add the new type, but doesn't provide any functional information about it's content.
+
+=== Example Document ===
+&lt;pre&gt;
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;Dataset name="200803061600_HFRadar_USEGC_6km_rtv_SIO.nc"
+    xmlns="http://xml.opendap.org/ns/DAP/3.3#"
+    xmlns:dap="http://xml.opendap.org/ns/DAP/3.3#"
+    dap_version="3.3"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xml:base="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx"
+
+
+        &lt;Attribute name="wcsStuff" type="OtherXML" relationship="is-a"&gt;
+            &lt;CoverageDescription xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                                 xmlns:owcs="http://www.opengis.net/wcs/1.1/ows"
+                                 xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 &gt;
+                &lt;ows:Title&gt;Near-Real Time Surface Ocean Velocity&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;CoverageDescription generated by OPeNDAP WCS UseCase 2.0&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/Identifier&gt;
+                &lt;Domain&gt;
+                    &lt;SpatialDomain&gt;
+                        &lt;ows:BoundingBox crs="urn:ogc:def:crs:EPSG::4326"&gt;
+                            &lt;ows:LowerCorner&gt;-97.8839 21.736&lt;/ows:LowerCorner&gt;
+                            &lt;ows:UpperCorner&gt;-57.2312 46.4944&lt;/ows:UpperCorner&gt;
+                        &lt;/ows:BoundingBox&gt;
+                    &lt;/SpatialDomain&gt;
+                    &lt;TemporalDomain&gt;
+                        &lt;gml:timePosition&gt;2008-03-27T16:00:00.000Z&lt;/gml:timePosition&gt;
+                    &lt;/TemporalDomain&gt;
+                &lt;/Domain&gt;
+                &lt;Range&gt;
+                &lt;/Range&gt;
+                &lt;SupportedCRS&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt;
+                &lt;SupportedFormat&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+                &lt;SupportedFormat&gt;dap2.0&lt;/SupportedFormat&gt;
+            &lt;/CoverageDescription&gt;
+        &lt;/Attribute&gt;
+
+        &lt;Grid name="u"&gt;
+            &lt;Attribute name="one" type="OtherXML" relationship="has-a"&gt;
+                &lt;units xmlns="http://my.foo.com/ns/units#" /&gt;
+            &lt;/Attribute&gt;
+            &lt;Attribute name="two" type="OtherXML" relationship="is-a"&gt;
+                &lt;Field xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                                 xmlns:owcs="http://www.opengis.net/wcs/1.1/ows"
+                                 xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 &gt;
+                    &lt;ows:Title&gt;surface_eastward_sea_water_velocity&lt;/ows:Title&gt;
+                    &lt;ows:Abstract&gt;Eastward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+                    &lt;Identifier&gt;u&lt;/Identifier&gt;
+                    &lt;Definition&gt;
+                        &lt;ows:AnyValue/&gt;
+                    &lt;/Definition&gt;
+                    &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                    &lt;owcs:InterpolationMethods&gt;
+                        &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                    &lt;/owcs:InterpolationMethods&gt;
+                &lt;/Field&gt;
+            &lt;/Attribute&gt;
+            &lt;Array name="u"&gt;
+                &lt;Int16/&gt;
+                &lt;dimension name="time" size="1"/&gt;
+                &lt;dimension name="lat" size="460"/&gt;
+                &lt;dimension name="lon" size="701"/&gt;
+            &lt;/Array&gt;
+            &lt;Map name="time"&gt;
+                &lt;Int32/&gt;
+                &lt;dimension name="time" size="1"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="lat"&gt;
+                &lt;Float32/&gt;
+                &lt;dimension name="lat" size="460"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="lon"&gt;
+                &lt;Float32/&gt;
+                &lt;dimension name="lon" size="701"/&gt;
+            &lt;/Map&gt;
+        &lt;/Grid&gt;
+
+    &lt;/Dataset&gt;
+&lt;/pre&gt;
+
+
+
+
+----
+
+== Re-factoring the representation of DAP Attribute objects. ==
+
+=== Goals ===
+
+Provide an improved XML representation of the DAP Attributes.
+
+=== Background ===
+
+The original DDX represented Attribute objects as a single XML element dap:Attribute. The type of the DAP Attribute was represented as the value of an XML attribute names '''type'''. For example:
+
+    &lt;Attribute name="bears" '''type="Container"'''&gt;
+        &lt;Attribute name="act" '''type="String"'''&gt;
+            &lt;value&gt;text string\\012\\011123&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="acs" '''type="Int16"'''&gt;
+            &lt;value&gt;-40&lt;/value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Attribute&gt;
+
+This is unlike the scheme for variables in which each one is represented by an XML element whose name reflects the type of the variable:
+
+        &lt;String name="satellite"/&gt;
+        &lt;Int32 name="year"/&gt;
+
+A more parallel representation can be achieved by creating a separate namespace for the DAP Attribute data model. This way the two representations can more closely resemble each other, and they can be easily filtered and manipulated using namespace aware processing (which really is a key component of the XML use model).
+
+Additionally, the way that our current Attribute semantics cannot be expressed in XML Schema 1.0, as they require "conditional type assignment" which is only available in (the as yet to released) XML Schema 1.1
+
+=== Design ===
+
+There are two design candidates. One in which we use separate namespaces for DAP variables and DAP Attribute. The other simply provides a second set of specific Attribute types separate from the DAP variable types.
+----
+==== Candidate 1: Attributes In A Separate Namespace ====
+
+Each type of DAP Attribute type will have its own XML element representation in the DAP Attribute namespace: '''&lt;nowiki&gt;http://xml.opendap.org/ns/DAP/3.3/att#&lt;/nowiki&gt;'''
+
+*'''''xmlns:att="http://xml.opendap.org/ns/DAP/3.3/att#"''''' Using the att prefix to identify the DAP Attribute namespace.
+* '''&lt;att:Byte /&gt;''' - Represents a byte valued Attribute.
+* '''&lt;att:Int16 /&gt;''' - Represents a 16 bit integer valued Attribute.
+* '''&lt;att:UInt16 /&gt;''' - Represents an unsigned 16 bit integer valued Attribute.
+* '''&lt;att:Int32 /&gt;''' - Represents a 32 bit integer valued Attribute.
+* '''&lt;att:UInt32 /&gt;''' - Represents an unsigned 32 bit integer valued Attribute.
+* '''&lt;att:Float32 /&gt;''' - Represents a 32 bit floating point valued Attribute.
+* '''&lt;att:Float64 /&gt;''' - Represents a 64 bit floating point valued Attribute.
+* '''&lt;att:String /&gt;''' - Represents a String valued Attribute.
+* '''&lt;att:URL /&gt;''' - Represents a URL valued Attribute.
+* '''&lt;att:Container /&gt;''' - Represents a Container Attribute.
+* '''&lt;att:XML /&gt;''' - Represents an Attribute object that may hold any XML not in the DAP namespaces and identifies it as an Attribute. (Assuming we want to wrap foreign XML in an Attribute tag)
+
+===== Schema =====
+
+
+Here is the '''[[DAP4 XML schema|prototype schema for the DAP4 namespace]]'''
+* This schema document is made much simpler due to moving the DAP  Attributes to their own schema.
+Here is the '''[[DAP4 Attribute XML schema|prototype schema for the DAP4 Attribute namespace]]'''  This schema needs a few changes/corrections:
+#  The AttributeUrlType  Allows the URL type to contain any URI. We need to modifiy the schema so that it it is restricted to any URL. Or we might wish to relax the DAP definition of the URL Attribute type to become a URI.
+# The AttributeXMLType   - Allows any XML not in the DAP Attribute namespace. We should try to make this any XML not in the DAP or the DAP Attribute namespaces (IE: XML not in http://xml.opendap.org/ns/DAP/3.3/att# or http://xml.opendap.org/ns/DAP/3.3/dap#)
+----
+==== Candidate 2: Separate Attribute Types In The Same Namespace ====
+
+Each type of DAP Attribute type will have its own XML element representation in the DAP Attribute namespace: '''&lt;nowiki&gt;http://xml.opendap.org/ns/DAP/3.3/att#&lt;/nowiki&gt;'''
+
+*'''''xmlns:att="http://xml.opendap.org/ns/DAP/3.5/dap#"''''' 
+* '''&lt;aByte /&gt;''' - Represents a byte valued Attribute.
+* '''&lt;aInt16 /&gt;''' - Represents a 16 bit integer valued Attribute.
+* '''&lt;aUInt16 /&gt;''' - Represents an unsigned 16 bit integer valued Attribute.
+* '''&lt;aInt32 /&gt;''' - Represents a 32 bit integer valued Attribute.
+* '''&lt;aUInt32 /&gt;''' - Represents an unsigned 32 bit integer valued Attribute.
+* '''&lt;aFloat32 /&gt;''' - Represents a 32 bit floating point valued Attribute.
+* '''&lt;aFloat64 /&gt;''' - Represents a 64 bit floating point valued Attribute.
+* '''&lt;aString /&gt;''' - Represents a String valued Attribute.
+* '''&lt;aURL /&gt;''' - Represents a URL valued Attribute.
+* '''&lt;AttContainer /&gt;''' - Represents a Container Attribute.
+* '''&lt;OtherXML /&gt;''' - Represents an Attribute object that may hold any XML not in the DAP namespaces and identifies it as an Attribute. 
+**If this element has a ''relationship'' attribute equal to "is-a", that indicates that its contents are in essence an alternate semantic rpresentation of the Attribute's parent DAP object.
+**If this element has a ''relationship'' attribute equal to "has-a", that indicates that its contents are in to the Attribute's parent DAP object as a property.
+
+===== DAP4 Schema Prototype =====
+
+''DAP4 Variables Schema''
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by Nathan Potter (OSU-COAS) --&gt;
+    &lt;xs:schema targetNamespace="http://xml.opendap.org/ns/DAP/3.5/dap#"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dap="http://xml.opendap.org/ns/DAP/3.5/dap#"
+        xmlns="http://xml.opendap.org/ns/DAP/3.5/dap#" elementFormDefault="qualified"
+        attributeFormDefault="unqualified"&gt;
+    
+    
+        &lt;!-- ==============================================================
+            includes and imports
+            ============================================================== --&gt;
+    
+        &lt;xs:include schemaLocation="dapAtt_3.5.xsd"/&gt;
+    
+        &lt;!--
+    	
+    	--&gt;
+        &lt;xs:element name="Dataset" type="DAP_Dataset"/&gt;
+        &lt;xs:element name="Map" type="Array"/&gt;
+        &lt;xs:element name="Byte" type="BaseType"/&gt;
+        &lt;xs:element name="Int16" type="BaseType"/&gt;
+        &lt;xs:element name="UInt16" type="BaseType"/&gt;
+        &lt;xs:element name="Int32" type="BaseType"/&gt;
+        &lt;xs:element name="UInt32" type="BaseType"/&gt;
+        &lt;xs:element name="Float32" type="BaseType"/&gt;
+        &lt;xs:element name="Float64" type="BaseType"/&gt;
+        &lt;xs:element name="String" type="BaseType"/&gt;
+        &lt;xs:element name="Url" type="BaseType"/&gt;
+        &lt;xs:element name="Array" type="Array"/&gt;
+        &lt;xs:element name="Grid" type="Grid"/&gt;
+        &lt;xs:element name="Structure" type="Structure"/&gt;
+        &lt;xs:element name="Sequence" type="Sequence"/&gt;
+        &lt;!-- --&gt;
+    
+        &lt;!--
+    	
+    	--&gt;
+        &lt;xs:group name="allDapTypes"&gt;
+            &lt;xs:annotation&gt;
+                &lt;xs:documentation&gt;Reusable Content Model for Complex DODS types&lt;/xs:documentation&gt;
+            &lt;/xs:annotation&gt;
+            &lt;xs:choice&gt;
+                &lt;xs:element ref="Byte" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Int16" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="UInt16" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Int32" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="UInt32" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Float32" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Float64" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="String" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Url" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Array" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Grid" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Structure" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:element ref="Sequence" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;/xs:choice&gt;
+        &lt;/xs:group&gt;
+        &lt;!--
+    	
+    	--&gt;
+        &lt;xs:complexType name="DAP_Dataset"&gt;
+            &lt;xs:annotation&gt;
+                &lt;xs:documentation&gt;This is the XML representation of a DODS DDS
+                    object.&lt;/xs:documentation&gt;
+            &lt;/xs:annotation&gt;
+            &lt;xs:sequence&gt;
+                &lt;xs:group ref="allAttributeTypes" minOccurs="0" maxOccurs="unbounded"/&gt;
+                &lt;xs:group ref="allDapTypes" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;/xs:sequence&gt;
+            &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;/xs:complexType&gt;
+    
+        &lt;!--
+    	
+    	--&gt;
+        &lt;xs:complexType name="BaseType"&gt;
+            &lt;xs:annotation&gt;
+                &lt;xs:documentation&gt;DODS Base Type&lt;/xs:documentation&gt;
+            &lt;/xs:annotation&gt;
+            &lt;xs:sequence&gt;
+                &lt;xs:group ref="allAttributeTypes" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;/xs:sequence&gt;
+            &lt;xs:attribute name="name" type="xs:string"/&gt;
+        &lt;/xs:complexType&gt;
+        &lt;!--
+    	
+    	--&gt;
+        &lt;xs:complexType name="Array"&gt;
+            &lt;xs:complexContent&gt;
+                &lt;xs:extension base="BaseType"&gt;
+                    &lt;xs:sequence&gt;
+                        &lt;xs:choice minOccurs="1" maxOccurs="1"&gt;
+                            &lt;xs:element ref="Byte"/&gt;
+                            &lt;xs:element ref="Int16"/&gt;
+                            &lt;xs:element ref="UInt16"/&gt;
+                            &lt;xs:element ref="Int32"/&gt;
+                            &lt;xs:element ref="UInt32"/&gt;
+                            &lt;xs:element ref="Float32"/&gt;
+                            &lt;xs:element ref="Float64"/&gt;
+                            &lt;xs:element ref="String"/&gt;
+                            &lt;xs:element ref="Url"/&gt;
+                            &lt;xs:element ref="Grid"/&gt;
+                            &lt;xs:element ref="Structure"/&gt;
+                            &lt;xs:element ref="Sequence"/&gt;
+                        &lt;/xs:choice&gt;
+                        &lt;xs:element name="dimension" type="dap:ArrayDimension" minOccurs="1"
+                            maxOccurs="unbounded"/&gt;
+                    &lt;/xs:sequence&gt;
+                &lt;/xs:extension&gt;
+            &lt;/xs:complexContent&gt;
+        &lt;/xs:complexType&gt;
+        &lt;!--
+    	--&gt;
+        &lt;xs:complexType name="ArrayDimension"&gt;
+            &lt;xs:attribute name="name" type="xs:string"/&gt;
+            &lt;xs:attribute name="size" type="xs:integer" use="required"/&gt;
+        &lt;/xs:complexType&gt;
+        &lt;!--
+    	
+    	--&gt;
+        &lt;xs:complexType name="Grid"&gt;
+            &lt;xs:complexContent&gt;
+                &lt;xs:extension base="dap:BaseType"&gt;
+                    &lt;xs:sequence&gt;
+                        &lt;xs:element ref="Array" minOccurs="1" maxOccurs="1"/&gt;
+                        &lt;xs:element ref="Map" minOccurs="1" maxOccurs="unbounded"/&gt;
+                    &lt;/xs:sequence&gt;
+                &lt;/xs:extension&gt;
+            &lt;/xs:complexContent&gt;
+        &lt;/xs:complexType&gt;
+        &lt;!--
+    
+    	--&gt;
+        &lt;xs:complexType name="Structure"&gt;
+            &lt;xs:complexContent&gt;
+                &lt;xs:extension base="BaseType"&gt;
+                    &lt;xs:group ref="allDapTypes" minOccurs="1" maxOccurs="unbounded"/&gt;
+                &lt;/xs:extension&gt;
+            &lt;/xs:complexContent&gt;
+        &lt;/xs:complexType&gt;
+        &lt;!--
+    
+    	--&gt;
+        &lt;xs:complexType name="Sequence"&gt;
+            &lt;xs:complexContent&gt;
+                &lt;xs:extension base="BaseType"&gt;
+                    &lt;xs:group ref="allDapTypes" minOccurs="1" maxOccurs="unbounded"/&gt;
+                &lt;/xs:extension&gt;
+            &lt;/xs:complexContent&gt;
+        &lt;/xs:complexType&gt;
+    
+        &lt;!--
+    	
+    	 --&gt;
+    &lt;/xs:schema&gt;
+
+
+''DAP4 Attributes Schema''
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xs:schema targetNamespace="http://xml.opendap.org/ns/DAP/3.5/dap#"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dap="http://xml.opendap.org/ns/DAP/3.5/dap#"
+    xmlns="http://xml.opendap.org/ns/DAP/3.5/dap#" elementFormDefault="qualified"
+    attributeFormDefault="unqualified"&gt;
+    &lt;!--
+        	
+    --&gt;
+    &lt;xs:element name="aByte" type="AttributeByteType"/&gt;
+    &lt;xs:element name="aInt16" type="AttributeInt16Type"/&gt;
+    &lt;xs:element name="aUInt16" type="AttributeUInt16Type"/&gt;
+    &lt;xs:element name="aInt32" type="AttributeInt32Type"/&gt;
+    &lt;xs:element name="aUInt32" type="AttributeUInt32Type"/&gt;
+    &lt;xs:element name="aFloat32" type="AttributeFloat32Type"/&gt;
+    &lt;xs:element name="aFloat64" type="AttributeFloat64Type"/&gt;
+    &lt;xs:element name="aString" type="AttributeStringType"/&gt;
+    &lt;xs:element name="aUrl" type="AttributeUrlType"/&gt;
+    &lt;xs:element name="AttContainer" type="AttributeContainerType"/&gt;
+    &lt;xs:element name="OtherXML" type="AttributeXmlType"/&gt;
+    &lt;!--
+        	
+    --&gt;
+    &lt;xs:group name="allAttributeTypes"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;Reusable Content Model for Containers of Attribute
+                types&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element ref="aByte" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="aInt16" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="aUInt16" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="aInt32" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="aUInt32" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="aFloat32" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="aFloat64" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="aString" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="aUrl" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="AttContainer" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="OtherXML" minOccurs="0" maxOccurs="unbounded"/&gt;         
+        &lt;/xs:choice&gt;
+    &lt;/xs:group&gt;
+    &lt;!--
+        
+    --&gt;
+    &lt;xs:simpleType name="relationships"&gt;
+        &lt;xs:restriction base="xs:string"&gt;
+            &lt;xs:enumeration value="is-a"/&gt;
+            &lt;xs:enumeration value="has-a"/&gt;
+        &lt;/xs:restriction&gt;
+    &lt;/xs:simpleType&gt;
+    &lt;!--
+                
+    --&gt;
+    &lt;xs:complexType name="AttributeContainerType"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAP Attribute Container Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:group ref="allAttributeTypes" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+        	
+     --&gt;
+    &lt;xs:complexType name="AttributeByteType"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAP Attribute Byte Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element name="value" type="xs:unsignedByte" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+                
+    --&gt;
+    &lt;xs:complexType name="AttributeInt16Type"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAP Attribute Int16 Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element name="value" type="xs:short" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+     
+     
+     
+    --&gt;
+    &lt;xs:complexType name="AttributeUInt16Type"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAP Attribute UInt16 Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element name="value" type="xs:unsignedShort" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+ 
+    --&gt;
+    &lt;xs:complexType name="AttributeInt32Type"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAP Attribute Int32 Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element name="value" type="xs:int" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+                
+     --&gt;
+    &lt;xs:complexType name="AttributeUInt32Type"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAP Attribute UInt32 Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element name="value" type="xs:unsignedInt" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+                
+     --&gt;
+    &lt;xs:complexType name="AttributeFloat32Type"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAP Attribute Float32 Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element name="value" type="xs:float" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+                
+    --&gt;
+    &lt;xs:complexType name="AttributeFloat64Type"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAP Attribute Float64 Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element name="value" type="xs:double" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+                
+     --&gt;
+    &lt;xs:complexType name="AttributeStringType"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAS Attribute String Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element name="value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+       -
+       -
+       -
+       -
+       - This allows the URL type to contain anyURI. Can we modifiy the schema so that it is
+       - resricted to just URLs? (Probably not based on aerdin the W3C stuff on URI/URL)
+       -
+       - OR 
+       -
+       - We need to relax the DAP definition of the URL Attribute type.
+       -       
+    --&gt;
+    &lt;xs:complexType name="AttributeUrlType"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAS Attribute URL Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:element name="value" type="xs:anyURI" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+       -
+       -
+       -
+       -
+       - This allows any XML not in the DAP Attribute namespace. 
+       - The ##other only applies to the immediate
+       - children. So the childrens children could still
+       - contain elements from our namespace.
+       -        
+    --&gt;
+    &lt;xs:complexType name="AttributeXmlType"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DAS Attribute XML Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:choice&gt;
+            &lt;xs:any namespace="##other" minOccurs="1" maxOccurs="unbounded" processContents="skip"/&gt;
+        &lt;/xs:choice&gt;
+        &lt;xs:attribute name="relationship" type="relationships" use="optional" default="has-a"/&gt;
+    &lt;/xs:complexType&gt;
+    
+    
+&lt;/xs:schema&gt;
+
+
+
+
+&lt;/pre&gt;
+
+=== Example Document ===
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Dataset name="200803061600_HFRadar_USEGC_6km_rtv_SIO.nc"
+         xmlns="http://xml.opendap.org/ns/DAP/3.5#"
+         xmlns:dap="http://xml.opendap.org/ns/DAP/3.5#"
+         dap_version="3.3"
+         xmlns:xml="http://www.w3.org/XML/1998/namespace"
+         xml:base="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx"&gt;
+
+
+    &lt;OtherXML relationship="is-a"&gt;
+        &lt;CoverageDescription xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                             xmlns:owcs="http://www.opengis.net/wcs/1.1/ows" xmlns:gml="http://www.opengis.net/gml/3.2"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"
+                &gt;
+            &lt;ows:Title&gt;Near-Real Time Surface Ocean Velocity&lt;/ows:Title&gt;
+            &lt;ows:Abstract&gt;CoverageDescription generated by OPeNDAP WCS UseCase 2.0&lt;/ows:Abstract&gt;
+            &lt;Identifier&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/Identifier&gt;
+            &lt;Domain&gt;
+                &lt;SpatialDomain&gt;
+                    &lt;ows:BoundingBox crs="urn:ogc:def:crs:EPSG::4326"&gt;
+                        &lt;ows:LowerCorner&gt;-97.8839 21.736&lt;/ows:LowerCorner&gt;
+                        &lt;ows:UpperCorner&gt;-57.2312 46.4944&lt;/ows:UpperCorner&gt;
+                    &lt;/ows:BoundingBox&gt;
+                &lt;/SpatialDomain&gt;
+                &lt;TemporalDomain&gt;
+                    &lt;gml:timePosition&gt;2008-03-27T16:00:00.000Z&lt;/gml:timePosition&gt;
+                &lt;/TemporalDomain&gt;
+            &lt;/Domain&gt;
+            &lt;Range&gt;
+            &lt;/Range&gt;
+            &lt;SupportedCRS&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt;
+            &lt;SupportedFormat&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+            &lt;SupportedFormat&gt;dap2.0&lt;/SupportedFormat&gt;
+        &lt;/CoverageDescription&gt;
+
+    &lt;/OtherXML&gt;
+
+    &lt;AttContainer name="NC_GLOBAL" &gt;
+        &lt;aString name="title" &gt;
+            &lt;avalue&gt;Near-Real Time Surface Ocean Velocity&lt;/avalue&gt;
+        &lt;/aString&gt;
+        &lt;aString name="institution"&gt;
+            &lt;avalue&gt;Scripps Institution of Oceanography&lt;/avalue&gt;
+        &lt;/aString&gt;
+        &lt;aString name="source"&gt;
+            &lt;avalue&gt;Surface Ocean HF-Radar&lt;/avalue&gt;
+        &lt;/aString&gt;
+        &lt;aString name="history" &gt;
+            &lt;avalue&gt;12-Mar-2008 22:26:19: NetCDF file created&lt;/avalue&gt;
+        &lt;/aString&gt;
+        &lt;aString name="references"&gt;
+            &lt;avalue&gt;Terrill, E. et al., 2006. Data Management and Real-time\\012Distribution in the HF-Radar National
+                Network. Proceedings\\012of the MTS/IEEE Oceans 2006 Conference, Boston MA,\\012September 2006.
+            &lt;/avalue&gt;
+        &lt;/aString&gt;
+    &lt;/AttContainer&gt;
+
+    &lt;Grid name="u"&gt;
+        &lt;OtherXML relationship="has-a"&gt;
+            &lt;units xmlns="http://www.opengis.net/WxS /&gt;
+        &lt;/OtherXML &gt;
+        &lt; OtherXML relationship="is-a" &gt;
+            &lt;Field xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                             xmlns:owcs="http://www.opengis.net/wcs/1.1/ows" xmlns:gml="http://www.opengis.net/gml/3.2"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"
+                &gt;
+                &lt;ows:Title&gt;surface_eastward_sea_water_velocity&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;Eastward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;u&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+        &lt;/OtherXML &gt;
+        &lt;aString name="standard_name" &gt;
+            &lt;value&gt;surface_eastward_sea_water_velocity&lt;/value&gt;
+        &lt;/aString&gt;
+        &lt;aString name="units" &gt;
+            &lt;value&gt;m s-1&lt;/value&gt;
+        &lt;/aString&gt;
+        &lt;aInt16 name="_FillValue" &gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/aInt16&gt;
+        &lt;aFloat32 name="scale_factor" &gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/aFloat32&gt;
+        &lt;aString name="ancillary_variables"&gt;
+            &lt;value&gt;DOPx&lt;/value&gt;
+        &lt;/aString&gt;
+        &lt;Array name="u"&gt;
+            &lt;Int16/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Array&gt;
+        &lt;Map name="time"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lat"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lon"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+
+&lt;/Dataset&gt;
+&lt;/pre&gt;
+
+
+[[Category:Development|DAP3/4]] [[Category:DAP4|DAP3/4]]</text>
+      <sha1>770vzhbc8wiwnn6c7umau13yiublf65</sha1>
+    </revision>
+  </page>
+</mediawiki>

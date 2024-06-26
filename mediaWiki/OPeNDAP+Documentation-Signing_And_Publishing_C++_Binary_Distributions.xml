@@ -1,0 +1,73 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Signing And Publishing C++ Binary Distributions</title>
+    <ns>0</ns>
+    <id>1031</id>
+    <revision>
+      <id>13291</id>
+      <timestamp>2022-01-09T22:57:39Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>Created page with "How to sign and publish the C++ binaries for libad and the BES.  == Retrieve the binary RPM packages built using the CI/CD process ==  # Pull the binary packages from our open..."</comment>
+      <origin>13291</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1861" sha1="kndic03s2ql4r87u6vjamd8jk54pyls" xml:space="preserve">How to sign and publish the C++ binaries for libad and the BES.
+
+== Retrieve the binary RPM packages built using the CI/CD process ==
+
+# Pull the binary packages from our opendap.travis.build S3 bucket. Log into the OPeNDAP AWS account and goto: https://s3.console.aws.amazon.com/s3/buckets/opendap.travis.build?region=us-east-1&amp;tab=objects
+# Locate and download the most recent builds of the libdap4 to your system. This is easily done by filtering on the string "libdap" and then sorting by date so the most recent builds are at the top.. Be sure to get the library, developer, and debug info rpms for each architecture. For example if the version is &lt;numbers&gt; and the architecture is CentOS-7 get:
+#* ''libdap-&lt;numbers&gt;.el7.x86_64.rpm''
+#* ''libdap-devel-&lt;numbers&gt;.el7.x86_64.rpm''
+#* ''libdap-debuginfo-&lt;numbers&gt;.el7.x86_64.rpm''
+# Locate and download the most recent builds of the BES to your system. This is easily done by filtering on the string "bes" and then sorting by date so the most recent builds are at the top. Be sure to get the library, developer, and debug info rpms for each architecture. For example if the version is &lt;numbers&gt; and the architecture is CentOS-7 get:
+#* ''bes-&lt;numbers&gt;.el7.x86_64.rpm''
+#* ''bes-devel-&lt;numbers&gt;.el7.x86_64.rpm''
+#* ''bes-debuginfo-&lt;numbers&gt;.el7.x86_64.rpm''
+
+== Sign the RPM packages ==
+In the directory containing only the RPM packages for the release run the following command:
+
+''for i in *.rpm;do gpg --detach-sign --local-user security@opendap.org $i; done''
+
+== Publish the RPM packages and their signatures ==
+ 
+# Use sftp to log into www.opendap.org
+# ''cd httpdocs/pub/binary/hyrax.XX.YY/&lt;os-name&gt;''
+#: (where XX.YY is the major release number, ex: 1.16 and &lt;os-name&gt; is something like centos-7 for CentOS-7 RPMs): https://www.opendap.org/pub/binary/hyrax-1.16/centos-7.x/
+# ''put *.rpm*''
+# ''exit''</text>
+      <sha1>kndic03s2ql4r87u6vjamd8jk54pyls</sha1>
+    </revision>
+  </page>
+</mediawiki>

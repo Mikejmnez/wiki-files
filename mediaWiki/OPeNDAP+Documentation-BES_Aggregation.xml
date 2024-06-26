@@ -1,0 +1,198 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>BES Aggregation</title>
+    <ns>0</ns>
+    <id>439</id>
+    <revision>
+      <id>3417</id>
+      <parentid>3402</parentid>
+      <timestamp>2009-03-09T12:54:22Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <origin>3417</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7102" sha1="qerob38gzl159yed2shjc1a3oligv81" xml:space="preserve">By default there are no aggregation engines installed with the BES. But there is a mechanism to register your own aggregation engine. This page will discuss how to go about doing that.
+
+== How does aggregation work in the BES? ==
+A request comes into the BES that references some containers, creates a definition using those containers adding constraints and specifying an aggregation engine to use and an aggregation command, and then a get command to grab the containers, constrain them, and then aggregate. The command would look something like this:
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;request reqID="some_unique_value" &gt;
+    &lt;setContainer name="c1" space="catalog"&gt;/data/nc/fnoc1.nc&lt;/setContainer&gt;
+    &lt;setContainer name="c2" space="catalog"&gt;/data/nc/fnoc2.nc&lt;/setContainer&gt;
+    &lt;setContainer name="c3" space="catalog"&gt;/data/nc/fnoc3.nc&lt;/setContainer&gt;
+    &lt;setContainer name="c4" space="catalog"&gt;/data/nc/fnoc4.nc&lt;/setContainer&gt;
+    &lt;define name="d"&gt;
+	&lt;container name="c1"&gt;
+            &lt;constraint&gt;u&lt;/constraint&gt;
+        &lt;/container&gt;
+	&lt;container name="c2"&gt;
+            &lt;constraint&gt;u&lt;/constraint&gt;
+        &lt;/container&gt;
+	&lt;container name="c3"&gt;
+            &lt;constraint&gt;u&lt;/constraint&gt;
+        &lt;/container&gt;
+	&lt;container name="c4"&gt;
+            &lt;constraint&gt;u&lt;/constraint&gt;
+        &lt;/container&gt;
+        &lt;aggregate handler="someHandler" cmd="someCommand" /&gt;
+    &lt;/define&gt;
+    &lt;get type="dods" definition="d" /&gt;
+&lt;/request&gt;
+&lt;/pre&gt;
+
+In order to the BES to perform the specified aggregation there must be an aggregation engine registered with the BES call &lt;code&gt;someHandler&lt;/code&gt;. The command &lt;code&gt;cmd&lt;/code&gt; is passed to the aggregation engine and is parsed by the engine. This command can be different from engine to engine, there are no requirements for the command.
+
+== Creating your Aggregation Handler ==
+The first step is to create an aggregation class that inherits from BESAggregationServer. The minimum that must be defined in this new class is the following:
+
+&lt;pre&gt;
+class MyAggregationServer : public BESAggregationServer
+{
+public:
+                       MyAggregationServer( string handler_name )
+                              : BESAggregationServer( handler_name ) {} ;
+    virtual            ~MyAggregationServer() {} ;
+
+    virtual void       aggregate( BESDataHandlerInterface &amp;dhi ) ;
+
+    static BESAggregationServer *AggBuilder( string handler_name );
+};
+&lt;/pre&gt;
+
+The value of the handler_name parameter will be &lt;code&gt;someHandler&lt;/code&gt;. When a request comes in to aggregate, the BES takes that name and looks up a function in the aggregation factory with that name (someHandler) and calls that function. That function will return a new instance of BESAggregationServer. The function called will be AggBuilder. The function AggBuilder would look something liket his:
+
+&lt;pre&gt;
+BESAggregationServer *
+MyAggregationServer::AggBuilder( string handler_name )
+{
+    return new MyAggregationServer( handler_name ) ;
+}
+&lt;/pre&gt;
+
+The only real method that you have to implement is the aggregate method. More on that later.
+
+== Registering your Aggregation Handler ==
+You register your new aggregation handler with the Aggregation Factory BESAggFactory giving it the name that you want it to be referenced by in the define command (someHandler). What you are actually registering with the factory is a function that knows how to instantiate the new aggregation server. In the example above, MyAggregationServer::AggBuilder function is registered with the BESAggFactory. This should be done in your Module class' initialize method.
+
+For example:
+
+&lt;pre&gt;
+    BESDEBUG( "mydebug", "    adding " &lt;&lt; modname &lt;&lt; " aggregation" &lt;&lt; endl )
+    BESAggFactory::TheFactory()-&gt;add_handler( modname, MyAggregationServer::AggBuilder ) ;
+&lt;/pre&gt;
+
+Typically, the name of the aggregation engine is the same as the name of your module. In this example, modname would be "someHandler".
+
+== Writing your &lt;code&gt;aggregate&lt;/code&gt; method ==
+The aggregate method is the only method that you need to implement. This is the method that gets called to aggregate the resulting DataDDS object. The DataDDS object is stored in the BESDataHandlerInterface instance passed to your method. Here is an example of getting the DataDDS out of the BESDataHandlerInterface.
+
+&lt;pre&gt;
+void
+NCESGAggregationServer::aggregate( BESDataHandlerInterface &amp;dhi )
+{
+    if( dhi.action == "das" )
+    {
+        string err = "DAS is not a valid request type in aggregated datasets" ;
+        throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+
+    BESResponseObject *resp = dhi.response_handler-&gt;get_response_object() ;
+    BESDataDDSResponse *bdds = dynamic_cast&lt;BESDataDDSResponse *&gt;(resp) ;
+    if( !bdds )
+    {
+        string err = "response object is not a DataDDS" ;
+        throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+    DataDDS *dds = bdds-&gt;get_dds() ;
+    if( !dds )
+    {
+        string err = "dap response object is not a DataDDS" ;
+        throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+
+    ....
+    your code here
+    .....
+&lt;/pre&gt;
+
+Once you have the DataDDS you have all of the data that has been read in and you can perform your aggregation. The DataDDS will be organized in the following manner. For each of the containers defined in the BES request (in our example, c1, c2, c3, and c4) there will be a structure containing the data for that container. So, in our example, you would have:
+
+&lt;pre&gt;
+Dataset {
+    Structure {
+        Int16 u[time_a = 16][lat = 17][lon = 21];
+    } c1;
+    Structure {
+        Int16 u[time_a = 16][lat = 17][lon = 21];
+    } c2;
+    Structure {
+        Int16 u[time_a = 16][lat = 17][lon = 21];
+    } c3;
+    Structure {
+        Int16 u[time_a = 16][lat = 17][lon = 21];
+    } c4;
+} fnoc1.nc;
+&lt;/pre&gt;
+
+The result of your aggregation will be a new DataDDS object that will take the place of the one you got out. The end of your function might look something like this:
+
+&lt;pre&gt;
+    ....
+    your code here
+    ...
+    BESDataDDSResponse *my_bdata = new BESDataDDSResponse( my_data ) ;
+    dhi.response_handler-&gt;set_response_object( my_bdata ) ;
+    delete bdds ;
+}
+&lt;/pre&gt;
+
+== Summary ==
+We recommend that your first step in writing your own aggregation server is to create the classes that you will need with an empty &lt;code&gt;aggregate&lt;/code&gt; method, get it compiled and installed, load the module into the BES, and make sure that your aggregation method is being called. Once you have done this, then you can write your &lt;code&gt;aggregate&lt;/code&gt; method.
+
+Here's what you need to do:
+# Create your class that inherits from BESAggregationServer using the code from above.
+# Register your AggBuilder function with the BESAggFactory in your Module class.
+# Build your new code, creating a shared object library (.so file) that can be loaded into the BES
+# Add your module to the BES configuration file
+# Run the BES with this new module
+# Implement your &lt;code&gt;aggregate&lt;/code&gt; method
+
+For more information on the Module class and adding it to the BES configuration file, please refer to the [[Hyrax - Extending BES Module|Extending the BES]] page.
+
+[[Category:Extending BES|Aggregation]]</text>
+      <sha1>qerob38gzl159yed2shjc1a3oligv81</sha1>
+    </revision>
+  </page>
+</mediawiki>

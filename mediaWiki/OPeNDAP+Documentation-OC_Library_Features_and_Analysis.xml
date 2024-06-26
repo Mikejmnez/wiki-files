@@ -1,0 +1,159 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>OC Library Features and Analysis</title>
+    <ns>0</ns>
+    <id>400</id>
+    <revision>
+      <id>3098</id>
+      <parentid>3097</parentid>
+      <timestamp>2009-01-27T22:32:47Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Post Conditions */</comment>
+      <origin>3098</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4958" sha1="kkgmf4kbyohuiqbjv86td37c64bzsar" xml:space="preserve">== Features ==
+''Features likely needed by any general C-language client-side API for DAP''
+
+=== features already implemented in oc ===
+
+# get variables (primitive types)
+# get array varaibles (of primitive types)
+# get attributes
+
+=== features that can be implemented with little effort ===
+''little means using the current library's structure and some more code''
+
+# make print representations for all responses (DAS, DDS, DataDDS)
+# http authentication support
+# SSL suport
+# cookie support
+#.dodsrc support (read and write)
+# compression support
+# testing - write automated tests
+# nightly builds
+# automated build (autoconf, make, libtool)
+# more typical API (open, read, close all based on an opaque parameter - object - and C's existing data types)
+
+=== features that will be hard to implement ===
+''hard means extending the existing library's structure/implementation''
+
+# get structures (flat and nested)
+# get sequences (flat and nested)
+# get grids
+# get arrays of Structure
+# parse XML(DDX, DataDDX*)
+# shared dimensions*
+# groups*
+# allow constraints for the DDS
+# allow constraints for the DataDDS (e.g., lat or lon or '''lat and lon togther''')
+# DAP 3.x protocol version negotiation
+
+== Use Cases ==
+===Use Case #1===
+==== Description ==== 
+Write a client for oc that is a command line tool which allows constraints and prints the desired schema and the data (when appropriate) in the getdap format.
+
+==== Goal ====
+This use case is designed to identify the essential functions that are required in order for a command line client from the current Ocapi code to be replicated in the oc.
+
+==== Summary ====
+The current Ocapi code has undergone a major rewrite which has provided a new branch of the original code called oc.  The oc code branch is approximately half the size of the Ocapi code branch and the complexity of the code is reduced dramatically.  
+The Ocapi code has a client that is a command line tool to allow an end user to access a desired  schema, with or without constraints, and have that schema printed out in a special format.  This use case is designed in principal, to see if the new oc code will allow for the same functionality as the Ocapi code in order to achieve the same results that the Ocapi currently provides.  If the oc code is not as capable as the current Ocapi code this use case will identify the missing criteria and give a general idea of how much coding it will take to get the new oc code branch on the same functionality level as the Ocapi code branch. If the oc proves to be a more efficient means of running the c library then it is plausible that the oc code will be adopted as the current Ocapi code and any new development will occur on this code branch and the Ocapi code will no longer be maintained.
+
+Note: Since it appears that the oc code does not include functions to print the results of a query, we might take this as an opportunity to write functions that mimic libdap's output functions/methods and not those of the current Ocapi library.
+
+==== Actors ====
+Primary:  end user- this is any individual that is using the system to retrieve data utilizing the dap standard for individual use
+C  libraries
+Api's
+Clients
+
+==== Preconditions ====
+The oc code must be properly compiled with no errors. 
+The oc code must contain all necessary functions in order to achieve the desired outcome. These include functions that allow the data to be read in and printed in the appropriate format, allow constraints, proxy support, http authentication, SSL, cookies, compression, .dodsrc file support, and password and username provisions.
+
+==== Triggers ====
+An end user downloads the oc code, builds and compiles the code. A command line is open and the newly created get_oc client is initiated with a proper url and constraints if desired.
+
+==== Basic Flow ====
+# Identify URL
+# Initialize the oc
+## Provide proxy support
+## Provide http authentication
+## Provide SSL support
+# Allow for the das, dds, and dods schemas
+# Read url specified
+# Retrieve the data from the above url
+# Print the DDS, DAS or DataDDS
+
+==== Alternate Flow ====
+Provide error handling for all of the specific functions listed above
+
+==== Post Conditions ====
+The user will request information/data using the new client (that has been copied from, or based on, the current Ocapi  and/or libdap code) and that particular data set requested will be returned and printed to the screen.
+
+==== Activity Diagram ====
+
+==== Notes ====
+The oc code has to be able to read and print sequences, arrays, structures, strings,  primitive data types, array of structures, nested sequences, grids, and nested structures.
+
+==== Resources ====
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|''oc code and Ocapi code''
+|''OPeNDAP''
+|''C library for dap protocal''
+|''Continuous availability''
+|''OPeNDAP web site''
+|}
+
+== Definitions ==
+
+
+== Background ==
+
+
+== Deliverables ==
+
+
+== Period of use ==</text>
+      <sha1>kkgmf4kbyohuiqbjv86td37c64bzsar</sha1>
+    </revision>
+  </page>
+</mediawiki>

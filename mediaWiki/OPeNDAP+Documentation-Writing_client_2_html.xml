@@ -1,0 +1,97 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Writing client 2.html</title>
+    <ns>0</ns>
+    <id>5</id>
+    <revision>
+      <id>36</id>
+      <timestamp>2007-02-25T02:48:20Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>New page: {| width="100%" cellspacing="2" | bgcolor="#99ccff" | [writing_client_1.html [[Image:previous.gif|1 Preface]]] | bgcolor="#99ccff" | [writing_client.html [[Image:up.gif|Top]]] | bgcolor="#...</comment>
+      <origin>36</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6005" sha1="r7oqf47ouoklo93vja4ovngmkl7qw6n" xml:space="preserve">{| width="100%" cellspacing="2"
+| bgcolor="#99ccff" |
+[writing_client_1.html [[Image:previous.gif|1 Preface]]]
+| bgcolor="#99ccff" |
+[writing_client.html [[Image:up.gif|Top]]]
+| bgcolor="#99ccff" |
+[writing_client_3.html [[Image:next.gif|3 The DAP Architecture]]]
+| width="100%" bgcolor="#99ccff" align="center" | '''2 Writing your own OPeNDAP client'''
+|}
+
+= 2 Writing your own OPeNDAP client =
+
+== 2.1 Choose a language ==
+
+The OPeNDAP project provides both [http://www.opendap.org/support/docs.html/api/pguide-html/ C++] and [http://www.opendap.org/support/docs.html/home/swJava1.1/ Java] implementations of the DAP. Each library includes classes that implement the various objects which comprise the DAP software for building clients. Each also includes some extra software which simplifies building clients by managing virtual connections, handling data caching, et cetera. To choose one of the toolkits, several factors should be weighed. With which of the two programming languages are you most comfortable? What type of computer will the client run on? For client development, both Java and C++ are supported on win32 and Unix architectures. Java is more likely to be supported on other architectures, such as Mac.
+
+The DAP library is middle-ware. You can use it to build a completely new client or to add network data access to an existing program (making it a client). If you're interested in writing a client from scratch, simply choose the toolkit/language you feel most comfortable. If you're going to take an existing program and transform it into a client there are several additional factors beyond programming language you should consider.
+
+If the program you want to DAP-enable can read netCDF files, by far the easiest way to achieve your goal is to use our DAP-enable netCDF ''client library'' (CL). This piece of software works like the standard netCDF CL but has been modified to recognize DAP URLs when they are presented in place of local file names. The OPeNDAP netCDF CL has exactly the same functional interface as the standard netCDF library available from Unidata. That makes it a very powerful tool because it is possible to tap into a large number of existing programs and build OPeNDAP clients. Ferret, GRrADS and IDV are complex programs which have been OPeNDAP-enabled using the netCDF CL.
+
+Using the netCDF CL is not without its caveats. First netCDF does not do a good job of representing the entire OPeNDAP data model (That's not a dig at netCDF, it's a reflection of different design goals for two pieces of software). It's very hard to access point data using the netCDF CL, although we're working on this problem. Second, the C++ DAP library is used to build the C version of the netCDF CL&lt;sup&gt;[writing_client_12.html#id1 1]&lt;/sup&gt; which means that the application programs ''must'' be linked use a C++ compiler. Finally, it can be tricky to build a shared object (aka DLL) using the C++ DAP library.&lt;sup&gt;[writing_client_12.html#id2 2]&lt;/sup&gt; If you're going to do that, please contact us through user support or the technical discussion list.
+
+However, while the previous points are true, the principle distinction between using the netCDF CL and one of the DAP class libraries is that with the netcDF CL you often do not have to write any new software at all! If you choose to use one of the DAP libraries, you're going to have to write some code.
+
+If you plan to OPeNDAP-enable an existing application using the Java toolkit, the application typically must provide a Java Virtual Machine (VM). You may be able to side-step this if you feel you can rely on the host OS to provide a JVM and/or your target program already has a JVM embedded in it. Still you must be sure there is a way to communicate data values between the DAP library and the application.
+
+To use the C++ toolkit you should insure that your client application can be built with, or link with libraries constructed using C++compilers.&lt;sup&gt;[writing_client_12.html#id3 3]&lt;/sup&gt; Check the current list of supported architectures on the web-site, or contact the DODS technical support ([mailto:support@unidata.ucar.edu support@unidata.ucar.edu]), or write to the [http://www.opendap.org/mailLists/ OPeNDAP Mailing Lists] mailing list for information and/or help.
+
+This tutorial will focus on using the C++ toolkit. In Section [writing_client_10.html A] the main programmatic differences between the two class libraries is listed. Both toolkits are essentially the same, with only minor differences between them.
+
+== 2.2 Client Architecture ==
+
+In essence, an OPeNDAP-enabled client uses overloaded URLs to form the requests to a remote data server. Through the URL, the client connects to the remote server and issues one of several requests. In response to each request, the server will return a well-defined response that the client can use to intern the structure and content of the remote data into local data structures, as well as retrieve any attributes associated with the remote data.
+
+The C++ and Java toolkits share the same characteristics, though the names of the objects and their methods may be slightly different. If you understand how the clients are built, it will be easy to see how your own client application can be OPeNDAP-enabled with minimal effort. The [http://www.opendap.org/support/docs.html/api/pguide-html/ &lt;cite&gt;The DODS Toolkit Programmer's Guide&lt;/cite&gt;] provides a complete description of the C++ Toolkit and the http://www.opendap.org/support/docs.html/home/swJava1.1/ provides a complete description of the Java toolkit.
+
+----
+James Gallagher &amp;lt;jgallagher@gso.uri.edu&amp;gt;, 2004/04/24, Revision: 1.10
+
+&lt;br /&gt;
+
+{| width="100%" cellspacing="2"
+| bgcolor="#99ccff" |
+[writing_client_1.html [[Image:previous.gif|1 Preface]]]
+| bgcolor="#99ccff" |
+[writing_client.html [[Image:up.gif|Top]]]
+| bgcolor="#99ccff" |
+[writing_client_3.html [[Image:next.gif|3 The DAP Architecture]]]
+| width="100%" bgcolor="#99ccff" align="center" | '''2 Writing your own OPeNDAP client'''
+|}</text>
+      <sha1>r7oqf47ouoklo93vja4ovngmkl7qw6n</sha1>
+    </revision>
+  </page>
+</mediawiki>

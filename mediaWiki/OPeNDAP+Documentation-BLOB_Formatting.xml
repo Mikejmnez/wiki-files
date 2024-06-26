@@ -1,0 +1,62 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>BLOB Formatting</title>
+    <ns>0</ns>
+    <id>311</id>
+    <revision>
+      <id>2241</id>
+      <parentid>2240</parentid>
+      <timestamp>2008-06-24T22:06:31Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>2241</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1962" sha1="1sdyu6zlm6f5kn0z1jdvdkuay6lb1uf" xml:space="preserve">We're going to have to structure the inside of a DAPBLOB object/response so that while a server is writing the object, it can report an error, dump the ErrorX into the DAPBLOB and a client can be sure it'll get the ErrorX.
+
+One way to do this is 'chunk' the data in the DAPBLOB. In this scheme, the DAPBLOB announces its chunk size at the beginning (using a MIME header?) and guarantees that the client can read at least that many bytes. If an error is found while preparing the next chunk, write an ErrorX, else write the next chunk of data. Repeat until done. If the first chunk contains an error, respond with an ErrorX and not a DAPBLOB.
+
+Does MIME support chunked messages? No (James Gallagher - 26 Sep 2003)
+
+I also think that the DAPBLOB should contain a reference to the DDX URL which describes the types the DAPBLOB contains. A back pointer of sorts... James Gallagher - 19 Sep 2003
+
+I've spent a little time poking around and I think the best way to handle this is to put the BLOB in a MIME document and make that document have a &lt;code&gt;Content-Type&lt;/code&gt; of &lt;code&gt;multipart/mixed&lt;/code&gt; (see [http://www.faqs.org/rfcs/rfc2046.html RFC 2046], Sec 5). Each 'chunk' of binary data would be enclosed in a &lt;code&gt;boundary&lt;/code&gt; section which could have a header indicating that it is &lt;code&gt;application/octet-stream&lt;/code&gt; information. We can include other headers (such as &lt;code&gt;Content-Description&lt;/code&gt;) which would be used to tell if the stuff a given part was more binary data or an ErrorX object. Note that parts in a multipart MIME document don't ''have'' to include headers, but they ''can''. James Gallagher - 26 Sep 2003
+
+
+This seems like an HTTP specific solution. Is that what we want? Nathan Potter - 26 Sep 2003
+
+
+I don't think it is HTTP specific. We move stuff around inside MIME documents. Those documents can be moved by just about anything. I don't think we should buy into the 7-bit clean stuff, though...  James Gallagher - 26 Sep 2003</text>
+      <sha1>1sdyu6zlm6f5kn0z1jdvdkuay6lb1uf</sha1>
+    </revision>
+  </page>
+</mediawiki>

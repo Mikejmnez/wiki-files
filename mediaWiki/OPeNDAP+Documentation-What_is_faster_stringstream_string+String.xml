@@ -1,0 +1,82 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>What is faster? stringstream string + String</title>
+    <ns>0</ns>
+    <id>1065</id>
+    <revision>
+      <id>13498</id>
+      <parentid>13497</parentid>
+      <timestamp>2023-08-16T18:45:19Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <origin>13498</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1398" sha1="sk5owr3ycr8welgaeekcjob8zkjbtky" xml:space="preserve">== Question ==
+
+I have two string objects:string str_1, str_2. I want to concatenate to them. I can use two methods: 
+
+method 1:
+
+&lt;pre&gt;
+std::stringstream ss;
+ss &lt;&lt; "hello"&lt;&lt; "world"；
+const std::string dst_str = std::move(ss.str());
+&lt;/pre&gt;
+
+method 2:
+
+&lt;pre&gt;
+std::string str_1("hello");
+std::string str_2("world");
+const std::string dst_str = str_1 + str_2;
+&lt;/pre&gt;
+
+Because the string's buffer is read only, when you change the string object, its buffer will destroy and create a new one to store new content. So method 1 is better than method 2? Is my understanding correct?
+
+== Answer ==
+From StackOverflow (https://stackoverflow.com/questions/30254175/is-stringstream-better-than-strings-operator-for-string-objects-concatenati)
+
+stringstreams are complex objects compared to simple strings. Everythime you use method 1, a stringstream must be constructed, and later destructed. If you do this millions of time, the overhead will be far from neglectible.
+
+The apparently simple &lt;pre&gt;ss &lt;&lt; str_1 &lt;&lt; str_2&lt;/pre&gt; is in fact equivalent to &lt;pre&gt;std::operator&lt;&lt;(sst::operator&lt;&lt;(ss, str_1), str_2);&lt;/pre&gt; which is not optimized for in memory concatenation, but common to all the streams.
+
+I've done a small benchmark :
+
+* In debug mode, method 2 is almost twice as fast as method1.
+
+* In optimized build (verifying in the assembler file that nothing was optimized away), it's more then 27 times faster.</text>
+      <sha1>sk5owr3ycr8welgaeekcjob8zkjbtky</sha1>
+    </revision>
+  </page>
+</mediawiki>

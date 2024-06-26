@@ -1,0 +1,269 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>LibdapDataClasses</title>
+    <ns>0</ns>
+    <id>539</id>
+    <revision>
+      <id>4927</id>
+      <parentid>4925</parentid>
+      <timestamp>2009-10-06T21:41:42Z</timestamp>
+      <contributor>
+        <username>TomSgouros</username>
+        <id>39</id>
+      </contributor>
+      <origin>4927</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="10772" sha1="2t458d2s9t0h6nv38e1t6mzx6ninrqm" xml:space="preserve">[[Libdap_Overview|return to Libdap Overview]]
+
+=Using the Libdap Classes=
+
+
+In order to be used by real client-libraries and data servers, many of
+the classes in the libdap toolkit must be subclassed. For example, the
+type hierarchy classes, which represent the data types in the OPeNDAP
+data model, are all abstract classes. In order to use them in a
+program they must be subclassed. The Connect class also must
+be subclassed if it to hold additional information about the
+connection.
+
+==Sub-classing the Type Hierarchy==
+
+
+In order to link a program with libdap, the DAP's abstract classes
+must be subclassed and those subclasses must ensure that all of the
+member functions of those classes have valid definitions. The next
+three sections cover sub-classing the simple, vector and compound
+classes, respectively. In addition, a sample set of classes (called
+the &lt;font color='green'&gt;Test&lt;/font&gt; classes because they are used by
+the DAP tests) is included with the DAP distribution. You can read the
+source code for those classes to find out how they were created.
+
+
+Each of the sub-classed types must supply: 
+
+  
+*A constructor that takes a String argument and returns an object with that name.   
+*A virtual destructor.
+*A copy function called &lt;font color='green'&gt;ptr_duplicate&lt;/font&gt;.
+*The &lt;font color='green'&gt;read&lt;/font&gt; function, to read data from a disk and load it into the type class object.  
+
+The &lt;font color='green'&gt;ptr_duplicate&lt;/font&gt; member function returns a pointer to a new instance of the type of object from which it was invoked. This member
+function exists so that objects that are referenced through pointers
+to BaseType can correctly copy themselves. (If you were to use
+the operator &lt;font color='green'&gt;new&lt;/font&gt; to copy an object referenced through
+BaseType , you would get a  BaseType, not a new instance of the type of the referenced object.) Note that &lt;font color='green'&gt;ptr_duplicate&lt;/font&gt;
+is a virtual function so an object which is a descendent of BaseType will get the most specific definition of that function.
+
+The &lt;font color='green'&gt;read&lt;/font&gt; function is much more complicated to write than
+&lt;font color='green'&gt;ptr_duplicate&lt;/font&gt;, and the difficulty varies depending on the data type to be read. However, this function is only used on the server
+side of the system and not by the client.  That is, it can be
+implemented with a null function body if all you are building is a
+client library. The &lt;font color='green'&gt;read&lt;/font&gt; function takes two arguments, the
+dataset name, and an error flag.  It must read from that dataset the
+values specified by the current constraint expression. The error flag
+is passed by reference so that read can set its value and callers can
+test it.  The class BaseType contains a number of member
+functions to facilitate writing a read function.  The return value of
+&lt;font color='green'&gt;read&lt;/font&gt; is TRUE is there is more data to be read (by additional calls to &lt;font color='green'&gt;read&lt;/font&gt;) or FALSE otherwise.
+
+
+===Sub-classing the Simple Types===
+
+
+Creating a &lt;font color='green'&gt;read&lt;/font&gt; function for the simple type classes is a fairly straightforward operation.  Simply read the function using the data
+access API's standard protocol, and use the type class's &lt;font color='green'&gt;val2buf&lt;/font&gt; function to load the data into the type object.
+
+Here's an example, from the OPeNDAP implementation of the netCDF
+client library. 
+
+
+&lt;pre&gt;
+
+NCByte::read(const String &amp;dataset, int &amp;error) 
+{
+   int varid;                  /* variable Id */
+   nc_type datatype;           /* variable data type */
+   long cor[MAX_NC_DIMS];      /* corner coordinates */
+   int num_dim;                /* number of dim. in variable */
+   long nels = -1;             /* number of elements in buffer */
+   int id;
+
+   if (read_p()) // already done
+     return true;
+
+   int ncid = lncopen(dataset, NC_NOWRITE); /* netCDF id */
+
+   if (ncid == -1) { 
+     cerr &lt;&lt; "ncopen failed on " &lt;&lt; dataset&lt;&lt; endl;
+     return false;
+   }
+ 
+   varid = lncvarid( ncid, name());
+   (void)lncvarinq( ncid, varid, (char *)0, &amp;datatype, 
+                    &amp;num_dim, (int *)0, (int *)0);
+
+   if(nels == -1){  
+     for (id = 0; id &lt; num_dim; id++) 
+       cor[id] = 0;
+   }
+
+   if (datatype == NC_BYTE){
+     dods_byte Dbyte;
+
+     (void) lncvarget1 (ncid, varid, cor, &amp;Dbyte);
+     set_read_p(true);
+          
+     val2buf( &amp;Dbyte );
+
+     (void) lncclose(ncid);  
+     return true;
+   }
+   return false;
+}
+ 
+&lt;/pre&gt;
+
+The following points are worth consideration about the above example.
+
+ 
+
+; line 10 : Check to see if this variable has already been read.
+
+; line 13 : The &lt;font color='green'&gt;lncopen()&lt;/font&gt; function call is simply the &lt;font color='green'&gt;ncopen()&lt;/font&gt; function from the [http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;] library. Also, the &lt;font color='green'&gt;lncvarid&lt;/font&gt; function is renamed &lt;font color='green'&gt;ncvarid&lt;/font&gt; and so on.  The names have been changed to avoid link-time problems.  (Remember that the whole point of this exercise is to create a new &lt;font color='green'&gt;ncopen()&lt;/font&gt; function and its friends.
+
+; line 33 : This sets the flag tested with the &lt;font color='green'&gt;read_p&lt;/font&gt; function.
+
+; line 35 : This command transfers values from the dataset's variable to the OPeNDAP instance.  This is the point where the read actually happens.
+
+ 
+
+Note the use of &lt;font color='green'&gt;dods_byte&lt;/font&gt; in the code example.  The OPeNDAP
+configuration process creates definitions for the simple data types
+like this one. They are stored in &lt;font color='green'&gt;config_dap.h&lt;/font&gt;.
+
+The &lt;font color='green'&gt;read&lt;/font&gt; member function is used by the constraint expression
+evaluator to extract data from a dataset during evaluation of the
+constraint expression.  This is particularly important to remember
+because the &lt;font color='green'&gt;read&lt;/font&gt; member function for a simple data type will be
+called when reading an aggregate type such as Structure.
+
+===Sub-classing the Vector Types===
+
+
+The vector data types require the same abstract member functions be
+defined as the simple types. The definition for &lt;font color='green'&gt;ptr_duplicate&lt;/font&gt;
+is also the same for vector as for simple types.  However, the
+&lt;font color='green'&gt;read&lt;/font&gt; member function for the vector types (classes Array
+and List) is more complicated than for the simple types
+because vectors of values are represented in two ways in OPeNDAP,
+depending on the type of variable in the vector. Arrays are stored as
+C would store them for the simple types such as Byte,
+Int32  and  Float64.  However, compound types are stored
+as arrays of the OPeNDAP  objects (with the exception of arrays
+themselves, but more on that later).
+
+When reading an array of Byte values, the &lt;font color='green'&gt;val2buf&lt;/font&gt; member function
+should be passed a pointer to values stored in a contiguous piece of
+memory. For example, when &lt;font color='green'&gt;read&lt;/font&gt; is called to read a variable
+&lt;font color='green'&gt;byte-array&lt;/font&gt;, it must determine how much memory to allocate to
+hold that much information, use &lt;font color='green'&gt;new&lt;/font&gt; to allocate an adequate
+amount of memory, use the dataset's API calls to read
+&lt;font color='green'&gt;byte-array&lt;/font&gt; into the newly allocated memory and then pass that
+memory to &lt;font color='green'&gt;val2buf&lt;/font&gt;. This same procedure can be followed for all
+the simple types.
+
+
+However, when reading an array of Structure, for example, the
+values must be stored in the OPeNDAP Array object one at a time
+using the Array member function &lt;font color='green'&gt;set_vec&lt;/font&gt;. An
+Array  object containing a 3x4 array of  Structure
+objects will actually point to 12 different instances of that class.
+An Array  object containing  Byte objects contains
+only one instance of the Byte class, as a template for the
+array elements.
+
+Arrays in OPeNDAP are unlike arrays in C in that an array object may have
+more than one dimension. In terms of the way a value is stored,
+however, an Array is a single dimensional object. When an Array is
+declared as having two or more dimensions, those are mapped onto a
+single vector. To access the element A_ij of array ''A'' , you
+must know the size of the first dimension, ''I'' , and use the
+expression i * I + j to compute the offset into the vector.
+
+Since the class List is a single dimension array without
+''declared''  size (the size of each value of the List object is
+stored in the object) the rules for Array's read member
+function apply.
+
+===Sub-classing the Compound Types===
+
+
+The &lt;font color='green'&gt;read&lt;/font&gt; member function of the compound data types simply
+iterates over the contained variables calling their &lt;font color='green'&gt;read&lt;/font&gt; member functions. In the future, this definition will move into the supplied
+classes (That is, &lt;font color='green'&gt;read&lt;/font&gt; will no longer be a abstract member
+function for the compound types.).
+
+The two constructor types Sequence and Function are different from all
+the other types in the DAP in that they have ''state'' . That is, the
+value of a sequence depends on how many values have been read
+previously.  This is very different from an array where the i^{th}
+element has the same value regardless of what has happened
+before. When you write implementations for &lt;font
+color='green'&gt;read&lt;/font&gt; in the Sequence and Function classes, you
+must be sure to write those member functions so that they can be
+called repeatedly and that each call to read returns the next value of
+the corresponding data Sequence or Function.
+
+This is true because the constraint expression evaluator must be able
+to apply certain constraints to values of individual sequence elements
+and is actually implemented in the DDS class by first calling the read
+member function, evaluating the constraint expression based on the
+values and, if the constraint expression is satisfied, calling the
+serialize member function.  See the member function &lt;font
+color='green'&gt;DDS::send&lt;/font&gt;.
+
+If, for some reason, it is not possible to write &lt;font
+color='green'&gt;read&lt;/font&gt; so that it gets called once for each
+sequence value, then you must
+re-implement &lt;font color='green'&gt;DDS::send&lt;/font&gt; so that its
+functions are performed. For example, you could implement &lt;font
+color='green'&gt;Sequence::read&lt;/font&gt; so that the entire sequence is
+read in and overload &lt;font color='green'&gt;Sequence::serialize&lt;/font&gt;
+and &lt;font color='green'&gt;Sequence::deserialize&lt;/font&gt; so that the next
+set of values are sent/received. You would then build a send that
+called the &lt;font color='green'&gt;Sequence::read&lt;/font&gt; member function
+once and extracted each successive value, evaluated the constraint
+expression using on that value and used the result of that evaluation
+to determine whether to send the value or not.</text>
+      <sha1>2t458d2s9t0h6nv38e1t6mzx6ninrqm</sha1>
+    </revision>
+  </page>
+</mediawiki>

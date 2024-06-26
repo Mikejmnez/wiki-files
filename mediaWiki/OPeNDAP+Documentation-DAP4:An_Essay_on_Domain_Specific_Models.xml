@@ -1,0 +1,76 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: An Essay on Domain Specific Models</title>
+    <ns>0</ns>
+    <id>817</id>
+    <revision>
+      <id>8141</id>
+      <parentid>8140</parentid>
+      <timestamp>2012-05-05T20:55:14Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <origin>8141</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2889" sha1="6ir94a3tfcloqb72qtq5z0fx0or106z" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+== Domain Specific Models ==
+
+A domain specific model is one which has constructs that are specific to a particular domain. Examples are the CDM [http://www.unidata.ucar.edu/software/netcdf-java/CDM Coordinate System and Scientific Feature Type] models, which augment CDM with features such as lat-lon based indexing, grids, and point data.
+
+It is often the case that a domain specific model is implemented by providing an API that in turn is implemented with respect to some underlying, more generic data model. Again, CDM is an example, where the  ''Coordinate System'' and ''Scientific Feature Type'' models are implemented using the underlying CDM ''Data Access Layer'' model.
+
+DAP4 also provides a good, generic model capable of supporting domain specific models. In fact, it should be possible to implement the equivalent of the CDM ''Coordinate System'' and ''Scientific Feature Type'' models on top of DAP4.
+
+[[File:dm.png|centered]]
+&lt;center&gt;Figure 1. Notional Domain Model over DAP4 Architecture&lt;/center&gt;
+
+Figure 1 shows a notional architecture for using DAP4 as the basis for domain specific modeling.
+
+The client is given an API supporting a domain specific model. It is assumed here that an instance of the domain model meta-data is represented as a traversable abstract syntax tree.  So, the model API would provide the following operations.
+# Request the meta-data for a specific dataset. The result would be  a reference to the root of the abstract tree for that meta-data. This is analogous to asking DAP2 for a DDS.
+# Traverse the meta-data tree.
+# Request some subset of the data associated with the dataset. The request would be in terms of the domain-specific model.
+
+The domain-specific library implementing the API would be responsible for making requests to the server for information. Those requests would indicate to the server the domain model being used as well as the dataset being requested.
+
+The reply from the server would be in the form of a DAP4 DDX and data with annotations (i.e. attributes and extra variables) sufficient to allow the client-side domain model library to convert the returned information to the domain model for presentation to the client.
+
+The server side operation is similar. It is assumed that request from a client contains sufficient identifying information to allow the server (a servlet server such as Tomcat) to forward the request to the servlet capable of intrepreting such a domain specific model request.
+
+The domain specific model servlet is capable of translating the dataset into DAP4 as the reply to the client's request. As expected by the client, the reply is annotated with sufficient information to allow the generic DAP4 reply to be converted to the domain specific model.
+
+[[User:dmh|Dennis Heimbigner]]</text>
+      <sha1>6ir94a3tfcloqb72qtq5z0fx0or106z</sha1>
+    </revision>
+  </page>
+</mediawiki>

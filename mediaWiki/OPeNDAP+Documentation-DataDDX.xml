@@ -1,0 +1,184 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DataDDX</title>
+    <ns>0</ns>
+    <id>339</id>
+    <revision>
+      <id>9624</id>
+      <parentid>7227</parentid>
+      <timestamp>2013-04-29T17:43:42Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>9624</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="9177" sha1="fcrqo8wnhbvir21lk5d9fikiupgxxqq" xml:space="preserve">* Use a multipart MIME document to hold the DDX and one ''data blob'' per DDX. Adopt the same use of Multipart MIME as WCS uses.
+
+* consider the following design idea for embedding type information within the data stream:
+&lt;blockquote&gt;In DAP2, the DDS is used as a descriptive header for data. For gridded data that works OK but for point data it doesn't work so well. When the data are read as from a stream, it's OK, but when the data are read and stored, then used, they need to be in a linked structure. Because the DDS contains the data type definition and not the value, it does not hold a structure suitable for holding values. Look at how the d_values field in Sequence works (see Sequence::print_val(), deserialize()). A better approach would be to encode the type of a variable in the data stream itself and have the reader (client most of the time) build instances as needed. For arrays, structures and simple types this is mostly a wash, but for Sequences it would be a major plus because the protocol could support sequences of complex objects more easily. It would also get rid of the odd situation where a DDS holds a type definition for a nested sequence while the top-most sequence holds the tree of objects which hold values. (I.E. the child sequences in the DDS don't hold data at all).&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+As an alternative, suppose we build a data response using the DDX in a multipart document and then encoded type information in the data stream as well? &lt;s&gt;This would provide a way to bundle attributes with variables in the data response and locate type information with the data values (for sequences mostly).&lt;/s&gt; &lt;font color="red"&gt;It's not possible to return the Attributes with a constrained DDX because the constraint can alter the attributes in ways that cannot be computed without semantic knowledge about the attribute.&lt;/font&gt;
+&lt;/blockquote&gt;
+
+[[DAP_4.0_Design#DataDDX|See also the Dap 4.0 Design for the DDX]] Note that there are some contradictions between the two documents.
+
+== Questions to consider ==
+
+# Will we be able to implement it efficiently?
+# How can we get those pesky reliable error messages/objects in there?
+# What will trigger our server to send this response?
+
+== Normative References ==
+
+[http://tools.ietf.org/html/rfc2112 Multipart MIME]
+
+[http://www.w3.org/TR/xlink/ Xlink]
+
+== Using Multipart MIME for the DataDDX response ==
+
+The DataDDX response's network representation will be as a Multipart MIME document with two parts: One part that contains a DDX that contains zero or more variables; and one part that contains zero or more bytes of XDR-encoded data which corresponds to the variables declared in the DDX. The ''Data'' element in the DDX holds an xlink reference to this second part.
+
+The DataDDX may be empty to account for cases where a dataset contains only type definitions, something that never happens now but which is an emerging feature of both HDF5 and NetCDF4.
+
+The DataDDX will always have two parts, even if the second 'data' part is empty so that processing software can always assume that a DataDDX will occupy two parts of a multipart MIME document.
+
+The ''Data'' element is used to link the DDX, in one part, to the data values, in another part, so that other protocols (e.g., DAP-SOAP) can package several responses in one document easily. That is, while this design does not provide for that capability, it is easily extensible to one that does.
+
+=== Adding the ''Data'' element ===
+
+In addition to the multipart MIME document that holds the two parts of the data response, the ''Data'' element holds a reference to the 'data part' of the response. Here's a sample ''Data'' element:
+
+&lt;pre&gt;
+&lt;Data xmlns:xlink="http://www.w3.org/XML/1999/xlink" 
+      xlink:href="cid:6efa6ea4:98eda872192:-1ed1" xlink:type="simple"/&gt;
+&lt;/pre&gt;
+
+=== Example DataDDX response Sent via HTTP 1.1 ===
+
+Note that this example shows the DataDDX being returned using HTTP/1.1. In past versions of DAP important information was encoded in the HTTP response headers. In this example the key information, that this response conforms to DAP version 3.2 is encoded both in the response header and the DDX response element using the ''dap-version'' attribute. This makes the DataDDX more friendly toward applications which use non-HTTP transport protocols.
+
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+ HTTP/1.1 200 OK
+ Server: Apache-Coyote/1.1
+ Content-Type: multipart/related; type="text/xml"; start="&lt;080B6DC4AC8AF0C43041C57CE8DE9646&gt;"; boundary="--mimepart_7_9651610.1145395859678"
+ Date: Tue, 18 Apr 2006 21:30:59 GMT
+ XDAP: 3.2
+ Connection: close
+ 
+ --mimepart_7_9651610.1145395859678
+ Content-Type: text/xml; charset=UTF-8
+ Content-Transfer-Encoding: binary
+ Content-Id: &lt;080B6DC4AC8AF0C43041C57CE8DE9646&gt;
+ 
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ 
+     &lt;Dataset 
+              xmlns:xml="http://www.w3.org/XML/1998/namespace"  
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xml.opendap.org/ns/DAP/3.2#  http://xml.opendap.org/dap/dap/3.2.xsd"
+              xmlns="http://xml.opendap.org/ns/DAP/3.2#"
+              xmlns:dap="http://xml.opendap.org/ns/DAP/3.2#"
+              xml:base="http://test.opendap.org/dap/data/nc/fnoc1.nc.ddx"
+              dap_version="3.2"
+              name="fnoc1.nc"&gt;
+
+        &lt;Data xmlns:xlink="http://www.w3.org/XML/1999/xlink" 
+              xlink:href="cid:6efa6ea4:98eda872192:-1ed1" xlink:type="simple"/&gt;
+
+        &lt;Attribute name="NC_GLOBAL" type="Container"&gt;
+	     &lt;Attribute name="base_time" type="String"&gt;
+	         &lt;value&gt;&amp;quot;88- 10-00:00:00&amp;quot;&lt;/value&gt;
+	     &lt;/Attribute&gt;
+	     &lt;Attribute name="title" type="String"&gt;
+	         &lt;value&gt;&amp;quot; FNOC UV wind components from 1988- 10 to 1988- 13.&amp;quot;&lt;/value&gt;
+	     &lt;/Attribute&gt;
+	 &lt;/Attribute&gt;
+	 &lt;Attribute name="DODS_EXTRA" type="Container"&gt;
+	     &lt;Attribute name="Unlimited_Dimension" type="String"&gt;
+	         &lt;value&gt;&amp;quot;time_a&amp;quot;&lt;/value&gt;
+	     &lt;/Attribute&gt;
+	 &lt;/Attribute&gt;
+	 &lt;Array name="v"&gt;
+	     &lt;Attribute name="units" type="String"&gt;
+		 &lt;value&gt;&amp;quot;meter per second&amp;quot;&lt;/value&gt;
+	     &lt;/Attribute&gt;
+             &lt;Attribute name="long_name" type="String"&gt;
+		 &lt;value&gt;&amp;quot;Vector wind northward component&amp;quot;&lt;/value&gt;
+	     &lt;/Attribute&gt;
+	     &lt;Attribute name="missing_value" type="String"&gt;
+		 &lt;value&gt;&amp;quot;-32767&amp;quot;&lt;/value&gt;
+	     &lt;/Attribute&gt;
+	     &lt;Attribute name="scale_factor" type="String"&gt;
+		 &lt;value&gt;&amp;quot;0.005&amp;quot;&lt;/value&gt;
+	     &lt;/Attribute&gt;
+	     &lt;Int16/&gt;
+	     &lt;dimension name="time_a" size="16"/&gt;
+	     &lt;dimension name="lat" size="17"/&gt;
+	     &lt;dimension name="lon" size="21"/&gt;
+	 &lt;/Array&gt;
+     &lt;/Dataset&gt;
+ &lt;/xml&gt;
+
+ --mimepart_7_9651610.1145395859678
+ Content-Type: application/octet-stream
+ Content-Transfer-Encoding: binary
+ Content-Id: 6efa6ea4:98eda872192:-1ed1
+   
+   Here be the XDR encoded binary stuff that is the data from the GetDATA request
+   
+ --mimepart_7_9651610.1145395859678--
+&lt;/source&gt;
+&lt;/font&gt;
+
+== Encoding the binary data ==
+
+How we encode the binary data will determine if a client can reasonably be expected to recognize when the data serialization code has stumbled and been forced to send an error message in place of the data. Another issue we might look at is the current cumbersome way of encoding Sequence data - it places a heavy burden on the server and has always had significant issues (i.e., it's broken).
+
+=== Reliable Errors in the Hyrax Response ===
+
+The BES and OLFS communicate using data transmissions that are ''chunked''. That means that the BES first sends a seven-byte ASCII-HEX ''byte count'' and ''control character'' of ''d'' for data (for a total of eight bytes) followed by that number of bytes of data, zero or more times followed by a ''byte count/control character'' sequence of 0x0000000d (seven ASCII digits plus a ''d''). If the BES encounters an error it sends a ''byte count'' and ''control character'' that is out of band control information and then the error in a following data block. The chunking scheme is described on the Trac site in [https://scm.opendap.org/trac/wiki/BES_Chunking BES Chunking].
+
+What currently happens in the OLFS to suppoprt DAP2 responses is that the ''byte count'' is read, then the following block of data is read and passed onto the client, then the next ''byte count'' is read, ..., until the 0x0000000d is read signaling the end of the document. That is the chunked nature of the data transmission is stripped so that the data Hyrax now (DAP 2.0 to 3.2) sends is not chunked. 
+
+I would propose that for DAP 3.2 (or 3.3?) we make it so that those byte counts are passed onto the client in the data part of the DataDDX response. This will allow Hyrax to send errors and other out-of-band information to clients in a way that client can actually use. See [[Hyrax_-_BES_PPT#PPT_Chunking | Chunking]] for a description; it's fairly simple.
+
+=== Encoding Sequence Data ===
+
+Adopt the suggestion that type information be included in the data stream. This will duplicate some (small) amount of information, but make the software to decode the data easier to write, including particularly, nested sequences.
+
+[[Category:Development|DataDDX]][[Category:DAP4|DataDDX]]</text>
+      <sha1>fcrqo8wnhbvir21lk5d9fikiupgxxqq</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,75 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: DAP4 Error Responses</title>
+    <ns>0</ns>
+    <id>823</id>
+    <revision>
+      <id>8229</id>
+      <timestamp>2012-05-08T21:51:20Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <comment>Created page with "[[Category:Development|Development]][[Category:DAP4|DAP4]] [[OPULS_Development| &lt;&lt; Back to OPULS Development]]  == Background == It must be expected that any DAP4 server will enc..."</comment>
+      <origin>8229</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2040" sha1="mojbs4u583jxkqz6m7wi3roetguflpi" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+== Background ==
+It must be expected that any DAP4 server will encounter unrecoverable errors when processing a DAP4 request. Thus the DAP4 protocol must be prepared to communicate such errors from the server to the requesting client.
+
+== Proposal ==
+The [[DAP4: DAP4 Multipart Mime Format | multipart mime proposal]] is to be extended so that at any point, the sequence of parts can be terminated with an error part describing the error and ending the request.
+
+The proposed format for an error part is as follows.
+&lt;pre&gt;
+--&lt;&lt;boundary&gt;&gt;
+   Content-Type: text/xml; charset=UTF-8
+   Content-Transfer-Encoding: binary
+   Content-Description: error
+       &lt;&lt;Error Body&gt;&gt;
+&lt;/pre&gt;
+
+The error body contains information using a T.B.D. xml document structure.  It is proposed that the error body contain at least the following information.
+# An error code (an integer) &amp;ndash; provides a short characterization of the error. The set of error codes will be defined and extended as needed.
+# An error message &amp;ndash; provides a detailed characterization of the error.
+# Positional information &amp;ndash; where appropriate, this provides a "pointer" into some text document that shows where the error was detected. Possible documents include the DDX and the constraint expression. The positional information will include, as appropriate, a document reference, (optionally) a line number, and a character number either within the line or within the document as a whole.
+# Context information &amp;ndash; provide additional information that will help to isolate the error and its cause. A java stack trace would be an example of this.
+# Other information &amp;ndash; Any other arbitrary text information thought useful by the error detector.
+
+The error code and error message are the only required elements. The structure of the "other information" is undefined, but should look like a legal, if unvalidated, xml document.
+
+[[User:dmh|Dennis Heimbigner]]</text>
+      <sha1>mojbs4u583jxkqz6m7wi3roetguflpi</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,91 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: DAP4 XML</title>
+    <ns>0</ns>
+    <id>728</id>
+    <revision>
+      <id>7654</id>
+      <parentid>7405</parentid>
+      <timestamp>2012-03-27T23:32:36Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>7654</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2653" sha1="6hqu6y9jzywq601287qonm15iun4sbx" xml:space="preserve">[Most recent modifications are underlined or struck out]
+
+We have agreed to use some form of XML to represent the DXD metadata and the
+capabilities document(s). I would like to present some ideas about
+the "kind" of XML we use. These are my ideas, and are certainly not intended to be the last word on this subject.
+
+First, note that our XML is not intended to be a stand-alone document. It exists in a very specific context and for a specific purpose. This means that we are not obliged to adhere to any existing XML document "standards". &lt;ins&gt;Further, there is a strong presumption that it should be defined for ease of machine processing, not for ease of reading&lt;/ins&gt;. 
+
+I believe the rule that should guide our use of XML is to be as simple as possible and no simpler (to paraphrase Einstein).
+
+Specifically, I think we should consider the following ideas:
+# no DOCTYPE declarations: We all agree that DOCTYPE things are not for this application
+# &lt;del&gt;no XML declaration&lt;/del&gt; We decided that this is of minimal cost and it's useful to have the documents work in lots of different contexts, if for no other reason than it make development easier.
+# &lt;del&gt;no namespace declarations.&lt;/del&gt; This is useful when these documents are used in various contexts
+None of the above constructs  is necessary because they can all be inferred from the context.
+
+Additional ideas:&lt;br/&gt;
+1. We avoid the use of other kinds of cruft such as xlinks. They provide more structure than is needed for DAP4 and slow up parsing.
+
+&lt;ins&gt;2.Attribute values should never contain structural information. This means that they can be validated as of some type (simple identifier, string, integer, etc.) but that they never need to be parsed. One example of this involves representing the dimensions of a declared variable.
+Consider this example.
+&lt;pre&gt;
+&lt;Int32 name="var"&gt;
+  &lt;Dimensions&gt;
+    &lt;Dimension name="/g1/d1"/&gt;
+  &lt;/Dimensions&gt;
+&lt;/Int32&gt;
+&lt;/pre&gt;
+As opposed to this.
+&lt;pre&gt;
+&lt;Int32 name="var"&gt;
+  &lt;Dimensions&gt;
+    &lt;Dimension name="d1"&gt;
+      &lt;Path group="g1"/&gt;
+    &lt;/Dimension&gt;
+  &lt;/Dimensions&gt;
+&lt;/Int32&gt;
+&lt;/pre&gt;
+In the first example the dimension name "/g1/d1" needs to be parsed to extract the structure, namely the path to the group containing the definition of "d1". In the second example, that parsing is not necessary because it is represented by the "&lt;Path&gt;" element. I propose we use the second approach.&lt;/ins&gt;
+
+''- Dennis Heimbigner''
+
+== Discussion ==
+[[User:Jimg|Jimg]] 16:32, 27 March 2012 (PDT) At the meeting on 3/27/12 we decided to adopt an ''As simple as possible, but no simpler'' stance. We'll decide things like ''xlink'' on a case-by-case basis when they come up.</text>
+      <sha1>6hqu6y9jzywq601287qonm15iun4sbx</sha1>
+    </revision>
+  </page>
+</mediawiki>

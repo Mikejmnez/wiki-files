@@ -1,0 +1,165 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>WCS Data Model Mapping</title>
+    <ns>0</ns>
+    <id>369</id>
+    <revision>
+      <id>5198</id>
+      <parentid>5197</parentid>
+      <timestamp>2010-01-07T20:42:24Z</timestamp>
+      <contributor>
+        <username>BennoBlumenthal</username>
+        <id>25</id>
+      </contributor>
+      <comment>/* Mapping WCS/DAP Data Models */</comment>
+      <origin>5198</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6557" sha1="i5rqv86esjyrpf8jx80toznxdchzuvv" xml:space="preserve">== Mapping WCS/DAP Data Models ==
+It has been proposed that netcdf variables map to WCS fields, and netcdf datasets map to WCS coverages (Domenico &amp; Nativi).   This works for DAP as well, particularly as DAP has nested datasets, and WCS has nested coverages.  However, a coverage (both theoretically and in practice) has a single coordinate reference system (CRS) (location, time, possibly height/depth though those CRSs seem fluid in both CF and WCS).  That suggests that there be an extra coverage nesting that sorts by CRS.  This leads to a number of alternatives:
+
+# map DAP GRID variables to WCS fields, use the wcs:CRS property to group into (and name) coverages.  Drop the dataset nesting (if any).  Where would the dataset metadata go?
+# map DAP GRID variables to WCS fields, use the wcs:CRS property to group into (and name) coverages.  Use as one layer of nested coverages -- datasets would also map to coverages.   Would datasets go above/below CRS coverages?
+# map DAP GRID variables to WCS coverages, datasets to higher levels of coverage.
+# map DAP GRID variables to WCS fields, map the top coverage level to a dataset-CRS combination, subdatasets would go underneath.  That way the nesting is preserved.
+# use ncml to insure that all datasets we which to map to coverages have precisely one CRS, i.e. if a dataset has more than one CRS, use ncml to seperate it into multiple datasets, each with its own CRS. This essentially finesses the issue.
+
+''Note that the WCS 1.1.2 specification (OGC document  07-067r5, Table 13) says that if a coverage is georectified, then its domain description must have exactly one gridCRS.''
+
+
+Variables to fields make theoretical sense, but WCS defaults to all fields of a coverage if range subsetting is not requested.  I think originally people mapped data arrays into coverages, not fields.  Of course, there are not (m)any WCS 1.1.2 clients out there, so whose to say what will really happen?
+
+In addition, it is looking to me ([[User:Ndp|ndp]]) that the data model mapping is different depending on the supported format of the return.
+
+* GeoTIFF - Supports a single axis, typically RGB or RGG-alpha. The axis can be longer, but few clients would be able to use it and the semantics of the axis would be lost .
+
+* NetCDF - Supports multiple axes and the semantics of the content are well defined.
+
+So it seems as if it would be better to describe the datasets as many coverages if the target format is geotiff, and as coverages with fields if the target format is netcdf.
+
+How to accomplish this: I think maybe you would need a WCS terminus (server) for each representation - one returns a set of Coverages that map to GeoTIFF and the other that map to NetCDF.
+
+== DescribeCoverage Examples ==
+
+In the CoverageDescription the Range element is mandatory and must contain a WCS data model description of the Coverage. I think that this may well fall under the realm of Benno's semantic analysis of the DDX. Consider our pre-built use case data set:
+
+   http://dev1.opendap.org:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.html
+
+How do we represent it? Lets look at the sea surface velocity first, since I have no clue how to represent the rest of the semantic relationships in the file
+
+With the caveat that I don't clearly understand the WCS data model, here are a couple of attempts at representing the velocity field:
+
+
+=== Example 1 ===
+       &lt;Range&gt;
+           &lt;Field&gt;
+               &lt;ows:Title&gt;Sea Surface Velocity&lt;/ows:Title&gt;
+               &lt;ows:Abstract&gt;Sea surface velocity 2D vector.&lt;/ows:Abstract&gt;
+               &lt;Identifier&gt;Velocity&lt;/Identifier&gt;
+               &lt;Definition&gt;
+                   &lt;ows:AnyValue/&gt;
+               &lt;/Definition&gt;
+               &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+               &lt;owcs:InterpolationMethods&gt;
+                   &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+               &lt;/owcs:InterpolationMethods&gt;
+               &lt;Axis identifier="Velocity"&gt;
+                   &lt;AvailableKeys&gt;
+                       &lt;Key&gt;u&lt;/Key&gt;
+                       &lt;Key&gt;v&lt;/Key&gt;
+                   &lt;/AvailableKeys&gt;
+               &lt;/Axis&gt;
+           &lt;/Field&gt;
+       &lt;/Range&gt;
+
+=== Example 2 ===
+            &lt;Field&gt;
+                &lt;ows:Title&gt;Sea Surface Velocity&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;Sea surface velocity 2D vector.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;Velocity&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+                &lt;Axis identifier="surface_eastward_sea_water_velocity"&gt;
+                    &lt;AvailableKeys&gt;
+                        &lt;Key&gt;u&lt;/Key&gt;
+                    &lt;/AvailableKeys&gt;
+                &lt;/Axis&gt;
+                &lt;Axis identifier="surface_northward_sea_water_velocity"&gt;
+                    &lt;AvailableKeys&gt;
+                        &lt;Key&gt;v&lt;/Key&gt;
+                    &lt;/AvailableKeys&gt;
+                &lt;/Axis&gt;
+            &lt;/Field&gt;
+
+
+=== Example 3 ===
+
+Both of the previous  examples rely on my human semantic analysis. From a strictly mechanical view it might be like this:
+
+           &lt;Field&gt;
+               &lt;ows:Title&gt;surface_eastward_sea_water_velocity&lt;/ows:Title&gt;
+               &lt;ows:Abstract&gt;Eastward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+               &lt;Identifier&gt;surface_eastward_sea_water_velocity&lt;/Identifier&gt;
+               &lt;Definition&gt;
+                   &lt;ows:AnyValue/&gt;
+               &lt;/Definition&gt;
+               &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+               &lt;owcs:InterpolationMethods&gt;
+                   &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+               &lt;/owcs:InterpolationMethods&gt;
+           &lt;/Field&gt;
+           &lt;Field&gt;
+               &lt;ows:Title&gt;surface_northward_sea_water_velocity&lt;/ows:Title&gt;
+               &lt;ows:Abstract&gt;Northward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+               &lt;Identifier&gt;surface_northward_sea_water_velocity&lt;/Identifier&gt;
+               &lt;Definition&gt;
+                   &lt;ows:AnyValue/&gt;
+               &lt;/Definition&gt;
+               &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+               &lt;owcs:InterpolationMethods&gt;
+                   &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+               &lt;/owcs:InterpolationMethods&gt;
+           &lt;/Field&gt;
+
+In the short term I could use some help (Benno?) in trying to understand the specification.
+
+[[ndp]]
+
+----
+[[Category:WCS]]</text>
+      <sha1>i5rqv86esjyrpf8jx80toznxdchzuvv</sha1>
+    </revision>
+  </page>
+</mediawiki>

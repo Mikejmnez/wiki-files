@@ -1,0 +1,159 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>ConfigureCentos</title>
+    <ns>0</ns>
+    <id>761</id>
+    <revision>
+      <id>13315</id>
+      <parentid>13314</parentid>
+      <timestamp>2022-01-20T16:48:13Z</timestamp>
+      <contributor>
+        <username>Kneumiller</username>
+        <id>53</id>
+      </contributor>
+      <comment>/* CentOS versions */</comment>
+      <origin>13315</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7001" sha1="shsp4e0ajuw0zdmwnrtc7t2r604wjfd" xml:space="preserve">[[HowTo_guides|&lt;&lt; back to HowTo Guides]]
+
+This describes how to set up a vanilla CentOS computer so that we can build RPM binaries for the Hyrax data server. This was taken from notes describing how I configured a machine with a fresh install of CentOS 5.3 to build Hyrax. Augmented for CentOS 6. 
+
+If you're installing this on a ''virtual'' host using VMware, see the section at the end of this document for some tips on making that VM run smoothly.
+
+== CentOS versions ==
+
+These instructions have been amended to cover:
+
+* CentOS-6.9 (64-bit)
+* CentOS-7.? (64-bit)
+
+== Initial configuration ==
+
+Set up general build stuff that you need. The RPM packages you need are listed here. Using ''yum'' (''sudo yum install &lt;package&gt;'') is the easiest way to install these packages on CentOS/RedHat. The package names for Ubuntu are a bit different, but are easy to figure out. Our CI builds are done on Ubuntu 14 (as of Nov 2017), so it's certainly possible to build there:
+* java-1.7.0-openjdk
+* java-1.7.0-openjdk-devel
+* ant
+* ant-junit
+* junit
+* git 
+* gcc-c++ 
+* flex 
+* bison 
+* autoconf 
+* automake 
+* libtool 
+* emacs 
+* openssl-devel 
+* libuuid-devel 
+* readline-devel 
+* zlib-devel 
+* bzip2, bzip2-devel 
+* libjpeg-devel 
+* libxml2-devel 
+* curl-devel 
+* libicu-devel
+* vim
+* bc
+
+If you're feeling lucky, you can put all of the packages on a single line
+:''yum install java-1.7.0-openjdk java-1.7.0-openjdk-devel ant ant-junit junit git gcc-c++ flex bison autoconf automake libtool emacs openssl-devel libuuid-devel readline-devel zlib-devel bzip2 bzip2-devel libjpeg-devel libxml2-devel curl-devel libicu-devel vim bc''
+
+'''Notes:''' 
+*''Java 1.7, Ant and CentOS 6''. I found that ant 1.7 (the default with CentOS 6) would not work with Java 1.8. To get our code to build with Java 1.7, I used ''alternatives --config java'' to configure 1.7 and then ''export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.75.x86_64''. I could not compile the olfs otherwise. 
+*''7 June 2016 - CentOS 7 RPM Build''. I had to add '''bzip2-devel''', '''libicu-devel''', and '''bc''' to the set of packages to get the RPM to build on CentOS 7. It may be the case this was true of CentOS 6 as well and it just slipped by.
+*''11 Nov 2017'' - The latest versions of CentOS 6 and 7 had no problems using the packages above. I did not test Java 8 or Java 9, but Java 8 has no problems in development configurations. Tomcat7, 8, and 9 from RPMs all work as well, at least on my development machines.
+
+==== Autotools ====
+The autotools with CentOS 6 should be fine - the scripts will complain if otherwise. However, the newer autoconf/make support some nice features, so installing these newer version is not a waste. On a Test machine, this should not be done. If you don't install the new versions, make sure to use yum to install autoconf, automake and libtool. That is
+:''yum install autoconf automake libtool''
+If you don't want to use RPM for these, then:
+* download the latest versions of autoconf, automake, and libtool from GNU: http://ftp.gnu.org/gnu/
+* ./configure, make, make install
+
+==== RPM Construction Tools ====
+* ''yum install rpm-devel rpm-build redhat-rpm-config''
+
+== Hyrax specific configuration ==
+Set up things that are specific to Hyrax
+
+It's best to use as much of the RPM 'ecosystem' as possible because this is what will be on other people's computers; using newer stuff, like the lastest HDF5 library is only going to cause incompatibilities. But to do that for Hyrax, you need to get beyond the stock set of repositories that ''yum'' searches. 
+
+==== Add the EPEL EL repo to yum ====
+* Information about EPEL/EL is here: https://fedoraproject.org/wiki/EPEL.
+* For CentOS 6, you likely want the rpm package here: http://mirror.pnl.gov/epel/6/i386/repoview/epel-release.html
+
+&lt;blockquote&gt;'''Note''' Use CentOS 6 if possible for Hyrax at this time (Sept 2014). We'll be moving to combined v.6 and v.7 support soon; v.5 is no longer supported. Some CentOS 5 information is included here because this was initially written back when it was the latest version.&lt;/blockquote&gt;
+
+===== Centos 5.x =====
+But don't use this unless you really have too...
+
+* google EPEL/EL5 and 
+* find &amp; download ''epel-release-5.4.noarch.rpm''
+* install it: ''rpm -i epel-release-5.4.noarch.rpm''
+
+===== Centos 6.x =====
+Use this until we start supporting CentOS 7
+
+* google EPEL/EL6 and 
+* find &amp; download ''epel-release-6.5.noarch.rpm''
+* install it: ''rpm -i epel-release-6.5.noarch.rpm''
+
+==== Data type dependencies: NetCDF, HDF4, HDF5 ====
+* ''yum install netcdf-devel'' (note: On CentOS-6.2 you'll get netcdf-4 and on CentOS-5.3 you'll get netcdf-3)
+* ''yum install hdf-devel'' (note: 'hdf', not 'hdf4')
+* ''yum install hdf5-devel''
+
+==== Other dependencies ====
+* ''yum install libicu-devel''
+* ''yum install cfitsio-devel''
+* ''yum install cppunit-devel''
+
+==== ... If you're feeling lucky ====
+As with the 'build packages,' here are all of the 'hyrax-specific' packages so you can use just one Yum command
+:''netcdf-devel hdf-devel hdf5-devel libicu-devel cfitsio-devel cppunit-devel rpm-devel rpm-build''.
+Note that you'll still need to set up the EPEL repository.
+
+== VMware configuration tips ==
+It's best if you enable a shared directory so that you can pass stuff back and forth between the host OS and the Guest OS (i.e., the Virtual machine). That will only work if you have the ''VMware tools'' installed in/on the guest.
+
+* Install VMware-tools. This process varies, but it's pretty easy for all platforms. On VMware Fusion, look under the ''Virtual Machine'' menu for the item that says ''Install VMware Tools''. This will download lump of code and, for CentOS, mount it on '/media/VMware Tools' (yes, there's a space in the directory name). Copy the *.tar.gz file to some place like your home directory, unpack it and read the INSTALL file. For an initial installation, the typical process is to run ''vmware-install.pl''.
+* Under the configuration/options menu (the little wrench thing in Fusion), choose ''Sharing''. Make a folder with an obvious name (e.g., ''vmware'') and turn sharing on. Now, anything you put in there when on either the OS will be available to the other OS. On linux, this directory is located at ''/mnt/hgfs/&lt;&lt;name&gt;&gt;''.
+
+== Support for DEB packages ==
+It is possible to use ''fpm'' to build debian packages from RPM packages. See [https://ask.fedoraproject.org/en/question/52141/how-to-convert-rpm-package-to-deb/ how-to-convert-rpm-package-to-deb] for an explanation. In summary, make a few directories to hold parts of the RPM, load files from the RPM into them and then use ''fpm'' to build the debian package. In addition to these steps, extract the package description text to a file and pass that into ''fpm'' and look at the dependencies for the RPMs, find the corresponding Ubuntu dependencies and provide them to ''fpm''.
+
+== problems not addressed ==
+* There is no JUnit for the OLFS build
+* There is no graphviz so the ''doc'' targets for libdap and bes will fail</text>
+      <sha1>shsp4e0ajuw0zdmwnrtc7t2r604wjfd</sha1>
+    </revision>
+  </page>
+</mediawiki>

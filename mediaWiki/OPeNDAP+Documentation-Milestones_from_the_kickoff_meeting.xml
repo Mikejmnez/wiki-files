@@ -1,0 +1,69 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Milestones from the kickoff meeting</title>
+    <ns>0</ns>
+    <id>385</id>
+    <revision>
+      <id>2688</id>
+      <parentid>2685</parentid>
+      <timestamp>2009-01-08T22:00:05Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>2688</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1596" sha1="szwb0ds6vxdgnqsod8cdlkyi9mj26bv" xml:space="preserve">Integration of DAP and netCDF
+
+== Project administration activities ==
+
+* 11/2/07: Kickoff meeting. Full notes at Google Docs: http://docs.google.com/Doc?id=ddkdb64s_0c5bfmw
+# There are a number of issues regarding DAP2 and the forthcoming netCDF4 (Common Data Model) work that will need to be resolved. We have long thought that this would have happened by now with the development of DAP4, but that development has stalled. For this project, we will need to start work on DAP4 again. ''Action: Make a DAP4 page that can be referenced by all of the projects that are affected by it so that their efforts can be coordinated.''
+# Deliverables:
+## libdap++/libnc-dap + netcdf 3.7 '''3/2008'''
+## Ocapi (supporting DAP2) + glue code + netcdf 4.x '''9/2008'''
+## Ocapi (supporting DAP3.x) + glue + netcdf 4.x '''3/2009'''
+## Ocapi (Supporting DAP4) + glue + netcdf 4.x '''9/2009'''
+## Testing, beta snapshot released '''12/31/2009'''
+# Other deliverables: (these are later dates than in the meeting notes)
+## DAP4 Specification '''3/2009'''
+## libdap++ for DAP4 '''6/2009'''
+## netCDF 4.x server which uses DAP4 '''9/2009'''
+# Licensing: Unidata will release netCDF using the MIT Open Source license while OPeNDAP will keep Ocapi, libdap++, and libnc-dap under LGPL. Use of libnc-dap will be fazed out at the end of this project.
+
+== related documents ==
+
+* [http://docs.opendap.org/images/4/4a/NetCDF_OPeNDAP_Integration_Project_Ki....doc NetCDF OPeNDAP Integration Project Kickoff Meeting Notes]
+* [http://docs.opendap.org/images/4/43/SDCIprogress080401.pdf Progress report for 3/2008 from Unidata]</text>
+      <sha1>szwb0ds6vxdgnqsod8cdlkyi9mj26bv</sha1>
+    </revision>
+  </page>
+</mediawiki>

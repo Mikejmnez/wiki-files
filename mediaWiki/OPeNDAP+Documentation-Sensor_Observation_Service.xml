@@ -1,0 +1,317 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Sensor Observation Service</title>
+    <ns>0</ns>
+    <id>507</id>
+    <revision>
+      <id>4711</id>
+      <parentid>4710</parentid>
+      <timestamp>2009-08-23T20:13:29Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* IOOS-DIF Schema */</comment>
+      <origin>4711</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="30761" sha1="g216sh8gzf6uf1rpd1eb4xjl0iaheig" xml:space="preserve">== Overview ==
+
+The OGC Sensor Observation Service (SOS) is part of the OGC Web Services (OWS) initiative. As such it supports the generalized OWS services ''GetCapabilities'' , ''Describe'''X''''', and ''Get'''X''''' methods. In the particular case of SOS these methods are ''GetCapabilities'' , ''Describe'''Sensor''''', and ''Get'''Observation''''' (which doesn't truly conform to the general OWS service description...)  It also defines a number of optional services RegisterSensor, InsertObservation, GetResult, GetFeatureOfInterest, GetFeatureOfInterestTime, DescribeFeatureOfInterest, DescribeObservationType, and DescribeResultModel. Of these optional services GetResult seems to be most in line with the general OPeNDAP value of  "''send the data as compactly as possible''"  since it allows the client to minimize the transmission of ancillary metadata associated with the transmitted values of Observations.
+
+
+
+== Required Operations ==
+
+These three server operations are required 
+
+=== ows:GetCapabilities ===
+
+In response to an ows:GetCapabilities request with a ''service'' attribute set to ''SOS'' an SOS service returns an sos:Capabilities document. The sos:Capabilities document is formed form of the three OWS defined sections ''ows:ServiceIdentification, ows:SeriviceProvider, and ows:OperationsMetadata''. There are two additional sections, sos:FilterCapabilities and sos:Contents which  contain information unique to the SOS service semantics.
+
+==== Content Sections ====
+
+; '''ows:ServiceIdentification, ows:SeriviceProvider, ows:OperationsMetadata'''
+These three  parts of the sos:Capabilities responses are defined in the OWS specification. The contents of these documents are very site specific, and unlikely change very often. I think an implementation strategy for this would simple be static files, or records in a database with a user interface for making changes (I say - why not a file? It's easy!)
+
+; sos&lt;nowiki&gt;:&lt;/nowiki&gt;FilterCapabilities
+
+In this section the server advertises which of the OGC Filter Encoding (Sub-setting) activities it supports. Again this information is unlikely to change very often (probably only through server upgrades) so it could be cached in files or a database. 
+
+; sos&lt;nowiki&gt;:&lt;/nowiki&gt;Contents
+
+This section contains the "meat" of the sos:Capabilities document: A list (or catalog if you will) of all of the sos:ObservationOfferings available from the service. These sos:ObservationOffering elements each of which represents/describes a collection os related sensor system observations.
+
+==== sos:ObservationOffering ====
+
+The section (clause) 6.3 of the SOS specification describes the sos:ObservationOffering as follows:
+: ''An SOS organizes collections of related sensor system observations into Observation Offerings.  The concept of an Observation Offering is often equivalent to that of a sensor constellation discussed in the introduction to this document.  An Observation Offering is analogous to a “layer” in Web Map Service because each offering is typically a non-overlapping group of related observations.  Each Observation Offering is constrained by a number of parameters including the following: ''
+:* ''Specific sensor systems that report the observations, ''
+:* ''Time period(s) for which observations may be requested (supports historical data),  ''
+:* ''Phenomena that are being sensed,  ''
+:* ''Geographical region that contains the sensors, and ''
+:* ''Geographical region that contains the features that are the subject of the sensor observations (may differ from the sensor region for remote sensors) ''
+:''An SOS service instance should factor these classifiers into offerings such that in response to a GetObservation request the likelihood of getting an empty response for a valid query should be minimized. ''
+:''For example, suppose an SOS instance advertises two sensors – one that reports wind speed and the other that reports air temperature.  If these sensors are attached to the same weather station, they should probably be included in the same offering.  That is because a GetObservation request for weather data for a given area that includes the weather station to which the sensors are attached and for time periods that the weather station is reporting will almost always have data for both sensors.  If the client asks for wind speed only, air  temperature only, or both, the time and location of the results should be the same. ''
+:''On the other hand, if the two sensors are located on weather stations that are far apart in space or which report during non-overlapping time periods, then they should probably be factored into two distinct offerings.  If they were put into the same offering, then the combinatorial space of that single offering would be relatively sparse.  In other words, it would frequently be the case that a GetObservation request asking for temperature might return a result where one for wind speed might not.  The client might have to make quite a few GetObservation requests on a “sparse” offering before finding data, which is clearly undesirable. ''
+
+This definition makes it clear that the organization and content of each ObservationOffering is tightly coupled to the types of sensors, what phenomena they measure, and how they are organized in the physical world. Thus each sos:ObservationOffering is in essence a logical data set whose structure must be  determined by humans. 
+
+From the practical standpoint of writing server software to provide SOS services it would seem that each sos:ObservationOffering would be carefully defined and handwritten by someone familiar with sensor system(s) whose data is being made available through the SOS service.  Automatic generation of the sos:ObservationOffering content appears to be beyond the ability (scope?) of current systems to produce. The SOS specification does provide an (optional) API through which clients might learn about the structure of the documents produced by the service via a set of requests that return XML schema documents describing the ''features'', ''observations'', and ''result models'' used by the service (sos:DescribeFeatureType, sos:DescribeObservationType, and sos:DescribeResultModel respectively). However constructing these schemas, along with instances of the sos:ObservationOffering content still appears to be a human centric activity and not likely to be done through some kind of automation.
+
+
+=== sos:DescribeSensor ===
+
+The sos:DescribeSensor is used to request a SensorML document that provides a detailed description of the sensor. SensorML is a complex standard that is intended to provide a language that can describe all possible sensors, sensor networks, sensor data processing, and sensor data. The last is significant in that SensorML does define a data model. Unfortunately the SOS specification is quite vague regarding how SensorML should be used to return the sensor description. Section (clause) 8.3.3 of the SOS specification states:
+:''"A SensorML or TML document describing the sensor system."''
+And that's all it says on the matter. 
+
+I think from an implementation perspective this information, like the previous content, represents material that is very site/service specific and will have to be generated by hand by humans. Given the complexity of the SensorML specification it would probably be useful (but probably not practical) to provide a GUI/form based tools for helping people create sensor descriptions that can be stored as SensorML documents.
+
+=== sos:GetObservation ===
+
+:''"The GetObservation operation is designed to query a service to retrieve observation data structured according to the [http://www.opengeospatial.org/standards/om Observation and Measurement] specification."''
+
+The Observation and Measurement Specification (OM) provides a model for describing observations. The model is meant to provide a user-centric view point by emphasizing semantic of features in contrast to the sensor/process view of the same information which provides a more provider oriented viewpoint. The OM is used to develop specialized schemas and vocabularies for different application domains by building on semantics inherited from the OM. 
+
+In practice this means that any given producer of data (be it a single individual, a group working in a laboratory, or institution) will most likely be  required to define their own application domain using the OM model, or they will need to locate a predefined one which matches the way their work is organized and conducted. Either way the result is that the OM model and documents it produces for a particular instance of sensor/instrument deployment is something that cannot be pre-configured into an SOS service.
+
+It may be possible to generate template XML documents for each Observation (corresponding to each sos:ObservationOffering in the sos:Capabilities document) that can be used to create instance documents for the responses to sos:GetObservation requests.
+
+== Optional Operations ==
+
+There are a number of optional operations (services) defined by the SOS specification. The specification organizes them into two groups:
+
+
+; Transaction Operations Profile (optional)
+: ''sos:RegisterSensor'' - Allows a client to register a new sensor system with the SOS.
+: ''sos:InsertObservation'' - Allows a client to insert new observations from a sensor system in to the SOS.
+
+; Enhanced Operations Profile (optional)
+: ''sos:GetObservationById'' - Returns an observation based on an identifier. The identifier may determined from any source, possible from the SOS response to an sos:InsertObservation command.
+
+: '''''sos:GetResult''''' - Allows a client to repeatedly obtain sensor data without having to send requests and receive responses that contain largely the same material with the exception of the time-stamps and sensor data content. This is accomplished by the client first sending a sos:getObservation request with the responMode="resultTemplate". The server will return a collection of Observation templates. The client is then free to send sos:GetResult requests using sos:ObservationTemplateId values gleaned from the Observation Templates.
+
+: ''sos:GetFeatureOfInterest'' - returns a GML feature instance corresponding to the FeatureOfInterestId submitted in the request
+
+: ''sos:GetFeatureOfInterestTime'' - Returns the time periods for which the SOS will return data for a given advertised feature of interest.
+
+: ''sos:DescribeFeatureType'' - Returns an XML schema for a specified GML feature advertised in the sos:Capabilities document.
+
+: ''sos:DescribeObservationType'' - Returns the XML schema that describes the Observation type that is returned for a particular phenomenon. This allows the SOS to list the set of Observation types that it can deliver (by default the value is "om:Observation").
+
+: ''sos:DescribeResultModel'' - Returns the schema for the result element that will be returned when the client asks for the given result model by the given ResultName.
+
+
+== Implementations ==
+
+
+=== [http://52north.org/index.php?option=com_content&amp;view=category&amp;layout=blog&amp;id=26&amp;Itemid=31 52North] ===
+
+
+52north has implemented an SOS. Their implementation uses PostGIS to store the data and the metadata used in generating the service responses. There are a couple of interesting things about their design: They have created a software framework for the server that handles all of the SOS procedural activities while factoring out the interface that provides the actual SOS documents internally. The documentation indicates that this was intended to allow developers to connect the framework to another data source (Other than their default PostGIS database). There is also another project at 52north called SOSFeeder which is a piece of software meant to provide ingest services for their SOS. The SOSFeeder can work on both ''push'' and ''pull'' relationships with the sensor data source.
+
+* It may be possible to write a version of SOSFeeder that can pull data from a DAP data source. 
+* It might be possible to subclass their existing PGSQLDAOFactory and associated class to build a version of the DAO that retrieves data at request time from a DAP server for inclusion in the SOS documents.
+* Some combination of the previous two might be required.
+
+=== [http://mapserver.org/ogc/sos_server.html Map Server SOS] ===
+
+== Discussion ==
+
+Similar to the WCS specification, the SOS specification defines a web based service that builds on the OWS service stack. 
+
+'''Similarities to WCS'''
+* WCS and SOS both support the OWS '''''GetCapabilities''''', ''Describe'''X''''', and ''Get'''X''''' pattern of operations.
+* Both services have a catalog of holdings which can be abstracted to an interface (although interfaces would share few if any methods).
+
+
+'''Differences to WCS'''
+* Everything but the common sections of the Capabilities document is different.
+* Potentially more complex document creation than for WCS due to the fact that the content model is defined in part by the ''application domain'' which appears to be something that is developed independently for each data provider.
+
+
+The service generated content is complex, and the fact that the content is tied so tightly (through the SensorML and OM schemas) to the actual sensors and organizations operating them makes the amount of local configuration activity for the server quite high. It may be possible to generalize parts of the service activities and lower the cost of localization, or it may be that there is enough consistency between our users sites that a simpler less flexible design that made important core assumptions about the content could still provide satisfactory service functionality while also being deployable across multiple sites.
+
+Are semantic web tools worth looking at? Both the SensorML and OM documents require the user to define the ''application domain''. Semantic web tools could work only after developing the XML schema for the application domain documents. Once the schema are defined ontologies could be built from the them. Inference rules mapping to other ontologies would need to be written (by humans) to complete the inputs for the semantic web tools. '''Is that all? What happens next?? HOw is this going to help? Can we extract enough semantics out of CF to allow us to cross walk into SensorML and OM? Are there better (or more common) metadata conventions than CF for in-situ data?'''
+
+
+=== Server Structure===
+
+The collection of sos:ObservationOffering and SensorML sensor descriptions each represent an inventory of documents available from the server. In addition each of the sos:ObservationOfferings may be decomposed into multiple sos:featureOfInterest, sos:procedure, and sos:observedProperties. 
+
+Separating the catalog and document generation activities is a useful way to build the server software. Wrapping the catalog and document construction activities in an interface will allow us to construct a basic service that uses files cached in the local filesystem to hold the catalog and OM document fragments to build the response documents. Later the catalog and document construction component can be easily replaced with a different implementation. Obvious choices would be to store the content components in a relational database or to use semantic web inferencing to build content from metadata already available from an existing service.
+
+The activity of accepting, parsing, triggering the evaluation of, and responding to SOS requests can be encoded in a software framework into which we would plug-in the catalog implementation. This framework would be fairly code stable (as long as the SOS spec remains stable).
+
+
+== To Do List ==
+
+=== 1. Get data sets. Get access to native storage examples. ===
+
+In order to proceed with an implementation we need to identify work with our stakeholders:
+
+* identify data sets that should be used to supply both data and metadata for the SOS.
+* identify the types of native storage in the data sets are held - this may affect what kind of BES work is required.
+* identify the other services through which the data sets are available
+* Get SensorML and OM ''application domain'' schemas from the providers of the example data sets
+
+=== 2. Evaluate the possibility of using templates (XML document fragments) and XSLT to generate responses. ===
+
+Also we should look at existing SOS sites and look closely at the documents returned from different sos:GetObservation requests. Because sos:ObservationOfferings may represent aggregations of similar sensors, or of sensors in the same location (''Not both? Really? Check that!'') there may be a a lot of common information in the OM XML documents returned for queries accessing holdings in a particular sos:ObservationOffering. Identifying the commonalities within a couple of existing ''application domains'' (IOOS etc.) response sets might be useful in determining if an XSLT  and template approach would work for document formation.
+
+=== 3. Evaluate the 52north SOS code base. ===
+
+The 52north code appears to be very close in design to how I was thinking of approaching the problem anyway. It may be possible to OPeNDAP enable their framework fairly quickly. We should look very closely at this since they already have a number of OGC frameworks in place.
+
+== Issues (Post August 2008 IPT Meeting) ==
+
+# Multiple Application Schemas make a generalized solution difficult.
+# Most in situ and time series data appears to be held in RDBMS's The database schema for each groups holdings is most probably different, thus making generalized software to layer SOS on top of the holdings is more difficult. 
+# Even if we focus on just the IOOS schema set, individual sites may have organized their holdings (typically in RDBMS systems) differently. Creating one (or more) common "view" tables might allow us to work with that: We could have the data provider produce  a collection required views from which our software might retrieve the data and metadata required for an SOS service based on the common IOOS application schema.
+# NOAA IOOS is already serving NDBC data using their own SOS implementation. Do we need to replicate their work? 
+# SOS clients - are there any? How much are the SOS services at the existing beta sites being used?
+# Additionally Hyrax does not currently support retrieving data from and RDBMS. Do we have enough funding and time to produce RDH &amp; SOS in addition to WCS?
+
+=== IOOS-DIF Schema ===
+
+The [http://ioos.gov/dif/schema.html IOOS-DIF SOS schema] is not a regular XML schema in the sense that it is not written entirely in XML schema language, but rather relies on rules from the SWE common specification and it's associated schema which provide a manner in which the structure of the returned documents may described. The contractor (Paul Daisey with Image Matters LLC) chose to separate the record definition activity from the regular XML schema documents because:
+:''"The schema does not define complex types to structure data records, as that approach was deemed to be too inflexible because it would require schema changes for every record format modification, and entail significant overhead to manage schema versions for multiple SOS. Instead, record definitions are provided in separate record definition documents that define swe:DataRecord elements that contain swe:field elements to define record structures for instance documents that contain elements defined in this schema."''( [[http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.1/schemas/ioosTypes.xsd Line 9, iooosTypes.xsd]])
+
+The upshot is that the IOOS-DIF "schema" must be interpreted with the aid of this document: http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/EncodingIOOSv0.6.0Observations.doc that details the manner in which the record definitions are used in instance documents of the system. This may be supported by the SWE specification, but in general the idea of keeping the structural metadata separate from the document posses a number of issues.
+
+'''Note:''' ''Based on some recent traffic in the Galeon group  (8/21/2009 This [http://www.unidata.ucar.edu/mailing_lists/archives/galeon/2009/msg00108.html msg] in this [http://www.unidata.ucar.edu/mailing_lists/archives/galeon/2009/thread.html thread]) I think that I may have missed (in my reading of the various SOS components) the way in which the SWE supports the IOOS use of using separate record definitions, and examples may be found in the way that CRS's are defined in GML 3.2 This doesn't change the fact that by factoring the record definitions out of the schema they have essentially pushed the complexity issue down a step further in the food chain, leaving the resolution of the structural data model an open issue. An issue that is left for client and server authors to resolve dynamically.''
+
+
+
+Since:
+* the record definitions are intended to proliferate
+* the record definitions are not writtten in XML schema.
+* There is no consistent structure enforced in the record definitions.
+One may concluded that writing software to support this arrangement is pretty much like implementing a new (although simpler) type of XML schema language. The upshot is that no regular schema processing or automation tools can be used to either work with the IOOS-DIF schema, or to validate instance documents that claim to conform to it.
+
+Additionally, the IOOS-DIF schema relies on a phantom version of the OGC SWE common schema, version 1.0.2. 
+* This schema is not publicly available from OGC.
+* It is hosted at the NOAA sit in such a way that it is not easily downloaded. A human must follow links on the IOOS-DIF page to each file in the schema, and no bundle is made available.
+* Because of this, locating element definitions is a pain. I used '''wget''' to crawl the IOOS-DIF site in order to assemble a local working copy of the schema documents.
+
+==== Instance Documents and Record Definitions ====
+Example documents from:
+* [http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.1/sampleDataDocuments/salinityPoint.xml salinityPoint.xml]
+* [http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.1/recordDefinitions/SalinityPointDataRecordDefinition.xml SalinityPointDataRecordDefinition.xml]
+
+The example instance documents provided by IOOS-DIF are confusing, and it is not clear how the different components are intended to be related to the "schema". Unfortunately, no substantive information is available on the SWE specification through the public OGC website. It may be that OGC views the SWE as a collection of related specifications (SOS, SensorML, SPS, TML, O&amp;M, SAS, and WNS) but I have not found any explicit way of tying these all together. The SWE common schema is available at OGC, but only versions 1.0.0 and 1.0.1 (IOOS-DIF is using 1.0.2). So we are left to reverse engineer much of the work done by IOOS-DIF. 
+
+The [http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/EncodingIOOSv0.6.0Observations.doc Word Document] explains that the record definitions are invoked in the instance document by including the XML attribute ''reqDef'' to the top level ioos:CompositeContext  element in the om:procedure section: 
+       &lt;om:Process&gt;
+            &lt;ioos:CompositeContext gml:id="SensorMetadata"
+                '''recDef="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.1/recordDefinitions/PointSensorMetadataRecordDefinition.xml"'''&gt;
+                &amp;lt;!--This recDef attributes gives the URL of an external record definition XML file that describes the structure of the sensor metadata section. --&amp;gt;
+                &lt;gml:valueComponents&gt;
+and  ioos:Composite element in the om:result section:
+        &lt;ioos:Composite
+            '''recDef="http://www.csc.noaa.gov/ioos/schema/IOOS-DIF/IOOS/0.6.1/recordDefinitions/SalinityPointDataRecordDefinition.xml"'''
+            gml:id="WaterTemperaturePointCollectionTimeSeriesDataObservations"&gt;
+            &amp;lt;!--This recDef attributes gives the URL of an external record definition XML file that describes the structure of the measurement value section.--&amp;gt;
+            &lt;gml:valueComponents&gt;
+
+of the sos:GetObservation response. This use of the ''recDef'' attribute does not appear to be part of the SWE common schema, but rather something unique to IOOS-DIF schema.
+
+It is not clear in what way they intend the users of this scheme to make the associations between the various components of the response with the components of the record definition.
+
+The record definitions appear to use a pattern of declaration  as follow:
+    &lt;swe:field name="SOMENAME"&gt;
+        &lt;swe:SomeSweType  gml:id="SOMENAME"&gt;
+        .
+        .
+        .
+        
+    &lt;/swe:field&gt;
+Or:
+    &lt;swe:elementType name="SOMENAME"&gt;
+        &lt;swe:DataRecord gml:id="SOMENAME"&gt;
+        .
+        .
+        .
+        &lt;/swe:DataRecord&gt;       
+    &lt;/swe:elementType&gt;
+
+Which can (possibly incorrectly) be interpreted to declare an swe:field or swe:elementType with a name, and then using a ''gml:Id'' assign that element a type. This is probably discussed in the bowels of the O&amp;M specification and I probably didn't understand it when I read the spec.
+
+===== Record Definitions vs Instance Documents =====
+
+In many places the instance examples uses element names that are so clearly based on the names of the components in the record definition it is unclear which names are intended to references components in the record definition and which could be "opaque":
+
+
+{| cellspacing="0" border="1"
+! instance document
+! record definition
+|-
+|&lt;ioos:Composite gml:id="Station1TimeSeriesRecord"&gt;
+|&lt;swe:DataRecord gml:id="StationTimeSeriesRecord"&gt;
+|-
+|&lt;ioos:Count name="Station1NumberOfObservationTimes"&gt;3&lt;/ioos:Count&gt;
+|&lt;swe:Count gml:id="NumberOfObservationTimes"/&gt;
+|-
+|&lt;ioos:Array gml:id="Station1TimeSeries"&gt;
+|&lt;swe:DataArray gml:id="StationTimeSeries"&gt;
+|-
+|&lt;ioos:Composite gml:id="Station1T1Point"&gt;
+|&lt;swe:elementType name="StationTimePoint"&gt;
+|-
+|}
+
+
+Are these instance document ''gml:id'' values intended to in some way refer to the record definition document? Or are they actually opaque, and the relationship between the components in the the instance and those in the record definition are made explicit through an interpretation of the SWE description held therein? The latter would seem to be the case: That the record definition is a set of instructions, encoded in XML, that can be read to generate a structured document. (This is NOT an example of XML schema, but a new XML language.) The relationship between the instance documents and the record definitions is simply structural. The names (''gml:id'' and ''name'' attributes) of the components in the instance documents are used only as a meta-tag, they are not intended to connect the various ioos:Composite'''*''' objects to the associated record definition. The '''structure''' of the instance document is described by the record definition, but nothing in the instance document (with the exception of the ''reDef'' attributes described above) explicitly relates the two. If it really is the case that the ''gml:id'' attributes of the various components are actually opaque, replacing them with randomized character strings renders the resulting document unusable from a human perspective. So in essence it seems to be the case that the semantics must also be embedded in the ''gml:id'' attributes.
+
+Clarification of this from IOOS-DIF would be most useful.
+
+
+So this leaves two burning questions:
+# How does client cope with the diversity of the returned records? Is it expected that the client will get the returned instance documents, parse them, extract the ''recDef'' attributes, retrieve the record definitions and use them to interpret the instance documents (perhaps build classes at runtime that can hold the values for use in the program)?
+# How do you build a general purpose server that can produce IOOS-DIF compliant GetObservation responses based on a simple configuration?
+
+===== Clients =====
+The client problem space for the IOOS-DIF SOS is really just an extension of the general SOS problem. A generalized SOS client may have no code to deal with specific instances of a an Observation System. Thus, when presented with the GetObservation response, the client will have to query the service for the response schema (generic SOS). For the IOOS-DIF SOS the client will need to be able to take the extra steps of look into the record definitions in order to interpret the structure of the returned document. With the schema and record definitions in hand, the client will use some type of automation to build in memory wrapper classes that it can use to extract (meta)data from the document. THis stills seems like a bit of a technological stretch. I think that in practice clients will either be targeted at specific SOS service instances, or they'll just "punt" and search for XML elements that look likedatavalues in the response using some heuristic.
+
+===== Servers =====
+
+Writing a generalized SOS server in support of just the IOOS-DIF schema is difficult for pretty much the same reasons that writing one for the general SOS specification is difficult:
+
+* Because IOOS chose not to enforce metadata and data record definitions for their schema, but allow them to be external to the instance documents for the expressed purpose of allowing them to proliferate (change, update, version, what have you) this adds significant complexity to a general solution. It also means that providing a semantic mapping between existing DAP holdings (following some yet to be identified metadata convention) will need to be done for each target (meta)data record definition.
+* Most in situ and time series data appears to be held in RDBMS's which Hyrax does not currently have the ability to access. (Cue the RDH fanfare)
+* Individual sites may have organized their holdings (typically in RDBMS systems) differently. The different database schema create significant mapping issues for a general solution. Creating one (or more) common "view" tables might allow us to work with that: We could have the data provider produce a collection required views(each related to a different metadata or data record definition?) from which our software might retrieve the data and metadata required for an SOS service based on the common IOOS application schema.
+* NOAA IOOS is already serving NDBC data using their own SOS implementation. Do we need to replicate their work?
+* SOS clients - are there any? How much are the SOS services at the existing beta sites being used?]
+* By factoring the record definitions out of the schema they have essentially pushed the complexity issue down a step further in the food chain, leaving the resolution of the structural data model an open issue. An issue that is left for client and server authors to resolve dynamically.</text>
+      <sha1>g216sh8gzf6uf1rpd1eb4xjl0iaheig</sha1>
+    </revision>
+  </page>
+</mediawiki>

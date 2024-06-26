@@ -1,0 +1,79 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>1 Preface</title>
+    <ns>0</ns>
+    <id>4</id>
+    <revision>
+      <id>34</id>
+      <timestamp>2007-02-25T02:43:54Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>New page: {| width="100%" cellspacing="2" | bgcolor="#99ccff" | [writing_client.html [[Image:previous.gif|Top]]] | bgcolor="#99ccff" | [writing_client.html [[Image:up.gif|Top]]] | bgcolor="#99ccff" ...</comment>
+      <origin>34</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1458" sha1="4o1h2mpnd02srixyr1zpw37to8hac78" xml:space="preserve">{| width="100%" cellspacing="2"
+| bgcolor="#99ccff" |
+[writing_client.html [[Image:previous.gif|Top]]]
+| bgcolor="#99ccff" |
+[writing_client.html [[Image:up.gif|Top]]]
+| bgcolor="#99ccff" |
+[writing_client_2.html [[Image:next.gif|2 Writing your own OPeNDAP  client]]]
+| width="100%" bgcolor="#99ccff" align="center" | '''1 Preface'''
+|}
+
+= 1 Preface =
+
+This tutorial describes the steps required to enable your client application to interact with the OPeNDAP Data Access Protocol by using the Java or C++ classes provided in the OPeNDAP class libraries. It also describes the trade offs between using these toolkits and a client-library interface such as netCDF.
+
+The C++ and Java toolkis are class libraries which provide for direct interaction with a remote OPeNDAP server. You'll need to write some code.
+
+If your client application currently uses one of the netCDF, GDAL or OGR APIs, then you only need to relink your application with the OPeNDAP-enabled version of the API library, allowing you to skip this tutorial entirely.
+
+----
+James Gallagher &amp;lt;jgallagher@gso.uri.edu&amp;gt;, 2004/04/24, Revision: 1.10
+
+&lt;br /&gt;
+
+{| width="100%" cellspacing="2"
+| bgcolor="#99ccff" |
+[writing_client.html [[Image:previous.gif|Top]]]
+| bgcolor="#99ccff" |
+[writing_client.html [[Image:up.gif|Top]]]
+| bgcolor="#99ccff" |
+[writing_client_2.html [[Image:next.gif|2 Writing your own OPeNDAP  client]]]
+| width="100%" bgcolor="#99ccff" align="center" | '''1 Preface'''
+|}</text>
+      <sha1>4o1h2mpnd02srixyr1zpw37to8hac78</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,72 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - Configuration</title>
+    <ns>0</ns>
+    <id>117</id>
+    <revision>
+      <id>6271</id>
+      <parentid>6270</parentid>
+      <timestamp>2011-02-16T22:30:36Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>6271</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1138" sha1="9yew5w4j0yfpsl4w89ei6cuvqdjonbf" xml:space="preserve">'''When you install Hyrax for the first time it is pre-configured to serve test data sets that come with each of the installed data handlers. This will allow you to test the server and make sure it is functioning correctly. After that you can customize it for your data.'''
+
+== [[Hyrax - BES Configuration|BES configuration]]==
+
+== [[Hyrax - OLFS Configuration|OLFS configuration]]==
+
+== [[Hyrax - THREDDS Configuration|THREDDS Configuration]]==
+
+== [[Hyrax - Logging Configuration|Logging configuration]]==
+
+== Robots ==
+
+To correctly deploy a robots.txt file for Hyrax, you must correctly deploy it for Tomcat. This means that your robots.txt file must be accessible here:
+
+    http://you.host:port/robots.txt
+
+For example:
+
+    http://www.opendap.org/robots.txt
+
+Placing it lower in the URL path doesn't seem to work. 
+
+In order to get Tomcat to serve the file from that location you must place it in '''$CATALINA_HOME/webapps/ROOT'''
+
+If you still find that you system is being cruelly burdened with robot traffic then you might want to try the [[Hyrax_-_OLFS_Configuration#BotBlocker_.28optional.29|BotBlocker handler for the OLFS]].</text>
+      <sha1>9yew5w4j0yfpsl4w89ei6cuvqdjonbf</sha1>
+    </revision>
+  </page>
+</mediawiki>

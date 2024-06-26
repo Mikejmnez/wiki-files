@@ -1,0 +1,91 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - Installing on Mac</title>
+    <ns>0</ns>
+    <id>138</id>
+    <revision>
+      <id>1417</id>
+      <parentid>774</parentid>
+      <timestamp>2007-11-07T10:06:34Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <minor/>
+      <comment>[[Hyrax 1.1:Installing on Mac]] moved to [[Hyrax - Installing on Mac]]</comment>
+      <origin>1417</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1463" sha1="benwvcd2vk3z3atdhcbqyxv3d6fzd1h" xml:space="preserve">The BES will be installed in the /usr directory on your Mac. This will require root access.
+
+After [http://www.opendap.org/download/BES.html downloading] the .dmg for either an Intel Mac or PPC Mac, double click on the .dmg file. A new disk will be opened on your desktop that looks something like this:
+
+[[Image:Hyrax_1_1_BES_Disk_image.jpg]]
+
+
+Double click on the disk image on the left. This will open up a Finder window that contains the bes-3.4.1 package file (.pkg).
+
+
+[[Image:Hyrax_1_1_BES_Package_image.jpg]]
+
+
+Double click on the package file. This will begin the installation process for the BES by opening up the installer.
+
+
+[[Image:Hyrax_1_1_BES_Installer_image.jpg]]
+
+
+Click continue...
+
+
+[[Image:Hyrax_1_1_BES_Installer2_image.jpg]]
+
+
+Make sure to select the disk where you want to install the BES, usually the Macintosh HD. Then click Continue...
+
+
+[[Image:Hyrax_1_1_BES_Installer3_image.jpg]]
+
+
+Click on the Install button. Since this requires root access, if you are not logged in as root, you should see an Authenticate dialog box pop up asking for the root Name and Password, something like this...
+
+
+[[Image:Hyrax_1_1_BES_Installer4_image.jpg]]
+
+
+Type in your root username and password and click on OK. If all went well, then you should see this window...
+
+[[Image:Hyrax_1_1_BES_Installer5_image.jpg]]
+
+Click on the close button. Now, the BES should be installed in your /usr directory. To make sure, you should see the file /usr/bin/besctl.</text>
+      <sha1>benwvcd2vk3z3atdhcbqyxv3d6fzd1h</sha1>
+    </revision>
+  </page>
+</mediawiki>

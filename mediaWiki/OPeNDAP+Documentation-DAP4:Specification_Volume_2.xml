@@ -1,0 +1,1393 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Specification Volume 2</title>
+    <ns>0</ns>
+    <id>868</id>
+    <revision>
+      <id>13375</id>
+      <parentid>12107</parentid>
+      <timestamp>2022-07-28T15:35:53Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Query String Parameters */</comment>
+      <origin>13375</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="86285" sha1="2dq9c238e96y3bbgt9lqneovosgo8hd" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]&lt;br/&gt;&lt;br/&gt;
+
+&lt;div style="font-size: 24pt;line-height: 100%"&gt;'''The Data Access Protocol: DAP Version 4.0'''&lt;/div&gt;&lt;br/&gt;
+&lt;div style="font-size: 24pt;line-height: 100%"&gt;'''Volume 2: DAP4 Web Services&lt;/div&gt;
+
+&lt;table border=1 width="85%"&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Date:&lt;/td&gt;&lt;td&gt;November 6, 2013&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Last Revised:&lt;/td&gt;&lt;td&gt;04 July 2014&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Status:&lt;/td&gt;&lt;td&gt;Draft&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Authors:&lt;/td&gt;&lt;td&gt;John Caron (Unidata)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;Ethan Davis (Unidata)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;David Fulker (OPeNDAP)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;James Gallagher (OPeNDAP)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;Dennis Heimbigner (Unidata)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;Nathan Potter (OPeNDAP)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Copyright:&lt;/td&gt;&lt;td&gt;2014 University Corporation for Atmospheric Research and Opendap.org&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+
+
+'''''Abstract'''''
+
+&lt;i&gt;While Volume 1 of the DAP4 specification addresses the detailed semantics and structure of the DAP4 data and metadata content, this volume (Volume 2) details the manner in which clients can request things from a DAP4 server and what things the clients can expect to receive from a DAP4 server in response to their requests. The description of this interaction focuses on DAP4 clients and servers that are communicating via HTTP, and while this is perceived by the authors as the most common transport for DAP4 client/server interaction the specification is written in a broad enough manner to allow for other transport mechanisms.&lt;/i&gt;
+
+Distribution of this document is unlimited.
+
+
+'''Change List'''
+
+&lt;table border=1 width="85%"&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.09.06:&lt;/td&gt;
+    &lt;td&gt;Initial Draft&lt;/td&gt;&lt;/tr&gt;
+&lt;tr valign="top"&gt;&lt;td width="25%"&gt;2014.07.04&lt;/td&gt;
+    &lt;td&gt;ASCII/.ascii changed to text/.txt; Removed most of the async text since it is duplicate of the material in the extension; Created a volume 3 containing the extensions&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt; 
+
+
+
+== Introduction ==
+
+This document defines the DAP4 Web Service protocol which DAP4-compliant software MUST support when utilizing the HTTP protocol to transmit DAP4 requests and responses, along with additional optional services that DAP4-compliant software SHOULD support.
+
+The DAP4 protocol uses three basic responses to represent a data resource.  One response, the Dataset Metadata Response (DMR) contains metadata information describing the structure of the data resource. That is, it characterizes the variables, their datatypes, names and attributes. The second response, the Data Response (DataDMR), contains both the metadata about the requested data and the actual data that was requested. The third basic response is the Dataset Services Response (DSR) that provides a listing of services, any alternate media representations if available, and all of the associated access URI's for a particular data resource.
+
+The DAP4 protocol uses a fourth basic resource, the Constraint/Query Expression (CE), to represent subsetting of and, possibly, transformations of the dataset requested.
+
+The DAP4 protocol uses a fifth basic resource, the Error Response (ER), to allow servers to communicate error information with clients. When a request for any of the three basic responses cannot be completed, an Error response is returned. If an error occurs before the standard response is initiated, an error response is returned in place of the standard response. If an error occurs after a data response has been initiated, an Error Response is returned as the final chunked record as described in Section 7 "DAP4 Chunked Data Representation" of the DAP4 Data Model document.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1 |DAP4 Vol.1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+The DAP4 Data Model, constraint/query language, dataset metadata XML encoding, and binary data encoding are all defined in the DAP4 Volume 1: "Data Model, Persistent Representations, and Constraints" document.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1 |DAP4 Vol.1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+Each of the three responses (Dataset Metadata, Data, and Dataset Services) are complete in and of themselves so that, for example, the Data response can be used by a client without ever requesting either of the two other responses. In many cases, client programs will request the Dataset Metadata response before requesting the Data response but there is no requirement they do so and servers SHALL NOT require that behavior on the part of clients.
+
+These three standard dataset responses can each be accessed in two different ways. First, similar to DAP2 URL construction and to support client-driven content negotiation (see the section titled [[#Content_Negotiation_and_Media_Types|"HTTP - Content Negotiation and Media Types"]] below), each dataset resource has a standard URL suffix that can be added to the DAP4 dataset URL to retrieve the resource in its standard (normative) encoding. This allows clients, given a base DAP4 dataset URL, to construct DAP4 URLs in a simple and standard way for each of the three standard dataset resources.
+
+Second, to support server-driven content negotiation (see the [[#Content_Negotiation_and_Media_Types|"HTTP - Content Negotiation and Media Types"]] section below) and hypermedia-driven style, a DAP4 resource role is defined for each standard dataset resource and a DAP4 media type is defined for each dataset resource encoding scheme.
+
+Any particular instance of a DAP4 server MAY have one or more additional services, alternate media representations of service responses, or unique (to the server instance) server side functions. All of these things, including the core services and their default representations MUST be included in the ''Dataset Services Response''.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_DSR|DAP4 DSR]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+The DAP4 web service is currently limited to HTTP GET requests though it is expected that extensions (e.g., asynchronous access) will use other HTTP methods (e.g., POST). This makes, for now, the DAP4 Constraint Expression something of a pseudo-resource type given that they are encoded as part of the URL query string rather than as an independent document.
+
+
+&lt;div id="Terms_and_Definitions"&gt;&lt;/div&gt;
+== Terms and Definitions ==
+
+; Dataset Service Response (DSR)
+: The DAP4 response type that contains a list of DAP (and other) services available for the dataset including any alternate media representations and all the associated access URIs.
+; Dataset Metadata Response (DMR)
+: The DAP4 response type that contains metadata information describing the structure of the requested data. The metadata information characterizes the requested data variables including their names, data types, shapes, and attributes.
+; Dataset Data Response (Data)
+: The DAP4 response type that contains both the dataset metadata and the binary data for the requested data.
+; Resource role ID
+: A URI that identifies the role of a resource, generally provided with a link to allow clients to identify the type of resource the link references. (For instance, an "atom:link" element has an optional "atom:rel" attribute.)
+; Media Type
+: A internet media type is a two-part identifier for resource encoding schemes, e.g. "text/html", "text/plain", "application/octet-stream". (See [[#MediaTypes|section 1.1 DAP4 Resource Roles and Media Types]] of this document)
+; DAP4 Constraint Expression (CE)
+: The constraint expression that encapsulates various sub-setting of,  and possibly the application of server side functions to variables in a DAP4 dataset.
+; Query String (QS)
+: Everything after the "&lt;font size="3"&gt;&lt;code&gt;?&lt;/code&gt;&lt;/font&gt;" character in a URL.
+
+&lt;div id="DAP4_MediaTypes"&gt;&lt;/div&gt;
+=== DAP4 Resource Roles and Media Types ===
+
+The standard DAP4 dataset resource roles and encodings (plus a few alternate encodings) that are defined in the core DAP4 documents are:
+
+'''Dataset Services Response (DSR)'''
+
+&lt;blockquote&gt;
+{| class="wikitable" style="font-size: 95%;" width="90%"
+! style="text-align: left;"| Resource Role
+|-
+|
+: '''&lt;nowiki&gt;http://services.opendap.org/dap4/dataset-service&lt;/nowiki&gt;'''
+|}
+
+{| class="wikitable" style="font-size: 95%;" width="90%"
+! style="width: 15%" | URL Suffix
+! style="width: 55%" | Media Type
+! style="width: 30%" | URL Example
+|-
+| ''none'' or "'''.dsr'''"
+|
+; application/vnd.opendap.dap4.dataset-services+xml
+: Normative DSR encoding
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;
+&lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dsr'''
+|-
+| "'''.xml'''" or "'''.dsr.xml'''"
+|
+; text/xml
+: Normative DSR encoding with generic media type
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.xml'''
+&lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dsr.xml'''
+|-
+| "'''.html'''" or "'''.dsr.html'''"
+|
+; text/html
+: HTML DSR encoding
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.html'''
+&lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dsr.html'''
+|}
+&lt;/blockquote&gt;
+
+'''Dataset Metadata Response (DMR)'''
+
+&lt;blockquote&gt;
+{| class="wikitable" style="font-size: 95%;" width="90%"
+! style="text-align: left;"| Resource Role
+|-
+|
+: '''&lt;nowiki&gt;http://services.opendap.org/dap4/dataset-metadata&lt;/nowiki&gt;'''
+|}
+
+{| class="wikitable" style="font-size: 95%;" width="90%"
+! style="width: 15%" | URL Suffix
+! style="width: 55%" | Media Type
+! style="width: 30%" | URL Example
+|-
+| "'''.dmr'''"
+|
+; application/vnd.opendap.dap4.dataset-metadata+xml
+: Normative DMR encoding
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dmr'''
+|-
+| "'''.dmr.xml'''"
+|
+; text/xml
+: Normative DMR encoding with generic media type
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dmr.xml'''
+|-
+| "'''.dmr.html'''"
+|
+; text/html
+: HTML DMR encoding
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dmr.html'''
+|}
+&lt;/blockquote&gt;
+
+'''Dataset Data Response (Data)'''
+
+&lt;blockquote&gt;
+{| class="wikitable" style="font-size: 95%;" width="90%"
+! style="text-align: left;"| Resource Role
+|-
+|
+: '''&lt;nowiki&gt;http://services.opendap.org/dap4/data&lt;/nowiki&gt;'''
+|}
+
+{| class="wikitable" style="font-size: 95%;" width="90%"
+! style="width: 15%" | URL Suffix
+! style="width: 55%" | Media Type
+! style="width: 30%" | URL Example
+|-
+| "'''.dap'''"
+|
+; application/vnd.opendap.dap4.data
+: Normative Data encoding
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dap'''
+|-
+| "'''.dap.txt'''"
+|
+; text/plain
+: Text (UTF-8) Data encoding
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dap.txt'''
+|-
+| "'''.dap.xml'''"
+|
+; text/xml
+: XML Data encoding
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dap.xml'''
+|}
+&lt;/blockquote&gt;
+
+'''Error Response (ER)'''
+
+&lt;blockquote&gt;
+{| class="wikitable" style="font-size: 95%;" width="90%"
+! style="text-align: left;"| Resource Role
+|-
+|
+: '''&lt;nowiki&gt;http://services.opendap.org/dap4/error&lt;/nowiki&gt;'''
+|}
+
+{| class="wikitable" style="font-size: 95%;" width="90%"
+! style="width: 15%" | URL Suffix
+! style="width: 55%" | Media Type
+! style="width: 30%" | URL Example
+|-
+| N/A
+|
+; application/vnd.opendap.dap4.error+xml
+: Normative Error encoding
+| N/A
+|-
+| N/A
+|
+; text/xml
+: Normative Error encoding with generic media type
+| N/A
+|-
+| N/A
+|
+; text/html
+: HTML Error encoding
+| N/A
+|}
+&lt;/blockquote&gt;
+
+=== DAP4 Core Specification Documents ===
+
+* DAP4 Volume 1: "Data Model, Persistence Representations, and Constraints"
+* DAP4 Web Service (this document)
+* DAP4 Dataset Services
+* DAP4 Requirements for Server-side Functions
+
+=== Extensions to DAP4 Core Specifications ===
+
+Several types of extensions can be made to the DAP4 core including:
+
+* New encodings for the core DAP4 response types
+* New response types
+* New server-side functions.
+
+==  DAP4 Web Service Responses  == 
+
+The core of the DAP4 Web Service protocol consists of the four standard response types: Dataset Services Response (DSR), Dataset Metadata Response (DMR),  Dataset Data Response (Data), DAP4 Error Response (Error)
+&lt;!--, and the DAP4 Asynchronous Response (Async).--&gt;
+Each dataset served by a DAP4 compliant server MUST provide the DSR, DMR, and Data responses and MUST return errors documents as DAP4 Error Responses.
+&lt;!--A DAP4 server MAY return an DAP4 Asynchronous Response for data that are not immediately available. &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Async|DAP4 Async]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;--&gt;
+
+All of the example requests described below are based on the DAP4 dataset URL:
+: http://server.org:8080/dap/path/data.nc
+
+=== DAP4 Dataset Services Response ===
+
+The DAP4 Dataset Services Response (DSR)&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_DSR|DAP4 DSR]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; provides clients with a listing of all available DAP4 services and all the available encodings for those services as well as all available DAP4 extensions.
+
+Each service (or response type) has a unique resource role (defined in the appropriate specification), each link (alternate representation) for a given service MUST fulfill that same role. This is not always a clear distinction to make. For example, the DAP4 Dataset Metadata Response can be mapped into ISO 19115 metadata. However, IS0 19115 is clearly a different domain.
+
+The DAP4 Dataset Services Response MUST contain the following information:
+
+* List of DAP versions supported by server
+* The implementation version (e.g., "TDS 4.3.57" or "Hyrax 1.7.45")
+* List of all available DAP4 services for the dataset
+* For each DAP4 services listed, a list of all available links each with its corresponding media type
+* List of supported extensions
+** Resource type extensions
+** Media type extensions
+** Server-side function extensions
+
+If SHOULD contain the following information:
+
+* A human readable title for the dataset
+* A human readable title for each service
+
+To take advantage of web caching, servers should try to keep DSRs light weight (i.e., quick creation) and as stable as possible.
+
+==== DSR Resource Role ====
+
+DSRs are identified by the resource role:
+
+: '''&lt;font size="2"&gt;&lt;code&gt;&lt;nowiki&gt;http://services.opendap.org/dap4/dataset-services&lt;/nowiki&gt;&lt;/code&gt;&lt;/font&gt;'''
+
+==== Normative Encoding of the DSR ====
+
+The normative XML representation for the Dataset Services Response is defined in the "Normative XML Encoding of the DSR" appendix. The media type for the normative XML representation is
+
+: &lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dataset-services+xml'''&lt;/code&gt;&lt;/font&gt;
+
+==== Service Behavior ====
+
+When an HTTP GET request is made on a base DAP4 dataset URL, all DAP4 servers MUST return the normative XML encoding of the DSR given these conditions: 
+
+* the request "Accept" header contains only the normative XML encoding media type,
+* the request "Accept" header equals "*/*", or
+* the request "Accept" header does not indicate a preference for another media type in which the server knows how to encode the DSR.
+
+For example, the request:
+&lt;pre&gt;
+GET /dap/path/data.nc HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;
+Might result in the following response:
+
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: application/vnd.opendap.dataset-services+xml
+Date: ...
+&lt;/pre&gt;
+
+===== Downgrading the Normative XML Encoding (Required) =====
+
+When an HTTP GET request is made on a base DAP dataset URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt; added to it:
+
+: request url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url'''''.xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the response MUST be the normative representation of the DSR along with the HTTP &lt;font size="2"&gt;&lt;code&gt;Content-Type&lt;/code&gt;&lt;/font&gt; header set to &lt;font size="2"&gt;&lt;code&gt;text/xml&lt;/code&gt;&lt;/font&gt; . For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.xml HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;
+Might result in the following response:
+
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Date: ...
+&lt;/pre&gt;
+The normative XML representation MUST also be returned when an HTTP GET request is made on a base DAP4 dataset URL (without a suffix) and the server uses server-driven content negotiation to decide that the best response for the client would be an HTML encoded DSR. For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc HTTP/1.1
+Host: server.org:8080
+Accept: text/xml
+&lt;/pre&gt;
+==== Other Encodings of the DSR ====
+
+
+===== HTML Encoding  (Optional) =====
+
+When an HTTP GET request is made on a base DAP dataset URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt; added to it:
+
+: request url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url'''''.html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the server MUST reply with an HTML representation of the DSR, '''or''' return an HTTP status of 404 to indicate that an HTML representation of the DSR is not available. For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.html HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;Might result in the following response:
+
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Date: ...
+&lt;/pre&gt;If available, the HTML representation MUST also be returned when an HTTP GET request is made on a base DAP4 dataset URL (without a suffix) and the server uses server-driven content negotiation to decide that the best response for the client would be an HTML encoded DSR. For example this request:
+
+&lt;pre&gt;
+GET /dap/path/data.nc HTTP/1.1
+Host: server.org:8080
+Accept: text/html
+&lt;/pre&gt;Must return the HTML representation of the DMR, if available. If no such representation is available then the server MAY return an HTTP status of 404 or even 415.
+&lt;!-- 
+=== [[DAP4 Dataset Services Response]] (Original) ===
+
+The DAP4 Dataset Services Response (DSR) provides a listing of the various DAP4 resources and their associated media-type representations available for a dataset. Dereferencing the base URL for a dataset accessed through a DAP4 web server will return a ''DatasetServices'' document that describes the various responses possible for that data set, including URLs that can be used to access those responses. In other words, the Dataset Services response is acquired by dereferencing the data resource (aka base) URL for the dataset and there is no suffix added to the data resource URL prior to that dereferencing.
+
+Every DAP4 compliant server MUST return the normative representation (an XML document [[DAP4 Dataset Services Response | as described here]]) of the Dataset Services response when a client attempts to access an unmodified dataset URL. The DAP4 server MAY return alternate representations if the client indicates that it can accept them and the server can provide them.
+
+
+
+More information on the normative XML representation for the Dataset Services Response can be found on the [[DAP4 Dataset Services Response]] page.
+
+service suffix = &lt;br /&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/dataset-services#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;
+
+DAP4 media type:
+*&lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dataset-services+xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Alternate media type(s):
+*&lt;font size="2"&gt;&lt;code&gt;'''text/html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+:media type suffix = &lt;font size="2"&gt;&lt;code&gt;'''.html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+:url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url'''''.html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+*&lt;font size="2"&gt;&lt;code&gt;'''text/xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+:media type suffix = &lt;font size="2"&gt;&lt;code&gt;'''.xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+:url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url'''''.xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+==== HTTP Request Examples ====
+
+''Simple''
+: This simple request will return the normative XML representation of the Dataset Web Services response with the &lt;font size="2"&gt;&lt;code&gt;'''Content-Type'''&lt;/code&gt;&lt;/font&gt; header of the response set to &lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dataset-services+xml'''&lt;/code&gt;&lt;/font&gt;.
+&lt;pre&gt;
+GET /dap/path/data.nc HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;
+
+''Server-driven content negotiation for the HTML representation.''
+: This request for the Dataset Services response indicates that the client wants the HTML representation. The server SHOULD reply with the HTML representation if it is available, otherwise it MAY return it's normative XML representation.
+&lt;pre&gt;
+GET /dap/path/data.nc HTTP/1.1
+Host: server.org:8080
+Accept: text/html
+&lt;/pre&gt;
+
+''Server-driven content negotiation for the XML representation.''
+: This request for the the Dataset Services response indicates that the client wants the XML representation. The server MUST reply with the XML representation, and the server should set the &lt;font size="2"&gt;&lt;code&gt;'''Content-Type'''&lt;/code&gt;&lt;/font&gt; header to &lt;font size="2"&gt;&lt;code&gt;'''text/xml'''&lt;/code&gt;&lt;/font&gt;. While the normative representation of the the Dataset Services response is already an XML document, the normative media type is &lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dataset-services+xml'''&lt;/code&gt;&lt;/font&gt; which may be unfamiliar to many generic clients (such as web browsers) and it is quite conceivable that such a client might ask for the more generic  &lt;font size="2"&gt;&lt;code&gt;'''text/xml'''&lt;/code&gt;&lt;/font&gt; media type.
+&lt;pre&gt;
+GET /dap/path/data.nc HTTP/1.1
+Host: server.org:8080
+Accept: text/xml
+&lt;/pre&gt;
+
+''Agent-driven content negotiation for the HTML representation.''
+: This request is for the HTML version of Dataset Services response. The server MUST reply with the HTML representation (with the &lt;font size="2"&gt;&lt;code&gt;'''Content-Type'''&lt;/code&gt;&lt;/font&gt; header of the response set to &lt;font size="2"&gt;&lt;code&gt;'''text/html'''&lt;/code&gt;&lt;/font&gt;) if available, or with a status of 404 if not.
+&lt;pre&gt;
+GET /dap/path/data.nc.html HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;
+
+
+''Agent-driven content negotiation for the XML representation.''
+: This request is for the XML version of Dataset Services response. The server MUST response with the XML representation (with the &lt;font size="2"&gt;&lt;code&gt;'''Content-Type'''&lt;/code&gt;&lt;/font&gt; header of the response set to &lt;font size="2"&gt;&lt;code&gt;'''text/xml'''&lt;/code&gt;&lt;/font&gt;) if available, or with a status of 404 if not.
+&lt;pre&gt;
+GET /dap/path/data.nc.xml HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;
+
+--&gt;
+
+===  Dataset Metadata Response  ===
+The Dataset Metadata Service returns the Dataset Metadata Response (DMR) which is a metadata description of the dataset. The normative representation of the DMR  is an XML document that contains both the 'syntactic' (structural) and 'semantic' metadata for the dataset, persisted as a DAP4 data model representation of the dataset held at the server.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1|DAP4_Vol1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; The DMR service accepts a query string (constraint expression) that allows you to inspect the effects on the data structures when sub-setting and/or server side functions are applied. If a constraint expression has been successfully applied, the service will returned the constrained view of the dap:Dataset object. The constrained view may contain different data structures than the unconstrained view as the constraint may alter the reasonable representation of the data set.
+Note that all dap:Attribute objects have been removed from constrained dap:Dataset objects. More information on the syntax of DAP4 constraint expressions can be found in Volume 1 of the DAP4 specification. &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1|DAP4_Vol1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+==== DMR Resource Role ====
+
+DMRs are identified by the resource role:
+
+: '''&lt;font size="2"&gt;&lt;code&gt;&lt;nowiki&gt;http://services.opendap.org/dap4/dataset-metadata&lt;/nowiki&gt;&lt;/code&gt;&lt;/font&gt;'''
+
+==== Normative Encoding of the DMR ====
+
+The normative XML representation for the Dataset Metadata Response is defined in Volume 1 of the DAP4 specification.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1|DAP4_Vol1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;  The media type for the normative XML representation is:
+
+: &lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dap4.dataset-metadata+xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+==== Service Behavior ====
+
+Every DAP4 compliant server MUST return the normative representation of the Dataset Metadata Response  (an XML document described Volume 1 of the DAP4 specification  &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1|DAP4_Vol1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;) when a client attempts to access a dataset URL with the suffix "&lt;font size="2"&gt;&lt;code&gt;'''.dmr'''&lt;/code&gt;&lt;/font&gt;" appended to it. The DAP4 server MAY return alternate representations if the client indicates that it can accept them and the server can provide them.
+
+When an HTTP GET request is made on a base DAP dataset URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.dmr'''&lt;/code&gt;&lt;/font&gt; added to it:
+
+: request url = &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.dmr''''+ [?dap_constraint]&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the server MUST reply with an normative representation of the DMR for the (possibly constrained) dataset given these conditions:
+
+* the request "Accept" header contains only the normative XML encoding media type (&lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dap4.dataset-metadata+xml'''&lt;/code&gt;&lt;/font&gt;),
+* the request "Accept" header equals "*/*", or
+* the request "Accept" header does not indicate a preference for another media type in which the server knows how to encode the DMR.
+
+For example, the request:
+&lt;pre&gt;
+GET /dap/path/data.nc.dmr HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;Might result in the following response:
+
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: application/vnd.opendap.dataset-metadata+xml
+Date: ...
+&lt;/pre&gt;
+
+===== Downgrading the Normative XML Encoding (Required) =====
+While the normative representation of the the Dataset Metadata response is already an XML document, the normative media type is &lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dataset-metadata+xml'''&lt;/code&gt;&lt;/font&gt; which may be unfamiliar to many generic clients (such as web browsers) and it is quite conceivable that such a client might ask for the more generic  &lt;font size="2"&gt;&lt;code&gt;'''text/xml'''&lt;/code&gt;&lt;/font&gt; media type.
+
+When an HTTP GET request is made on a DAP DMR URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt; added to it:
+
+: request url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url.dmr'''''.xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the response MUST be the normative representation of the DMR along with the HTTP &lt;font size="2"&gt;&lt;code&gt;Content-Type&lt;/code&gt;&lt;/font&gt; header set to &lt;font size="2"&gt;&lt;code&gt;text/xml&lt;/code&gt;&lt;/font&gt; . For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dmr.xml HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;Might result in the following response:
+
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Date: ...
+&lt;/pre&gt;The normative XML representation of the DMR MUST also be returned when an HTTP GET request is made on a base DAP4 DMR URL ( and the server uses server-driven content negotiation to decide that the best response for the client would be an HTML encoded DSR. For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dmr HTTP/1.1
+Host: server.org:8080
+Accept: text/xml
+&lt;/pre&gt;
+==== Other Encodings of the DMR ====
+
+===== HTML Encoding  (Optional) =====
+
+When an HTTP GET request is made on a DAP DMR URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt; added to it:
+
+: request url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url.dmr'''''.html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the server MUST reply with an HTML representation of the DMR, '''or''' return an HTTP status of 404 (or 415)  to indicate that an HTML representation of the DMR is not available. For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dmr.html HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;Might result in the following response:
+
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Date: ...
+&lt;/pre&gt;If available, the HTML representation MUST also be returned when an HTTP GET request is made on a base DAP4 DMR URL (without an additional suffix) and the server uses server-driven content negotiation to decide that the best response for the client would be an HTML encoded DMR. For example this request:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dmr HTTP/1.1
+Host: server.org:8080
+Accept: text/html
+&lt;/pre&gt;Must return the HTML representation of the DMR, if available. If no such representation is available then the server MAY return an HTTP status of 404 or even 415.
+
+=== DAP4: Data Response &lt;!--'''[[DAP4:_Responses#Data_Response | DAP4: Data Response ]]'''--&gt; ===
+The Data Service provides DAP4 data access to a dataset, and is the (primary) way that DAP4 returns data to a client.  The Data service accepts a query string (constraint expression) which allows you to subset the data and invoke server side functions. When the service is invoked it returns the DAP4 data object. On the wire this is a binary document with MIME type ''application/vnd.opendap.dap4.data''. The payload is broken into two logical parts: A DMR-type xml document that describes the data and a BLOB that contains the actual data. For more on the information on the Data response and the internal structure of its payload along with a complete discussion of the DAP4 constraint expression syntax see Volume 1 of the DAP4 specification.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1|DAP4_Vol1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+==== Data Response Resource Role ====
+
+DAP4 Data Responses are identified by the resource role:
+
+: '''&lt;font size="2"&gt;&lt;code&gt;&lt;nowiki&gt;http://services.opendap.org/dap4/data&lt;/nowiki&gt;&lt;/code&gt;&lt;/font&gt;'''
+
+==== Normative Encoding of the Data Response ====
+
+The normative XML representation for the Data Response is defined in Volume 1 of the DAP4 specification.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1|DAP4_Vol1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;  The media type for the normative XML representation is:
+
+: &lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dap4.data'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+
+==== Service Behavior ====
+Every DAP4 compliant server MUST return the normative representation of the Data Response when a client attempts to access a dataset URL with the suffix "&lt;font size="2"&gt;&lt;code&gt;'''.dap'''&lt;/code&gt;&lt;/font&gt;" appended to it. The DAP4 server MAY return alternate representations if the client indicates that it can accept them and the server can provide them. The normative representation of the Data Response is described in Volume 1 of the DAP4 specification.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1|DAP4_Vol1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+When an HTTP GET request is made on a base DAP dataset URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.dap'''&lt;/code&gt;&lt;/font&gt; added to it:
+
+: request url = &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.dap''''+ [?dap_constraint]&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the server MUST reply with an normative representation of the (possibly constrained) data response for the dataset given these conditions:
+
+* the request "Accept" header contains only the normative XML encoding media type (&lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dap4.data'''&lt;/code&gt;&lt;/font&gt;),
+* the request "Accept" header equals "*/*", or
+* the request "Accept" header does not indicate a preference for another media type in which the server knows how to encode the Data Response.
+
+For example, the request:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dap HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;Might result in the following response:
+
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: application/vnd.opendap.data
+Date: ...
+&lt;/pre&gt;
+
+==== Other Encodings of the Data Response ====
+
+===== Text Encoding  (Optional) =====
+When an HTTP GET request is made on a DAP Data Response URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.txt'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt; added to it:
+
+: request url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url.dap'''''.txt'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the server MUST reply with the text representation of the Data Response using the utf-8 character set, '''or''' return an HTTP status of 404 (or 415) to indicate that a text representation of the Data Response is not available. For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dap.txt HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;Might result in the following response:
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: text/plain; charset=utf-8
+Date: ...
+&lt;/pre&gt;If available, the text representation MUST also be returned when an HTTP GET request is made on a base DAP4 Data Response URL (without an additional suffix) and the server uses server-driven content negotiation to decide that the best response for the client would be an text encoded Data Response. For example this request:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dap HTTP/1.1
+Host: server.org:8080
+Accept: text/plain
+&lt;/pre&gt;
+Must return the text representation of the Data Response, if available. If no such representation is available then the server MAY return an HTTP status of 404 or even 415.
+
+===== XML Encoding  (Optional) =====
+
+When an HTTP GET request is made on a DAP Data Response URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt; added to it:
+
+: request url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url.dap'''''.xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the server MUST reply with the XML representation of the Data Response, '''or''' return an HTTP status of 404 (or 415) to indicate that an XML representation of the Data Response is not available. For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dap.xml HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;Might result in the following response:
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Date: ...
+&lt;/pre&gt;
+If available, the XML representation MUST also be returned when an HTTP GET request is made on a base DAP4 Data Response URL (without an additional suffix) and the server uses server-driven content negotiation to decide that the best response for the client would be an XML encoded data response. For example this request:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dap HTTP/1.1
+Host: server.org:8080
+Accept: text/xml
+&lt;/pre&gt;
+Must return the XML representation of the Data Response, if available. If no such representation is available then the server MAY return an HTTP status of 404 or even 415.
+
+===== NetCDF-3 Encoding  (Optional) =====
+
+When an HTTP GET request is made on a DAP Data Response URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.nc'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt; added to it:
+
+: request url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url.dap'''''.nc'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the server MUST reply with a NetCDF-3 representation of the Data Response, '''or''' return an HTTP status of 404 (or 415) to indicate that a NetCDF-3 representation of the Data Response is not available. For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dap.nc HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;
+Might result in the following response:
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: application/x-netcdf
+Date: ...
+&lt;/pre&gt;
+If available, the NetCDF-3 representation MUST also be returned when an HTTP GET request is made on a base DAP4 Data Response URL (without an additional suffix) and the server uses server-driven content negotiation to decide that the best response for the client would be an NetCDF-3 encoded data response. For example this request:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dap HTTP/1.1
+Host: server.org:8080
+Accept: application/x-netcdf
+&lt;/pre&gt;
+Must return the NetCDF-3 representation of the Data Response, if available. If no such representation is available then the server MAY return an HTTP status of 404 or even 415.
+
+===== NetCDF-4 Encoding  (Optional) =====
+
+When an HTTP GET request is made on a DAP Data Response URL with the suffix &lt;font size="2"&gt;&lt;code&gt;'''.nc4'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt; added to it:
+
+: request url =  &lt;font size="2"&gt;&lt;code&gt;''dataset_url.dap'''''.nc4'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+the server MUST reply with a NetCDF-4 representation of the Data Response, '''or''' return an HTTP status of 404 (or 415) to indicate that a NetCDF-4 representation of the Data Response is not available. For example:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dap.nc HTTP/1.1
+Host: server.org:8080
+Accept: */*
+&lt;/pre&gt;
+Might result in the following response:
+&lt;pre&gt;
+HTTP/1.1 200 OK
+Content-Type: application/x-netcdf;ver=4
+Date: ...
+&lt;/pre&gt;
+If available, the NetCDF-4 representation MUST also be returned when an HTTP GET request is made on a base DAP4 Data Response URL (without an additional suffix) and the server uses server-driven content negotiation to decide that the best response for the client would be an NetCDF-4 encoded data response. For example this request:
+
+&lt;pre&gt;
+GET /dap/path/data.nc.dap HTTP/1.1
+Host: server.org:8080
+Accept: application/x-netcdf;ver=4
+&lt;/pre&gt;
+Must return the NetCDF-4 representation of the Data Response, if available. If no such representation is available then the server MAY return an HTTP status of 404 or even 415.
+
+&lt;!--
+=== DAP4 Asynchronous Response ===
+
+Some servers may not be able to fulfill DAP4 service requests in a timely manner. 
+* A  DAP4 server that is retrieving data content from a near-line tape storage subsystem might take several minutes to access a particular data holding. 
+* A DAP4 server that is providing access to data held in an Amazon Web Services Glacier Vault will have to wait ~4 hours before it can retrieve a particular holding. 
+In these circumstances the server may return the DAP4 Asynchronous Response &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Async | DAP4 Async]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+==== Asynchronous Response Resource Role ====
+
+DAP4 Asynchronous Responses are identified by the resource role:
+
+: '''&lt;font size="2"&gt;&lt;code&gt;&lt;nowiki&gt;http://services.opendap.org/dap4/async&lt;/nowiki&gt;&lt;/code&gt;&lt;/font&gt;'''
+
+==== Normative Encoding of the Asynchronous Response ====
+
+The normative XML representation for the Asynchronous Response is defined in Appendix x "Normative XML Encoding of the Asynchronous Response". The media type for the normative XML representation is:
+
+: &lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dap4.async.xml'''&lt;/code&gt;&lt;/font&gt;
+--&gt;
+
+=== [[DAP4 Error Response]]  ===
+
+The DAP4 protocol returns error information using an Error response. If a request for any of the three basic responses cannot be completed then an Error response is returned in its place.
+
+The normative XML representation for the Error Response is defined by the following RELAX-NG schema.
+&lt;source lang="xml"&gt;
+&lt;grammar xmlns="http://relaxng.org/ns/structure/1.0"
+                xmlns:doc="http://www.example.com/annotation"
+                datatypeLibrary="http://xml.opendap.org/datatypes/dap4"
+                ns="http://xml.opendap.org/ns/DAP/4.0#"
+                &gt;
+&lt;start&gt;
+  &lt;ref name="errorresponse"/&gt;
+&lt;/start&gt;
+&lt;define name="errorresponse"&gt;
+  &lt;element name="Error"&gt;
+    &lt;optional&gt;
+      &lt;attribute name="httpcode"&gt;&lt;data type="dap4_integer"/&gt;&lt;/attribute&gt;
+    &lt;/optional&gt;
+    &lt;optional&gt;
+      &lt;interleave&gt;
+        &lt;element name = "Message"&gt;&lt;text/&gt;&lt;/Message&gt;
+        &lt;element name = "Context"&gt;&lt;text/&gt;&lt;/Message&gt;
+        &lt;element name = "OtherInformation"&gt;&lt;text/&gt;&lt;/Message&gt;
+      &lt;/interleave&gt;
+    &lt;/optional&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+&lt;/source&gt;
+
+The Error element has one optional attribute: the ''httpcode'' which is a standard HTTP protocol return code indicating the general class of error. When possible, this code should match the return code in the HTTP headers for the response.
+
+The body of the &amp;lt;Error&amp;gt; element may contain any or all of the following
+inner elements each containing arbitrary text.
+# &amp;lt;Message&amp;gt; &amp;mdash; A short informative message describing the error.
+# &amp;lt;Context&amp;gt; &amp;mdash; Information describing the context in which the error occurred: position of a parse error in a constraint expression, for example.
+# &amp;lt;OtherInformation&amp;gt; &amp;mdash; Arbitrary additional text information: a Java stack trace, for example.
+
+==== Error Response Resource Role ====
+
+DAP4 Error Responses are identified by the resource role:
+
+: '''&lt;font size="2"&gt;&lt;code&gt;&lt;nowiki&gt;http://services.opendap.org/dap4/error&lt;/nowiki&gt;&lt;/code&gt;&lt;/font&gt;'''
+
+==== Normative Encoding of the Error Response ====
+
+The normative XML representation for the Error Response is defined in Appendix x "Normative XML Encoding of the Error Response". The media type for the normative XML representation is:
+
+: &lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dap4.error.xml'''&lt;/code&gt;&lt;/font&gt;
+
+== HTTP ==
+
+The DAP4 Web Services specification describes the features of HTTP that are required to be a compliant DAP4 client or server. It does not attempt to describe all aspects of HTTP that DAP4 servers might implement or that DAP4 clients may see in response to DAP4 requests. Similarly, it does not cover all issues related to the performance and scalability of HTTP.
+
+However, the following sections include both DAP4 requirements as well as some suggestions of HTTP features that servers and clients are encouraged to use.
+
+&lt;div id="Content Negotiation and Media Types"&gt;&lt;/div&gt;
+=== Content Negotiation and Media Types ===
+
+Though the DAP4 core specifications only describe one encoding for each type of resource, DAP4 web servers MAY have the ability to provide a given resource in a number of different media types. All media types available for a resource MUST be listed in the DAP4 Dataset Services response document.
+
+DAP4 responses MUST use the "Content-Type" header field to identify the media type of the DAP4 response body. For example, the normative value for the XML encoded DMR response is ''application/vnd.opendap.dap4.dataset-metadata+xml''.
+
+The DAP4 Dataset Services response describes the available services and their media types, and through this description provides DAP4 software (client and/or server) with two different mechanisms to negotiate for different kinds of media representations. The first mechanism is server-driven content negotiation as described in the HTTP 1.1 specification, section 12, "Content Negotiation".&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_12 |HTTP RFC2616 - Section 12]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;  The second mechanism is similar to the agent-driven negotiation also described in section 12 of the HTTP 1.1 specification. The difference being that the "list of available representations ... [each with] its own URI" is provided by the DAP4 Dataset Services response rather than in response to an initial request. 
+
+Clients need not retrieve the Dataset Services response in order to access the normative representations of either the Dataset Metadata or Data responses, as these responses are required for every DAP4 server and are mapped to well known URL patterns. If clients attempt to access other representations or other services using agent-driven negotiation without first checking the Dataset Services response, they should be prepared to receive a 404 Not Found response.
+
+When using server-driven negotiation, DAP4 clients are encouraged to, at a minimum, include "Accept"&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_14.1 |HTTP RFC2616 - Section 14.1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;and "User-Agent"&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_14.43|HTTP RFC2616 - Section 14.43]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; headers in their requests and to provide accurate and detailed information in the values of those headers. However, when server-driven negotiation is used, DAP4 servers are not limited to those headers for determining the media type that is returned. DAP4 clients should also be prepared to handle 415 "Unsupported Media type" response codes.
+
+&lt;!--
+When using server-driven negotiation DAP4 servers MAY return a more general media type (e.g., "text/xml") if something in the request (e.g., the "Accept" or "User-Agent" header values) indicates the client might be better able to handle a more general media type. Servers should use caution when downgrading the response media type:
+
+&lt;blockquote&gt;
+  It is impossible for the server to accurately determine what
+  might be "best" for any given user, since that would require
+  complete knowledge of both the capabilities of the user agent
+  and the intended use for the response (e.g., does the user want
+  to view it on screen or print it on paper?).
+&lt;/blockquote&gt;
+
+
+&lt;font color="red"&gt;
+When DAP4 servers engage in server-driven content negotiation they SHOULD only return DAP4 media types to clients that explicitly request them, otherwise they should return the most general media type that correctly represents the response content. In particular if a DAP4 server detects that a general purpose web browser (such as Internet Explorer, Firefox, Chrome, Safari, Opera, etc.) is requesting one of the three DAP4 response types then the Content-Type header in the servers response SHOULD be the most widely understood media type for the particular response. For the Dataset Services response and Dataset Metadata response this would be a media type of ''text/xml'' and for the Data response it would be ''multipart/mixed''. This is particularly important for the Dataset Services response and Dataset Metadata response as these XML documents may come with XSLT style sheet references that would allow the browser to transform the XML content into an HTML presentation suitable for the browsers. This presentation may even include a complete data request form that will allow the user to subset and select data in their browser. If the DAP4 specific media types are returned the browsers will simply write the response to disk and they will make no effort to render the response in the browser using the stylesheet reference.
+&lt;/font&gt;
+
+{| class="wikitable"   width="85%"
+|+ Server Driven Negotiation Debate (NEEDS RESOLVED)
+! Ethan's View
+! James' View
+|-
+|When using server-driven negotiation DAP4 servers MAY return a more general media type (e.g., "text/xml") if something in the request (e.g., the "Accept" or "User-Agent" header values) indicates the client might be better able to handle a more general media type. Servers should use caution when downgrading the response media type: &lt;br/&gt;&lt;br/&gt;"''It is impossible for the server to accurately determine what might be "best" for any given user, since that would require complete knowledge of both the capabilities of the user agent and the intended use for the response (e.g., does the user want to view it on screen or print it on paper?).''"
+| style="width: 50%;" | When DAP4 servers engage in server-driven content negotiation they SHOULD only return DAP4 media types to clients that explicitly request them, otherwise they should return the most general media type that correctly represents the response content. In particular if a DAP4 server detects that a general purpose web browser (such as Internet Explorer, Firefox, Chrome, Safari, Opera, etc.) is requesting one of the three DAP4 response types then the Content-Type header in the servers response SHOULD be the most widely understood media type for the particular response. For the Dataset Services response and Dataset Metadata response this would be a media type of ''text/xml'' and for the Data response it would be ''multipart/mixed''. This is particularly important for the Dataset Services response and Dataset Metadata response as these XML documents may come with XSLT style sheet references that would allow the browser to transform the XML content into an HTML presentation suitable for the browsers. This presentation may even include a complete data request form that will allow the user to subset and select data in their browser. If the DAP4 specific media types are returned the browsers will simply write the response to disk and they will make no effort to render the response in the browser using the stylesheet reference.
+
+|}
+==== A brief digression on ''vnd'' MIME types ====
+Looking at how web browsers use these types, the set of vendor MIME types appears to be driven by the browsers, and not the servers. For example, Chrome will look for a MIME type of ''application/vnd.google.drive.ext-type.png'' and do something special when it sees it. Unless we expect mass-market HTTP client software to recognize ''vnd.opendap...'' MIME types, there's little value in them. This conclusion matches what the developers in NASA came to conclude with respect to the vendor MIME types when used as values for the Content-Type header. It's certainly the case that these MIME types provide no value to DAP-aware clients. Providing responses with Content-Type of ''text/xml'' will result in a browser rendering the response, something we might make actually useful with some savvy coding (for example, the (in)famous web form interface could be encoded in it using an XSL transform).
+
+--&gt;
+
+=== Redirects ===
+
+While HTTP redirects are not directly part of the DAP4 web protocol it is strongly suggested that DAP4 client implementations be capable of processing HTTP redirects as nominally described in the HTTP-1.1 specification sections on redirection status codes and redirection response headers.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616 |HTTP RFC2616]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.3 |HTTP RFC2616 - Section 10.3]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616 - Section 14.30 |HTTP RFC2616 - Section 14.30]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; (It is suggested that implementers of DAP4 clients utilize an existing robust HTTP client library that will manage this for them.)
+
+=== Caching of Responses and Conditional Requests ===
+
+While, HTTP caching and conditional requests are not explicitly part of the DAP4 web protocol, they do provide important tools for improving the performance of both sides client server interaction. Therefore, it is strongly suggested that DAP4 servers and client implementers be aware of how HTTP caching &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616 - Section 13|HTTP RFC2616 - Section 13]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; works, and utilize it for working with DAP servers.
+
+=== Authentication/Authorization ===
+
+Authentication is the process by which a user agent establishes the identity of the user to a server, and the server establishes it's identity with the user agent. While, HTTP authentication is not explicitly part of the DAP4 web protocol, it does provide important tools for securing the client server interaction. Therefore, it is strongly suggested that DAP4 servers and client implementers be aware of how HTTP authentication works, and utilize it for working with DAP servers.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2617 |HTTP RFC2617]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; Server implementers should pay particular attention to HTTP security considerations.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_15|HTTP RFC2616 - Section 15]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+Authorization is the process through which a server determines who/what has access to its various holdings and services. The HTTP protocol does not directly address the issue of authorization (even though HTTP defines the 401 response status using the word "authorization" it does not provide separate semantics for authentication and authorization which we see as an important distinction for data access), but any DAP4 server implementer should be aware that some kind of mechanism for controlling access to holdings and services will likely be desired by the people that install and operate their software.
+
+=== Headers ===
+
+==== Request Headers ====
+
+These are the HTTP request headers that DAP clients using HTTP MAY utilize. DAP4 servers MUST accept these headers and act on them in a manner consistent with their descriptions below.
+
+===== General =====
+:; Accept
+:: The HTTP Accept header MAY be used by clients that wish to engage in server-dirven content negotiation by requesting a particular representation of a resource in the initial request. The server MUST utilize this header, if present, in a manner consistent with the HTTP content negotiation]] specification.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_12 |HTTP RFC2616 - Section 12]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+:; User-Agent
+:: The HTTP User-Agent header MAY be used by clients to indicate their "software identity" to the server.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_14.43 |HTTP RFC2616 - Section 14.43]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; The server MAY utilize this header, if present, to alter the Content-Type of the response to something that is more likely to be digestible by the requesting client software.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_14.17 |HTTP RFC2616 - Section 14.17]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+===== DAP Specific =====
+
+:There are no DAP specific headers required to make a general DAP request.
+
+&lt;!--
+===== Asynchronous Transaction &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Async |DAP4 Async]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; =====
+; X-DAP-Async-Accept 
+: A client MAY indicate it's willingness to accept asynchronous responses by including the '''X-DAP-Async-Accept''' HTTP header. Clients MAY make conditional requests for asynchronous responses by indicating the maximum time they are willing to wait by using the '''X-DAP-Async-Accept''' HTTP header with a value given in seconds. A value of zero indicates that the client is willing to accept whatever delay the server may encounter.
+--&gt;
+
+==== Response Headers ====
+
+These are the HTTP response headers that DAP servers using HTTP MUST and SHOULD (as indicated) return.
+
+===== General =====
+&lt;!--
+&lt;font size="3" color="red"&gt; Should we be referencing RFC1123 for the time format or the source (which RFC1123 references) [http://www.rfc-editor.org/rfc/rfc822.txt RFC822]? I think it's hard to find the time format stuff in either place and since RFC1123 basically says to use RFC822 then shouldn't we use RFC822? Or did I miss something in RFC1123 that amends the content of RFC822 w.r.t. format? Ethan??? [[User:Ndp|ndp]] 21:26, 7 November 2013 (PST))&lt;/font&gt; 
+--&gt;
+:; Date
+:: DAP4 servers MUST return an HTTP '''Date''' header whose value is the time of the response and which MUST be in RFC 1123 date/time format.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#RFC1123|RFC1123]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+
+:; Last-Modified
+:: DAP4 servers SHOULD return an HTTP '''Last-Modified''' header whose value is the last modified time of the request resource and which MUST be in &lt;nowiki&gt;RFC  1123&lt;/nowiki&gt; date/time format.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#RFC1123|RFC1123]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+
+:; Content-Type
+:: DAP4 servers MUST return an HTTP '''Content-Type''' header, the value of which SHOULD be set in accordance with the Dap4 Resource Roles and Media Types discussion in section 1.1 of this document.
+
+:; Content-Description
+:: DAP4 servers SHOULD return an HTTP '''Content-Description''' header. 
+
+:; Content-Disposition
+:: DAP4 servers SHOULD return an HTTP '''Content-Disposition''' header when transmitting file typed responses.
+
+:; Content-Encoding
+:: DAP4 servers MUST return an HTTP '''Content-Encoding''' header when the content-coding of an entity is not "identity".
+
+&lt;!--
+
+&lt;font color="Red"&gt;Update this to include the following headers....&lt;/font&gt;
+&lt;font size="2"&gt;&lt;pre&gt;
+HTTP/1.1 200 OK
+Date: Mon, 23 May 2005 22:38:34 GMT
+Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT
+Content-Type: multipart/related; type="text/xml"; start="&lt;&lt;start id&gt;&gt;";  boundary="&lt;&lt;boundary&gt;&gt;"
+Content-Description: data-ddx; url=...
+Content-Encoding: gzip
+XDAP: &lt;&lt;DAP version&gt;&gt;
+&lt;/pre&gt;&lt;/font&gt;
+--&gt;
+
+===== DAP Specific =====
+
+:; X-DAP-Server
+:: DAP4 servers SHOULD return the '''X-DAP-Server''' HTTP header. This HTTP header is used in a response to communicate the software version of the server. This may be a simple string with the server name and version number, or multiple software component versions may be represented. The value of this header is a string determined by the implementations author(s).
+:: '''Example'''
+::: &lt;font size="2"&gt;&lt;tt&gt;X-DAP-Server: bes/3.10.0, libdap/3.11.2, dap-server/ascii/4.1.2, csv_handler/1.0.2, freeform_handler/3.8.4, fits_handler/1.0.7, fileout_netcdf/1.1.2, gateway_module/1.1.0, hdf4_handler/3.9.4, hdf5_handler/1.5.0, netcdf_handler/3.10.0, ncml_module/1.2.1, dap-server/usage/4.1.2, dap-server/www/4.1.2, xml_data_handler/1.0.1&lt;/tt&gt;&lt;/font&gt;
+
+:: '''Example'''
+::: &lt;font size="2"&gt;&lt;tt&gt;X-DAP-Server: TDS-4.19.3&lt;/tt&gt;&lt;/font&gt;
+
+:; X-DAP
+:: DAP4 servers MUST return the '''X-DAP''' HTTP header. This HTTP header is used in a response to indicate the DAP protocol version used to encode the content of the response. This value is constrained to a format of ''"major_version" dot "minor version"'', where both major_version and minor_version are represented by an integer value.
+:: '''Example'''
+::: &lt;font size="2"&gt;&lt;tt&gt;X-DAP: 4.0&lt;/tt&gt;&lt;/font&gt;
+:: '''Example'''
+::: &lt;font size="2"&gt;&lt;tt&gt;X-DAP: 2.17&lt;/tt&gt;&lt;/font&gt;
+
+&lt;!--
+===== Asynchronous Transaction =====
+
+:; X-DAP-Async-Required
+:: DAP4 servers MUST return the '''X-DAP-Async-Required''' header if the request requires an asynchronous response and the client has not indicated willingness to accept such a response. Rejection of the request MUST also be indicated by an HTTP status code of 400, DAP Asynchronous Response Required.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Async |DAP4 Async]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+--&gt;
+
+=== Status Codes ===
+
+DAP servers that provide an HTTP interface are expected to utilize the HTTP response codes in a manner consistent with the HTTP 1.1 specification.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616|HTTP RFC2616]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; 
+
+The ones that are detailed here are used by the DAP in a manner consistent with the specifications definition, but in support of specific DAP server behavior.
+
+==== 200 OK ====
+
+A server MUST return an HTTP status of 200 when the request has been successful and that the returned document contains the requested resource. However since DAP responses can be quite large and since it is also possible for the server to encounter any number of problems during the marshaling, serialization, and subsequent transmission of the response it is possible that the server may have committed/transmitted the HTTP headers (in which the status value is transmitted) before a subsequent error is encountered. These types of errors are transmitted in the DAP4 over-the-wire protocol and all DAP4 clients MUST be able to read and process these errors.
+&lt;!--
+&lt;font color="red" size="3"&gt;See Section? I think that this should be a reference to volume 1, at least if we decide that the DAP4 Error Response semantics and content is defined there… [[User:Ndp|ndp]] 21:28, 7 November 2013 (PST)&lt;/font&gt;
+--&gt;
+&lt;!--
+==== 202 Accepted  ====
+
+A server MUST return a '''202 Accepted''' HTTP response code when a request has been accepted and will be handled asynchronously. The response body MUST contain a DAP4 asynchronous response accepted document.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.2.3|HTTP RFC2616 - Section 10.2.3]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Async|Dap4 Async]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+--&gt;
+==== 400 Bad Request ====
+
+The HTTP specification defines this status code as:
+:''The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.''&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.4.1|HTTP RFC2616 - Section 10.4.1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; 
+DAP4 servers utilizes this code to mean the following.
+
+===== 400 Bad DAP4 Request Syntax =====
+
+:The '''400 Bad DAP4 Request Syntax''' HTTP response code MUST be returned by the server when there is a problem with the syntax of the OPeNDAP URL.  The problem could be in the formulation of the constraint expression, or it may be that the URL extension did not match any that are recognized by this server.
+
+&lt;!--
+===== 400 DAP4 Asynchronous Response Required =====
+
+:The '''400 DAP4 Asynchronous Response Required''' HTTP response code MUST be returned by the server when the DAP request has been rejected because an asynchronous response is required and the client did not indicate willingness to accept an asynchronous response. The server MUST include the '''X-DAP-Async-Required''' HTTP header and the DAP4 Asynchronous Response Required document as the response body.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Async|DAP4_Async]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+--&gt;
+==== 401 Unauthorized ====
+
+The '''401 Unauthorized''' HTTP response code MUST be returned by the server when access to the requested resource requires (not previously acquired) user authentication. See the HTTP specification-1.1 for usage and behavior.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.4.2|HTTP RFC2616 - Section 10.4.2]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+==== 403 Forbidden ====
+
+The '''403 Forbidden''' HTTP response code MUST be returned when the server has understood the request, but is refusing to fulfill it. Authorization will not help and the request SHOULD NOT be repeated. This is appropriate to return if, for example, the server software does not have read permission for the requested resource.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.4.4|HTTP RFC2616 - Section 10.4.4]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+==== 404 Not Found ====
+The '''404 Not Found''' HTTP response code MUST be returned when the server has not found anything matching the Request-URI.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.4.5|HTTP RFC2616 - Section 10.4.5]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+&lt;!--
+==== 409 Conflict (DAP4 Async Response Not Available) ====
+The '''409 Conflict''' HTTP response code SHOULD be returned by the server when the DAP request has been rejected because a previous asynchronous request has not been completed and the result is not ready for access. The response body MUST contain the '''DAP4 Asynchronous Response Not Yet Available''' document.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.4.10|HTTP RFC2616 - Section 10.4.10]]&lt;nowiki&gt;]&lt;/nowiki&gt;
+&lt;/sup&gt;&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Async|DAP4 Async]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+==== 412 Precondition Failed ====
+ 
+The '''412 Precondition Failed''' HTTP response code MUST be returned by the server if the DAP request has been rejected because it did not meet the '''X-DAP-Async-Accept''' condition that was specified in the request. The response body MUST contain the'''DAP4 Asynchronous Request Rejected''' document.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.4.13 |HTTP RFC2616 - Section 10.4.13]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Async|DAP4 Async]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+--&gt;
+==== 415 Unsupported Media Type ====
+ 
+The '''415 Unsupported Media Type''' HTTP response code MUST be returned when the client requests a representation of the requested resource that the server cannot provide.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.4.16 |HTTP RFC2616 - Section 10.4.16]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+==== 500 Internal Server Error ====
+
+The '''500 Internal Server Error''' status code SHOULD be returned when the DAP server encounters internal problems when attempting to fulfill a request.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_10.5.1 |HTTP RFC2616 - Section 10.5.1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+=== Verbs (aka Methods) ===
+
+==== GET ====
+
+A DAP4 request may be made using the HTTP GET request method utilizing a Uniform Resource Identifier (URI) that encodes information specific to the DAP4.
+&lt;!--(&lt;font color="red"&gt;see Section ?&lt;/font&gt;). --&gt;
+
+Each GET request MUST conform to the HTTP specification (which basically says that a GET request MUST contain an HTTP protocol version number followed by a MIME-like message containing various headers that further describe the request.). While there are some optional  DAP4 HTTP request headers that may be used, DAP4 requests do not require specific HTTP headers beyond those necessary for HTTP (see section 4.5.1 Request Headers of this document for more). DAP4 servers SHOULD support the use of the HTTP Accept request header to allow clients to engage in HTTP content negotiation for specific representations of a requested DAP4 response.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#HTTP_RFC2616_Section_12 |HTTP RFC2616 - Section 12]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+&lt;!--
+; Implementation Note
+:''In practice, DAP clients typically use a third-party library implementation of HTTP/1.1 so the GET request, URI and HTTP version information are hidden from the client; it sees only the DAP Uniform Resource Locator (URL) and the request headers.''
+--&gt;
+
+The DAP server responds to the GET request with an HTTP compliant response (one that includes a status line containing the HTTP protocol version and an error or success code, followed by HTTP response headers and then response itself). There are two DAP specific HTTP headers that are always included in a DAP response over HTTP: &lt;font size="3"&gt;&lt;tt&gt;X-DAP-Server&lt;/tt&gt;&lt;/font&gt; and &lt;font size="3"&gt;&lt;tt&gt;X-DAP&lt;/tt&gt;&lt;/font&gt;,  as described in section 4.5.2 of this document.
+The DAP response is the payload of the HTTP response.  Unless otherwise negotiated, the data response payload is encoded using the chunked format as described
+in &lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1 |DAP4 Vol.1]]&lt;nowiki&gt;]&lt;/nowiki&gt;, while the other responses are simple HTTP responses.
+
+===== Examples =====
+; HTTP GET request.
+&lt;pre&gt;
+GET /dap/path/data.nc.dap?/u,/v[0:8:1024] HTTP/1.1
+Host: server.org
+Accept: application/vnd.opendap.dap4.data
+&lt;/pre&gt;
+
+&lt;!--
+
+==== POST ====
+
+DAP4 supplies (via the DAP Service Terminus) a URI for each DAP4 service and each of its various media-type representations. How do we leverage this into a non-HTTP usage? I think we need to define a message document that is sent to the server (say over a socket) that carries everything we need in the request. Suggestion:
+
+&lt;source lang="xml"&gt;
+&lt;request xmlns="http://opendap.org/ns/dap4/request"&gt;
+  &lt;service&gt;dap4-data&lt;/service&gt;
+  &lt;media-type&gt;...&lt;/media-type&gt;
+  &lt;dataset id="/local/id/of/data/resource"&gt;
+    &lt;ce&gt;
+      &lt;projection&gt;x,y[0:3:99]&lt;/projection&gt;
+      &lt;selection&gt;k&lt;33 &amp; i&gt;17&lt;/selection&gt;
+    &lt;/ce&gt;
+  &lt;/dataset&gt;
+&lt;/request&gt;
+&lt;/source&gt;
+
+Obviously this needs more thought and discussion...
+
+
+
+'''Proposal''': The  DAP4 data model and it's persistent (over-the-wire) representations are transport protocol agnostic. All of the information required by the DAP must be present in the content of the DAP requests and responses.  The DAP won't uniquely embed information required by the DAP into HTTP Headers or AMQP thingys, or other whatnot. 
+
+'''Discussion''': 
+
+# Does this matter?
+# Would we need to add new syntax server-side functions etc. to the protocol to enable this?
+--&gt;
+
+== DAP4 URLs ==
+
+In DAP4 we divide a dataset URL into two sections, the ''identifier'' and the ''query string''. The ''identifier'' section is everything up to "''?''" character. The ''query string'' is the "''?''" character and everything after it.
+
+For example in the URL:
+:   &lt;tt&gt;'''&lt;nowiki&gt;http://test.opendap.org:8080/opendap/data/nc/fnoc1.nc.dmr?dap4.ce=/u;/lat;/lon&lt;/nowiki&gt;'''&lt;/tt&gt;
+
+We have:
+:   ''identifier = '' &lt;tt&gt;'''&lt;nowiki&gt;http://test.opendap.org:8080/opendap/data/nc/fnoc1.nc.dmr&lt;/nowiki&gt;'''&lt;/tt&gt;
+:   ''query string = '' &lt;tt&gt;'''&lt;nowiki&gt;?dap4.ce=/u;/lat;/lon&lt;/nowiki&gt;'''&lt;/tt&gt;
+
+Additionally DAP4 URLs conform to the web convention in which the query string is decomposed as a set of key-value pairs (KVP) separated from each other by "'''&amp;'''" characters:
+: &lt;code&gt;?key=value&amp;key=value&amp;key=value ... &lt;/code&gt;
+
+Many web services utilize this pattern, including OGC. The DAP2 constraint expression subsumed the entire query string, so it did not fit into the standard KVP model. Tomcat (and other web server frameworks) provide specific API methods for collecting the KVP from the query string, but again DAP2 doesn't play well with this. The DAP4 constraint is designed to operate in a KVP environment.
+&lt;!--
+In DAP2 the constraint expression (CE) was defined as a ''projection'' and a ''selection''. The ''projection'' being a list of dataset variables to be returned, and the ''selection'' being the conditions that must be met to return them. . The projected variables could, if they were arrays, be subset using a square bracket notation (rigorously described elsewhere). The ''selection'' was written as a list of "clauses" (my word),  separated from the ''projection'' and from each other by an "&amp;" character. The ''selection'' was applied to all of the requested variables, and in practice was rarely used because the only legitimate application of the ''selection''  was to constrain a Sequence object. Thus, the DAP2 CE consumed the entire URL query string, in other words everything after the "'''?'''" in the URL was considered to be the DAP2 CE string.
+--&gt;
+=== Query String Parameters ===
+
+* DAP4 query string parameters will always begin with the 5 character string &lt;tt&gt;"'''dap4.'''"&lt;/tt&gt; In this way query string parameters associated with the DAP4 protocol can be easily identified by both people and software. 
+* DAP4 query string keys are case sensitive.
+* DAP4 servers MUST treat ALL values of query string KVPs as case sensitive.
+* Each DAP4 key may appear once in each query string (request URL).
+* The order of the keys does not matter, and unrecognized keys are ignored, along with their values.
+
+&lt;!--
+While the initial DAP4 specification defines 3 &lt;font color="red"&gt;(Or is it 2?)&lt;/font&gt; query string keys,--&gt;
+The DAP4 protocol reserves the exclusive use of all future query string keys that begin with the 4 character token &lt;tt&gt;"'''dap4.'''"&lt;/tt&gt; This way future DAP4 service features may be added and invoked through the query string section of the request URL without interfering with other features and behaviors added to service implementations outside of the DAP4 development process.
+
+The following keys are reserved.
+;&lt;tt&gt;dap4.ce&lt;/tt&gt;
+: The DAP4 constraint expression is contained in a single query string parameter named &lt;tt&gt;"'''dap4.ce'''"&lt;/tt&gt; This constraint expression contains all of the subsetting information for the dataset include the projection (which variables are to be returned), slicing (how the various arrays are to be decimated), and filtering (conditional retrieval of values). The fill discussion of the syntax of the constraint expression can be found in Section 8 of Volume 1 of the DAP4 specification. &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1 |DAP4 Vol.1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+;&lt;tt&gt;dap4.async&lt;/tt&gt;
+: The asynchronous response behavior is described in detail in Section 10 of Volume 1 of the DAP4 Specification.&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1 |DAP4 Vol.1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt; While the a DAP4 server's asynchronous response behavior can be controlled by a savvy client using HTTP headers it can also be managed using the DAP4 query string parameter &lt;tt&gt;"'''dap4.async'''"&lt;/tt&gt;
+
+;&lt;tt&gt;dap4.function&lt;/tt&gt;
+: While server-side functions are not addressed in the initial DAP4 specification or constraint expression syntax we do anticipate them being defined (in short order) in an extension to the DAP4 specification. For now we are working with a proposed server side function syntax in which a server side function is invoked as a key value pair, something like: &lt;tt&gt;'''dap4.function=ugr5(0,v,z,”10&lt;lat&lt;30”)'''&lt;/tt&gt;
+: '''Note:''' This was documented as '''dap4.func''' but Hyrax/OLFS is the only DAP4 server I know of that implements server-side functions, and it uses '''function''' not '''func''', so lets adopt that as the standard way to supply this part of the constraint expression. jhrg 7/28/22
+
+== Normative References ==
+
+&lt;div id="DAP4_Vol1"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[DAP4 Vol1]&lt;/nowiki&gt; [[DAP4:_Specification_Volume_1|DAP4 Volume 1: Data Model, Persistent Representations, and Constraints]].
+&lt;!--
+&lt;div id="DAP4_DSR"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[DAP4 DSR]&lt;/nowiki&gt;  [[DAP4_Dataset_Services_Response|DAP4: Dataset Services Response]].
+
+&lt;div id="DAP4_Async"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[DAP4 Async]&lt;/nowiki&gt; [[DAP4:_Asynchronous_Request-Response_Proposal_v3|DAP4: Asynchronous Request/Response]].
+--&gt;
+&lt;div id="HTTP_RFC2616"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616.html  Hypertext Transfer Protocol -- HTTP/1.1] (as [http://www.ietf.org/rfc/rfc2616.txt text]).
+
+&lt;div id="HTTP_RFC2616_Section_10.2.3"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.2.3]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3 HTTP/1.1 Section 10.2.3 - Accepted]
+
+&lt;div id="HTTP_RFC2616_Section_10.3"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.3]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3 HTTP/1.1 Section 10.3 - Redirection Status Codes]
+
+&lt;div id="HTTP_RFC2616_Section_10.4.1"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.4.1]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1 HTTP/1.1 Section 10.4.1 - Bad Request]
+
+&lt;div id="HTTP_RFC2616_Section_10.4.2"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.4.2]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2 HTTP/1.1 Section 10.4.2 - Unauthorized]
+
+&lt;div id="HTTP_RFC2616_Section_10.4.4"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.4.4]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4 HTTP/1.1 Section 10.4.4 - Forbidden]
+
+&lt;div id="HTTP_RFC2616_Section_10.4.5"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.4.5]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5 HTTP/1.1 Section 10.4.5 - Not Found]
+
+&lt;div id="HTTP_RFC2616_Section_10.4.10"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.4.10]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10 HTTP/1.1 Section 10.4.10 - Conflict]
+
+&lt;div id="HTTP_RFC2616_Section_10.4.13"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.4.13]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.13 HTTP/1.1 Section 10.4.13 - Precondition Failed]
+
+&lt;div id="HTTP_RFC2616_Section_10.4.16"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.4.16]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.16 HTTP/1.1 Section 10.4.16 - Unsupported Media Type]
+
+&lt;div id="HTTP_RFC2616_Section_10.5.1"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 10.5.1]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1 HTTP/1.1 Section 10.5.1 - Internal Server Error]
+
+&lt;div id="HTTP_RFC2616_Section_12"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 12]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec12.html HTTP/1.1 Section 12 - Content Negotiation]
+
+&lt;div id="HTTP_RFC2616_Section_13"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 13]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html HTTP/1.1 Section 13 - Caching]
+
+&lt;div id="HTTP_RFC2616_Section_14.1"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 14.1]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1 HTTP/1.1 Section 14.1 - Accept Header]
+
+&lt;div id="HTTP_RFC2616_Section_14.17"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 14.17]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17 HTTP/1.1 Section 14.17 - Content-Type Header]
+
+&lt;div id="HTTP_RFC2616_Section_14.30"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 14.30]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.30 HTTP/1.1 Section 14.30 - Redirection Response Headers]
+
+&lt;div id="HTTP_RFC2616_Section_14.43"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 14.43]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43 HTTP/1.1 Section 14.43 - User-Agent Header]
+
+&lt;div id="HTTP_RFC2616_Section_15"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2616 - Section 15]&lt;/nowiki&gt; [http://www.w3.org/Protocols/rfc2616/rfc2616-sec15.html HTTP/1.1 Section 15 - Security Considerations]
+
+&lt;div id="HTTP_RFC2617"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[HTTP RFC2617]&lt;/nowiki&gt; [http://www.ietf.org/rfc/rfc2617.txt - HTTP Authentication]
+
+&lt;div id="RFC1123"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[RFC1123]&lt;/nowiki&gt; [http://www.ietf.org/rfc/rfc1123.txt - Requirements for Internet Hosts]
+
+== Non-Normative References ==
+
+&lt;div id="REST_Fielding"&gt;&lt;/div&gt;
+[REST] R. Fielding, UC Irvine Doctoral Thesis: [http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm|"Architectural Styles and the Design of Network-based Software Architectures"]
+&lt;div id="MediaType"&gt;&lt;/div&gt;
+[MediaType] Wikipedia: [http://en.wikipedia.org/wiki/Internet_media_type Internet Media Type]
+
+----
+----
+
+== Appendix - Ancillary Web Services (Beyond DAP4) ==
+
+DAP4 servers MAY offer a number of other services that, while not exactly DAP4 services per say, are commonly available. This section lists some of the alternate services a DAP4 server might provide. By enumerating the available services in the Dataset Services Response servers can easily make software clients and the people that use them aware of the server's ancillary capabilities.
+
+==== [[DAP4: HTML DATA Request Form Service]] ====
+The HTML DATA Request Form Service provides browser based access to the Dataset. When invoked it returns a web-browser renderable document (in html) that provides a form (or other UI) that can be used to constrain and request data in accordance with the DAP4 specification as applied to the dataset .
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + .html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/data-request-form#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/html'''&lt;/code&gt;&lt;/font&gt; | &lt;font size="2"&gt;&lt;code&gt;'''text/xhtml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+==== [[DAP4: RDF Service  | DAP4: RDF Service]] ====
+The RDF service provides an RDF representation of the Dataset document (DDX). The RDF response is an XML document containing an RDF version of the [[DAP4: Responses#Dataset_Response | DAP4: Dataset Response.]]
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.rdf'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + .rdf'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/rdf#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''application/rdf+xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP4: ISO 19115 Service ]] ====
+This service provides ISO 19115 metadata for the Dataset, if any can be found. When invoked  it returns an XML document containing ISO 19115 metadata located in the  [[DAP4: Responses#Dataset_Response | DAP4: Dataset Response.]]
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.iso'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + .iso'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/iso-19115-metadata#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP4: ISO Conformance Score Service ]] ====
+This service provides a browser renderable document that describes how well the metadata held in the Dataset conforms to ISO 19115. When invoked this service returns a browser renderable document that scores how well the metadata held in the [[DAP4: Responses#Dataset_Response | Dataset Response]] conforms to ISO 19115.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.rubric'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + .rubric'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/iso-19115-score#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP4: NetCDF File-out Service ]] ====
+This service provides data responses in NetCDF-4 file format. When invoked the regular DAP data response will be repackaged as a NetCDF 4 file. 
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.nc4'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.nc4' + [?dap_constraint]'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/netcdf-3#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''application/x-netcdf-4'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP4: ASCII Data Service]] ====
+This service provides data responses in ASCII format. When invoked the regular DAP data response will be repackaged as an ASCII representation of the data values.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.ascii'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.ascii' + [?dap_constraint]'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/ascii#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/plain'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP4: XML Data Service]] ====
+This service provides data responses in XML format. When invoked the constrained Dataset response document (DDX) will be marked up with the data values of the request and returned. Large requests may be denied.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.xdap'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.xdap' + [?dap_constraint]'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/xml-data#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP4: Native File Access Service ]] ====
+This service provides direct access to the data source file (or whatever else) that is creating the DAP dataset resource. When invoked it returns the "native" data from whatever store (filesystem, etc.) it may be in. Servers MAY elect to not support this response, for example, for generated data, very large data, et cetera.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.file'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + .file'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/file#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;
+
+Default/primary media type: Type varies with file type.
+&lt;br/&gt;
+
+==== [[DAP4: Server Version Service  ]]====
+This service provides software versioning information. When invoked the service returns an XML file containing a description of the version of the server and it's components.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.ver'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + .ver'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/version#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+=== DAP2 Services ===
+
+In order to support legacy client applications DAP4 server implementations MAY support the DAP2 services stack. If they do so the DAP2 services MUST be organized as described in this section.
+
+
+
+==== [[DAP2: Data Service]]====
+The DAP2 data service provides DAP2 data access to the data resource.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.dods'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.dods' + [?dap_constraint]'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap2/dods#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''application/octet-stream'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP2: DDX Service ]]====
+The DAP2 DDX service provides DAP2 access to the data resource metadata. When invoked the service returns an XML document containing both syntactic and semantic  dataset metadata in DAP2 XML format.
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.ddx'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + .ddx'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap2/ddx#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/xml'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP2: DDS Service ]]====
+The DAP2 DDS service provides access to the 'syntactic' metadata (aka use or structural metadata) for the data resource. When invoked returns a DAP2 DDS response document conforming to the DDS part of the DAP2 specification.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.dds'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.dds' + [?dap_constraint]'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap2/dds#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/plain'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP2: DAS Service ]] ====
+The DAP2 DAS service provides access to the 'semantic' metadata (aka domain metadata) for the data resource. When invoked returns a DAP2 DAS response document conforming to the DAS part of the DAP2 specification.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.das'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + .das'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap2/das#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/plain'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+
+==== [[DAP2: ASCII Data Service]] ====
+This service provides DAP2 data responses in ASCII format. When invoked the regular DAP2 data response will be repackaged as an ASCII representation of the data values.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.ascii'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.ascii' + [?dap_constraint]'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap2/ascii#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/plain'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP2: JSON Data Service]] ====
+This service provides DAP2 data responses in w10n JSON format. When invoked the regular DAP2 data response will be repackaged as an w10n JSON representation of the data values.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.json'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.json' + [?dap_constraint]'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap2/json#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/plain'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP2: Info Service ]] ====
+The DAP2 INFO service provides a browser renderable page that combines both the DAP2 'syntactic' and 'semantic' metadata for the data resource in a human readable way. When invoked this service returns a web browser renderable document that combines both the DAP2 'syntactic' and  'semantic' metadata for the data resource in a human readable way.
+
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.info'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + .info'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap2/Info#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''text/html'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+==== [[DAP2: NetCDF Service ]] ====
+This service provides data responses in NetCDF-3 file format. When invoked the regular DAP data response will be repackaged as a NetCDF 3 file. 
+
+suffix = &lt;font size="2"&gt;&lt;code&gt;'''.nc'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+service url =  &lt;font size="2"&gt;&lt;code&gt;'''dataset_url + '.nc' + [?dap_constraint]'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+role id = &lt;font size="2"&gt;&lt;code&gt;'''&lt;nowiki&gt;http://services.opendap.org/dap4/netcdf-3#&lt;/nowiki&gt;'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+
+Default/primary media type: &lt;font size="2"&gt;&lt;code&gt;'''application/x-netcdf'''&lt;/code&gt;&lt;/font&gt;&lt;br/&gt;
+&lt;br/&gt;
+
+
+[[Template: ServiceTemplate]]</text>
+      <sha1>2dq9c238e96y3bbgt9lqneovosgo8hd</sha1>
+    </revision>
+  </page>
+</mediawiki>

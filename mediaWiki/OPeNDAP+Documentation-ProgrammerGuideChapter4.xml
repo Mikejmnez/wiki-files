@@ -1,0 +1,894 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>ProgrammerGuideChapter4</title>
+    <ns>0</ns>
+    <id>191</id>
+    <revision>
+      <id>1869</id>
+      <parentid>1868</parentid>
+      <timestamp>2008-01-26T13:31:11Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Client Libraries */</comment>
+      <origin>1869</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="43193" sha1="3hhqhoaz75nkc8amf04asu98q1veyin" xml:space="preserve">=Using the Toolkit=
+
+
+This chapter describes how to use the toolkit software to build new
+client libraries and data servers. Before beginning to build either
+part of a new OPeNDAP application, it is very important to be intimate
+with the details of the API to be replaced.
+
+
+To create a client library that can ''replace''  the original API
+implementation at ''link time''  means that the client library must
+present exactly the same interface as the original library. This
+includes, to the extent that they are widely used, any undocumented
+features of the original implementation that manifest themselves as
+symbols that require link-time resolution. Building a client-library
+requires great understanding of the existing implementation as well as
+current use of the target API.
+
+
+To build a good data server for files or data sets encoded using an
+API it is important to understand the data model(s) the API supports
+and how they relate to the OPeNDAP data models. Each of the various data
+types that the API supports must be translated into a OPeNDAP data type
+(i.e., one of the OPeNDAP classes that descend from BaseType).
+However, there is often not a one-to-one match between the API's types
+and the OPeNDAP types. Thus, the data server author must decide how to
+best translate the API's types into OPeNDAP types so as to preserve as
+much of the data set author's intent. This is exacerbated by the use
+of various conventions that (implicitly) bind several variables
+together with a data set. When this pattern shows up (as it does with
+NetCDF) you must decide whether to lump all variables together that
+''appear''  to use the convention (and thus falsely group some
+variables) or to group only those which actually are explicitly
+grouped using whatever the API provides. If you choose the latter then
+any data sets which follow the convention will lose information. When
+building the data server it is important to keep such tradeoffs in
+mind.
+
+The following sections discuss the specifics of building a data server
+and a client library. The existing NetCDF server and client library
+are used as examples. Many APIs are very similar in their overall
+organization. The source code used for these examples can be found in
+&lt;font color='green'&gt;$(OPeNDAP_ROOT)/src/nc-dods/&lt;/font&gt;. Much of the NetCDF example will be relevant to your task, even if your target API is significantly
+different. The &lt;font color='green'&gt;$(OPeNDAP_ROOT)/src/jg-dods/&lt;/font&gt; directory contains both a data server and client library for the [http://www1.whoi.edu/jgofs.html&lt;cite&gt;Joint Geoghsical Ocean Flux Study&lt;/cite&gt;] relational data system.
+
+==Data Servers==
+
+
+The OPeNDAP data server consists of a dispatch program and a set of
+filter programs.  The dispatch program reads the incoming URL
+and decides which of the filter programs to run based on the URL
+suffix.
+
+
+
+A typical OPeNDAP data request uses three filters: one to return the
+DAS  (&lt;font color='green'&gt;.das&lt;/font&gt;), one for the  DDS (&lt;font color='green'&gt;.dds&lt;/font&gt;), and the third for the data (&lt;font color='green'&gt;.dods&lt;/font&gt;).  A client can also request ASCII data (&lt;font color='green'&gt;.asc&lt;/font&gt; or &lt;font color='green'&gt;.ascii&lt;/font&gt;), usage information about the server (&lt;font color='green'&gt;.info&lt;/font&gt;), or version information about the server and the data (&lt;font color='green'&gt;.ver&lt;/font&gt;).
+
+
+The task of building a OPeNDAP server can then be separated into the
+following steps:
+
+
+#Create concrete classes of the entire BaseType hierarchy, with &lt;font color='green'&gt;read&lt;/font&gt; functions for each data type.  Certain APIs cannot handle certain OPeNDAP types.  For these types, there must still be a concrete class, but it can have a &lt;font color='green'&gt;read&lt;/font&gt; method with a null body.
+#Write functions that use the native API to extract from the dataset the information needed to build the OPeNDAP DAS and DDS objects, and then build them with the methods those classes provide.    &lt;blockquote&gt; NOTE: This step has nothing at all to do with OPeNDAP.  This is between you and your data.  OPeNDAP makes no demands on how these structures are created.  That is, for example, if all the data to be served has the same DDS, feel free to cheat.  The only thing that is important is that the structures accurately reflect the relationships of the data.&lt;/blockquote&gt;
+#Create filter programs to return the DAS ,  DDS, data, and server usage and version information.
+#Create a dispatch program to parse an incoming URL and invoke the correct filter program.
+
+To install the finished server, put the filter programs into a web
+server's CGI directory, and put the datasets to be served somewhere
+they can be seen by those filter programs.  Refer to the [http://docs.opendap.org/index.php/Wiki_Testing/OpeNDAP_User%27s_Guide&lt;cite&gt;The OPeNDAP User Guide&lt;/cite&gt;] for more details about installing a server.
+
+
+
+===The Dispatch CGI===
+
+
+The OPeNDAP dispatch CGI program receives a data request from the OPeNDAP
+client, and dispatches the request to one of several filter programs.
+The dispatch CGI is stored in a CGI directory on the host machine.
+Its name is an important detail of its operation.  The name should
+begin with &lt;font color='green'&gt;nph-&lt;/font&gt;, and end with the letters that distinguish data files containing data formatted with that API from other files.[[ProgrammerGuideFootNotes|(8)]]  So, for example, [http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;] data files are called \var{foo}&lt;font color='green'&gt;.nc&lt;/font&gt;, so the
+[http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;] dispatch CGI is called &lt;font color='green'&gt;nph-nc&lt;/font&gt;.
+
+
+
+The dispatch CGI's job is to parse the incoming URL and execute the
+appropriate filter programs with the arguments enclosed in the URL.
+The dispatch CGI is also be responsible for the first level of error
+information that must be returned to the user.  These tasks are easily
+accomplished in any scripting language.  On the off chance you wish to
+use Perl, OPeNDAP provides a Perl class designed to make writing the CGI
+a simple task.
+
+
+
+The file &lt;font color='green'&gt;OPeNDAP_Dispatch.pm&lt;/font&gt; contains the definitions of the
+OPeNDAP_Dispatch class.  This class provides several methods
+used to parse the incoming URL, and one method for delivering error
+messages to the client.  The OPeNDAP_Dispatch provides the
+following methods:
+
+ 
+
+; &lt;font color='green'&gt;command()&lt;/font&gt; : Returns the command string implied by the input URL.  The command string looks like:
+
+
+; : command filename &lt;font color='green'&gt;-e&lt;/font&gt; query-string.
+
+
+; : Where command is the OPeNDAP filter program to be run, filename is the absolute filename of the dataset on which to run it, and query-string is the constraint expression that was enclosed in the URL. Of the OPeNDAP_dispatch methods, many dispatch CGI scripts may only need to use this one and &lt;font color='green'&gt;print_error_msg&lt;/font&gt;.  See Figure 4.1.1
+
+
+; &lt;font color='green'&gt;query()&lt;/font&gt; : Returns the query string from the URL.  This is the OPeNDAP constraint expression.
+
+
+; &lt;font color='green'&gt;filename()&lt;/font&gt; : Returns the absolute filename corresponding to the requested dataset.
+
+
+; &lt;font color='green'&gt;extension()&lt;/font&gt; : Returns the extension on the end of the URL. For OPeNDAP, this will be &lt;font color='green'&gt;das&lt;/font&gt;, &lt;font color='green'&gt;dds&lt;/font&gt;, &lt;font color='green'&gt;dods&lt;/font&gt;, &lt;font color='green'&gt;info&lt;/font&gt;, or &lt;font color='green'&gt;ver&lt;/font&gt;.
+
+
+; &lt;font color='green'&gt;cgi-dir()&lt;/font&gt; : Returns the absolute pathname of the directory in which the dispatch CGI is stored.  This is generally the same as
+the directory in which the OPeNDAP filter programs are stored.
+
+
+; &lt;font color='green'&gt;script()&lt;/font&gt; : Returns the name of the dispatch CGI, minus the &lt;font color='green'&gt;nph-&lt;/font&gt;, and any suffixes used for a secure server.
+
+
+; &lt;font color='green'&gt;print_error_message(&lt;/font&gt;ver&lt;font color='green'&gt;)&lt;/font&gt; : This returns an error message to the client, explaining how to use the server.  The ver argument should be a string containing the version of the server software.  The error message returned is encoded in the &lt;font color='green'&gt;OPeNDAP_Dispatch.pm&lt;/font&gt; file.
+
+
+; &lt;font color='green'&gt;print_help_message()&lt;/font&gt; : This returns a help message to the client.  This can be issued in response to a confusing or inadequate URL. The help message returned is encoded in the &lt;font color='green'&gt;OPeNDAP_Dispatch.pm&lt;/font&gt; file.
+
+
+A sample (simple) OPeNDAP dispatch CGI is shown in Figure 4.1.1.
+This is a Perl script using the OPeNDAP_Dispatch methods.  This
+script assumes that all data is rooted in the http document directory
+subtree.[[ProgrammerGuideFootNotes|(9)]]
+
+
+ 
+&lt;pre&gt;
+#!/usr/local/bin/perl
+
+use Env;
+use OPeNDAP_Dispatch;
+
+$dispatch = new OPeNDAP_Dispatch;
+
+&lt;math&gt;command = &lt;/math&gt;dispatch-&gt;command();
+
+if ($command ne "") {           # if no error...
+    exec($command);
+} else {
+    my &lt;math&gt;script_rev = '&lt;/math&gt;Revision: 11906 $ ';
+
+&lt;math&gt;script_rev =~ s@&amp;#36;([A-z]*): (.*) &amp;#36;@&lt;/math&gt;2@;
+
+    &lt;math&gt;dispatch-&gt;print_error_msg(&lt;/math&gt;script_rev);
+}
+
+&lt;/pre&gt;
+&lt;center&gt;
+A simple OPeNDAP data server dispatch CGI.
+&lt;/center&gt;
+
+===The DAS  and  DDS filter programs===
+
+
+The simplest way to learn about creating a new filter program to
+return a dataset's DAS  or  DDS is to examine the
+existing filter programs.  In this section, we will examine the
+[http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;] servers.
+
+The source code for the DAS filter program distributed with
+the [http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;] server software is shown in Figure 4.1.2. The DAS  and  DDS filters are very similar, so only the DAS filter will be discussed here. The important differences between the two will be pointed out.
+
+The CGI dispatch program makes heavy use of commonly used
+functions collected in the OPeNDAP_Dispatch class.  In the same
+way, the OPeNDAPFilter class collects several commonly used
+functions for the construction of filter programs.  The example
+program uses several methods of that class.  Other useful utility
+functions are in the &lt;font color='green'&gt;cgi-util&lt;/font&gt; collection.
+
+
+The filter program in Figure 4.1.2 can be separated into
+the following steps:
+ 
+
+; line 16 : Step 1: The OPeNDAPFilter class provides a constructor that parses the argument list to create the data.  You can use the &lt;font color='green'&gt;OK&lt;/font&gt; method to check that the list was parsed properly.  Any errors here indicate a mistake in the dispatch CGI itself.  This is why the &lt;font color='green'&gt;print_usage&lt;/font&gt; function prints its message to the WWW server log file when it returns an error object to the client.
+
+; line 21 : Step 2: If the user has only requested version information from the server, it is provided here.
+
+; line 26 : Step 3: The &lt;font color='green'&gt;read_variables&lt;/font&gt; function performs the real work of this program.  This involves scanning the dataset itself for data variable attributes and using the DAS method functions to assemble the corresponding DAS.  This operation is specific to the data access API in use, so does not make a good example.
+
+; line 29 : Step 4: Each of the filter programs must create a MIME document to hold its return value. The DAS and DDS filters return a text MIME document; they set up the MIME headers using the utility function &lt;font color='green'&gt;set_mime_text&lt;/font&gt;.
+
+; line 34 : Step 5: Once the data set has been read and the attribute table built, the DAS ancillary file is loaded. The example filter looks for a file with the same root name as the data set and an extension of &lt;font color='green'&gt;.das&lt;/font&gt;. If such a file exists, it is read in using the DAS member function &lt;font color='green'&gt;DAS::parse&lt;/font&gt; and the information it contains is merged with the DAS built from the dataset.
+
+; line 37 : Step 6: Finally the DAS member function &lt;font color='green'&gt;print&lt;/font&gt; is used to send the textual representation of the DAS to the client.  When it is invoked by the &lt;font color='green'&gt;httpd&lt;/font&gt; daemon, the dispatch CGI's standard input and output are a socket connected to the remote client process.  This means that since the filter is invoked by the dispatch script, its output goes directly to the client.  The OPeNDAPFilter &lt;font color='green'&gt;send_das&lt;/font&gt; method looks something like this:
+
+
+&lt;pre&gt;
+
+ DODSFilter::send_das(DAS &amp;das)
+{
+    set_mime_text(dods_das);
+    das.print();
+
+    return true;
+}
+&lt;/pre&gt;
+
+ 
+
+&lt;pre&gt;
+#include &lt;iostream.h&gt;
+
+#include "DAS.h"
+#include "cgi_util.h"
+#include "DODSFilter.h"
+
+extern bool read_variables(DAS &amp;das, 
+        const char *filename, String *error);
+
+int 
+main(int argc, char *argv[])
+{
+    DAS das;
+    DODSFilter df(argc, argv);
+
+    if (!df.OK()) {
+        df.print_usage();
+        return 1;
+    }
+
+    if (df.version()) {
+        df.send_version_info();
+        return 0;
+    }
+
+    String errMsg;
+    if(!read_variables(das, df.get_dataset_name(), &amp;errMsg)){
+      Error e(no_such_file, errMsg);
+      set_mime_text(dods_error);
+      e.print();
+      return 1;
+    }
+
+    if (!df.read_ancillary_das(das))
+        return 1;
+
+    if (!df.send_das(das))
+        return 1;
+
+    return 0;
+}
+&lt;/pre&gt;
+&lt;center&gt;
+ Figure 4.1.2 The DAS filter program.
+&lt;/center&gt;
+
+
+Note that the example filter in Figure 4.1.2 does not
+use any caching. It is possible to build a more sophisticated filter
+program that saves the generated DAS to a text file and then uses that
+file without first interrogating the data set, thus saving on access.
+It is also possible to write a DAS by hand and ''always''  use that
+if the data set does not contain any of the type of information that
+the DAS has.
+
+
+====Caching DAS  and  DDS Objects====
+
+Because the construction of the DAS and DDS objects requires that an
+entire data set be scanned, it can become very inefficient to
+continually rebuild these objects. Because the DAS and
+DDS filter programs use a text representation for transmission
+from the server to the client, it is simple to store both the
+DAS  and  DDS objects once they have been created.
+Subsequent accesses to these objects can be accomplished by reading
+and transmitting the textual representation without actually building
+the binary data object.
+
+When taking advantage of this optimization, it is important that the
+server check the date stamp of the DAS / DDS text
+objects and compare it to the latest modification date of the data
+set. For any dataset to which new data is periodically added, the
+DAS / DDS text object must clearly be updated so that
+the cached text object matches exactly the object that would be
+created if the object were built by querying the data set.
+
+The update of the DAS / DDS text object can itself be
+optimized significantly.  It is not actually necessary to completely
+re-read the entire data set.  Because the software used to build both
+the DAS  and the  DDS binary objects work incrementally,
+it is possible to read text version of the DAS / DDS
+object, and then read only the new parts of the data set. The binary
+object will be added to as needed.
+
+&lt;blockquote&gt;NOTE: The DAS / DDS software may not properly update
+''changed''  data (data that was present in a previous version of
+the data set, but is now different) nor is it straightforward to
+remove data which is no longer present in the data set.  In these
+cases it is usually better to regenerate the DAS / DDS
+from scratch.
+&lt;/blockquote&gt;
+
+===The Data filter===
+
+
+The data filter program is structured similarly to both the
+DAS  and  DDS filters except that it returns a binary
+MIME document rather than text and that it takes two arguments instead
+of just one. In addition to the data set or file name (argument 1) it
+also takes the OPeNDAP constraint expression (argument 2, which was
+enclosed in the URL's ''query'' ).
+
+The [http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;] data filter is all but identical to the DDS
+filter.  The only difference is that it calls the &lt;font color='green'&gt;send_data&lt;/font&gt; method of OPeNDAPFilter to send the binary data over the network. This function calls the DDS &lt;font color='green'&gt;send&lt;/font&gt; method.
+
+If for some reason you cannot use the &lt;font color='green'&gt;send&lt;/font&gt; member function of DDS, then you must ensure that the the ''read'' , CE evaluation and the ''serialize''  operations are all carried out in the correct order.  Furthermore, you must ensure that the return value of the data filter is a binary MIME document with a text prefix (currently, OPeNDAP does not use the multi-part MIME standard); that is a
+regular binary MIME document with a section at the start that is text.
+This text is the DDS generated after evaluating the projection
+clauses of the constraint expression. The text part is separated from
+the data by the keyword "Data:" at the start of the
+line.[[ProgrammerGuideFootNotes|(10)]].
+
+
+====The ASCII Data Filter====
+
+
+OPeNDAP is packaged with a filter to translate a OPeNDAP data stream into an
+ASCII data file.  Clients can request ASCII data by appending
+&lt;font color='green'&gt;.asc&lt;/font&gt; or &lt;font color='green'&gt;.ascii&lt;/font&gt; to their URL instead of &lt;font color='green'&gt;.dods&lt;/font&gt;.  The &lt;font color='green'&gt;asciival&lt;/font&gt; program is useful as a standalone client (see [http://docs.opendap.org/index.php/Wiki_Testing/OpeNDAP_User%27s_Guide&lt;cite&gt;The OPeNDAP User Guide&lt;/cite&gt;]), but may also be used by a server to provide ASCII data.
+
+A request for ASCII data is processed as any other request for data,
+but the final output of the data filter is  piped into the &lt;font color='green'&gt;asciival&lt;/font&gt; program and the result returned to the client:
+
+&lt;pre&gt;
+nc_dods Data.nc | asciival -m -- -
+&lt;/pre&gt;
+
+ 
+The &lt;font color='green'&gt;OPeNDAP_Dispatch&lt;/font&gt; class takes care of this step automatically, when it encounters a request using &lt;font color='green'&gt;.asc&lt;/font&gt; or &lt;font color='green'&gt;.ascii&lt;/font&gt;.
+
+===The Usage Filter===
+
+
+Client requests containing a &lt;font color='green'&gt;.info&lt;/font&gt; suffix should return to the
+client HTML text containing documentation of both the server usage and
+the dataset named in the query.  OPeNDAP provides a &lt;font color='green'&gt;usage&lt;/font&gt; filter
+that can be used for this purpose.  The &lt;font color='green'&gt;OPeNDAP_Dispatch&lt;/font&gt; class
+invokes this filter.
+
+The OPeNDAP-provided &lt;font color='green'&gt;usage&lt;/font&gt; filter accepts two arguments, the data
+file name requested and the name of the CGI script (the dispatch CGI)
+in use:
+
+&lt;pre&gt;
+usage filename CGI-name 
+&lt;/pre&gt;
+
+ 
+The &lt;font color='green'&gt;usage&lt;/font&gt; filter looks in the dataset directory for a file
+called filename&lt;font color='green'&gt;.html&lt;/font&gt;, and in the directory specified in
+the CGI-name argument for a file called CGI-name&lt;font color='green'&gt;.html&lt;/font&gt;.  These two files must contain HTML, but without the &lt;font color='green'&gt;html&lt;/font&gt;, &lt;font color='green'&gt;head&lt;/font&gt; or &lt;font color='green'&gt;body&lt;/font&gt;  tags.
+
+
+For example, suppose a dispatch CGI using the &lt;font color='green'&gt;OPeNDAP_Dispatch&lt;/font&gt;
+class receives a URL like this:
+
+&lt;pre&gt;
+http://dods/cgi-bin/nph-nc/data.info
+&lt;/pre&gt;
+
+ 
+In this case, the &lt;font color='green'&gt;usage&lt;/font&gt; filter looks for two files:
+&lt;font color='green'&gt;cgi-bin/nph-nc.html&lt;/font&gt; and &lt;font color='green'&gt;data.html&lt;/font&gt;  (the htdocs directory is assumed in the second case).  The contents of these two files are concatenated with an HTML representation of the DAS and DDS for the &lt;font color='green'&gt;data.nc&lt;/font&gt; file, and the whole thing is
+returned to the client.  If the HTML files are not found, the returned
+document contains only the DAS  and  DDS.
+
+
+===Documenting Your Work===
+
+
+If you do write a server, and intend to circulate it beyond your own
+site, here are some guidelines for documenting that server that will
+help others use it.
+
+
+
+Since there are two sets of "users" for a data server program, there
+are two sets of instructions that need to be prepared for a given
+server. One set will be read by the person who installs and maintains
+the server on the host platform. The other set is designed to be read
+by people who intend to request data from that server. These users
+will get this documentation by submitting queries to the Info
+Service, in rather the same way that many UNIX commands have a
+&lt;font color='green'&gt;-usage&lt;/font&gt; option.
+
+
+In addition to these two documents, all servers should include a set
+of text files in their distribution directory.
+
+
+
+====The README File====
+
+
+The &lt;font color='green'&gt;README&lt;/font&gt; file should contain the following information:
+
+
+*A brief overview that describes the purpose and method of   operation of the server.
+
+*The revision level of the server.
+
+*Any features the local &lt;font color='green'&gt;httpd&lt;/font&gt; daemon must support to use   this server.
+
+*Any data translations that this data server can do.  If any are   done, they should be described in detail, so that users can know   what data they get.
+
+
+====The ERRORS File====
+
+
+The &lt;font color='green'&gt;ERRORS&lt;/font&gt; file should contain a complete list of the error messages
+and explanations that might ever be issued by the server.
+
+
+====Installation Notes====
+
+These instructions should be included in a file called &lt;font color='green'&gt;INSTALL&lt;/font&gt; which is
+to be included with the server distribution. At a minimum, they should
+cover the following topics:
+
+
+*Configuring and compiling the server code. Ideally, there should be a &lt;font color='green'&gt;configure&lt;/font&gt; script included, but detailed instructions on editing the &lt;font color='green'&gt;Makefile&lt;/font&gt; will often suffice. Remember to install the usage data file somewhere the server can find it.
+*Are there any environment variables that must be defined in order to run the server? Are there other programs (e.g. &lt;font color='green'&gt;gzip&lt;/font&gt; that must be installed on the host machine?
+*What configuration options are there for the installed server? This covers issues like enabling data compression, ancillary data caching, and choosing the GUI manager program with which the server will communicate. If there are performance trade-offs associated with each option, note them here.
+*Ancillary data files:
+**Must the installer prepare ancillary data files by hand, or     are these created automatically and cached?
+**If they must be created, where ought they be put?
+**If they are cached, where are they kept?
+**Also, if the ancillary data files are cached, what     implications are there for updating the data sets served by this     server? (i.e. must the ancillary data files be updated also?     Deleted and recreated?)
+*:
+*What temporary files will be created by the server? Where will they be stored? Under what conditions may (or must they) they be erased?
+
+
+
+====Information Files====
+
+
+
+The information files contain the information that remote users of
+this server will use to figure out how to use this server and its
+datasets once it is installed somewhere.  The files are used in
+constructing the HTML page for the &lt;font color='green'&gt;info&lt;/font&gt; server  The &lt;font color='green'&gt;.info&lt;/font&gt;
+results can include information about both the server and the current
+dataset.  (In fact, the results will usually include the DAS and DDS
+of the dataset named in the URL.)
+
+When a user appends &lt;font color='green'&gt;.info&lt;/font&gt; to a URL, the info service is
+activated.  This service collates information about the server and the
+dataset (from the DAS, DDS, lists of global attributes, and variable
+summaries), and assembles that information in an HTML document.  The
+server then looks for additional HTML files created by the server's
+administrator, and appends them the original file, and returns the
+whole document to the client.
+
+Although it is possible merely to rely on the collated data to
+describe a server, we hope that server writers will provide rich,
+human-friendly descriptions of the server's usage and the accompanying
+datasets.  These files can be thought of as "usage" or "README"
+files.  At a minimum, they should cover:
+
+
+*Any special data functions defined by the server that can be   used in a constraint expression, and
+*Any data model translations the server supports, and how they   are to be controlled by the user[[ProgrammerGuideFootNotes|(11)]]
+*A list of the programs a user should have to use certain   features of the server. For example, note here that the server   expects that the GUI manager is running a Tcl interpreter.    
+*A list of the error messages that the user is apt to see.   Include explanations of the conditions that may have caused them,   and any steps the user may take to recover from them.
+*The answers to any questions you are frequently asked about this   server or its usage.
+
+
+The usage data file need not be any more elaborate than any man page.
+
+To create information for a server, write an HTML fragment using the
+format given below, and put the HTML file in the same directory as teh
+server.  Name it using the base name of the server; for example, the
+HTML file that describes the netCDF server (made up of &lt;font color='green'&gt;nph-nc&lt;/font&gt;,
+and &lt;font color='green'&gt;nc_das&lt;/font&gt;, &lt;font color='green'&gt;nc_dods&lt;/font&gt; and so on) is called &lt;font color='green'&gt;nc.html&lt;/font&gt;.
+
+This example shows the correct HTML tagging for server information:
+
+&lt;pre&gt;
+&lt;h3&gt;
+Server Function:
+&lt;/h3&gt;
+&lt;dl&gt;
+&lt;dt&gt;geolocate(variable, lat1, lat2, lon1, lon2)&lt;/dt&gt;
+&lt;dd&gt;Returns the elements of &lt;em&gt;variable&lt;/em&gt; that fall
+within the box created by (&lt;em&gt;lat1&lt;/em&gt;,&lt;em&gt;lon1&lt;/em&gt;)
+and (&lt;em&gt;lat2&lt;/em&gt;,&lt;em&gt;lon2&lt;/em&gt;).&lt;/dd&gt;
+&lt;p&gt;
+&lt;dt&gt;time(variable, start_time, stop_time)&lt;/dt&gt;
+&lt;dd&gt;Returns the elements of &lt;em&gt;variable&lt;/em&gt; that fall
+within the time interval &lt;em&gt;start_time&lt;/em&gt; and
+&lt;em&gt;stop_time&lt;/em&gt;.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;
+&lt;/pre&gt;
+
+For datasets, put the HTML file, tagged using the format given below,
+in the same directory as the datasets.  Name it using the base name of
+the datasets; for example, the HTML file for &lt;font color='green'&gt;fnoc1.nc&lt;/font&gt;,
+&lt;font color='green'&gt;fnoc2.nc&lt;/font&gt;, and &lt;font color='green'&gt;fnoc3.nc&lt;/font&gt; might be called &lt;font color='green'&gt;fnoc.html&lt;/font&gt;.
+This example shows the correct HTML for a dataset information file:
+
+&lt;pre&gt;
+&lt;h3&gt;
+About the dataset
+&lt;/h3&gt;
+This is where the server administrator would supply
+information about the dataset.  And so on...
+&lt;p&gt;
+&lt;/pre&gt;
+
+You may prefer to override this method of creating documentation and
+simply provide a single, complete HTML document that contains general
+information for the server or for a group of datasets.  For example,
+to force the info server to return a particular HTML document for all
+its datasets, you would create a complete HTML document and give it
+the name \var{dataset}&lt;font color='green'&gt;.ovr&lt;/font&gt;, where \var{dataset} is the dataset
+name.  The HTML file in this case would look like this:
+
+&lt;pre&gt;
+
+&lt;\html&gt;
+&lt;\head&gt;
+&lt;title&gt;Override document&lt;/title&gt;
+&lt;\/head&gt;
+&lt;\body&gt; 
+Test dataset
+
+This is where the server administrator would supply
+information about the dataset(s) and what-have-you.
+&lt;\/body&gt;
+&lt;\/html&gt;
+
+&lt;/pre&gt;
+
+Remember to ensure that the installation instructions cover installing the
+usage data file in a place where the server can find it.
+
+
+==Client Libraries==
+
+
+The goal of building a client library is to provide a drop-in
+replacement for an existing API so that user programs written for that
+API can switch to the OPeNDAP version and access remote OPeNDAP data. The
+user programs should not require any modification to change over to
+the OPeNDAP client library version of the API. However, the API will
+clearly need substantial changes to its current implementation.
+
+In order to build the OPeNDAP client library for a particular API, it is
+useful to divide the API to be re-implemented into five categories of
+functions:
+
+
+*Open or connect
+*Variable information read
+*Data read
+*Write
+*Close or disconnect
+
+===Rewriting the Open and Close Functions===
+
+
+The functions that perform the dataset "open" and "close"
+operations must be implemented so that information about the data set
+can be retrieved from the data server. These functions must store the
+necessary state information so that subsequent accesses for variable
+information or data reads can be satisfied. This state information
+will, in almost every case, be the dataset's DAS and
+DDS.
+
+
+The open function for a OPeNDAP client library version of a given
+API must first determine if the data object (typically a file) is
+local to the user program making the open call or is a remote data
+object to be accessed through OPeNDAP. It is possible to access OPeNDAP
+objects which are local to a user program, but there is little reason
+to do so if the data object can also be accessed through the original
+API. In any case, the distinction of local or remote is made on the
+basis whether a URL is used to reference the data object, or a local
+filename.
+
+If the data object is remote, then the open function must build a
+structure which can hold the DAS  and  DDS objects which
+describe the named data set.  This is the Connect class
+object.  Once this object is built, the open function must map this
+structure to a file identifier or pointer which can be passed back to
+the user program as the return value of the open function. You add
+this data to the Connect objects when you sub-class them for a
+particular API.  Subsequent accesses to the data set will include this
+identifier (or pointer), and each function that is a member of the API
+can be modified to use it to gain access to the state information
+stored by the open function.
+
+The close function should use the state information accessible with
+the file identifier or pointer returned by the open function to
+determine if the dataset is local or remote. In the case of a local
+data set, the original implementation's close function must be
+called. In the case of a remote data set, the locally stored state
+information must be freed.  You can do this by destroying the
+Connect object.
+
+See [[ProgrammerGuideChapter3|Section 3.2]] for an example of a recoded open
+function and a description of its use.  (The example uses the [http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;]
+API.)
+
+===Getting Information about Variables===
+
+ 
+Most APIs for self-describing data sets include functions which return
+information about the variables that comprise a data set. These
+functions return information about the type and shape of variables in
+a form that can be used by a program as well as attribute information
+about the variables that is more often than not intended for use by
+humans. Each of these functions must be rewritten so that to the
+extent possible, information present in the DAS and
+DDS is used to satisfy them.
+
+While many `self-describing' APIs may have dozens of
+these functions, the basic structure of the re-implemented code is the same
+for each one. If the data set is local, use the original implementation,
+otherwise use the locally stored state information (DAS and
+DDS) to answer the request for data.
+
+Rewriting these functions can be the most labor intensive part of
+re-imple\-menting a given API. This is typically the largest group of
+functions in the API and the information stored in the DAS and
+DDS must often be `massaged' before it fulfills the
+specifications of the API. Thus the rewritten functions must not only
+get the necessary information from the DAS  and  DDS
+objects, but they must also transform the types of the objects used to
+return that information to the user program into the data types the
+program expects.
+
+===Reading the Values of Variables from a Dataset===
+
+
+To read data values from a dataset using a typical data access API, a
+user would submit to some API function the name of the variable to be
+read.  The OPeNDAP client library version of this same function must take
+that variable name and use it to construct a constraint expression.
+(See [[ProgrammerGuideChapter4|Section 4.3.2]] for more information on using
+constraint expressions to access data.)  The constraint expression
+must then be appended to the dataset URL (with the suffix
+&lt;font color='green'&gt;.dods&lt;/font&gt;), and the resulting URL sent out into the internet.
+
+For example, to get a variable called &lt;font color='green'&gt;var&lt;/font&gt; from a dataset at:
+
+&lt;pre&gt;
+http://blah/cgi-bin/nph-nc/weekly.nc.dods
+&lt;/pre&gt;
+
+you would use the URL:
+
+&lt;pre&gt;
+http://blah/cgi-bin/nph-nc/weekly.nc.dods?var
+&lt;/pre&gt;
+
+
+The Connect class contains a member function,
+&lt;font color='green'&gt;request_data&lt;/font&gt; that performs this task. It takes the constraint
+expression and the suffix to use for requesting data, appends them to
+the Connect URL, and sends the entire string off to retrieve
+its corresponding data.
+
+The &lt;font color='green'&gt;request_data&lt;/font&gt; function returns a pointer to a DDS
+object, which contains the data as well as the structure description
+corresponding to the data request.
+
+
+Once the &lt;font color='green'&gt;request_data&lt;/font&gt; member function has returned, the client
+library must still call the &lt;font color='green'&gt;deserialize&lt;/font&gt; member function (which
+is part of the OPeNDAP Type Classes) for each returned variable. The
+client library should use the variable objects contained in the
+DDS object returned by &lt;font color='green'&gt;request_data&lt;/font&gt; to invoke the
+&lt;font color='green'&gt;deserialize&lt;/font&gt; member function. Once that is done, the data values
+are stored in the internal buffers of the variable objects in the new
+DDS \footnote{For the  Sequence data type, the
+DDS contains only the current instance of the data.
+Repeated calls to the Sequence's &lt;font color='green'&gt;deserialize&lt;/font&gt; function
+are required to return successive instances of the sequence.}. The
+client library should store this new DDS, along with the
+constraint expression passed to &lt;font color='green'&gt;request_data&lt;/font&gt; so that future
+requests by the user program for the same information can be handled
+without accessing the remote data server.
+
+
+The data values of variables in a DDS are accessed using the
+&lt;font color='green'&gt;buf2val&lt;/font&gt; member function for the cardinal and vector types and by
+accessing the values of fields for constructor types.
+
+
+====Translation====
+
+
+For a OPeNDAP client library to be robust, it may have to be equipped to
+deal with data types it was not designed to use.  For example, the
+[http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;] software cannot manipulate a OPeNDAP Sequence.  But a user can
+use the OPeNDAP version of the [http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;] library to request data from a server that provides Sequence data.  When cases like this arise (and they arise farily often), the author of the client library must choose an appropriate data type into which the served data is to be
+translated, and implement functions to do that translation.
+
+
+Often, translation from one data type to another is a simple
+task. Translating an Array into Sequence format is fairly
+straightforward, although there are several ways to do it. (The
+author of the client library should choose one, and document that
+choice in a README file.)
+
+
+Other translations are more complex, and may even require that the
+client library violate the semantics of the original API, or of one of
+the OPeNDAP data types.  For example, translating a Sequence to an Array
+in [http://www.unidata.ucar.edu/software/netcdf/guide.txn_toc.html &lt;cite&gt;NetCDF&lt;/cite&gt;] requires that the client know in advance the length of the
+Sequence, which is not necessarily known.
+
+===Functions that Write to Data Sets===
+
+OPeNDAP is a read-only data system. While it is not technically
+inconceivable, a system which allows modification of remote data sets
+would be operationally much more complex than OPeNDAP. Thus, functions
+that write data are rewritten so that they call the original
+implementation in the case of a local access or return an error code
+in the case of a remote access. The error code should indicate a
+recoverable error so that programs which perform both reads and writes
+can recover if their logic permits.
+
+===Adding Local Access to a OPeNDAP Client Library===
+
+
+In order to ensure that programs, once they have been re-linked with
+OPeNDAP client libraries, can still access local data files it is
+necessary to add software to read those local data to the functions in
+the re-implemented library. Typically in each function in the new
+library the state information accessed by the identifier passed to the
+function is used to determine if the call is to access local or remote
+data. In the former case, the function must do exactly what the
+original implementation of the API would have done to satisfy the
+function call.
+
+It is wasteful to completely recode the entire API just to achieve
+local access.  However, it is also not possible to simply link the
+user program with both the OPeNDAP client library and the original
+library. because both libraries must define the same external symbols. Linking with both libraries will produce link-time conflicts on most computers or result in an incorrectly linked binary image.
+
+In order to use the original implementation of the library, you must
+rename all of its external symbols that will appear in user programs.
+For example, if an API defines four functions (&lt;font color='green'&gt;open&lt;/font&gt;,
+&lt;font color='green'&gt;close&lt;/font&gt;, &lt;font color='green'&gt;read&lt;/font&gt; and &lt;font color='green'&gt;write&lt;/font&gt;) and one global variable
+(&lt;font color='green'&gt;errno&lt;/font&gt;), then each of those must be renamed to some new symbol (e.g., &lt;font color='green'&gt;orig_open&lt;/font&gt;, &lt;font color='green'&gt;orig_close&lt;/font&gt;, ....). These source
+modules can then be added to the set of object modules used to build
+the OPeNDAP client library. Of course the OPeNDAP client library must also
+include the original external symbol names; one approach is to recode
+each of the APIs external symbols as a function which either calls the
+OPeNDAP-replacement or the original function (now renamed so that the
+symbols do not conflict) depending on whether the access is local or
+remote.
+
+
+==Using Constraints==
+
+
+Constraint expressions are an important part of DODS, providing a powerful way to control how data is accessed without forcing the Data Access Protocol to support a lot of different messages. Constraint expressions are used to select which variables will be extracted from a data set by both the user and by the client library. The constraint expression syntax is described in detail in the [http://docs.opendap.org/index.php/Wiki_Testing/OpeNDAP_User%27s_Guide &lt;cite&gt;The OPeNDAP User Guide&lt;/cite&gt;].
+
+
+===How Constraint Expressions are Evaluated===
+
+
+The server-side constraint expressions are evaluated using a two step process. Every constraint expression has two parts, the projection and the selection subexpressions. The projection part of a constraint expression tells which variables to include in any return document describing the data set and the selection subexpression limits the returned data to variables with values that satisfy a set of relational expressions. The projection subexpression is evaluated when the entire constraint expression is parsed; at parse-time the server's copy of the data set's DDS is marked with the variables included in the projection. The selection subexpression, however, is not evaluated until values are read from the data set. One way to classify the projection and selection subexpressions is that projections depend solely on the logical structure of a data set, while selections depend on the values of particular variables within that data set.
+
+
+===Different Ways of Using Constraint Expressions===
+
+
+There are two different ways that constraint expressions can be used. One is by the client library and the other is by the user. When writing a client library that has features for selecting variables or parts of variables, try to code the replacements to those calls so that they build up DODS constraint expressions that will request only the data the user wants. Then read the data from the returned DDS and store it in the variable(s) passed to the API call by the user. This is a much better solution than requesting the entire variable from the data set and then throwing away parts of it.
+
+Suppose that the user program (via the APIs functional interface) asks for the data in variable X. The constraint expression that will retrieve X is simply `X'. Suppose, given the following DDSthat the user program requests the two variables u and v from the embedded structure.
+
+&lt;pre&gt;
+Dataset {
+    Int32 u[time_a = 16][lat = 17][lon = 21];
+    Int32 v[time_a = 16][lat = 17][lon = 21];
+    Float64 lat[lat = 17];
+    Float64 lon[lon = 21];
+    Float64 time[time = 16];
+} fnoc1;
+&lt;/pre&gt;
+
+
+A constraint expression that would project just those variables would be fnoc1.u,fnoc1.v. To restrict the arrays u and v to only the first two dimensions (time and lat), the projection subexpression would be:  
+
+&lt;pre&gt;
+fnoc1.u[0:15][0:16],fnoc1.v[0:15][0:16]
+&lt;/pre&gt;
+
+
+Both of these constraint expressions have null selection subexpressions. Note that the comma operator separates the two clauses of the projection subexpression. Also note that whitespace is ignored by the constraint expression parser. See the grammar for CEs in [http://docs.opendap.org/index.php/Wiki_Testing/OpeNDAP_User%27s_Guide &lt;cite&gt;The OPeNDAP User Guide&lt;/cite&gt;] for more information about constraint expression grammar and the kind of things that can be done with the projection subexpression.
+
+The user program may have an interface that provides the user with a way to request only certain values be returned. This is particularly true for APIs such as JGOFS that support access to relational data sets. Suppose the following DDS describes a relational data set:
+
+&lt;pre&gt;
+Dataset {
+    Sequence {
+        Int32 id;
+        Float64 lat;
+        Float64 lon;
+        Sequence {
+            Float64 depth;
+            Float64 temperature;
+        } xbt;
+    } site;
+} cruise;
+&lt;/pre&gt;
+
+
+To request data with a certain range of latitude and longitude values, you can use a selection subexpression like this:
+
+&lt;pre&gt;
+&amp; lat&gt;=10.0 &amp; lat&lt;=20.0 &amp; long&gt;=5.5 &amp; long&lt;=7.5
+&lt;/pre&gt;
+
+
+Note that each clause of the selection subexpression begins with a &amp; and that the clauses are combined using a boolean and. Finally, using the previous DDS, if a user requested only depth and temperature given the above latitude and longitude range (i.e., the user program requests that only the depth and temperature values be returned given a certain latitude and longitude range) the client library would use the following constraint expression:
+
+&lt;pre&gt;
+site.xbt.depth, site.xbt.temp &amp; lat&gt;=10.0 &amp; lat&lt;=20.0 &amp; 
+   long&gt;=5.5 &amp; long&lt;=7.5
+&lt;/pre&gt;
+
+
+A second way that constraint expressions can be used is that users may specify an initial URL with a constraint expression already attached. In this case the request_data member function will append the constraint expression built by the client library to the one supplied by the user and request data constrained by both expressions. From the standpoint of a client library (or a data server, for that matter) there is no difference between a URL supplied with an initial constraint and one supplied without one.</text>
+      <sha1>3hhqhoaz75nkc8amf04asu98q1veyin</sha1>
+    </revision>
+  </page>
+</mediawiki>

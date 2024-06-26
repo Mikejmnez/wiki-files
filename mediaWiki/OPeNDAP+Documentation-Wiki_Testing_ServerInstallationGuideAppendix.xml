@@ -1,0 +1,71 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/ServerInstallationGuideAppendix</title>
+    <ns>0</ns>
+    <id>207</id>
+    <revision>
+      <id>1239</id>
+      <timestamp>2007-10-04T04:24:27Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>New page: =Getting the OPeNDAP Software=   Get the software from \DODShome .  If you can, it is usually advisable to download the pre-compiled binaries.  If you do so, be sure to follow the directio...</comment>
+      <origin>1239</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1392" sha1="f91yo3fjpb26anv3zhucjdlq7z7dspl" xml:space="preserve">=Getting the OPeNDAP Software=
+
+
+Get the software from \DODShome .  If you can, it is usually advisable
+to download the pre-compiled binaries.  If you do so, be sure to
+follow the directions that acompany the distributions, even if you're
+upgrading a server, since the places where the server's components are
+installed can change as the software evolves. Installation
+instructions for the binary distributions can be found on the web
+pages where you downloadded the software.
+
+If you can't use the pre-compiled binaries, download the source code
+from the \DODShome . You will need a few different files, depending onthe handler(s) you want to install. The "Download Software" page has
+instructions specifying which files to use. If you are building the
+software yourself, be sure to read the README, INSTALL and NEWS files
+included in the distributions.
+
+You will need to download the dap-server `base' software and one or
+more handlers. The base software and each handler each is contained in
+a single &lt;font color='green'&gt;tar.gz&lt;/font&gt; or source &lt;font color='green'&gt;rpm&lt;/font&gt; file. To build the source
+files, expand them, run the enclosed &lt;font color='green'&gt;configure&lt;/font&gt; script, run
+&lt;font color='green'&gt;make&lt;/font&gt; and then &lt;font color='green'&gt;make install&lt;/font&gt;. Once the software is
+installed, see the configuration instructions
+in ([http://www &lt;cite&gt; dods-server,install&lt;/cite&gt;]).</text>
+      <sha1>f91yo3fjpb26anv3zhucjdlq7z7dspl</sha1>
+    </revision>
+  </page>
+</mediawiki>

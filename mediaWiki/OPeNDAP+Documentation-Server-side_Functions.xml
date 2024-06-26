@@ -1,0 +1,88 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Server-side Functions</title>
+    <ns>0</ns>
+    <id>177</id>
+    <revision>
+      <id>4272</id>
+      <parentid>2724</parentid>
+      <timestamp>2009-05-12T21:42:37Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <origin>4272</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3200" sha1="m6gdfdmu9401bg09l2pmnwuserq37qs" xml:space="preserve">== Server-side Functions Working Group ==
+=== Motivation ===
+May different OPeNDAP server implementations include the ability to request that the server process the data before returning the data to the requesting client.  In some implementations, the client requests the processing by embedding the instructions into the URL of the request (GDS, F-TDS) .  Other implementations favor putting the processing request into the query string of the URL(pyDAP, I think).
+
+This working group will explorer the feasibility of developing a single method and syntax to request server-processing for common types of transformations.  For client writers and more importantly for users, this would be a tremendous advantage to be able to make server-side requests using one syntax regardless of the underlying server implementation.
+
+=== Statement of Work ===
+Identify those implementations which offer server-side processing.  Identify a common subset of processing requests.  Develop a common mechanism for embedding the request into the URL and a common syntax for the identified processing types.  Some candidate for requests that could have a common syntax are sum, average, minimum and maximum along one or more axes.
+
+=== Working Documents ===
+In this section we should build documents that represent the consensus of our work.  Rather than be an open-ended exchange the goal is to continue to shape these documents so that when consensus is reached, these documents can be put forward as the specification of the capabilities and syntax that we agreed should be implemented by those choosing to participate.  Please use the discussion tab and email for the initial exchange of ideas and consensus building.
+
+# [[Current Implementations]]
+# [[Proposed Capabilities]]
+#* "Server as client" to read other OPeNDAP data sets as part of the analysis.
+#* Standard functions
+#* Escaping to "native" scripts
+#* Security (syntax checking, OS "escapes", etc)
+#* Capabilities discovery
+#* Variable naming (client specified, best practices defaults, etc)
+# [[Proposed Syntax]]
+
+
+=== Members ===
+# [mailto:Roland.Schweitzer@noaa.gov Roland Schweitzer]
+# [mailto:pwest@ucar.edu Patrick West]
+# [mailto:rob@pydap.org Rob De Almeida]
+# [mailto:antonio.cofino@unican.es Antonio S. Cofiño]
+
+=== Resources ===
+
+* [mailto:opendap-functions@opendap.org The OPeNDAP Functions] mail list.
+* [http://wiki.opendap.org/twiki/pub/Developers/DevMeeting2007Program/RHS-OPeNDAP_Dev_Con.ppt "Server-side OPeNDAP Analysis - A General Approach Utilizing Legacy Applications through TDS" ppt presentation to OPeNDAP Developer's meeting 2007]
+* [http://www.iges.org/grads/gadoc/users.html The GrADS Data Server]
+* [http://wiki.opendap.org/twiki/pub/Developers/DevMeeting2007Program/sld_WZJ07b.pdf SWAMP Presentation from the OPeNDAP Meeting]
+* [http://dust.ess.uci.edu/ppr/ppr_WZJ073.pdf SWAMP Paper from Advances in Grid and Pervasive Computing, Second International Conference, GPC 2007]
+* [http://wiki.opendap.org/twiki/bin/view/Developers/DevMeeting2007Program See this section 1445-1715 Server-Side Operations with 1530-1600 Break]
+
+--Roland Schweitzer (Mon Sep 24 14:21:10 CDT 2007)
+
+[[Category:Working Groups|Server Side Functions]]</text>
+      <sha1>m6gdfdmu9401bg09l2pmnwuserq37qs</sha1>
+    </revision>
+  </page>
+</mediawiki>

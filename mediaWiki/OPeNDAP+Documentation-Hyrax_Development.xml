@@ -1,0 +1,89 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax Development</title>
+    <ns>0</ns>
+    <id>301</id>
+    <revision>
+      <id>12171</id>
+      <parentid>9623</parentid>
+      <timestamp>2016-03-18T18:53:38Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Features &amp; Projects */</comment>
+      <origin>12171</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1485" sha1="g3xpus2zb25sbgr69ujjix2oreg7gsa" xml:space="preserve">''We are in the process of moving pages from our Trac Wiki on Hyrax to the is wiki. More Soon.'' Until then, here's where a good bit of the Hyrax design docs are living: [https://scm.opendap.org/trac/wiki/Hyrax Hyrax Design Documentation]
+
+== Background Information ==
+
+* [[BES - How to Debug the BES]]
+* [[Eclipse - How to Setup Eclipse in a Shrew Checkout]]
+
+== Features &amp; Projects ==
+
+These are projects currently in their initial stages.
+
+* [[Fixing the (currently) broken Hyrax catalogs]]
+* [[Relational_Database_Handler]]
+* [[AIS Using NcML]]
+* [[Parse NcML]]
+* [[BES Aggregation using NcML]]
+* [[How to build the DataDDX response in/with Hyrax]]
+* [[Configurable BES cmdln client]]
+* [[Configurable Communication Protocol]] - AMQP instead of PPT for example
+
+== Projects that are now Released ==
+
+These might not be all complete, but all have passed through the initial planning and implementation stages and are at a stage where we are adding new capabilities to them or are 'in maintenance.'
+
+In Hyrax 1.7:
+* [[Single Constraint per Definition]]
+
+In Hyrax 1.6:
+* [[BES Configuration File]]
+
+In Hyrax 1.5:
+* [[THREDDS using XSLT]]
+* [[BES XML Commands]]
+* [[BES File Out NetCDF]]
+
+== Releases ==
+
+* [https://scm.opendap.org/trac/wiki/Hyrax_1.5_release Hyrax 1.5] New feature freeze on 1 Jan 2009; Beta release on 26 Jan 2009; Second beta release 23 Feb 2009; Final release 6 April 2009
+
+[[Category:Development|Hyrax Development]][[Category:Hyrax Development|Hyrax Development]]</text>
+      <sha1>g3xpus2zb25sbgr69ujjix2oreg7gsa</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,126 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>FreeForm</title>
+    <ns>0</ns>
+    <id>541</id>
+    <revision>
+      <id>4953</id>
+      <parentid>4940</parentid>
+      <timestamp>2009-10-07T00:03:12Z</timestamp>
+      <contributor>
+        <username>TomSgouros</username>
+        <id>39</id>
+      </contributor>
+      <origin>4953</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3970" sha1="e8k11m8ymypu2gwo68jqhc42yvbnxla" xml:space="preserve">Using FreeForm ND with OPeNDAP, a researcher can easily make his or her data
+available to the wider community of OPeNDAP users without having to
+convert that data into another data file format.  This document
+presents the FreeForm ND software, and shows how to use it with the OPeNDAP server.
+
+
+==Tasks Illustrated in this Guide==
+
+
+For a quick start to getting, installing, and using the FreeForm ND
+software, see the list below of tasks described in this document.
+
+
+*Quick start. ([http://docs.opendap.org/index.php/Wiki_Testing/dquick&lt;cite&gt;here&lt;/cite&gt;])
+*Getting and installing the FreeForm ND software.  ([http://docs.opendap.org/index.php/Wiki_Testing/dintro#Installing_the_OPeNDAP_FreeForm_ND_Data_Handler&lt;cite&gt;here&lt;/cite&gt;])
+*Serving tabular data. ([http://docs.opendap.org/index.php/Wiki_Testing/tblfmt&lt;cite&gt;here&lt;/cite&gt;])
+*Array tabular data. ([http://docs.opendap.org/index.php/Wiki_Testing/arrayfmt&lt;cite&gt;here&lt;/cite&gt;])
+*Dealing with data file headers ([http://docs.opendap.org/index.php/Wiki_Testing/hdrfmts&lt;cite&gt;here&lt;/cite&gt;])
+
+==Who is this Guide for?==
+
+
+This guide is for people who wish to use FreeForm ND to serve scientific
+datasets using the OPeNDAP software.  Scientists who wish to share their
+data with colleagues may also find this a useful system, since it is a
+relatively simple matter to set up a server that can allow remote
+access to your data.
+
+
+This documentation assumes that the readers are familiar with
+computers and the internet, but are not necessarily programmers. More
+than a passing familiarity with different data file formats will be
+useful, as will an understanding of elementary internet concepts, such
+as URLs and http.
+
+
+This manual also assumes some familiarity with the OPeNDAP software.  If
+you are starting from scratch, knowing nothing at all about OPeNDAP, we
+strongly encourage you to read the [http://docs.opendap.org/index.php/UserGuide&lt;cite&gt;The OPeNDAP User Guide&lt;/cite&gt;] before reading further
+here.
+
+
+==Organization of this Document==
+
+This book contains both introductory and reference material. There is
+also a description of the installation procedure.
+
+&lt;blockquote&gt;
+
+; [[Wiki_Testing/dintro | Introduction]] : contains an overview of the OPeNDAP FreeForm ND Data Handler software, including how to get it and install it.
+
+; [[Wiki_Testing/dquick | Quick Start]] : provides a brief introduction to writing format descriptions and using the OPeNDAP FreeForm ND Data Handler.
+
+; [[Wiki_Testing/tblfmt | Table Format]] :provides detailed information about writing format descriptions to facilitate access to data in tabular formats.
+
+; [[Wiki_Testing/arrayfmt | Array Format]] : provides detailed information about writing format descriptions to facilitate access to data in non-tabular (array) formats.
+
+; [[Wiki_Testing/hdrfmts | Header Formats]] : tells you how to work with header formats.
+
+; [[Wiki_Testing/ff-server | FreeForm Server]] : describes the operation of the OPeNDAP FreeForm ND Data Handler, with tips for writing format files.
+
+; [[Wiki_Testing/convs | FreeForm Conventions]] : presents FreeForm ND file name conventions, the search rules for locating format files, and standard command line arguments for FreeForm ND programs.
+
+; [[Wiki_Testing/fmtconv | Format Conversion]] : shows you how to use the FreeForm ND program &lt;font color='green'&gt;newform&lt;/font&gt; to convert data from one format to another and also how to read the data in a binary file.
+
+; [[Wiki_Testing/datachk | Data Check]] : discusses the FreeForm ND program &lt;font color='green'&gt;checkvar&lt;/font&gt;, which you can use to check data distribution and quality.
+
+&lt;/blockquote&gt;
+
+
+A position box is often used in this book to indicate column position
+of field values in data files. It is shown at the beginning of a data
+list in the documentation, but does not appear in the data file
+itself.  It looks something like this:
+
+&lt;pre&gt;
+1         2         3         4         5         6
+012345678901234567890123456789012345678901234567890
+&lt;/pre&gt;</text>
+      <sha1>e8k11m8ymypu2gwo68jqhc42yvbnxla</sha1>
+    </revision>
+  </page>
+</mediawiki>

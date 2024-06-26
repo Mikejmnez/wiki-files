@@ -1,0 +1,55 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Meetings</title>
+    <ns>0</ns>
+    <id>501</id>
+    <revision>
+      <id>11627</id>
+      <parentid>5802</parentid>
+      <timestamp>2015-03-05T19:12:29Z</timestamp>
+      <contributor>
+        <username>Dan</username>
+        <id>6</id>
+      </contributor>
+      <minor/>
+      <origin>11627</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="438" sha1="7g7mdeklerf5hh3qoj9dkgyex79ovt8" xml:space="preserve">&lt;!--
+* [[Developer's Meeting|Fall 2008 Developer's Meeting]] &lt;font size="-2"&gt;Tentatively scheduled for early Fall 2008&lt;/font&gt;
+--&gt;
+* [[OPeNDAP Developer's Workshop 2010]]
+* [[OPeNDAP Developer's Workshop 2007]]
+* [[OPeNDAP Workshops at APAC and the Australian BOM, Oct. 2007.]]
+* 2015 ESIP Winter Meeting - Panel Discussion: [[Media:Winter-ESIP-2015 Web-Services-Performance-Panel.pdf | Improving Performance for Data Access Web Services]]</text>
+      <sha1>7g7mdeklerf5hh3qoj9dkgyex79ovt8</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,86 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>How-To Guides</title>
+    <ns>0</ns>
+    <id>1023</id>
+    <revision>
+      <id>12903</id>
+      <parentid>12901</parentid>
+      <timestamp>2020-12-05T00:51:41Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Videos */</comment>
+      <origin>12903</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1843" sha1="tfflzrq1en8na6ej9rr82rc2ikmure6" xml:space="preserve">; Xarray Tips and Tricks - This page show how to work with multifile datasets served by OPeNDAP using Xarray when those files have not been aggregated.
+: https://rabernat.github.io/research_computing_2018/xarray-tips-and-tricks.html
+; Using OPeNDAP to access data remotely: MUR (Multi-scale Ultra-high Resolution SST) example - How to work with a single file. Along the way, this page show how to test things out using OPeNDAP's test.opendap.org server so you can test ideas on small datasets.
+: https://climate-cms.org/2019/01/18/using-opendap.html
+
+== Videos ==
+
+; ASPECT BALTO URL Reader Presentation - Part 1 Of the BALTO/ASPECT presentation. An overview of design and a brief discussion of some of the science behind the NALTO project
+: https://www.youtube.com/watch?v=WP9PLs77UbQ&amp;t=49s
+
+; Building ASPECT with the BALTO URL Reader - Part 2 Of the BALTO/ASPECT presentation. How to build, configure and use ASPECT with remote data from OPeNDAP servers.
+: https://www.youtube.com/watch?v=Sx0pRwzLlgE
+
+=== Videos from NASA ===
+
+; PO.DAAC 101 - How to Use OPeNDAP to Access Data (2017)
+: https://www.youtube.com/watch?v=npOKkLtXE0w
+
+=== Recorded Presentations ===
+
+; Earthdata Webinar Series - Simplified NASA Earth Science Data Access through OPeNDAP (2015)
+: https://www.youtube.com/watch?v=AJQ3m3E8SCY
+
+; 2015 Unidata Users Workshop - Big Data in small scripts: Python and OPeNDAP (2015)
+: https://www.youtube.com/watch?v=hdkZhdYE83M
+
+; Accessing Data Stored in Amazon S3 using Hyrax OPeNDAP Server (2019)
+: https://www.youtube.com/watch?v=gqD7JlLpRSM
+
+; MATLAB OpenDAP Tutorial (ONR-DRI) (2017)
+: https://www.youtube.com/watch?v=BTnVLw50G6c
+
+; OPenDAP data visualisation with Bokeh (2017)
+: https://www.youtube.com/watch?v=dOpPOZUrKpA
+
+; OPenDAP data visualisation with Bokeh - update (2020)
+: https://www.youtube.com/watch?v=Qe3QBVWjPsA</text>
+      <sha1>tfflzrq1en8na6ej9rr82rc2ikmure6</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,188 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax: Server Side Functions</title>
+    <ns>0</ns>
+    <id>849</id>
+    <revision>
+      <id>9543</id>
+      <parentid>9542</parentid>
+      <timestamp>2013-02-13T00:10:27Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* An instance of libdap::ServerFunction */</comment>
+      <origin>9543</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="9075" sha1="io1pen9wdwjk5ie804p67u6j9yzt8im" xml:space="preserve">== Overview ==
+
+Before you embark upon writing a server side function for DAP2 you should read through this [[DAP2: Constraint Expressions | overview of DAP2 constraint expressions and their use of functions]]. 
+
+&lt;font color="red"&gt;Here's another source for information on Server Side FUnctions and Constraint Expressions: http://docs.opendap.org/index.php/UserGuideOPeNDAPMessages#Constraint_Expressions
+&lt;br&gt;
+You might want to take some of your new text and fold it into this and then reference the User Guide only - I'm just angling here for any way to improve the User Guide ;-) jhrg 2/11/13&lt;/font&gt;
+
+== Types of Server Side Functions ==
+&lt;blockquote&gt;Here we document all three types of Server Side Functions that DAP2 supports. In ''practice'' only the first kind of function is very widely used. These functions take a set of variables from the current dataset and return a new value wrapped in a DAP2 variable. The other kinds of functions are used to control constraint expression evaluation and to add new variables to the dataset's DDS, respectively. We have used these to build queryable interfaces for inventories.&lt;/blockquote&gt;
+; BaseType Functions
+: &lt;font size="2"&gt;&lt;tt&gt;void(*btp_func)(int argc, libdap::BaseType *argv[], libdap::DDS &amp;dds, libdap::BaseType **btpp)&lt;/tt&gt;&lt;/font&gt;
+: A BaseType function takes four arguments: an integer (argc), a vector of BaseType *s (argv), the DDS for the dataset for which these function is being evaluated (analogous to the ENVP in UNIX) and a pointer for the function's return value. ARGC is the length of ARGV.
+
+; Boolean Functions
+: &lt;font size="2"&gt;&lt;tt&gt;void(*bool_func)(int argc, libdap::BaseType *argv[], libdap::DDS &amp;dds, bool *result)&lt;/tt&gt;&lt;/font&gt;
+: A boolean function takes four arguments, an integer (argc), a vector of BaseType *s (argv), the DDS for the dataset for which these function is being evaluated (analogous to the ENVP in UNIX) and a pointer for the function's return value. Unlike the previous type function, the result is a boolean type, and will be used by the constraint expression evaluator to determine the truth value for the expression. ARGC is the length of ARGV.
+
+; Projection Functions
+: &lt;font size="2"&gt;&lt;tt&gt;void(*proj_func)(int argc, libdap::BaseType *argv[], libdap::DDS &amp;dds, libdap::ConstraintEvaluator &amp;ce)&lt;/tt&gt;&lt;/font&gt;
+: A projection function is a function that appears in the projection part of the CE and is executed for its side-effect. Usually adds a new variable to the DDS. These are run ''during the parse'' so their side-effects can be used by subsequent parts of the CE.
+
+== Writing Server Side Functions ==
+
+
+
+=== Example: HelloWorld ===
+
+; What we'll do
+* Write a C++ function which uses one of the three server function type signatures, btp_func (BaseTypePointer_Function)
+* Write a very simple subclass of the &lt;font size="2"&gt;&lt;code&gt;libdap::Function&lt;/code&gt;&lt;/font&gt; class and install the your function into the class using the &lt;font size="2"&gt;&lt;code&gt;libdap::Function.setFunction()&lt;/code&gt;&lt;/font&gt; method.
+* Write a very simple subclass of the &lt;font size="2"&gt;&lt;code&gt;BESAbstractModule&lt;/code&gt;&lt;/font&gt; and in the &lt;font size="2"&gt;&lt;code&gt;initialize()&lt;/code&gt;&lt;/font&gt; method, add an instance of your Function class to the &lt;font size="2"&gt;&lt;code&gt;libdap::ServerFunctionsList&lt;/code&gt;&lt;/font&gt;
+* Build and install the module.
+
+
+Get the example_ssFunction project and follow along:
+: &lt;font size="2"&gt;&lt;code&gt;svn co https://scm.opendap.org/svn/trunk/example_ssFunction&lt;/code&gt;&lt;/font&gt;
+
+==== The &lt;code&gt;helloWorld()&lt;/code&gt; function ====
+
+Here is the &lt;font size="2"&gt;&lt;code&gt;example_ssf::helloWorld()&lt;/code&gt;&lt;/font&gt; function from [https://scm.opendap.org/svn/trunk/example_ssFunction/ the example_ssFunction project.] The &lt;font size="2"&gt;&lt;code&gt;example_ssf::helloWorld()&lt;/code&gt;&lt;/font&gt; function is defined in the file [https://scm.opendap.org/trac/browser/trunk/example_ssFunction/ExampleServerSideFunctions.cc ExampleServerSideFunctions.cc].
+ 
+&lt;font size="2"&gt;&lt;source lang="cpp"&gt;
+void helloWorld(  int argc,   libdap::BaseType *argv[],  libdap::DDS &amp;dds, libdap::BaseType **btpp)
+{
+    Str *dapResult = new Str("helloWorldFunction_result");
+    dapResult-&gt;set_value("Howdy Stranger...");
+    *btpp = dapResult;
+}
+&lt;/source&gt;&lt;/font&gt;
+We can see from the method's type signature that it is a BaseType function. The &lt;font size="2"&gt;&lt;code&gt;helloWorld()&lt;/code&gt;&lt;/font&gt; function creates  a DAP String object, set it's value and return it via the return value parameter '''btpp'''.
+
+==== An instance of libdap::ServerFunction ====
+
+Now we need a &lt;font size="2"&gt;&lt;code&gt;libdap::ServerFunction&lt;/code&gt;&lt;/font&gt; to provide an API by which the server can learn things about our new function. Since &lt;font size="2"&gt;&lt;code&gt;libdap::ServerFunction&lt;/code&gt;&lt;/font&gt; is not an abstract we don't need to override any methods to make the child class work, all we do is give the new instance state that's specific to our new function.
+
+&lt;font size="2"&gt;&lt;source lang="cpp"&gt;
+
+libdap:ServerFunction *helloWorld =
+    new libdap::ServerFunction(
+        "helloWorld", // The name of the function as it will appear in a constraint expression
+        "1.0",        // The version of the function
+        "Returns a DAP String whose value is 'Hello World'", // A brief description of the function
+        "helloWorld()", // A usage/syntax statement
+        "http://docs.opendap.org/index.php/Hyrax:_Server_Side_Functions", // A URL that points two a web page describing the function
+        "http://docs.opendap.org/index.php/Hyrax:_Server_Side_Functions", // A URI that defines the role of the function
+        example_ssf::helloWorld // A pointer to the helloWorld() function
+    );
+&lt;/source&gt;&lt;/font&gt;
+ 
+
+Now we have 
+* a BaseType function, and 
+* a libdap::ServerFunction class instance through whose API we can learn about the&lt;font size="2"&gt;&lt;code&gt;example_ssf::helloWorld&lt;/code&gt;&lt;/font&gt; function.
+
+Now we just need to hook it up to the BES and Hyrax...
+
+==== A child class of BESAbstractModule  ====
+
+In order to get our new function into Hyrax we need to have the BES load it at startup. This is done by writing a very simple BES module. For this example our module class  is called &lt;font size="2"&gt;&lt;code&gt;ExampleServerSideFunctions&lt;/code&gt;&lt;/font&gt; which is declared in the header file [https://scm.opendap.org/trac/browser/trunk/example_ssFunction/ExampleServerSideFunctions.h ExampleServerSideFunctions.h]:
+
+&lt;font size="2"&gt;&lt;source lang="cpp"&gt;
+class ExampleServerSideFunctions: public BESAbstractModule {
+public:
+    ExampleServerSideFunctions() {}
+    virtual ~ExampleServerSideFunctions() {}
+    virtual void initialize(const string &amp;modname);
+    virtual void terminate(const string &amp;modname);
+    virtual void dump(ostream &amp;strm) const;
+};
+&lt;/source&gt;&lt;/font&gt;
+
+
+and implemented in [https://scm.opendap.org/trac/browser/trunk/example_ssFunction/ExampleServerSideFunctions.cc ExampleServerSideFunctions.cc]:
+
+&lt;font size="2"&gt;&lt;source lang="cpp"&gt;
+void ExampleServerSideFunctions::initialize(const string &amp;modname) {
+    BESDEBUG( "ExampleServerSideFunctions", "Initializing ExampleServerSideFunctions:" &lt;&lt; endl );
+
+    // Here we wrap the helloWorld() function in an instance of the libdap::ServerFunction class
+    libdap:ServerFunction *helloWorld =
+        new libdap::ServerFunction(
+            "helloWorld", // The name of the function as it will appear in a constraint expression
+            "1.0",        // The version of the function
+            "Returns a DAP String whose value is 'Hello World'", // A brief description of the function
+            "helloWorld()", // A usage/syntax statement
+            "http://docs.opendap.org/index.php/Hyrax:_Server_Side_Functions", // A URL that points two a web page describing the function
+            "http://services.opendap.org/dap4/server-side-function/helloWorld", // A URI that defines the role of the function
+            example_ssf::helloWorld // A pointer to the helloWorld() function
+        );
+
+    // Here we add our new instance of libdap::ServerFunction to the libdap::ServerFunctionsList.
+    libdap::ServerFunctionsList::TheList()-&gt;add_function(helloWorld);
+
+    BESDEBUG( "ExampleServerSideFunctions", "Done initializing ExampleServerSideFunctions" &lt;&lt; endl );
+}
+
+void ExampleServerSideFunctions::terminate(const string &amp;modname) {
+    BESDEBUG( "ExampleServerSideFunctions", "Removing ExampleServerSideFunctions module (this does nothing)." &lt;&lt; endl );
+}
+
+extern "C" {
+    BESAbstractModule *maker() {
+        return new ExampleServerSideFunctions;
+    }
+}
+&lt;/source&gt;&lt;/font&gt;
+Note carefully the method &lt;font size="2"&gt;&lt;code&gt;ExampleServerSideFunctions.initialize()&lt;/code&gt; which contains the call to the &lt;font size="2"&gt;&lt;code&gt;libdap:ServerFunctionsList.addFunction()&lt;/code&gt;&lt;/font&gt; method. It is this call that causes a HelloWorld class instance and thus the helloWorld() function to be registered in BES.
+
+And that's pretty much all there is to the C/C++ programming. What remains is to build a little autotools project for your function code and set it up to install into the BES when ''make install'' is run.
+
+
+
+&lt;!--
+
+== Wrapping the function in a class ==
+
+== Adding the function to Hyrax (creating a BesModule) ==
+
+--&gt;</text>
+      <sha1>io1pen9wdwjk5ie804p67u6j9yzt8im</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,166 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>UserGuidePreface</title>
+    <ns>0</ns>
+    <id>184</id>
+    <revision>
+      <id>1161</id>
+      <parentid>1160</parentid>
+      <timestamp>2007-09-25T03:27:23Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Organization of this Document */</comment>
+      <origin>1161</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5251" sha1="gxlpbs9us730ed2s5u7ins0z3gexusw" xml:space="preserve">=Preface=
+
+
+This document describes version 3.4 of the [http://www.opendap.org/&lt;cite&gt;Distributed Oceanographic Data System&lt;/cite&gt;] (OPeNDAP), a
+data system intended to allow researchers transparent access to
+oceanographic data---stored in any of several different file
+formats---across the Internet. Using OPeNDAP function libraries, many
+existing data analysis programs can be easily modified to accommodate
+access of distant datasets in a manner identical to the access of
+local datasets. OPeNDAP includes a protocol for the transmission of data
+across the Internet, and supports selection of data using constraint
+expressions, and translation of data from one format to another.
+
+An overview of the system's use is presented, and specific tasks
+illustrated, for data providers as well as for users.
+
+
+
+
+
+==Tasks Illustrated in this Guide==
+
+
+For a quick start to getting, installing, and using OPeNDAP software, see the
+list below of tasks described in this document.
+
+
+*Getting the OPeNDAP software. ([http://www.opendap.org/&lt;cite&gt;install&lt;/cite&gt;])
+
+*Installing the OPeNDAP software. ([http://www.opendap.org/&lt;cite&gt;install&lt;/cite&gt;])
+
+*Using an OPeNDAP client. ([http://www.opendap.org/&lt;cite&gt;opd-client,using-example&lt;/cite&gt;])
+
+*Re-linking a data analysis or display application to become a OPeNDAP client. ([http://www.opendap.org/&lt;cite&gt;opd-client,link-example&lt;/cite&gt;]) 
+
+*Using the OPeNDAP data locator to find data.
+
+*Creating and installing an OPeNDAP server.
+
+**Installing the OPeNDAP server and CGI filters.
+([http://www.opendap.org/&lt;cite&gt;opd-server,cgi-install&lt;/cite&gt;])
+
+**Starting and configuring the httpd server. Due to the variety
+of available servers, this task is beyond the scope of the manual.
+Please refer to the documentation for the particular server in question
+for more information.
+
+**Implementing a new DODS-compliant API. ([http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;])
+
+*Writing an OPeNDAP CGI program. ([http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;] )
+
+*Writing the CGI service programs. ([http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;] )
+
+*A list of all supported APIs. ([http://www.opendap.org/&lt;cite&gt;opd-client,supported-APIs&lt;/cite&gt;])
+
+==Who is this Guide for?==
+
+
+The user documentation for OPeNDAP covers two groups of users: those who
+want to provide access to data vian OPeNDAP and those who want to use
+data. In many cases the people will be one and the same since most
+providers will also be data users.
+
+This documentation assumes that the readers are familiar with
+computers, but are not necessarily programmers.
+
+This guide also contains technical information that will be of
+assistance to programmers who plan to write new DODS-compliant APIs
+for as yet unsupported data models. Data providers and data consumers
+may find some general questions answered by this material, but it is
+not necessary to know any of it in order to use the system.
+
+
+
+==Organization of this Document==
+
+This book is organized into separate sections for data providers, data
+consumers, and technical reference material for programmers.
+
+&lt;blockquote&gt;
+
+Part I is for everybody who wants to use OPeNDAP.
+&lt;blockquote&gt;
+[[UserGuideChapter1|Chapter 1]] provides a high-level overview of the entire system.
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+[[UserGuideChapter2|Chapter 2]] describes the use of OPeNDAP with an OPeNDAP client program.
+&lt;/blockquote&gt;
+
+Part II is for data consumers, that is, the people who want to look at data using the OPeNDAP system.
+&lt;blockquote&gt;
+[[UserGuideChapter3|Chapter 3]] shows how to look at data using OPeNDAP.  It includes a section about the theoretical and practical problems of data model translation.  It also explains how to build
+an OPeNDAP client, which is the program used to look at OPeNDAP data.
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+[[UserGuideChapter4|Chapter 4]] explains how to subsample the data with constraint expressions.
+&lt;/blockquote&gt;
+
+
+Part III is for data providers, or people who want to make their data available through OPeNDAP servers.
+&lt;blockquote&gt;
+[[UserGuideChapter5|Chapter 5]] shows how to use OPeNDAP to make your data available to others.  It explains how to set up a OPeNDAP server to provide OPeNDAP data to OPeNDAP clients, and also contains information about modifying or writing an OPeNDAP server.
+&lt;/blockquote&gt;
+
+
+Part IV contains technical information about how OPeNDAP works. This information is provided to people who want to write new libraries to use OPeNDAP through a currently unsupported API.
+&lt;blockquote&gt;
+[[UserGuideChapter6|Chapter 6]] contains general information about Data and Data Models.  This is important information to have for people intending to use OPeNDAP to provide data to others.  It covers the OPeNDAP data attribute and data descriptor structures.  The chapter also contains a section outlining the problems associated with Data Model translation.
+&lt;/blockquote&gt;
+
+Appendices
+&lt;blockquote&gt;
+[[UserGuideAppendix|Appendix A]] contains the instructions for installing the OPeNDAP libraries, and software that requires these libraries.
+
+Glossary A small but useful collection of terms.
+&lt;/blockquote&gt;
+
+&lt;/blockquote&gt;</text>
+      <sha1>gxlpbs9us730ed2s5u7ins0z3gexusw</sha1>
+    </revision>
+  </page>
+</mediawiki>

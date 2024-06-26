@@ -1,0 +1,327 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP3/4</title>
+    <ns>0</ns>
+    <id>303</id>
+    <revision>
+      <id>6285</id>
+      <parentid>6196</parentid>
+      <timestamp>2011-02-24T21:19:32Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* DAP2 and DAP4 Specification efforts */</comment>
+      <origin>6285</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="19721" sha1="3uhmkxm8mxw2aets00mg72s1feilsvd" xml:space="preserve">== Structure and Function of this Page ==
+
+This is both a place to document the implemented features of the various 3.x versions of DAP and a place to describe and discuss the designs that might be implemented. For example, the XDAP page contains information on how 3.1 conforming clients and servers should treat the XDAP header based on its current implementation in libdap. It also contains the design for that header as it should behave in DAP 3.2.
+
+'''Note''': See the ''discussion'' pages to talk/debate a feature or describe how it should be implemented.
+
+== DAP2 and DAP4 Specification efforts ==
+
+The original (2004) DAP4 specification work morphed into separate DAP2 and DAP4 specification efforts. The [http://www.opendap.org/pdf/ESE-RFC-004v1.1.pdf DAP 2.0 specification] ([http://www.esdswg.org/spg/rfc/ese-rfc-004 official version] with notes, et c.) was approved by NASA [http://www.esdswg.org/spg/ ESE/SPG] as a 'Community Standard' on 10/8/2007. 
+
+This page holds the DAP4 design and specification information. Note that [http://www.esdswg.org/spg/rfc/ese-rfc-003/ESDS-RFC-003v2.pdf ESE RFC 003] is the reference for NASA ESE/SPG standards documents.
+
+Here's the original (2003!) [[Media:Dap_objectsdraft3nov03.pdf | DAP 4.0 draft]] document (and [[media:Dap4spec3nov03TODO.pdf| todo list]]) which we shelved in favor or writing the DAP 2.0 document because the latter described existing software - a requirement of the ESE/SPG.
+
+*'''The current [[DAP 4.0 Design | DAP 4.0 specification]]'''. This is a separate page to cut down on the noise and keep this area open for discussion.
+*'''The ''essential'' [[DAP_4.0_Essential_Features | DAP 4.0 information]]''' for information on parts of DAP4 we think are important to get set early on.
+
+=== Older information ===
+ 
+* Notes (8/7/2007): We've been working on this for several years and it seems that even though the ideas are all pretty good, DAP2 is good enough to be widely used. Most of the things listed as in the design documents are things we think will be used, not things with a definite use case or which address known issues in DAP2.
+* Older documents:
+** [http://rsg.opendap.org:8090/DAP3/templates/all-in-one.html RSG templates for the DAP3/4 project]
+** [http://wiki.opendap.org/twiki/bin/view/Developers/DAPFourSpec Developer's Wiki DAP4 discussion] (still used as of 1/12/06);
+** [http://wiki.opendap.org/twiki/bin/view/Developers/OPeNDAPSpecification November 2003 specification PDF and suggestions] (These don't open on the mac...).
+
+== DAP 2 Errata ==
+
+''Errata since the last revision of the specification''
+
+'''The Spec. is wrong about ...'''
+
+=== What are the correct HTTP return codes for Error responses? ===
+
+They should be one of the 400 codes (404: not found, et c.) because as Benno Blumenthal points out:
+&lt;blockquote&gt;
+... clients cannot expect to get dods-error messages exclusively, because error messages can get generated by the server or proxies outside of the cgi-scripts that implement OPeNDAP.  So not only should HTTP error codes be returned when a DAP error response is returned, but clients need to handle pure http error codes (like no route to server, page temporarily not available, ...).
+&lt;/blockquote&gt;
+
+In the past our servers have returned 200 for the HTTP response status when the Error response was returned.
+
+=== The values of the Content-Description header ===
+
+Well, it wouldn't be text without mistakes...
+
+So a while back someone pointed out that in the DAP 2 RFC the Content-Description values are given as "dods-das", ..., "dods-error" when all the clients and servers are using "dods_das", ..., "dods_error". 
+
+I actually think the values with dashes are correct, but if you don't support both dashes and underscores then you won't get much in the way of interoperability.
+
+[[User:Jimg|jimg]] 19:01, 22 January 2009 (PST) ''NB: libdap now supports both sets of values.''
+
+=== Can you have an Array of ... ===
+
+You can have an array of Structures.
+
+You cannot have an Array of Array (but that's because an Array can have more than one dimension).
+
+You cannot have an array of Grid nor can you have an array of Sequences.
+
+Rationale:
+# While these might be useful, they add considerable complexity.
+# Both Grid and Sequence are relational types and support the [] operators in ways that make sense for those types. 
+
+'''Discussion''': Sequences can have the [] operator used to perform a kind of range selection and allowing for arrays of sequences will make parsing the CE extremely hard. Similarly, Grids can be constrained using the [] operator too, and an array of Grid will make possible CEs with a similar ambiguity. Here's an example with a Grid:
+
+&lt;pre&gt;
+Grid {
+  Array:
+    Byte SST[lat = 1024][lon = 1024];
+  Maps:
+    Float64 lat[1024];
+    Float64 lon[1024];
+} SST[10][10];
+&lt;/pre&gt;
+
+(Maybe this holds a tile of Grids?...)
+
+So, What does SST[5:7][5:7] refer to? The ''[5, 6, 7] x [5, 6, 7]'' elements of the Array SST or all 100 elements of the Array SST such that only the the ''[5, 6, 7] x [5, 6, 7]'' elements of each of the Grids? It's easy enough to find ways around this, but all seem like an arbitrary solution to a problem can be better solved by expanding the capabilities of the Grid type in ways that are already planned (by relaxing the rule that every dimension of the array correspond to a map, in this case).
+
+
+
+=== Constraints on arrays of structures ===
+
+When an array looks like:
+ Structure {
+     Int32 x[10];
+     Int32 y[10];
+ } z[20];
+How can a constraint be written for it?
+
+Here are some examples:
+;z.x
+:Get all ten elements of ''x'' within all twenty elements of ''z'' 
+;z[0].x[0]
+:Get the first element of ''x'' in the first element of ''z''
+;&lt;nowiki&gt;z[0:4].x&lt;/nowiki&gt;
+:... you get the idea
+;&lt;nowiki&gt;z[5:9].x[0:4]&lt;/nowiki&gt;
+:...
+
+Several people commented about this once the HDF5 handler made its debut.
+
+=== Requests for multiple slices of the same variable ===
+
+Suppose:
+ Array f[100];
+A constraint like ''f[0:2:9],f[20:2:29]'' is not allowed since the variable ''f'' appears twice. The rational for not allowing this is that it makes the server and client sides both more complex without adding any real new functionality. If a client needs two different slices of ''f'', then it must make two separate requests. More about this issue from an email exchange with Dennis Heimbigner where he commented regarding a CE with the two projections ''S[a:b:c].f[d:e:f]'' and ''S[u:v:w].g[x:y:z]'':
+&lt;blockquote&gt;
+The problem is that these types of requests break simplifying
+assumptions many people have made about clients (mostly) and servers
+(less so) so while the request makes sense, it will make implementing DAP
+harder (although I suppose that having to detect the error is an extra
+step that's so far just been swept under the rug).
+&lt;/blockquote&gt;
+
+I think detecting that error makes the server harder to write as well, but on balance a little less so than returning two different values for one variable. In any case, not allowing this type of constraint certainly makes the clients easier since they can allocate space for just the stuff that has already shown up in the DDS/DDX (where ''f'' and ''S'' in the above examples would appear just once). I favor simplifying writing clients.
+
+Another thought: In a DDS/DDX, each variable name must be unique and that means that it cannot appear twice in the same lexical level. That makes asking for it twice problematic given that the response contains a DDS/DDX with all of the response variables listed matching the data in the second part of the MIME document.
+
+==  Implementations of DAP that OPeNDAP Maintains ==
+
+OPeNDAP has three implementations of the DAP that it maintains: libdap (C++), Java-OPeNDAP (Java) and Ocapi (C; client-side only). There are other implementations which have been developed by other groups.
+
+{| cellspacing="2" cellpadding="5" border="1"
+! colspan="2"|Versions
+|-
+|'''Library'''
+|'''Implements'''
+|-
+|libdap (C++)
+|3.2
+|-
+|Java-OPeNDAP (Java)
+|2.0 
+|-
+|Ocapi (C)
+|2.0 - client-side; to be phased-out soon
+|-
+|OC (C)
+|2.0 - client-side
+|}
+
+
+
+== Completed Changes From DAP2 ==
+
+=== Features of DAP3/4 implemented in libdap ===
+
+This title is a bit misleading since the bullets here are both features as implemented at version X.Y and designs to be implemented at X.Y++. The ''libdap'' library is the reference implementation for DAP. '''Note''': On some of these pages, especially ones with designs, the discussion section/tab at the top of the page has some important information. 
+
+Here are the DAP3 features implemented so far and ''designs'' for those features as we learn about their use:
+
+* [[DDX]] (although this implementation needs significant review and update)
+* [[XDAP header]] for the protocol version (Where should the  XDODS-Server and XOPeNDAP-Server headers go?)
+* [[Version response]] which provides information about software versions and the DAP version for a server.
+* [[DDXXMLBase | Add an ''xml:base'' element]] This was added to make the transformation from the DDX to RDF easier. From the IOOS work: Add the source URL of the DDX to the DDX as the value of the XML attribute Dataset@xml:base
+* [[Double Quotes in Constraint Expressions]] can be used to enclose identifier names that contain characters that would normally break the CE parser. Implemented in DAP 3.2 in a way that is backwards compatible with previous versions of the protocol.
+
+=== Other changes that affect the behavior of libdap, Hyrax, et c., and DAP 2.0/3.x ===
+
+# In the distant past it was decided that handlers should wrap String attribute values in double quotes. Why is no longer known. However, this meant that the values of the attributes were not ''exactly'' the values in the files (because of the added quote characters). This was changed so that libdap 3.8.3 has code to add the quotes, if they are not present, when writing out the DAS (but not the DDX). Doing this ensures that the DAS will only contain String attributes with quoted values which means we know it will parse. The test was added so that the new libdap would work with old handers which will still be adding the quotes. at the same time, the handlers from the same vintage no longer add the quotes. For the latter, the compile-time constant ATTR_STRING_QUOTE_FIX should be defined; not defining that symbol gets the old, broken, behavior from the handlers.
+
+== Proposed Changes To DAP ==
+
+=== Changes currently under development ===
+
+These features and changes are currently under development:
+
+* [[DAP4_Attribute_Model| New DAP Attribute object type of ''OtherXML'']] The OtherXML attribute type is present in libdap on the ioos branch of SVN. The other features are not yet implemented.
+
+=== Most desired features list ===
+ 
+This is a list of the very most desirable features proposed for DAP3 (which when final will become DAP4). Only the very most important items are listed here, other documents list everything that's ever been suggested.
+
+* [[DDX versus DDS and DAS]] In the current set of data handlers, the DDS and DAS objects/responses are built separately but in the future all of that information should be extracted at once from the data source and used to build the DDX. How then should backward compatibility be achieved?
+
+This ideas came directly from our experience with users of DAP 2 and from writing the DAP 2.0 specification:
+* [[DataDDX]] (using the DDX to return data in a fashion similar to the way data are returned using the DDS now)
+* [[DAP4_Attribute_Model#Re-factoring_the_representation_of_DAP_Attribute_objects. |Changes to DDX representation of DAP Attribute objects.]]
+* [[DAP4 Array Representation| Refactor the representation of Arrays in the DDX.]] 
+* &lt;s&gt;Reliable error delivery when accessing data (known defect)&lt;/s&gt;&lt;font color="red"&gt;This is part of the DataDDX&lt;/font&gt;;
+* &lt;s&gt;Eliminating the repetition of the array size for an array of Atomic types in the Data Response&lt;/s&gt;&lt;font color="red"&gt;This is part of the DataDDX&lt;/font&gt;;
+* &lt;s&gt;Support for 'any character in a name' using double quotes or some other scheme (use the DDX)&lt;/s&gt; &lt;font color="red"&gt;Done&lt;/font&gt;;
+* Support for the discovery of server-side functions (See [http://scm.opendap.org/trac/wiki/CEFunctionDiscovery CE Discovery] for a draft design)&lt;font color="green"&gt;Move this to the next version&lt;/font&gt;;
+* Add an XML representation for the error response. Use a Content-Description of "dap4-errorx" for this.
+* Add support for a ''Signed Byte'' type and both signed and unsigned 64-bit integers.
+
+These ideas are very general and are paired with their 'justification':
+* &lt;s&gt;Use of Multi-part MIME for DataDDX (feature --&gt; adherence to standard where applicable)&lt;/s&gt;&lt;font color="red"&gt;This is part of the DataDDX&lt;/font&gt;;
+* &lt;s&gt;Develop the DataDDX (feature --&gt; adherence to standard ...). Use a Content-Description of "dap4-datax" for this&lt;/s&gt;&lt;font color="red"&gt;This is part of the DataDDX&lt;/font&gt;;
+* Ability to return checksums (or digital watermarks) from data requests (feature with several use cases);
+* Add support for [[Asynchronous DAP Responses]] &lt;font color="green"&gt;Move this to the next version&lt;/font&gt;.
+
+=== Project-driven proposed changes ===
+
+==== IOOS ====
+
+Inclusion of the ''xmlbase'' attribute in the ''&lt;Dataset&gt;'' element. See above; Done.
+
+Change the way attributes are represented so that they can be associated with members of a particular namespace. This association would happen way back in the data handlers where the decision to put an attribute in a given namespace would be format-dependent, at least to some degree. [[WCS DAP Attributes]]
+
+==== NC-DAP  ====
+
+[[DAP Design: shared dimensions, groups and types]]
+
+The NC-DAP project's goal is to integrate support for DAP into Unidata's netCDF code base. This affects DAP because concurrent with this effort is the evolution of netCDF from he Version 3 to Version 4 API which included some substantial data model changes. Here are ideas from the netCDF 4 data model (aka the Common Data Model). In addition to netCDF, HDF5 also shares many aspects of the CDM, so these features are likely to help with compatibility with HDF5 as well.
+
+''Here's text from the June NC-DAP project meeting which we can edit here (without altering the record of the meeting):''
+
+We decided to lump a number of new types and features into DAP version 3.3 since this will follow nicely from the DAP 3.1 and nascent 3.2 versions. However, as part of this OPeNDAP will make a set of on-line documents that will be used to describe the changes that are being made to the DAP protocol so that those pages can be combined with the DAP 2.0, blessed by NASA, to get a picture of just how DAP 3.x should behave. For now we are not going to put much effort into trying to develop a finalized follow-on to DAP 2.0 -- the specification/protocol we have been referring to as DAP 4 for some time now -- and instead focus on adding features needed for netCDF 4 in an organized and documented way.
+
+There are several new features to be added to DAP in DAP 3.3:
+
+# Shared dimensions (which will indicate a common grid among variables that share dimensions).
+# User defined types.
+# An analogue to HDF5/netCDF-4 Groups
+
+
+Shared dimensions will require DAP to include a way to specify that dimensions are to be shared among variables. We discussed that sharing means more than just 'the sizes of the dimensions are the same in two places' because sharing means that they will always be that way and closes the possibility that, for any given example, it is just chance. Using hrefs or xpath to tie subsequent uses of a dimension to an initial definition is one way to implement this, but it may make the notion of sharing depend too much on context.
+
+User defined types are a way to simplify the description of a data source when the same structure is used many times over. They are part of HDF5 and netCDF-4 and while not used heavily now, are likely to be used as these formats become used more and more for archival storage. Supporting user defined types does not seem like a hard thing to do and it will provide a way to serve netCDF-4 files (and HDF5 files) that contain only type definitions.
+
+Groups in HDF5 and netCDF-4 are similar to namespaces in modern programming languages. NetCDF4 does not support Groups in the full sense of HDF5's Groups because it does not allow a single variable to be a member of several groups. The netCDF-4 rules for Groups include:
+
+* All variables in the Group are visible
+* All dimensions in the Group plus all in enclosing parent Groups are visible (i.e., dimensions can be inherited)
+* All user-defined types are globally visible
+
+Groups are different than Structures in the following ways:
+
+* Groups hold definitions and relations about parts of a file/granule (they are a logical entity)
+* Structures hold data
+* Structures imply 'locality' (that the data in the structure are all easily/quickly accessed in one operation) while Groups provide no such guarantee.
+* There are no arrays of Groups.
+
+
+There are several new types to be added to DAP:
+
+* Opaque.
+* Strings encoded using UTF-8
+* Enumerations
+
+One additional 'type' issue to be resolved is how best to handle the vlen data type. The (old) List type is the obvious choice but it was of (otherwise) no use and was removed. That leaves Sequence which carries with it some extra baggage in that servers are required to support relational operations on Sequences while vlens (as coded in the HDF5 and netCDF-4 APIs) don't. We talked about this and I (James) would like to propose that since vlens are generally short and that since the CE evaluator is part of libdap++, that adding support for applying a relational constraint expression to data read from a vlen should not be that hard, especially given that vlens are intended to be used for fairly small chunks of data. The alternatives are to make DAP more complicated by adding List back in (a bad idea given our previous experiences) or to provide several different behaviors for Sequences (also bad because it makes clients harder to write). Adding a little complexity to the the handful of servers that have to support the vlen type is reasonable trade off for a more robust system with simpler clients.
+
+=== All of the proposed changes to date ===
+
+Items in italics have been moved up to the 'most desirable features' section which means they are slated for addition to DAP.
+
+* Data Access Features:
+** ''Checksum: Provide a checksum with each (data only?) response and also a way to access just the checksum for a given response.''
+** Cyclic access to array indexes
+** Relational array constraints
+
+* [[Organization of attributes]]: The ideas from this email (2005) are relevant to recent (2008) work on the DDX and semantic web reasoners. 
+
+* [[Use of MIME]]: Basic ideas here have been developed in much more detail as a result of work on SOAP interfaces for DAP (which themselves have been sort of a flop).
+
+* [[BLOB Formatting]]: This is related to the MIME topic above.
+
+* [[Length Bytes]]: How to encode length information that is not limited by word sizes of different architectures.
+
+* [[Additional Data Types]]: A Partial list at this point...
+
+* [[Server Capabilities]]: Basic server discovery document support
+
+* [[Aliases]]: The idea that we will need to alias DAP attributes has been kicking around for a while although its practical use has been nearly nil. Aliases might be better handled using XPath in the DDX/DataDDX. Never-the-less, here for your enjoyment is the old discussion on this topic...
+** [[OPeNDAP MetaData Issues]]
+** [[Abstract Model]]
+
+* [[New Data Model]]
+
+* [[Streaming DAP]]
+
+* [[Coordinate Transforms]]
+
+* [[Web Services]]
+
+* [[Compression]]
+
+[[Category:Development|DAP3/4]] [[Category:DAP4|DAP3/4]]</text>
+      <sha1>3uhmkxm8mxw2aets00mg72s1feilsvd</sha1>
+    </revision>
+  </page>
+</mediawiki>

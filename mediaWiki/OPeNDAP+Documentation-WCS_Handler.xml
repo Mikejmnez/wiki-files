@@ -1,0 +1,467 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>WCS Handler</title>
+    <ns>0</ns>
+    <id>326</id>
+    <revision>
+      <id>2329</id>
+      <parentid>2328</parentid>
+      <timestamp>2008-07-11T18:08:04Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Data Access URL's */</comment>
+      <origin>2329</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="15347" sha1="f4nn0jdceibeer6i2fynr4niloiozz8" xml:space="preserve">The current implementation of the WCS gateway is hosed. I started working on a new design. 
+
+I started working on a !WcsDispatchHandler and it made me start to think it might be much natural to make it a module for the BES. I think I can do it in the OLFS. In fact I am sure I can manage it.
+
+
+Here's how it could work.
+
+== URL Decomposition ==
+
+
+Consider this URL:  '''&lt;nowiki&gt;http://server:port/opendap/wcs/project/site/serviceName/coverage/date&lt;/nowiki&gt;'''
+
+
+
+------
+=== Top Level Catalog ===
+
+URL Pattern: 
+:'''&lt;nowiki&gt;http://server:port/opendap/&lt;/nowiki&gt;'''
+:'''&lt;nowiki&gt;http://server:port/opendap&lt;/nowiki&gt;'''
+
+Corresponds to the top level catalog in the BES. Some how we need the '''show catalog for "/"''' command  to return a dataset element for the wcs module (when it's installed) at the top level:
+
+ &lt;showCatalog&gt;
+     &lt;response&gt;
+         &lt;dataset isData="false" thredds_collection="true"&gt;
+             &lt;name&gt;/&lt;/name&gt;
+             &lt;size&gt;238&lt;/size&gt;
+             &lt;lastmodified&gt;
+                 &lt;date&gt;2008-02-18&lt;/date&gt;
+                 &lt;time&gt;15:57:53&lt;/time&gt;
+             &lt;/lastmodified&gt;
+             &lt;count&gt;1&lt;/count&gt;
+             &lt;dataset isData="false" thredds_collection="true"&gt;
+                 &lt;name&gt;wcs&lt;/name&gt;
+                 &lt;size&gt;000&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+         &lt;/dataset&gt;
+     &lt;/response&gt;
+ &lt;/showCatalog&gt;
+
+Size=000
+
+lastModified=request_time
+
+------
+
+=== WCS Project List ===
+
+URL Pattern:
+:'''&lt;nowiki&gt;http://server:port/opendap/wcs/&lt;/nowiki&gt;'''
+:'''&lt;nowiki&gt;http://server:port/opendap/wcs&lt;/nowiki&gt;'''
+
+Corresponds to the project list:
+
+ &lt;showCatalog&gt;
+     &lt;response&gt;
+         &lt;dataset isData="false" thredds_collection="true"&gt;
+             &lt;name&gt;/wcs&lt;/name&gt;
+             &lt;size&gt;238&lt;/size&gt;
+             &lt;lastmodified&gt;
+                 &lt;date&gt;2008-02-18&lt;/date&gt;
+                 &lt;time&gt;15:57:53&lt;/time&gt;
+             &lt;/lastmodified&gt;
+             &lt;count&gt;2&lt;/count&gt;
+             &lt;dataset isData="false" thredds_collection="true"&gt;
+                 &lt;name&gt;CEOP&lt;/name&gt;
+                 &lt;size&gt;#ofSites&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+             &lt;dataset isData="false" thredds_collection="true"&gt;
+                 &lt;name&gt;REAP&lt;/name&gt;
+                 &lt;size&gt;ofSites&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Time&lt;/date&gt;
+                     &lt;time&gt;Time&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+         &lt;/dataset&gt;
+     &lt;/response&gt;
+ &lt;/showCatalog&gt;
+
+Size=#_of_sites in that project
+
+lastModified=request_time
+
+
+------
+
+=== Project Site List ===
+
+URL Pattern: 
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/project/&lt;/nowiki&gt;'''
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/project&lt;/nowiki&gt;'''
+
+Correspond to the site list for the project called '''project'''.
+
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/CEOP/&lt;/nowiki&gt;'''
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/CEOP&lt;/nowiki&gt;'''
+
+Correspond to the site list for project called '''CEOP''':
+
+ &lt;showCatalog&gt;
+     &lt;response&gt;
+         &lt;dataset isData="false" thredds_collection="true"&gt;
+             &lt;name&gt;/wcs/CEOP&lt;/name&gt;
+             &lt;size&gt;238&lt;/size&gt;
+             &lt;lastmodified&gt;
+                 &lt;date&gt;2008-02-18&lt;/date&gt;
+                 &lt;time&gt;15:57:53&lt;/time&gt;
+             &lt;/lastmodified&gt;
+             &lt;count&gt;2&lt;/count&gt;
+             &lt;dataset isData="false" thredds_collection="true"&gt;
+                 &lt;name&gt;BER&lt;/name&gt;
+                  &lt;size&gt;000&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+             &lt;dataset isData="false" thredds_collection="true"&gt;
+                 &lt;name&gt;BON&lt;/name&gt;
+                 &lt;size&gt;000&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+         &lt;/dataset&gt;
+     &lt;/response&gt; 
+ &lt;/showCatalog&gt;
+
+
+size=#_of_WCSService_elements in the config file
+
+lastModified=request_time
+
+
+------
+
+=== List of WCS servers ===
+
+URL Pattern: 
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/project/site/&lt;/nowiki&gt;'''
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/project/site&lt;/nowiki&gt;'''
+
+Correspond to the list of WCS Servers available for the project called '''project''' and the site called '''site'''..
+
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/CEOP/BER/&lt;/nowiki&gt;'''
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/CEOP/BER&lt;/nowiki&gt;'''
+
+
+Correspond to the list of WCS Servers available for the project called '''CEOP''' and the site called '''BER'''..
+
+ &lt;showCatalog&gt;
+     &lt;response&gt;
+         &lt;dataset isData="false" thredds_collection="true"&gt;
+             &lt;name&gt;/wcs/CEOP/BER/&lt;/name&gt;
+             &lt;size&gt;238&lt;/size&gt;
+             &lt;lastmodified&gt;
+                 &lt;date&gt;2008-02-18&lt;/date&gt;
+                 &lt;time&gt;15:57:53&lt;/time&gt;
+             &lt;/lastmodified&gt;
+             &lt;count&gt;2&lt;/count&gt;
+             &lt;dataset isData="false" thredds_collection="true"&gt;
+                 &lt;name&gt;Server1&lt;/name&gt;
+                 &lt;size&gt;000&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+             &lt;dataset isData="false" thredds_collection="true"&gt;
+                 &lt;name&gt;Server2&lt;/name&gt;
+                 &lt;size&gt;000&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+         &lt;/dataset&gt;
+     &lt;/response&gt; 
+ &lt;/showCatalog&gt;
+
+
+size=#_of_&lt;CoverageSummary&gt;_elements returned by a WCS ''DescribeCoverage'' command to the server
+
+lastModified=request_time
+
+
+------
+
+=== Coverage List ===
+
+URL Pattern:
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/project/site/wcs_service/&lt;/nowiki&gt;
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/project/site/wcs_service&lt;/nowiki&gt;'''
+
+Corresponds to a list of the &lt;CoverageOffering&gt;  elements returned by the WCS server called '''wcs_service''' (as defined in a &lt;WCSService&gt; element in the config file.) in response to the ''DescribeCoverage''  command.
+
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/CEOP/BER/Server1/&lt;/nowiki&gt;
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/CEOP/BER/Server1&lt;/nowiki&gt;'''
+
+Corresponds to a list of the &lt;CoverageOffering&gt;  elements returned by the WCS server called '''Server1''' (as defined in a &lt;WCSService&gt; element in the config file.) in response to the ''DescribeCoverage'' command.
+
+
+ &lt;showCatalog&gt;
+     &lt;response&gt;
+         &lt;dataset isData="false" thredds_collection="true"&gt;
+             &lt;name&gt;/wcs/CEOP/BER/Server1/&lt;/name&gt;
+             &lt;size&gt;238&lt;/size&gt;
+             &lt;lastmodified&gt;
+                 &lt;date&gt;2008-02-18&lt;/date&gt;
+                 &lt;time&gt;15:57:53&lt;/time&gt;
+             &lt;/lastmodified&gt;
+             &lt;count&gt;2&lt;/count&gt;
+             &lt;dataset isData="false" thredds_collection="true"&gt;
+                 &lt;name&gt;TSurfAir&lt;/name&gt;
+                 &lt;size&gt;000&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+             &lt;dataset isData="false" thredds_collection="true"&gt;
+                 &lt;name&gt;GP_Surface&lt;/name&gt;
+                 &lt;size&gt;000&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+         &lt;/dataset&gt;
+     &lt;/response&gt; 
+ &lt;/showCatalog&gt;
+
+size=# of items returned by ''&lt;nowiki&gt;http://server:port/opendap/wcs/project/site/wcs_service/coverage/&lt;/nowiki&gt;''
+
+lastModified=request_time
+
+It is not unreasonable to think that we can make this response using an XSLT on the coverage description returned by the WCS server. In fact, in the OLFS we could build the directory page that way...
+
+------
+
+=== List of dates for which is data is available ===
+
+URL Pattern:
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/project/site/wcs_service/coverage/&lt;/nowiki&gt;'''
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/project/site/wcs_service/coverage &lt;/nowiki&gt;'''
+
+Corresponds to the intersection of the sets:
+ * list of days that the coverage called '''coverage''' (From the &lt;!CoverageOffering&gt; element in the ''!DescribeCoverage'' response from the WCS server.)
+ * list of days that the coverage is requested by the site called '''site''' (From the &lt;Site&gt; element in the configuration coverage.)
+
+
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/CEOP/BER/Server1/TSurfAir/&lt;/nowiki&gt;'''
+:'''&lt;nowiki&gt; http://server:port/opendap/wcs/CEOP/BER/Server1/TSurfAir &lt;/nowiki&gt;'''
+
+Corresponds to the intersection of the sets:
+* list of days from the coverage called coverage '''TSurfAir'''.
+* list of days that the coverage is requested by the site called '''BER''' (From the &lt;Site&gt; element in the configuration coverage.)
+
+
+ &lt;showCatalog&gt;
+     &lt;response&gt;
+         &lt;dataset isData="false" thredds_collection="true"&gt;
+             &lt;name&gt;/wcs/CEOP/BER/Server1/TSurfAir&lt;/name&gt;
+             &lt;size&gt;238&lt;/size&gt;
+             &lt;lastmodified&gt;
+                 &lt;date&gt;2008-02-18&lt;/date&gt;
+                 &lt;time&gt;15:57:53&lt;/time&gt;
+             &lt;/lastmodified&gt;
+             &lt;count&gt;2&lt;/count&gt;
+             &lt;dataset isData="false" thredds_collection="false"&gt;
+                 &lt;name&gt;2002-10-01&lt;/name&gt;
+                 &lt;size&gt;000&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+             &lt;dataset isData="false" thredds_collection="false"&gt;
+                 &lt;name&gt;2004-09-30&lt;/name&gt;
+                 &lt;size&gt;000&lt;/size&gt;
+                 &lt;lastmodified&gt;
+                     &lt;date&gt;Today&lt;/date&gt;
+                     &lt;time&gt;Now&lt;/time&gt;
+                 &lt;/lastmodified&gt;
+             &lt;/dataset&gt;
+         &lt;/dataset&gt;
+      &lt;/response&gt;
+ &lt;/showCatalog&gt;
+
+
+size = Got me... maybe the age of the cached file if there is one already?
+
+lastModified = request_time
+
+----
+
+=== Data Access URL's ===
+
+At this point we are down to the data URLs.
+
+From this path ''&lt;nowiki&gt;http://server:port/opendap/wcs/project/site/wcs_service/coverage/date&lt;/nowiki&gt;''
+
+* DDS - &lt;nowiki&gt;http://server:port/opendap/wcs/project/site/wcs_service/coverage/date.dds&lt;/nowiki&gt;
+* DAS - &lt;nowiki&gt;http://server:port/opendap/wcs/project/site/wcs_service/coverage/date.das&lt;/nowiki&gt;
+* DDX - &lt;nowiki&gt;http://server:port/opendap/wcs/project/site/wcs_service/coverage/date.ddx&lt;/nowiki&gt;
+* INFO - &lt;nowiki&gt;http://server:port/opendap/wcs/project/site/wcs_service/coverage/date.info&lt;/nowiki&gt;
+* HTML - &lt;nowiki&gt;http://server:port/opendap/wcs/project/site/wcs_service/coverage/date.html&lt;/nowiki&gt;
+
+
+From this path ''http://server:port/opendap/wcs/CEOP/BER/Server1/TSurfAir/2008-02-18''
+
+* DDS - &lt;nowiki&gt;http://server:port/opendap/wcs/CEOP/BER/Server1/TSurfAir/2008-02-18.dds&lt;/nowiki&gt;
+* DAS - &lt;nowiki&gt;http://server:port/opendap/wcs/CEOP/BER/Server1/TSurfAir/2008-02-18.das&lt;/nowiki&gt;
+* DDX - &lt;nowiki&gt;http://server:port/opendap/wcs/CEOP/BER/Server1/TSurfAir/2008-02-18.ddx&lt;/nowiki&gt;
+* INFO - &lt;nowiki&gt;http://server:port/opendap/wcs/CEOP/BER/Server1/TSurfAir/2008-02-18.info&lt;/nowiki&gt;
+* HTML - &lt;nowiki&gt;http://server:port/opendap/wcs/CEOP/BER/Server1/TSurfAir/2008-02-18.html&lt;/nowiki&gt;
+
+The WCS request needs to get this thing:
+
+ http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET?service=WCS&amp;amp;version=1.0.0&amp;amp;request=GetCoverage&amp;amp;coverage=TSurfAir&amp;amp;crs=WGS84&amp;amp;bbox=-107.375000,51.625000,-102.625000,56.375000&amp;amp;format=netCDF&amp;amp;TIME=2002-08-31&amp;amp;resx=0.25&amp;amp;resy=0.25&amp;amp;interpolationMethod=Nearest%20neighbor"
+
+
+So let's pick that apart:
+
+'''&lt;nowiki&gt;http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET&lt;/nowiki&gt;'''  -  Config file: &lt;ServiceURL&gt; element in &lt;WCSService&gt; (REQUIRED)
+
+'''service=WCS'''  -  Config file: &lt;service&gt; element in &lt;WCSService&gt; (REQUIRED)
+
+'''version=1.0.0'''  -  Config file: &lt;version&gt; element in &lt;WCSService&gt; (REQUIRED)
+
+'''request=GetCoverage'''  - The command that actually gets data. (REQUIRED)
+
+'''coverage=TSurfAir'''  -  In the URL. (REQUIRED)
+
+'''crs=WGS84'''  -  Config file: &lt;crs&gt; element in &lt;Site&gt; Defines coordinates system for request and repsponse. (REQUIRED)
+
+'''bbox=-107.375000,51.625000,-102.625000,56.375000'''  -  Config file: &lt;bbox&gt; element in &lt;Site&gt; (REQUIRED)
+
+'''format=netCDF'''  -  Config file: format element in &lt;Site&gt; (REQUIRED)
+
+'''time=2002-08-31'''  -  In the URL (REQUIRED)
+
+'''resx=0.25'''  -  Config file: &lt;resx&gt; element in &lt;Site&gt; (REQUIRED)
+
+'''resy=0.25'''  -  Config file: &lt;resy&gt; element in &lt;Site&gt; (REQUIRED)
+
+'''interpolationMethod=Nearest%20neighbor'''  -  Config file: &lt;interpolationMethod&gt; element in &lt;Site&gt; (OPTIONAL)
+
+
+Now, here's the beauty of it: WCS has a soap interface. Basically every one of these parameters appears as an element in the SOAP request document. The corresponding SOAP request for this URL is:
+
+ &lt;GetCoverage version="1.0.0" service="WCS"&gt; 
+     &lt;Coverage&gt;TSurfAir&lt;/Coverage&gt;
+     &lt;crs&gt;WGS84&lt;/crs &gt;
+     &lt;bbox&gt;-107.475000,45.935000,-102.725000,50.685000&lt;/bbox&gt;
+     &lt;format&gt;netCDF&lt;/format&gt;
+     &lt;time&gt;2002-08-31&lt;/time&gt;
+     &lt;resx&gt;0.25&lt;/resx&gt;
+     &lt;resy&gt;0.25&lt;/resy&gt;
+     &lt;interpolationMethod&gt;Nearest neighbor&lt;/interpolationMethod&gt;
+ &lt;/GetCoverage &gt; 
+
+
+It seems to me that the thing to do is to put all of these things in the configuration, and hold them to the same rules as the WCS folks. Then we can just grab and insert the Element objects when we are working in the code base. The formating of the content of the WCS request elements is the same as for the KVP encoding (HTTP URL), so for using the HTTP GET interface we still don't have to modify anything, just rearrange it.
+
+The config file looks like this:
+
+ &lt;WCSConfig&gt;
+     &lt;WCSService name="server1" &gt;
+         &lt;ServiceURL&gt;
+             http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET
+         &lt;/ServiceURL&gt;
+         &lt;service&gt;WCS&lt;/service&gt;
+         &lt;version&gt;1.0.0&lt;/version&gt;
+     &lt;/WCSService&gt;
+     &lt;WCSService name="server2" &gt;
+         &lt;ServiceURL&gt;
+             http://g2dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET
+         &lt;/ServiceURL&gt;
+         &lt;service&gt;WCS&lt;/service&gt;
+         &lt;version&gt;1.0.0&lt;/version&gt;
+     &lt;/WCSService&gt;
+     &lt;Project name="CEOP"&gt;
+         &lt;Site name="BER"&gt;
+             &lt;label&gt;BERMS Old Black Spruce&lt;/label&gt;
+             &lt;WCSParameters&gt;
+                 &lt;bbox&gt;-107.475000,45.935000,-102.725000,50.685000&lt;/bbox&gt;
+                 &lt;time&gt;2003-10-01/2003-11-30&lt;/time&gt;
+                 &lt;format&gt;netCDF&lt;/format&gt;
+                 &lt;resx&gt;0.25&lt;/resx&gt;
+                 &lt;resy&gt;0.25&lt;/resy&gt;
+                 &lt;interpolationMethod&gt;Nearest neighbor&lt;/interpolationMethod&gt;
+             &lt;/WCSParameters&gt;
+         &lt;/Site&gt;
+         &lt;Site name="BON"&gt;
+             &lt;label&gt;Bondville&lt;/label&gt;
+              &lt;WCSParameters&gt;
+                &lt;crs&gt;WGS84&lt;/crs &gt;
+                 &lt;bbox&gt;-90.665000,37.635000,-85.915000,42.385000&lt;/bbox&gt;
+                 &lt;time&gt;2003-10-01/2003-11-30&lt;/time&gt;
+                 &lt;format&gt;netCDF&lt;/format&gt;
+                 &lt;resx&gt;0.25&lt;/resx&gt;
+                 &lt;resy&gt;0.25&lt;/resy&gt;
+                 &lt;interpolationMethod&gt;Nearest neighbor&lt;/interpolationMethod&gt;
+             &lt;/WCSParameters&gt;
+         &lt;/Site&gt;
+     &lt;/Project&gt;
+ &lt;/WCSConfig&gt;</text>
+      <sha1>f4nn0jdceibeer6i2fynr4niloiozz8</sha1>
+    </revision>
+  </page>
+</mediawiki>

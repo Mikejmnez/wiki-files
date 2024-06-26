@@ -1,0 +1,73 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/OPeNDAPUserGuideFootnotes</title>
+    <ns>0</ns>
+    <id>282</id>
+    <revision>
+      <id>1785</id>
+      <timestamp>2008-01-25T15:58:35Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>New page: #   The phrase distributed data refers to datasets that reside on different computers which are linked by a network such as the Internet. The computers may or may not be physically remote ...</comment>
+      <origin>1785</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5445" sha1="bjbxz3jn1gz5qnmim9vu2eatkazdcwp" xml:space="preserve">#   The phrase distributed data refers to datasets that reside on different computers which are linked by a network such as the Internet. The computers may or may not be physically remote from each other. The main point is that the computers manage their data resources independently. In this guide the terms remote and distributed are used to imply independently managed resources. 
+#   For example, suppose a user wishes to access the NODC XBT database using a program that uses the netCDF API. A program that can process the arrays that netCDF manipulates are largely unsuitable for XBT station data. However, a user can define constraint expressions in the URL to sample the data and deliver it in a form the netCDF API can use. For more information about constraint expressions, see Section 4.1. For more information about data models and translation, see Chapter 6. 
+#   Or a program specially developed to read data from OPeNDAP servers. 
+#   Note that there is a limit to what can be translated. An API meant to support two-dimensional arrays may be able to handle one-dimensional vector data, but a program designed to process one-dimensional vector data will not know what to do with a two-dimensional array. The set of data access APIs supported by OPeNDAP contain several such mismatches. See Section 6.1.2 for more information. 
+#   It is also referred to as the Data Descriptor Structure and the Data Attribute Structure. See Chapter 6 for more details about these structures. 
+#   The only part of the URL whose spelling is not at the discretion of the administrator of the host machine is the http, and the nph- at the beginning of the CGI script name. Even the nc, indicating netCDF, can be changed, although for clarity's sake, we hope people won't do so. Incidentally, the nph- is a relic, dating from the early days of the World Wide Web and the first hypertext protocol standards. It stands for "Non-Parsing Header" (See the CGI 1.1 Standard for more information.), and is the only way to pass data through many httpd servers unparsed. 
+#   The WWW Interface is only available for servers later than version 3.1. 
+#   This is not true of some APIs, such as JGOFS. That API, however, uses a data dictionary to allow the user to think that the data access is through files. 
+#   It is possible to use gcc  instead of g++, but in that case, -lg++ must be added to the end of the library list. 
+#   The "OR" function may be implemented with a list. For example, to say that i must equal 3 OR 11 you would write i = {3,11}The clause evaluates to true when i equals any one of the elements. 
+#   For the sake of clarity, this and several of the following constraint expression examples span multiple lines. While the constraint expression evaluator ignores newline characters, program limitations of the OPeNDAP client will likely prevent a user from typing a newline in a constraint expression. 
+#   Because it contains an array, the dataset pictured in Figure 4.1.1 is technically not a valid JGOFS dataset. We have included the array for pedagogical purposes, and hope that the JGOFS purists will forgive us. 
+#   The second step is, of course, optional. 
+#   A couple of services, such as the version and help services, are built into the server software, and need no configuration. 
+#   The geturl program knows about the OPeNDAP protocols, so you can also omit the .das suffix, and use the -a option to the geturl command. This tells geturl to append .das for you. 
+#   In the remainder of this document, the phrase sequence data, or just sequence, will mean an ordered set of elements each of which contains one or more sub-elements where all of the sub-elements of an element are somehow related to each other. 
+#   As in C, OPeNDAP array indices start at zero. 
+#   The absolute location and orientation of the entire array is specified by another set of scalar values; we are here considering the relationship between data type members. 
+#   The client process can limit the information received by either using a constraint expression or prematurely closing the I/O stream. In the latter case the server will exit without sending the entire sequence. 
+#   We have learned to shy away from this term since we have found that `metadata' to one person is `data' to another; the categorization often limits the usefulness of the underlying information. 
+#   To define attributes for the entire dataset, create an entry for a variable with the same name as the dataset. 
+#   Containers, aliases, and global attributes were introduced into OPeNDAP at version 2.16. In early OPeNDAP releases, the DAS was not a hierarchical structure; it was similar to a flat-file database. Although using the new structure is strongly recommended for new code, old code will still work with the old DAS. See The DODS Toolkit Referencefor a description of the changes made to the AttrTable class. 
+#   "Temperature" can be spelled "T", "Temp", "TEMPERATURE", "TEMP", and so on. Worse, "T" is also commonly used for "Time." 
+#   The default values enable a maximum cache size of 20 megabytes, a cache expiration time of 24 hours, and no proxy servers. 
+#   This is not to be confused with the OPeNDAP Matlab or IDL GUIs, which are clients of their own. This is simply a client feature that can display transmission and error information to the user. 
+#   You can also use a safe Tcl interpreter. Refer to the Tcl documentation for information.</text>
+      <sha1>bjbxz3jn1gz5qnmim9vu2eatkazdcwp</sha1>
+    </revision>
+  </page>
+</mediawiki>

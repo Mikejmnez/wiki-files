@@ -1,0 +1,125 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>RPM</title>
+    <ns>0</ns>
+    <id>757</id>
+    <revision>
+      <id>12501</id>
+      <parentid>12498</parentid>
+      <timestamp>2017-11-30T18:36:05Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Building RPMs that have Statically Linked Handlers */</comment>
+      <origin>12501</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="8102" sha1="4nenpdzc03lo5fpch1djxc8crbqe9bf" xml:space="preserve">[[Developer Info|&lt;&lt; back to Developer Info]]
+
+== About Building RPMs ==
+Once a [[ReleaseGuide |release is made]], it's time to make the binaries. 
+
+The page on [[Hyrax_GitHub_Source_Build | Building Hyrax rom GitHub]] has good information on setting up a CentOS 6 machine for source and binary builds - the key is to use ''yum'' to install the rpm packages needed to make rpm packages ;-)
+:&lt;tt&gt;'''yum install rpm-devel rpm-build redhat-rpm-config'''&lt;/tt&gt;
+
+== About RPMs ==
+Documentation for RPM and rpmbuild, in particular is hard to come by. Here's some good information: [http://fedoraproject.org/wiki/Packaging/Guidelines Fedora RPM Guidelines]
+&lt;!-- Old
+== How to configure RPM ==
+
+Here's how to set up RPM so builds of RPM files are easier to make. ''This means that you do not have to be root to build the packages. Unless you're using a VM, that's important because running rpm installs when the packages' .spec files are broken can corrupt RPMs databases, making future builds very hard.''
+
+First, create a `.rpmmacros` file in your home directory that sets `rpm` to use a set of directories in your own home directory so you don't have to use root privileges when you run `make rpm`. Here's a sample of what you add to the file:
+
+&lt;tt&gt;
+%_topdir                /home/jimg/rpm
+%_tmppath               /home/jimg/rpm/tmp
+&lt;/tt&gt;
+
+Next, copy the directory structure found under `/usr/src/redhat` being careful to ''not'' copy all the files under the `BUILD` subdirectory (BUILD can become substantial over time, so take care to copy the directory structure and not any .rpm files in them). --&gt;
+
+= Building RPMs for use with EPEL =
+There are some tricks to building the RPMs, but for the most part, its just ''make rpm''. However, you can make this easier if you do two things:
+# Install the EPEL ''yum'' repository. Get [http://mirror.pnl.gov/epel/6/i386/epel-release-6-8.noarch.rpm epel-release-6-8.noarch.rpm] and install it using ''sudo yum install epel-release-6-8.noarch.rpm''. Then install packages needed to read various file formats: ''yum install netcdf-devel hdf-devel hdf5-devel libicu-devel cfitsio-devel''
+# Set up the ''rpmbuild'' directory structure in $HOME and then build as yourself and not root. (Here are [http://wiki.centos.org/HowTos/SetupRpmBuildEnvironment instructions for CentOS])
+
+;build the libdap rpms: ''cd libdap4'', ''make rpm''
+;install (temporarily) the libdap rpm packages: You need to do this because ''libdap'' and ''libdap-devel'' are dependencies for the BES rpms and their builds. Use ''sudo yum install ~/rpmbuild/RPMS/x86_64/libdap*.rpm''
+;build the bes rpms: ''cd bes'', ''make rpm''
+;test the bes rpms (if you want): ''sudo yum install ~/rpmbuild/RPMS/x86_64/bes.rpm'', then run ''besctl start'' and ''bescmdln''. Type ''show version;'' in to the latter, you should get an xml document that lists the BES's components. Stop the server with ''besctl stop''
+;remove the packages you just installed:Do this step if you're on a build host an you don't want libdap, etc., permanently installed. ''sudo yum remove bes bes-devel libdap libdap-devel''
+
+= Building RPMs that have Statically Linked Handlers =
+Build RPMs that are usable for NASA takes a bit more work because NASA uses hdf4/hdfeos2 for lots of its data and there is no rpm for hdfeos2. As a result, you will need to build a version of the hdf4 handler that is statically linked to the hdfeps2 and hdf4 libraries. Not a huge problem, but it's an extra step. However, there is a bonus for doing this extra work: You also get the handlers that build GeoTIFF and JPEG2000 responses, an updated FITS handler and a handler that uses GDAL to read any of the formats it supports, including data stored in GeoTIFF files. 
+
+:Note: There are actually two different 'static' RPM build options for the BES, and here I describe the one that builds ''every'' handler using static linking so that EPEL is not required at all. Read the Makefiles, and spec files to find out more. The 'it uses EPEL' and 'it uses static linking' are the two most useful options.
+
+There's considerable overlap with the instructions from the above section, but there are key differences for the BES parts, highlighted in red below.
+
+;Build the dependencies for the BES handlers that have no (usable) RPM in CentOS 6: ''cd hyrax-dependencies'', ''make -j9 &lt;font color="red"&gt;for-static-rpm''&lt;/font&gt;
+;Build the libdap rpms: ''cd libdap4''; ''make rpm''
+;install (temporarily) the libdap rpm packages: You need to do this because ''libdap'' and ''libdap-devel'' are dependencies for the BES rpms and their builds. Use the command
+: ''sudo yum install ~/rpmbuild/RPMS/x86_64/libdap*.rpm''
+;build the bes rpms
+: ''cd bes''; ''make &lt;font color="red"&gt;all-static-rpm&lt;/font&gt;''
+;test the bes rpms (if you want)
+: Install BES
+:: ''sudo yum install ~/rpmbuild/RPMS/x86_64/bes*.rpm''
+: Start BES
+:: ''besctl start''
+: Run client
+:: ''bescmdln''  (Type ''show version;'' in to the bescmdln client, you should get an xml document that lists the BES's components.)
+: Stop BES
+:: ''besctl stop''
+;remove the packages you just installed
+:Do this step if you're on a build host and you don't want libdap, etc., permanently installed.
+:''sudo yum remove bes bes-devel libdap libdap-devel''
+
+&lt;!-- old
+== Procedure ==
+# When a release is ready, follow the steps in [wiki:ReleaseGuide the release guide] for making a source release
+# Make sure that Everyone in the project knows about the release. That's generally all the people that come to the developer's telecon but should definitely include whoever is writing docs for the group. This step is important so that we can keep our documentation up to date.
+# Make binaries. 
+# To make RPMs for Linux:
+#* When you're building things like libdap or the hdf4_handler, make sure that all of the dependencies are satisfied using RPMs and not source builds! This is a pain, but it's how RPM works. Using a mix of binary and source builds is OK if you're not distributing the result, but since we are distributing the result, it's not OK.
+#** Make a tar.gz source distributions using ''make dist'' or ''make distcheck''. ''Either use the source dist or check out the tagged code from SVN using export.''
+#** Use the ''rpm'' target in the Makefile.am or, if that's missing use ''rpmbuild -tb &lt;&lt;tar.gz&gt;&gt;'', to make the actual RPM files.&lt;br/&gt;'''Potential issues''':
+#*** One gotcha is that the ''tar.gz'' file is needed to run rpmbuild when using the -t option. It's best to list ''dist'' as a dependency for ''rpm'' in the ''Makefile.am''.
+#*** The ''spec'' file must be included in the ''tar.gz'' file! If it's not (add it to the EXTRA_DIST variable in ''Makefile.am'') rpmbuild will return a message saying that "Name field must be present in package: (main package)". 
+#***. The error messages from rpmbuild can be somewhat inscrutable. If you are getting an error and you just have no clue, Google the double quoted error message string since it's likely someone else has had the same problem.
+#** You'll probably need to be root to do this. But don't, set up a .rpmmacros file and configure rpm to use an alternative set of directories. You'll then need to mirror the directories in /usr/src/redhat somewhere (e.g., under $HOME). See the explanation above.
+#** It might be that you have to install a package (e.g. libdap) to build another (libnc-dap). If so, make sure to remove it once you're done, esp. on a development machine. Leaving a package installed makes it much more likely that package's files will wind up as 'required' by other packages (like libdap.so.6 requiring libdap.so.4).
+# Transfer the binaries to the web site. They go under /pub/binary. Each group of files for a given version should go in a subdirectory named for that version. As of 15 April 2008, we're not doing that, but we should since it will make the pages lots easier to maintain (moving the old versions to the `old` subdirectory means the old links have to be updated on all of the pages). Also, it makes it confusing for users when we do a release in steps unless they pay attention to the version numbers on the rpm files. --&gt;</text>
+      <sha1>4nenpdzc03lo5fpch1djxc8crbqe9bf</sha1>
+    </revision>
+  </page>
+</mediawiki>

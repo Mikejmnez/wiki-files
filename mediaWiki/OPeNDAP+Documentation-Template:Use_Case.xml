@@ -1,0 +1,99 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Template:Use Case</title>
+    <ns>10</ns>
+    <id>361</id>
+    <revision>
+      <id>11521</id>
+      <parentid>11516</parentid>
+      <timestamp>2015-01-27T20:45:39Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <origin>11521</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3532" sha1="pvs14tafj6zgfh35hj914sxnyo3wyvy" xml:space="preserve">'''Point Of Contact:''' ''A Human''
+
+== Description ==
+&lt;font size="-2" color="green"&gt;''Give a short descriptive name for the use case to serve as a unique identifier.''&lt;/font&gt;
+
+== Goal ==
+&lt;font size="-2" color="green"&gt;''The goal briefly describes what the user intends to achieve with this use case.''&lt;/font&gt;
+
+== Summary == 
+&lt;font size="-2" color="green"&gt;''Give a summary of the use case to capture the essence of the use case (no longer than a page). It provides a quick overview and includes the goal and principal actor.''&lt;/font&gt;
+== Actors ==
+&lt;font size="-2" color="green"&gt;''List actors, people or things outside the system that either acts on the system (primary actors) or is acted on by the system (secondary actors). Primary actors are ones that invoke the use case and benefit from the result. Identify sensors, models, portals and relevant data resources. Identify the primary actor and briefly describe role.''&lt;/font&gt;
+
+== Preconditions ==
+&lt;font size="-2" color="green"&gt;''Here we state any assumptions about the state of the system that must be met for the trigger (below) to initiate the use case. Any assumptions about other systems can also be stated here, for example, weather conditions. List all preconditions.''&lt;/font&gt;
+
+== Triggers ==
+&lt;font size="-2" color="green"&gt;''Here we describe in detail the event or events that brings about the execution of this use case. Triggers can be external, temporal, or internal. They can be single events or when a set of conditions are met, List all triggers and relationships.''&lt;/font&gt;
+
+== Basic Flow ==
+&lt;font size="-2" color="green"&gt;''Often referred to as the primary scenario or course of events. In the basic flow we describe the flow that would be followed if the use case where to follow its main plot from start to end. Error states or alternate states that might be highlighted are not included here. This gives any browser of the document a quick view of how the system will work. Here the flow can be documented as a list, a conversation or as a story.(as much as required)''&lt;/font&gt;
+
+== Alternate Flow ==
+&lt;font size="-2" color="green"&gt;''Here we give any alternate flows that might occur. May include flows that involve error conditions. Or flows that fall outside of the basic flow.''&lt;/font&gt;
+
+== Post Conditions ==
+&lt;font size="-2" color="green"&gt;''Here we give any conditions that will be true of the state of the system after the use case has been completed.''&lt;/font&gt;
+
+== Activity Diagram ==
+&lt;font size="-2" color="green"&gt;''Here a diagram is given to show the flow of events that surrounds the use case.''&lt;/font&gt;
+
+== Notes ==
+&lt;font size="-2" color="green"&gt;''There is always some piece of information that is required that has no other place to go. This is the place for that information.''&lt;/font&gt;
+
+== Resources ==
+&lt;font size="-2" color="green"&gt;''In order to support the capabilities described in this Use Case, a set of resources must be available and/or configured.  These resources include data and services, and the systems that offer them.  This section will call out examples of these resources.''&lt;/font&gt;
+
+
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|&lt;font size="-2" color="green"&gt;''name''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Organization that owns/ manages resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Short description of the resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''How often the resource is available''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Name of system which provides resource''&lt;/font&gt;
+|}</text>
+      <sha1>pvs14tafj6zgfh35hj914sxnyo3wyvy</sha1>
+    </revision>
+  </page>
+</mediawiki>

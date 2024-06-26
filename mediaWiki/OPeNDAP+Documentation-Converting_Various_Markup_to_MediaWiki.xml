@@ -1,0 +1,77 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Converting Various Markup to MediaWiki</title>
+    <ns>0</ns>
+    <id>11</id>
+    <revision>
+      <id>585</id>
+      <parentid>584</parentid>
+      <timestamp>2007-03-20T23:23:55Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Converting Latex */</comment>
+      <origin>585</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1732" sha1="idba5vbx3tycuotixoruqtia301virh" xml:space="preserve">=Converting HTML=
+
+==Using Perl on your own computer==
+
+Grab the [http://search.cpan.org/dist/HTML-WikiConverter/ HTML-WikiConverter], build it and follow the directions. You will need to supply the HTML file names on the command line and capture the output (the program writes to standard output) and then open a MediaWiki page for editing and paste the MediaWiki markup. Fairly painless unless you're working with a complex, multipage document.
+
+NB: This coverter does not like &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; tags.
+
+==Using online tools==
+
+These are web pages (CGIs) which run the HTML-WikiConverter software, so any limitations of the above software apply to this as well. However, they save you the trouble of getting the code and building it. 
+
+* This is the best converter, since it lets you paste a URL or the HTML: http://diberri.dyndns.org/wikipedia/html2wiki/index.html
+
+* These require you to paste the HTML:
+** This uses plain HTTP: http://labs.seapine.com/htmltowiki.cgi
+** This uses HTTPS: https://wiki.uww.edu/converter.php
+
+=Converting TWiKi=
+
+Use [http://wiki.ittoolbox.com/index.php/Code:Twiki2mediawiki Twiki2mediawiki] to convert TWiKi pages to MediaWiki markup. Once converted, use copy and paste to move the new markup into the pages after opening the page's edit window.
+
+=Converting Latex=
+
+We're making modifications to Latex2MediaWiki.py so that it will support our particular latex styles. This script can be found in our subversion archive at http://scm.opendap.org:8090/trac/browser/trunk/Doc/Latex2wiki.py.
+
+=More info...=
+
+See the [http://en.wikipedia.org/wiki/Wikipedia:Tools/Editing_tools#Wikisyntax_conversion_utilities page on WikiPedia] about conversions like Word to MediaWiki, CSV to MediaWiki, et c.</text>
+      <sha1>idba5vbx3tycuotixoruqtia301virh</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,64 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>ESIP2018</title>
+    <ns>0</ns>
+    <id>988</id>
+    <revision>
+      <id>12524</id>
+      <parentid>12523</parentid>
+      <timestamp>2018-07-19T22:03:40Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* DSR */</comment>
+      <origin>12524</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="998" sha1="jpswewxuoc5bdpbwz1acniz2u2drqrs" xml:space="preserve">== JSON ==
+These JSON dialects create 1:1 onto mappings to the native "binary" representation / source encoding.
+* NCO-JSON  &lt;-&gt;  nc4
+* hdf-json&lt;-&gt; hdf5
+* DAP2 JSON &lt;-&gt; DAP2
+
+== BALTO ==  
+clowder: https://opensource.ncsa.illinois.edu/confluence/display/CATS/Home
+
+==DSR==
+How to generate DSR?
+* Bake the response into the code (current)
+* Dynamically generate the response by:
+** Have OLFS ask BES what responses are supported for a particular dataset: For example, the covjson handler in the BES does this as part of generating the covjson response. We could duplicate that work in the OLFS (yuck) or we could add code to covjson that allows us to ask the question.
+** Get DDX/DMR and examine content in OLFS: Probably the most efficient but requires that we duplicate BES logic in the OLFS. For example: How do we determine if a dataset is a candidate for a covjson response? We have to examine the DDS/DAS/DDX/DMR to determine of the metadata is sufficient and the BES code already does this
+**</text>
+      <sha1>jpswewxuoc5bdpbwz1acniz2u2drqrs</sha1>
+    </revision>
+  </page>
+</mediawiki>

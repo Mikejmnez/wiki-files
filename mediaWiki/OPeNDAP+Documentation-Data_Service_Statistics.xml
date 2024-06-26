@@ -1,0 +1,99 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Data Service Statistics</title>
+    <ns>0</ns>
+    <id>662</id>
+    <revision>
+      <id>6486</id>
+      <timestamp>2011-05-31T16:00:09Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>New page:  == Thinking out loud == As a site data access manager, can you name the statistics that a site would be interested in?  And of those statistics, which would be good to maintain a real-tim...</comment>
+      <origin>6486</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2119" sha1="g6ejqbtupszgxamdplgrbl6eosdo1n6" xml:space="preserve">
+== Thinking out loud ==
+As a site data access manager, can you name the statistics that a site would be interested in? 
+And of those statistics, which would be good to maintain a real-time counter of?
+How this information is acquired could be from the service or from the logs.  I am thinking about how this would be done and whether Hyrax provide any of this information, or another tool within the service can scan the logs and obtain a standard of information.
+
+=== Catalog Statistics ===
+---------------
+Overall storage of accessible data (GB)
+Overall number of data files
+Overall number of data sets (groups of files from metadata structure, ideal for aggregations)
+Overall number of aggregated data sets
+Overall number of virtual data sets
+Overall number of CF compliant data sets
+...
+
+=== Catalog of data set statistics ===
+-----------------------
+Storage of accessible data (GB)
+Number of data files
+Time range of data
+Spatial range of data
+Number of unique variables in data files
+CF compliant data set
+Aggregation of data set
+...
+
+
+=== Data service statistics ===
+--------------------
+Number of unique visitors per day
+List of unique visitors names, ip address, host name, and application name
+Number of data requests per service (catalog, opendap, wms, ...)
+Number of data volume delivered per service
+List of application name, user name, and data-size delivered for data request
+Number of requests exceeding data request size thresholds
+List of unique visitors names, ip address, host name, and application name exceeding threshold
+Number of data request served asynchronously
+Number of data request using server-side processing
+...
+
+
+=== Service statistics per data set ===
+----------------------
+Number of unique visitors per day
+List of unique visitors names, ip address, host name, and application name
+Number of data requests per service (catalog, opendap, wms, ...) per data set
+Number of data volume delivered per service per data set
+List of application name, user name, and data-size delivered for data request
+...
+
+I’m thinking about this for an implementation plan and data service management.</text>
+      <sha1>g6ejqbtupszgxamdplgrbl6eosdo1n6</sha1>
+    </revision>
+  </page>
+</mediawiki>

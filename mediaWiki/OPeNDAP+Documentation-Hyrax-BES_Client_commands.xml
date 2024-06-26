@@ -1,0 +1,203 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - BES Client commands</title>
+    <ns>0</ns>
+    <id>128</id>
+    <revision>
+      <id>12382</id>
+      <parentid>12381</parentid>
+      <timestamp>2017-05-16T20:18:03Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* DAP4 example with both a function and a constraint */</comment>
+      <origin>12382</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="10413" sha1="1ffdx3jqepn77q1c9fao1l3ezat8na9" xml:space="preserve">[[Hyrax#For_Developers:|Back to Hyrax For Developers]]
+
+These are the commands that the BES supports. Documented here are the XML versions of the commands that are typed into the ''bescmdln'' client. All of these have a non-XML version as well that might be easier to type as the command line. However, if you're making command files, these are often the easiest to use because the SQL-like syntax of the 'text' commands can be confusing.
+
+If you want to find documentation on the XML document that the BES expects to receive, look at the [[BES XML Commands]] documentation. There you'll see that the commands listed here are generally sent as given to the ''bescmdln'' client but embedded in other XML that provides the BES with information such as a request ID and other bookkeeping information.
+
+== Current core commands available with BES ==
+NB: The BES supports both XML and a SQL-like syntax. Here we attempt to document both.
+
+* &lt;showHelp /&gt; or ''show help;''
+:* shows this help
+
+* &lt;showVersion /&gt; or ''show version;''
+:* shows the version of OPeNDAP and each data type served by this server
+
+* &lt;showProcess /&gt; or ''show process;''
+:* shows the process number of this application. This command is only available in developer mode.
+
+* &lt;showConfig /&gt; or ''show config;''
+:* shows all key/value pairs defined in the bes configuration file. This command is only available in developer mode.
+
+* &lt;showStatus /&gt; or ''show status;''
+:* shows the status of the server
+
+* &lt;showContainers /&gt; or ''show containers;''
+:* shows all containers currently defined
+
+* &lt;showDefinitions /&gt; or ''show definitions;''
+:* shows all definitions currently defined
+
+* &lt;showContext /&gt; or ''show context;''
+:* shows all context name/value pairs set in the BES
+
+* &lt;setContainer name="container_name" space="store_name" type="data_type"&gt;real_name&lt;/setContainer&gt; or ''set container in catalog values '''c''','''/data/nc/fnoc1.nc''';''
+:* defines a symbolic name representing a data container, usually a file, to be used by definitions, described below
+:* the space property is the name of the container storage and is optional.  Defaults to default volatile storage. Examples might include database storage, volatile storage based on catalog information.
+:* real_name is the full qualified location of the data container, for example the full path to a data file.
+:* data_type is the type of data that is in the dataset.  For netcdf files it is nc. For some container storage the data type is optional, determined by the container storage.
+
+* &lt;setContext name="context_name"&gt;context_value&lt;/setContext&gt;
+:* set the given context with the given value. No default context are used in the BES
+
+* &lt;define ...&gt; 
+&lt;source lang="xml"&gt;
+ &lt;define name="definition_name" space="store_name"&gt;
+     &lt;container name="container_name"&gt;
+         &lt;constraint&gt;legal_constraint&lt;/constraint&gt;
+         &lt;attributes&gt;attribute_list&lt;/attributes&gt;
+     &lt;/container&gt;
+     &lt;aggregate handler="someHandler" cmd="someCommand" /&gt;
+ &lt;/define&gt;
+&lt;/source&gt;
+:* creates a definition using one or more containers, constraints for each of the containers, attributes to be retrieved from each container, and an aggregation. Constraints, attributes, and aggregation are all optional.
+:* There can be more than one container element
+:* space is the name of the definition storage.  Defaults to volatile storage. Examples might include database storage.
+
+* &lt;deleteContainer name="container_name" space="store_name" /&gt;
+:* deletes the specified container from the specified container storage (defaults to volatile storage).
+
+* &lt;deleteContainers space="store_name" /&gt;
+:* deletes all of the currently defined containers from the specified container storage (defaults to volatile storage).
+
+* &lt;deleteDefinition name="definition_name" space="store_name" /&gt;
+:* deletes the specified definition from the specified container storage (defaults to volatile storage).
+
+* &lt;deleteDefinitions space="store_name" /&gt;
+:* deletes all of the currently defined definitions from the specified container storage (defaults to volatile storage).
+
+== Added commands for dap enabled servers ==
+If you are serving up OPeNDAP data responses (DAS, DDS, DataDDS) then you will have loaded the dap commands in your configuration file. Here are the available commands in the dap module.
+
+* &lt;showCatalog node="node_name" /&gt; or ''show catalog;'' or ''show catalog for &lt;&lt;node_name&gt;&gt;;''
+:* Shows catalog information, including contents if a  container. If node is not specified then the root node information is returned. If node is specified then that nodes information is returned.
+
+* &lt;showInfo node="node_name" /&gt;
+:* Shows catalog information for just that node, the root node if no node is specified. If the node is a container the contents are not displayed.
+
+* &lt;get type="das | dds | dods | ddx |  dataddx | ascii" definition="def_name" returnAs="returnAs" /&gt;
+:* dds: request the data descriptor structure. Returned as text.
+:* das: request the data attributes. Returned as text.
+:* dods: request for the data stream, this output is an octet binary stream made up of two parts and similar to a multipart MIME document (but not a real MPM doc). The first part is the DDS that describes the contents of this response; the separator is the text ''Data:''; and the data make up the third part. The data are represented using XDR-encoded binary values. There is a a one-to-one mapping between variables, name and types in the first part and the binary values in the second part. A library such as libdap can easily decode this response.
+:* ddx: request the data attributes and data descriptor structure returned as an xml document
+:* dataddx: This is the 'DAP4' counterpart to the ''dods'' response, just as the ''ddx'' is the DAP4 counterpart to the ''das'' and ''dds'' responses from DAP2. The dataddx response is a true multipart MIME document with the first part a text/xml section that holds the ddx that describes the data in the response and the second part an application/octet-stream section that holds the matching XDR-encoded values.
+:* ascii: request the data stream (i.e., dods) and then pass that through a formatter to generate an ASCII representation of the data and return it in a text/plain MIME document.
+
+* &lt;setContext name="errors"&gt;dap2 | xml | html | txt&lt;/setContext&gt;
+:* set the context 'errors' to dap2 in order to have all exceptions and errors formatted as dap2 error messages in the response.
+
+* &lt;setContext name="dap_format"&gt;dap2&lt;/setContext&gt;
+:* set the context 'dap_format' to dap2 in order to suppress the addition of an additional structure to the DDS/DDX whose elements are the containers named in the setContainer element.
+
+=== Complete command examples ===
+DAP2 and DAP4 can both be retrieved from the BES using the same basic syntax, with some twists.
+
+===== DAP4 example with both a ''function'' and a ''constraint'' =====
+Note: The ''bes'' namespace is not needed if this is being fed into the BES command processor.
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;bes:request xmlns:bes="http://xml.opendap.org/ns/bes/1.0#" reqID="[http-8080-1:27:bes_request]"&gt;
+  &lt;bes:setContext name="xdap_accept"&gt;4.0&lt;/bes:setContext&gt;
+  &lt;bes:setContext name="dap_explicit_containers"&gt;no&lt;/bes:setContext&gt;
+  &lt;bes:setContext name="errors"&gt;xml&lt;/bes:setContext&gt;
+  &lt;bes:setContext name="max_response_size"&gt;0&lt;/bes:setContext&gt;
+  
+  &lt;bes:setContainer name="c" space="catalog"&gt;/functions/tests/data/test_array_1.dmr&lt;/bes:setContainer&gt;
+  
+  &lt;bes:define name="d1" space="default"&gt;
+    &lt;bes:container name="c"&gt;
+        &lt;dap4function&gt;linear_scale(x,0.1,0)&lt;/dap4function&gt;
+        &lt;dap4constraint&gt;x[1:3]&lt;/dap4constraint&gt;
+    &lt;/bes:container&gt;
+  &lt;/bes:define&gt;
+  
+  &lt;bes:get type="dap" definition="d1" /&gt;
+  
+&lt;/bes:request&gt;
+&lt;/source&gt;
+
+=== DAP2 example with  a ''constraint'' ===
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;bes:request xmlns:bes="http://xml.opendap.org/ns/bes/1.0#" reqID="[http-8080-1:27:bes_request]"&gt;
+  &lt;bes:setContext name="dap_explicit_containers"&gt;no&lt;/bes:setContext&gt;
+  &lt;bes:setContext name="errors"&gt;xml&lt;/bes:setContext&gt;
+  &lt;bes:setContext name="max_response_size"&gt;0&lt;/bes:setContext&gt;
+  
+  &lt;bes:setContainer name="c" space="catalog"&gt;/functions/tests/data/test_array_1.dmr&lt;/bes:setContainer&gt;
+  
+  &lt;bes:define name="d1" space="default"&gt;
+    &lt;bes:container name="c"&gt;
+        &lt;constraint&gt;x[1:3]&lt;/constraint&gt;
+    &lt;/bes:container&gt;
+  &lt;/bes:define&gt;
+  
+  &lt;bes:get type="dods" definition="d1" /&gt;
+  
+&lt;/bes:request&gt;
+&lt;/source&gt;
+
+== Using the ''bescmdln'' client to test the BES ==
+Here are some tricks/command sequences that are useful when you need to test the BES without using a web browser. This section assumes that the DAP commands have been loaded into the BES. In this section, the examples use the older syntax because it's a bit more amenable to a command line environment. With the XML syntax, multiple commands cab be grouped together and sent to the BES in one shot.
+
+;Find the versions of all the installed and running modules: ''show version;''
+;Show the status os the BES: ''show status;''
+;Poke around in the RootDirectory to see what's actually visible to the BES: ''show catalog;'' will show you the root catalog; ''show catalog for '''"pathname"''';'' will show the contents of '''"pathname"''' (e.g., ''show catalog for "/data/nc";'' will show all the stuff in the /data/nc directory).
+;Get the BES to return a DAP response object: You need three commands to do this:
+:;bind the dataset to a container in a catalog: ''set container in catalog values '''c''','''/data/nc/feb.nc''';''
+:;make a definition so you can access that container: ''define '''d''' as '''c''';''
+:;a definition with a constraint: ''define '''d''' as '''c''' with '''c.constraint="lat"''';''
+:;request a particular response: ''get '''ddx''' for '''d''';''
+
+&lt;nowiki&gt;*&lt;/nowiki&gt;Note that there is a ''set container'' command but that does not use the default catalog while the command here explicitly binds the dataset to a container in the default catalog (which is called ''catalog''). This pathname is rooted in the directory set using the ''BES.Catalog.catalog.RootDirectory'' configuration parameter in the ''bes.conf'' file. The 'plain' ''set container ...'' command uses pathnames rooted in the directory name by the ''BES.Data.RootDirectory'' parameter, which is often null for Hyrax installations.
+
+[[Category:Development|BES Client Commands]][[Category:Hyrax Development|BES Client Commands]]</text>
+      <sha1>1ffdx3jqepn77q1c9fao1l3ezat8na9</sha1>
+    </revision>
+  </page>
+</mediawiki>

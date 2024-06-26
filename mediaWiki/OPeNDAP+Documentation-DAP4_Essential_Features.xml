@@ -1,0 +1,312 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP 4.0 Essential Features</title>
+    <ns>0</ns>
+    <id>621</id>
+    <revision>
+      <id>7017</id>
+      <parentid>7016</parentid>
+      <timestamp>2012-01-31T16:42:42Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Implementation (libdap) */</comment>
+      <origin>7017</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="24277" sha1="3x22wlfigrrxexsrebmsx79mm75k4p9" xml:space="preserve">;Version :We need to be able to extend the protocol so that different versions of servers and clients can still interoperate. This is, of course, a going to have conditions where data that cannot be encoded using an older version of the protocol cannot be served to an older client (because there's no way for it to support the newer protocol and still be an 'older client'). But newer clients can understand the older protocol and should be have reasonably. 
+;Checksum :A checksum (MD5, SHA1?) that provides a way to determine if two URLs that appear to reference the same data do, in fact, reference the same data types and/or data. This should be applied to any response, so it is a prime candidate for the Keywords capability used to implement the DAP version feature of DAP3+.
+;Error :We need a way to reliably report errors when they are detected in midstream of data transmission. This is the primary 'new feature' of the ''transmission'' part of the protocol.
+;NGrid :We need a way to represent more sophisticated kinds of data organization than the simple vector maps supported by Grid. This is a change to the ''data model'' of the protocol.
+;Shared Dimensions :Shared Dimensions may not be necessary if NGrid is defined correctly. Alternatively, they may provide a way to redefine how the concepts represented by Grid and NGrid are encoded in the data model. I think these two things are different approaches to the same basic concepts.
+;POST for Constraint Expressions: We will need to be able to use HTTP POST for sending Constraint Expressions to a server. This is needed for features like the planned ''ugrid'' subseting function which will need to accept a list of vertices, potentially more characters than can fit in a URL. This is the case because the size of the URL is not actually specified anywhere...&lt;font color="red"&gt;Think about this&lt;/font&gt; and make sure it is really something we want in the protocol. What is the best way to distinguish how we access DAP as a web service vesus the kind of response documents that service returns?
+;Group: We need support for Group in DAP4 to read and transmit both NetCDF4 and HDF5 without loss.
+;Asynchronous responses: Asynchronous responses are needed for an awful lot of things. Mostly, we need this in the protocol so that we can start the process of building clients that understand it. This is a major 'paradigm' shift for clients and the netCDF client-library code base is going to be left out, unless people are willing to modify their (old) netCDF client code.
+
+These features are the critical changes to the DAP to move it from version 2 to version 4. Other types like 64-bit integers, Opaque, and Enum seem critical, but once version number processing is handled correctly, they become much simpler enhancements. The NGrid/Shred-Dimension data model extension is fundamentally one that will affect the flow of control in clients, so it has more profound consequnces. Similarly, Groups will require clients map this concept into various situations where it is not present. Because Groups are used to create namespaces, the likely way to accommodate them will be various forms of flattening, each tailored to a specific client or type of client. Other things like asynchronous responses will break clients that have been 'living off' the current behavior that each response comes back right away.
+
+== Version ==
+
+See [[DAP_4.0_Design#Version | Version]] in the [[DAP 4.0 Design]] for the low down on this feature.
+
+There are three techniques we are looking at and/or have implemented so far:
+* Using HTTP MIME headers (which can be generalized to be Request MIME document headers; not limited to HTTP)
+* Using a function or keyword in the query string part of the URL
+* Making new URLs by adding to the path part of the URL
+* Define a new set of response types that are strictly DAP4 using a new set of extensions. This could make it easier to move more toward a REST protocol, although that really has more to do with the server specification and not the transport protocol.
+
+None are perfect... Discussion of the options follows. 
+
+=== HTTP/MIME headers ===
+
+The existing code uses the XDAP HTTP/MIME header. This could be adapted for use with other protocols but that can be cumbersome. This does not work for clients like web browsers without fairly complex setup. Compounding this is that client libraries are not using it.
+
+Here's a compatibility matrix:
+
+{| border="1" cellspacing="0" cellpadding="2" style="text-align:center;"
+ |+ Compatibility Matrix
+ |-
+ ! Server kind !! 2.0 Client !! Generic client !! 3.x Client
+ |-
+ ! Old Server 
+ | Works || Works || Works*
+ |-
+ ! New Server 
+ | Partial** || Works || Works 
+ |}
+
+&lt;nowiki&gt;*Client Falls back to DAP 2.0 (required by protocol)&lt;/nowiki&gt;&lt;br&gt;
+&lt;nowiki&gt;**New servers have to support the old protocol, but there may be some features/plugins that decide they cannot render all data sets. In this case 'supporting the protocol' might mean returning an error message, which is why this gets 'Partial'.&lt;/nowiki&gt;
+
+=== Function/keyword ===
+
+Another idea: Put a ''function call'' in the query part of the URL. This might look like this:
+&lt;pre&gt;
+http://test.opendap.org/opendap/data/nc/fnoc1.nc.ascii?dap(3.2),u[0:1:15][0:1:16][0:1:20]
+&lt;/pre&gt;
+However, because parens are not technically allowed in a URL so the result can be fairly obtuse:
+&lt;pre&gt;
+http://test.opendap.org/opendap/data/nc/fnoc1.nc.ascii?dap%283.2%29,u[0:1:15][0:1:16][0:1:20]
+&lt;/pre&gt;
+On the plus side, this would not require changing the CE syntax.
+
+We could address the parens (or the cumbersome escape character) issue by adding ''keywords'' to the set of allowable things passed in a CE. The resulting URL might look like:
+&lt;pre&gt;
+http://test.opendap.org/opendap/data/nc/fnoc1.nc.ascii?dap3.2,u[0:1:15][0:1:16][0:1:20]
+&lt;/pre&gt;
+This ''would'' change the syntax of a CE, but not in a way that's too hard to deal with, especially if keywords are restricted to appearing before any of the data set's variables.
+
+Both of these URLs have the same basic problem: with a server that does not recognize the function or keyword, the response is an error (a 400 response). So this syntax breaks existing servers, which means that to use this syntax in an automated sense a client needs to check for a 400 response and, if one comes back, guess it might be the function/keyword and try the request without it. 
+
+Here's a compatibility matrix:
+
+{| border="1" cellspacing="0" cellpadding="2" style="text-align:center;"
+ |+ Compatibility Matrix
+ |-
+ ! Server kind !! 2.0 Client !! Generic client !! 3.x Client
+ |-
+ ! Old Server 
+ | Works || Works || Partial*
+ |-
+ ! New Server 
+ | Partial** || Works || Works 
+ |}
+
+&lt;nowiki&gt;*Client will get an obtuse error message when it uses the keyword and will have to either guess that maybe this is an old server or look at the version response.&lt;/nowiki&gt;&lt;br&gt;
+&lt;nowiki&gt;**As with the above option using a MIME header, the 2.0 client may get an error response from the server. In this case, it can be verbose and explain the problem/situation, which is an improvement over the 3.x client --&gt; Old server condition.&lt;/nowiki&gt;&lt;br&gt;
+
+=== URL Path ===
+
+We could embed the protocol version in the ''path'' part of the URL. Doing this will likely complicate issues we already have with the dispatch software. It also does not fix the issue, from the client perspective, that a request from a 3.x client to an old server results in a somewhat inscrutable error message. It does not require a change to the CE parser or hack to the code that does initial processing of the request (DODSFilter in libdap) as with the keyword option (but note that the function option also does not require that hack). This would require extra processing on the path, however.
+
+{| border="1" cellspacing="0" cellpadding="2" style="text-align:center;"
+ |+ Compatibility Matrix
+ |-
+ ! Server kind !! 2.0 Client !! Generic client !! 3.x Client
+ |-
+ ! Old Server 
+ | Works || Works || Partial*
+ |-
+ ! New Server 
+ | Partial** || Works || Works 
+ |}
+
+=== Discussion ===
+
+If we implement both the first and second option, we get as much functionality as we possibly can (because choosing the third option doesn't get any new behavior over the second) without having to overload the URL path, which is already overloaded, or do processing on the path, which we currently do not do.
+
+Clients we write, or that are written with toolkits that follow the spec, can be savvy about using the MIME header. Having a server check in two places for this kind of information is not that onerous of a burden to support protocol extensibility. That technique can work for other transport protocols (e.g., using DAP over AMQP or GridFTP instead of HTTP), too, if they agree that the payload is a MIME document and the (non-HTTP-based) DAP server implementation contains a pre-processor that can pull apart the MIME document. At the same time, the ''keyword'' in the projection part of the URL will be pretty easy to extract from the CE, and is also independent of the underlying transport protocol (HTTP, AMQP, ...)
+
+Rationale for new clients using the keyword: While the 400 error they will get back from an old server is a real drag, these clients can be modified to be smart(er) and could even hide a call to the version service.
+
+:''Note'': We will need to define the behavior of '''''keywords'''''. I think they should be limited to changing behavior of responses and not specifying the responses themselves. For example, the ''dap4'' keyword requests a DAP4 response. We would still ask for the DDX using the ''.ddx'' suffix on the path name part of the URL and would ''not'' include a ''ddx'' keyword. It also means no ''version'' keyword...
+
+Choosing the design where a keyword is required to specify any version other than DAP2 means that all DAP4 clients will forever have to specify that they want DAP4 behavior. Is this really what we want? We could make DDX and DataDDX DAP4 responses and use the protocol version keyword (''dap3.2'', ...) as a transitional tool for the DDX only. The DataDDX will be only DAP4 and we will keep it as an Alpha feature throughout the development. This means that the curly-brace syntax will not be available from DAP4 servers or using DAP4, which would be a setback since XML is really a machine encoding. It also means that we'll likely have to introduce new response types for the next change to the protocol.
+
+==== Arguments for the ''function'' syntax over the ''keyword'' syntax ====
+The function syntax has the advantage that it is allowed by the current DAP2 specification. In addition. it will never trigger a 'name collision' should a dataset have a variable that is the same name as a keyword (it might be that this mechanism is needed/used for things beyond just protocol negotiation). Finally, for Hyrax/libdap, the function notation opens up the possibility of passing these keywords into handlers, because both libdap ''and'' handlers can register their own functions. Thus, libdap can register a function that defines a behavior for 'version("dap3.2")' (or maybe 'dap3.2()') and the hdf4 handler can define a different behavior for it. The hdf4 handler could also define a function like 'short_names()' that would trigger that option. Given the libdap/hyrax structure, this would be easy to implement. This would provide a way for users to choose options that are currently set in the configuration files of the BES (in addition to HDF4's ''short_names'', the netcdf handler's treatment of shared dimensions comes to mind).
+
+Here's the type definition for one of these functions, from libdap:
+&lt;pre&gt;
+// Projection function: A function that appears in the projection part of the
+// CE and is executed for its side-effect. Usually adds a new variable to
+// the DDS. These are run _during the parse_ so their side-effects can be used
+// by subsequent parts of the CE.
+
+typedef void(*proj_func)(int argc, BaseType *argv[], DDS &amp;dds, ConstraintEvaluator &amp;ce);
+&lt;/pre&gt;
+
+The most important points are that a ''projection function'' takes four arguments:
+;argc: The number of variables referenced by the second argument
+;argv: The arguments given in the Constraint expression
+;dds: The data set's DDS object. This is the lexically scoped environment in which the function will be evaluated. The function can modify this enviroment, by adding to it, calling methods that the DDS class defines, ...
+;ce: The ConstraintEvaluator object being used to evaluate this function. Because the function is run during the parse and because the ConstraintEvaluator object holds the parse tree for the constraint expression, a projection function can use this argument to alter the expression its part of (by adding clauses, for example.
+
+==== Arguments for the ''Keyword'' syntax ====
+In our server, and this might be a more general issue, the DDS is built (populated with the data set variables) before the CE is evaluated. This is the case because the constraint expression 'language' uses variable names whose bindings ''are'' the data set, so the DDS - the lexical environment in which the CE is evaluated - must exist first. However, we want the DAP protocol version to control how that DDS is built (not using DAP4-only types for a DAP2 client, e.g.). This is a catch-22 and argues for the keyword approach because those are parsed before the CE. They can simply be removed from the front of the HTTP Query String.
+
+However, using this approach with the simple syntax means that keywords and dataset variable names could collide. While this seems unlikely (how many datasets will have a variable named ''dap3.2''?) if more keywords are added it could become an issue.
+
+==== Implementation ====
+
+I've implemented the ''Keywords'' approach in libdap, but used the syntax of functions. I did this because:
+# The processing of this information ''must'' come before evaluation of the constraint;
+# it's impossible to be sure that a token used as a keyword won't also appear in a data set; 
+# the function notation provides an easy way to pass in values (2.0, true) for the keyword/function; and 
+# using the functional notation is not much more work than a plain keyword.
+
+Originally I added a new class to libdap named ''ResponseBuiler'' that replaces ''DODSFilter'' and removes the baggage that class had for processing command line arguments (''DODSFilter'' is still in the library). This was a first attempt and it makes the code in ''DODSFilter'' unnecessary so we can eventually remove it, dumping a lot of stuff that's no longer used by our server. However, setting the value in a class that builds responses in the handler didn't work well with the BES design, so...
+
+I added a ''Keywords'' class that can be used to parse the keywords and store them for later use. As a side effect the parse method returns the CE without the keywords, so that it can be processed by the ConstraintExpression evaluator. The BES has to make use of this code to see if a keyword was used to pass in a value for the DAP version that the client is requesting. 
+
+That code can be found in BESDDSResponseHandler.cc and related classes, although there are still issues with the BES and getting the constraint into that code so that the Keywords class can read the information, remove it from the CE and set the correct fields in the DDS.
+
+Given a constraint like 'dap(4.0),u,v' the Keywords class will:
+# parse the 'dap(4.0)' and separate the ''word'' and ''value'' given the syntax ''word'' '(' ''value'' ')'
+# ensure that ''word'' is registered as a known keyword and that ''value'' is registered as one of the allowed values
+# record the keyword and its value
+# provide access to value, using the keyword as an index.
+
+I added an instance of Keywords to DDS and then a method that returns a reference to the Keywords instance in the DDS.
+
+== Checksum ==
+
+=== Use cases ===
+
+
+From Peter Cornillon (2012-01-19 17:40): 
+Suppose I downloaded 50,000 SST fields from an archive and performed operations on them to obtain some scientific result. Six months later, I am about to publish but find that there is a new version of the data set. It would be great if I could simply download the checksum for the portion of the SST archive that I downloaded before - the same OPeNDAP request except for the checksum only to see what part of the archive has changed and if it is likely to affect my results. Or the data have moved to another server and I want to make sure that they are same when referencing them in my paper. This is a scenario that I encounter fairly often in thework that I am doing.
+
+A use case that I thought of when first thinking about this stuff a number of years ago is a nuclear sub driving around the ocean, underwater as subs are wont to do. When the sub leaves port it has the most up-to-date version of global bathymetry available. Because these guys are cool, they use OPeNDAP to access the data from their archive on the sub. The sub is moving into a new area and the commander gets whoever does the petty sort of stuff to request bathymetry for the region. The request returns several gigabytes. A checksum is returned with the data. The sub has a small window to connect to the outside world but can only send a small number of bytes - the captain wants to minimize its exposure. He wants to know if the bathymetry has changed, so his petty officer guy makes the same OPeNDAP request to bathymetry central but only asks for the checksum to be returned. If it is different, they all sit around trying to figger out what the next step is. If it is the same they are all very happy.
+
+From Frew (Jan 20, 2012, at 12:46):
+Interesting. I see 2 use cases lurking in here:
+
+1) '''server(DAP_request(old_dataset)) ?= server(DAP_request(new_dataset))'''
+
+Cornillon: I'm not sure that this captures the problem exactly. I think that I would have phrased it as: '''old_server(DAP_request(old_dataset)) ?= ?_server(DAP_request(?_dataset))'''. The problem is that the user may not know if the dataset has changed; i.e., whether or not it is a new_dataset or the old_dataset nor whether or not the server has changed. Suppose that I downloaded some data from site X last summer and found some very interesting results. Now I want to publish them, but want to be sure that someone else making the same request will get the same data. Specifically, if I make the same request from site X now will I get the same response? The server may have changed or the dataset may have been updated, but this may not be obvious in the request URL. Another case that happens quite frequently is that the data have been moved to another disk drive or another computer so that part of the URL has changed. Is the DAP response from the server, with the new address, the same?
+
+This is potentially solvable with etags. It's up to the server to decide whether the datasets are equivalent with respect to the specific request. This allows for the server operator to tweak things in order to solve the scientific equivalence problem.
+
+2) '''old_server(DAP_request(dataset)) ?= new_server(DAP_request(dataset)'''
+
+This isn't the same as (1), since in this case the etags must be unique '''across servers''', which is not how they're currently defined (at least, as far as I can figure out from the HTTP spec.) The consequence is that the etags would have to be determined entirely by calculations on the data---you couldn't use site-specific configuration info to solve the scientific equivalence problem without also requiring that information to travel with the dataset.
+
+=== Requirements ===
+
+# The checksum for an object (variable, subset, metadata, ...) will always be returned
+# It must be possible to ask for the checksum only. (That is, to get the checksum that would have been returned with a given response).
+# Metadata must have checksums
+# Data must have checksums - the latter will be split according to DAP variables, with a separate checksum for each discrete variable in the DDS associated with a response.
+# The checksums must be invariant with respect to server or URL; the checksum for two identical ''data values'' in a data set '''must''' be identical. The checksum must not vary depending on the 'packaging' of the data, so that the checksums are invariant WRT changes in the protocol used to transport the data.
+# This is a feature of DAP4, not DAP2.
+
+==== Performance tests ====
+
+Based on [https://docs.google.com/a/opendap.org/spreadsheet/ccc?key=0Apek_Ri3_W0WdEk2X2g1YkdESU1scHhkdU5oVXlaMGc&amp;authkey=CNqAlIEC&amp;hl=en_US&amp;authkey=CNqAlIEC#gid=0 some simple tests], checksums do not seem to be too expensive. Note that these tests use the BES alone; it's likely that there will be little or no noticeable difference for web accesses of HTTP.
+
+=== Design ===
+
+==== Data ==== 
+
+For every variable, that variable's checksum will follow the serialized XDR bytes. For MD5, the checksum is 32 hex digits. The XDR encoding of each variable will be extended in DAP4 so that the XDR encoded bytes are terminated by a newline. The next line will contain the checksum, as a hexadecimal number represented in ASCII, which will also be terminated by a newline.
+
+When checksums are computed for a variable, care should be taken to not include any bytes added for padding or any 'length bytes' used to prefix the XDR encoded data. Similarly, for Sequences, the sentinel bytes should not be included in the checksum computation.
+
+&lt;blockquote&gt;The guiding idea is that ''only'' data values included in the response should be used in the computation of the checksum and not that's an artifact of the encoding.&lt;/blockquote&gt;
+
+Variables are defined as anything for which libdap::BaseType::serialize() is called ''except'' Structure and Grid. For those types, each component has its checksum computed separately. ''(we will have to edit this later to remove the reference to libdap)''
+
+==== Metadata ====
+
+''How should the checksum for the DDX be computed?''
+
+=== Implementation (libdap) ===
+
+I added three methods to XDRStreamMarshaller:
+;virtual void    reset_checksum(): call before starting on the next variable
+;virtual string  get_checksum(): call to get the computed checksum
+;virtual void    checksum_update(const void *data, unsigned long len): add the data to checksum currently being computed
+
+I did not modify any of the other ''Marshaller'' or ''UnMarshaller'' classes.
+
+One approach would be to define two abstract classes: ''Checksum'' and ''ReadChecksum'' and change classes like XDRStreamMarshaller to inherit from both Marshaller and Checksum. (This trink be done using an interface in Java.)
+
+Also in libdap, I modified ''ResponseBuilder::dataset_constraint'', ''Structure::serialize()'', ''Grid::serialize()''. The code is activated using the compile-time switch ''CHECKSUMS''. Here's an example of the code used for testing which indicates it should be easy to make this a soft-switch selected feature:
+&lt;source lang="cpp"&gt;
+void ResponseBuilder::dataset_constraint(ostream &amp;out, DDS &amp; dds, ConstraintEvaluator &amp; eval, bool ce_eval) const
+{
+    // send constrained DDS
+    dds.print_constrained(out);
+    out &lt;&lt; "Data:\n";
+    out &lt;&lt; flush;
+#ifdef CHECKSUMS
+    // Grab a stream that encodes using XDR.
+    XDRStreamMarshaller m(out, true, false);
+#else
+    XDRStreamMarshaller m(out);
+#endif
+    try {
+        // Send all variables in the current projection (send_p())
+        for (DDS::Vars_iter i = dds.var_begin(); i != dds.var_end(); i++)
+            if ((*i)-&gt;send_p()) {
+                DBG(cerr &lt;&lt; "Sending " &lt;&lt; (*i)-&gt;name() &lt;&lt; endl);
+#ifdef CHECKSUMS
+                if ((*i)-&gt;type() != dods_structure_c &amp;&amp; (*i)-&gt;type() != dods_grid_c)
+                    m.reset_checksum();
+
+                (*i)-&gt;serialize(eval, dds, m, ce_eval);
+
+                if ((*i)-&gt;type() != dods_structure_c &amp;&amp; (*i)-&gt;type() != dods_grid_c)
+                    //cerr &lt;&lt; (*i)-&gt;name() &lt;&lt; ": " &lt;&lt;
+                    m.get_checksum(); //&lt;&lt; endl;
+#else
+                (*i)-&gt;serialize(eval, dds, m, ce_eval);
+#endif
+            }
+    }
+    catch (Error &amp; e) {
+        throw;
+    }
+}
+&lt;/source&gt;
+
+I did not test changes to read the checksum from the stream.
+
+I did not test computing a checksum for the DDX response.
+
+== Error ==
+
+Background: How the BES and OLFS communicate using chunked transmission: [[Hyrax - BES PPT]]</text>
+      <sha1>3x22wlfigrrxexsrebmsx79mm75k4p9</sha1>
+    </revision>
+  </page>
+</mediawiki>

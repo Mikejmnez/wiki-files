@@ -1,0 +1,164 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: DAP4 On the Wire Format</title>
+    <ns>0</ns>
+    <id>730</id>
+    <revision>
+      <id>8232</id>
+      <parentid>7887</parentid>
+      <timestamp>2012-05-08T22:55:23Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <origin>8232</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="12955" sha1="48qlztfzqyaemav3dezvmhzscgm4m5k" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+==Background==
+
+The current DAP2 clients use two different approaches to managing the packet of data that is sent by the server.
+
+The C++ libdap library uses what I will call an "eager" evaluation method. By this I mean that the whole packet is processed when received, is decomposed into its constituent parts (e.g. data arrays, sequence records, etc) and those parts are used to annotate the parsed DDS.
+
+In contrast, the oc library uses a "lazy" evaluation method. That is, the incoming packet is sent immediately into a file or into a chunk of heap memory. Almost no preproccessing occurs. Data extraction occurs only when requested by the user code through the API.
+
+==Problem addressed==
+The relative merits and demerits of lazy versus eager are well known and will not be repeated here.
+
+Lazy evaluation of the DAP2 packet is hampered by the inlining of variable length data: sequences and strings specifically. If it were not for those, the lazy evaluator could compute directly the location of the desired subset of data as requested by the user, and do so without having to read any intermediate information. But when, for example, Strings are inlined, then it is necessary to walk the packet piece by piece to step over the strings.
+
+I plan to use lazy evaluation for my implementations of DAP4, and propose here the outline of a format for the on-the-wire data packet that makes lazy operation fast and simple without, I believe, interferring with eager evaluation.
+
+==Proposed solution==
+Since we have previously agreed on the use of multipart-mime, the incoming data is presumed to be sequence of variable length ''parts'' with a unique id for each part and (optionally) a known length for each part. In order to accommodate streaming, the length is allowed to have the value -1, which indicates that the length was unknown at the time the part was sent out by the server and must be computed by the client when received.
+
+Under these assumptions, I propose the format described in this [http://dl.dropbox.com/u/53929684/otw.y grammar].
+
+Notes:
+* The grammar has a number of semantic (context sensitive) constraints not representable in the given context-free grammar.
+* In order to disambiguate the grammar, I had to add some extra tokens, BOA,EOA,BOS,EOS, to delimit certain unbounded lists. In a real implementation, the equivalent of these tokens would be handled by the enforcement of the semantic constraints.
+* The concept of ''group'' does not appear in the grammar. This is because a ''group'' is a lexical notion and thus only affects names, not the structure of the on-the-wire format.
+* The format presented here supports a limited form of  self-description in that various tags and counts are included in the format sufficient to allow for parsing an instance of the format.
+
+[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+==Grammar Overview==
+A narrative description of the grammar is as follows. The names enclosed in {...} are non-terminals in the grammar.
+
+Note: the following overview uses the term "sequence" (e.g {sequencepart}). However, vis-a-vis the [[DAP4: VLens (and Sequences)|sequence versus vlen]] discussion, this term also encompasses variable length dimensions as well.
+
+;{request} 
+:The complete on-the-wire {request} consists of a {mainpart} followed by zero or more {sequencepart} instances.
+;{mainpart} 
+:The {mainpart} consists of a part header followed by a {structure} followed by a {stringannex} part. The {mainpart} instance is assumed to be  a multi-part mime part and The {structure} represents a single, top-level dataset.&lt;br/&gt;&lt;br/&gt;The {mainpart} is of known computable length. That is, its size can be computed solely knowing the DDX for the incoming data. This means that strings and sequences are not represented inline, but instead are represented by "pointers" into subsequent {sequencepart} and {stringannex} parts that contain the sequence records and/or string data. Note that the "pointers" are actually the unique id's of those parts.
+;{partheader} 
+: The {partheader} is at the beginning of every multipart-mime part. It includes a unique identifier. With respect to the[[DAP4: DAP4 Multipart Mime Format | multipart mime proposal], this unique identifier is encoded as the ''Content-Id:'' header for the each part. This is different than the boundary marker. The {partheader} also contains the a header, ''Content-Length:'', recording the length in bytes of the data part of the mime part. If this is -1, then the length is unknown and must be computed by the client. The {partheader} also contains a {parttype} (''Content-Type:'') that indicates the type of the part.
+;{length}
+: The {length} is a 64 bit integer representing a length in bytes.
+;{parttype} 
+: The {parttype} is a 64 bit integer that defines the type of part and is equivalent to this enumeration.
+::&lt;nowiki&gt; enum parttype {mainpart=1, sequencepart=2, stringannex=3}&lt;/nowiki&gt;
+;{structure} 
+:A {structure} consists of a {tag} and a {fieldlist}. The {tag}'s {name} gives the name attribute value of the DDX element for this structure. The {tag}'s {typecode} indicates that this is a {structure} and the {tag's} count gives the number of fields in the structure. The {tag} is part of the self description feature.
+;{tag} 
+:A {tag} consists of a {name}, a {typecode} and a {count}. The {name} gives the name attribute of some DDX element. The {typecode} gives the type of the following component of the part. The count gives the number of items in that component.&lt;br/&gt;&lt;br/&gt;It should be noted that the tag could be removed from the on-the-wire format because it is reconstructable from the DDX. Removing it, however, would mean that the format is not parseable at all without knowing the DDX.
+;{name} 
+:A {name} is a character array of size 16. The purpose of the name is soley to aid in self-description, so it is an inlined fixed size string that is presumed to represent the 16 character prefix of the the name attribute of some DDX element.
+;{count} 
+:A {count} is a 64-bit integer.
+;{typecode} 
+:A {typecode} is a 64-bit integer encoding the equivalent of the following enumeration listing all the defined DAP4 primitive data types plus some structural types (structure,sequence,record).
+::enum typecode {char=1,
+::::                int8=2,int16=3,int32=4,int64=5,
+::::                uint8=6,uint16=7,uint32=8,uint64=9,
+::::                float32=10,float64=11,
+::::                opaque=12,string=13,
+::::                structure=14,sequence=15,record=16}
+;{fieldlist} 
+:A {fieldlist} is a sequence of {field}s. The number of fields was defined by the count in the tag for the enclosing {structure}.
+;{field} 
+:A {field} consists of a {tag} giving the field name, a {typecode} indicating the type of the field and a {count}, and finally, an {array}, where the count specifies the number of elements in the {array}.
+;{array} 
+:An {array}, generically, consists of the concatenation of one or more elements, where the elements all have the same {typecode} value, and whose length is defined by the {count} in the {tag} of the defining {field}.
+:* For most of the simple types, the {array} is a simple concatenation of instances of the specified type.
+:* For three of the simple types (char, int16, and uint16), the {array} is a simple concatenation of instances of the specified type that is then padded with ASCII NUL characters until the length of the array in bytes is a multiple of four; this is an accomodation to XDR.
+:* For an  array of opaque, the array is preceded by a count of the size of each opaque instance (this is separate from the count in the field of the total number of opaque instances). Each instance is an array of 8 bit bytes (uint8).
+:* For an array of strings, the array is a concatenation of {stringref}s (see below).
+:* For {structure} arrays, the array is a concatenation of the structure instances.
+:* For {sequence} arrays, the array is a concatenation of {sequenceref}s.
+;{stringref} 
+:A {stringref} is a "pointer" to a string in the {stringannex}. It consists of an {offset}, which indicates the relative start of the string in the annex, and a {count} to indicate the length of the string in utf-8 bytes. Note that this count is technically redundant with respect to the same count in the string in the annex. Note also that the unique id of the annex is not needed because the string annex part is presumed to immediately follow the part containing the {stringref}.
+;{sequenceref} 
+:A {sequenceref} is a concatenation of "pointers", where each  "pointer" gives the unique id of some corresponding {sequencepart} instance in some following multi-part mime part.
+;{stringannex} 
+:A {stringannex} is a part and consists of a {partheader} followed by a {stringlist}. Each {mainpart} or each {sequencepart} part is presumed to be followed immediately with an associated {stringannex} part.  The annex holds the content of all the strings referenced in that preceding part. If the annex is empty, then it may be elided.
+;{stringlist} 
+:A {stringlist} is a concatenation of {string} instances.
+;{string} 
+:A {string} is a {count} followed by a {chararray} whose length is specified by that {count}. The string content is followed by padding of ASCII NUL characters sufficient to bring the total size of the {string} instance up to a multiple of four (an accomodation to XDR).
+;{sequencepartlist} 
+:A {sequencepartlist} represents the content of the sequences referenced in the {mainpart} followed by the transitive closure of the content of all nested sequence instances referenced in all the sequence parts.
+;{sequencepart} 
+:A {sequencepart} is similar in form to a {mainpart} in that it consists of a {partheader} followed by data and followed by an optional {stringannex}. It differs from a {mainpart} in that its size is a variable number of {record} instances (i.e. a {sequence}). The number of records can be computed knowing the length of the {partheader} and knowing the size of the {record}. Note that the record's size is computable from the DDX because, like a {mainpart}, all nested sequences and strings have been moved to subsequence parts.
+;{sequence} 
+:A {sequence} is a tag indicating the {name} of the sequence from the DDX, the {typecode}, which is always the ''sequence'' typecode, followed by a {count} of the number of records, and a {recordarray}.
+;{recordarray} 
+:A {recordarray} is a concatenation of {record} instances.
+;{record} 
+:A {record} is essentially identical in format to a single {structure}. &lt;/dl&gt;
+
+==Discussion==
+The format described above assumes that the on-the-wire encoding is loosely based on the XDR encoding. However, some variations are assumed.
+* The encoding assumes "receiver makes it right", which means that the byte order on the wire is that of the sender, and that order may differ from that of the receiver. It is the duty of the receiver to determine if byte re-ordering is necessary and perform it as needed.
+* The above format includes short and unsigned short types. Normally, in XDR, all short/ushort instances are promoted to int/uint values. This encoding does not assume that, but in order to be consistent with the XDR four-byte rule, arrays of shorts are treated like arrays of bytes and are extended with ASCII NUL characters to a multiple of four bytes in length.
+
+==Rationale== 
+The above representation makes lazy evaluation very simple and a given item in a packet can be reached in o(1) time. Even with the case of nested sequences, the proper item can be reached in o(log n) time where n is the depth of the nesting.
+
+One cost is that a hash map is needed to map unique id's to offsets in the file or heap memory.
+
+The lazy versus eager cases also apply on the server side. Currently, for example, the opendap code on the thredds server takes the underlying data source (a .nc file for example), converts it to DAP2 and annotates the DDS with the data. Then as a second pass, the annotations are converted as need and send out over the wire.
+
+A lazy version would associate elements of the underlying source with the DDS. Tranfer of the data to the wire would then occur directly from the original source to the wire format a needed. Note that the ability to specify the part
+length as -1 (unknown) is useful in this situation.
+
+It can be hypothesized that the proposed encoding will also simplify the use of lazy evaluation on the server side.
+
+The above encoding has a number of pieces of extra data to support usable parsing of the format without needing the DDX. This extra information is primarily included in the {tag}. It is possible to remove that {tag} and still be able to parse the format as long as the DDX is available. Given that the {tag} overhead seems small, it seems reasonable to keep it.
+
+[[User:dmh|Dennis Heimbigner]]</text>
+      <sha1>48qlztfzqyaemav3dezvmhzscgm4m5k</sha1>
+    </revision>
+  </page>
+</mediawiki>

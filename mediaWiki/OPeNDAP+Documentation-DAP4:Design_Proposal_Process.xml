@@ -1,0 +1,79 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Design Proposal Process</title>
+    <ns>0</ns>
+    <id>755</id>
+    <revision>
+      <id>7467</id>
+      <parentid>7466</parentid>
+      <timestamp>2012-03-02T22:48:17Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>7467</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2488" sha1="itw75vgsgiqduhxw4a6zymxlvj7838s" xml:space="preserve">''James Gallagher''
+
+[[OPULS_Development | &lt;&lt; back to OPULS Development]]
+
+== Background ==
+We need a formal process for presenting and discussing proposals for the DAP4 design. It should be easy to use and accommodate the ideas/proposals we already have. It should also provide a way to preserve the important points of the discussions we have regarding the proposed idea. This doesn't mean that the entirety of the discussion should be included, often there is too much noise there to render that kind of material useful several month hence, but the main points should be preserved. Some of the proposals will very likely resolve themselves to tradeoffs where no choice is optimal and it will be very helpful to be able to return to the motivations for our decisions.
+
+== Proposed Process ==
+For Design Proposals, I propose these steps:
+
+# Anyone can write up a new idea and add it to the wiki. It would be best if the ideas are presented using the following format:
+#* Background;
+#* Problem addressed;
+#* Proposed solution;
+#* Rationale for the solution; 
+#* Discussion
+# We will put these ideas under the subsection titled ''Proposals''
+# Each proposal is listed in that subsection two parts:
+#* a pointer to a page containing the proposal
+#* a tag/annotation indicating the state of the proposal.
+# The possible states for a proposal will be:
+#; New : there can be any number of these
+#; Under Consideration : there can be at most one of these  as chosen by James or by consensus.
+#; Accepted : any number, but only so tagged after consideration and consensus acceptance.
+#; Declined : any number, if after consideration the proposal is not accepted
+#; Under Revision : any number if after consideration, it is deemed to need further work.
+
+For discussion, we will use email (or an email list if needed) for most of the discussion, but the conclusions of the discussion should be captured on the wiki page that contains the proposal.
+
+Notes:
+* I have a very simple template for the ideas at [[Template:DAP4 Design Proposal]]. The easiest way to use it is to use the ''&lt;nowiki&gt;{{subst: DAP4 Design Proposal}}&lt;/nowiki&gt;'' syntax to include the template. We might add to this template over time.
+* If the new wiki pages all start with the prefix ''DAP4:'' that will help organize the content and will automatically add all of the pages to the ''DAP4'' category. To explicitly add a page to that, or another, category, use the syntax ''&lt;nowiki&gt;[[Category:DAP4|&lt;&lt;page name&gt;&gt;]]&lt;/nowiki&gt;''.</text>
+      <sha1>itw75vgsgiqduhxw4a6zymxlvj7838s</sha1>
+    </revision>
+  </page>
+</mediawiki>

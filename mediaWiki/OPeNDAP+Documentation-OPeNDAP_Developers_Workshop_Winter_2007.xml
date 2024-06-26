@@ -1,0 +1,165 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>OPeNDAP Developer's Workshop, Winter 2007</title>
+    <ns>0</ns>
+    <id>54</id>
+    <revision>
+      <id>737</id>
+      <parentid>579</parentid>
+      <timestamp>2007-03-22T16:28:36Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Session 1 */</comment>
+      <origin>737</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4876" sha1="f3u8580ec6zrgwo82qemclhykgn3d9i" xml:space="preserve">= Wednesday February 21, 2007 =
+
+==Session 1 ==
+
+'''0900-1000 OPeNDAP Current Status'''
+
+* [[Media:Friday_summary.ppt| Introduction by Peter Fox, President of OPeNDAP]] ([[Media:Friday_summary.pdf | PDF]])
+'''1000-1015 Break'''
+
+==Session 2 (moderator: P. Fox) ==
+
+'''1015-1200 The OPeNDAP 4 Data Server (aka ''Hyrax'')''' &lt;!-- (20 minutes each) --&gt;
+
+* James Gallagher and Nathan Potter - [[Media:Hyrax-introduction-customization-02.21.2007.ppt | Customizing and Extending Hyrax]]
+* Patrick West - [[Media:OPeNDAP_Workshop_BES.ppt | Harnessing the power of the Server 4 Back-End Server modular framework]]
+* Jose H. Garcia - [[Media:GRID_OPENDAP.ppt | Numerical Grid Computations with the OPeNDAP Back End Server (BES)]]
+* Patrick West - [[Media:OPeNDAP_Workshop_SSL.ppt | OPeNDAP Server 4 Back-End Server Authentication and Authorization]]
+
+==Lunch 1215-1330 ==
+
+==Session 3 (moderator: P. Cornillon) ==
+
+'''1330-1530 Security''' &lt;!-- (20 minutes each) --&gt;
+
+* John Relph and Kenneth S. Casey - [[Media:OPeNDAP_Security_Feb2007.ppt | Software Development and Security at NOAA]]
+* John Caron - [[Media:OpendapSecurity.ppt | The THREDDS Data Server and OPeNDAP security]]
+* Tim Pugh - [http://wiki.opendap.org/twiki/pub/Developers/DevMeeting2007Program/2007_OPeNDAP_Dev_Meeting_BMRC.ppt | BMRCs OPeNDAP data service, how far can it reach?]
+* Discussion
+
+
+'''1530-1545 Break'''
+
+==Session 4 (moderator: J. Gallagher) ==
+
+'''1545-1730 Semantics''' &lt;!-- (20 minutes each) --&gt;
+
+* Benno Blumenthal- [[Media:OpenDAP2007.ppt | Using an RDF framework to carry metadata for datasets]]
+* Rob Raskin - [[Media:Sweet-opendap.ppt | SWEET - an upper-level ontology for Earth and Space Sciences]]
+* (withdrawn) Luis Bermudez - [[Media:Semanticsandopendap.pdf | MMI and CF]]
+* Peter Fox - [http://wiki.opendap.org/twiki/pub/Developers/DevMeeting2007Program/OPeNDAPSemantics_Fox_20070221.ppt | OPeNDAP and semantics]
+* Discussion
+
+==Dinner ==
+
+No-host dinner, Cafe Gondolier
+
+= Thursday February 22, 2007 =
+
+==Session 5 (moderator: D. Holloway) ==
+
+'''0900-1030 APIs and Clients''' &lt;!-- (30 minutes each) --&gt;
+
+* Roberto De Almeida - [[Media:OPeNDAPDevelopersMeeting2007_Python.ppt | Data Access Protocol meets Python]]
+        &lt;!-- * James Gallagher - Using the OPeNDAP C++ and Java Bindings --&gt;
+* Peter Cornillon - [[Media:2007-02-DevelopersMeeting.pdf|The Matlab OPeNDAP GUI Suite]]
+
+
+'''1030-1100 Break'''
+
+* Poster: Denis Nadeau - [[Media:OPeNDAP_nadeau_2.jpg|Enhancing Access to NASA Satellite Data OGC Web Services using OPeNDAP.]]
+
+==Session 5 continued  ==
+
+'''1100-1215 APIs and Clients (continued)'''
+
+* John Chamberlain - [[Media:2007_DevWorkshop_Chamberlain.ppt|OPeNDAP: User Versus Programmatic Access]]
+* Greg Janee - [[Media:janee.pdf|Data Discovery in a Distributed Environment]] and [[Media:janee-hardy.pdf|Darren Hardy's AGU presentation]].
+
+==Lunch 1215-1315 ==
+
+==Session 6 (moderator: P. Cornillon) ==
+
+'''1315-1445 Data Providers'''
+
+* Roy Mendelssohn - OPeNDAP at ERD with suggestions for future development 
+* Jim Potemra - [http://wiki.opendap.org/twiki/pub/Developers/DevMeeting2007Program/APDRCOPeNDAP.ppt | IPRC data transport, LAS and EPIC server]
+* Christopher Lynnes - [[Media:OpenDAP07.ppt|OPeNDAP Developments at the Goddard Earth Sciences DISC]]
+* Thomas LOUBRIEU - [[Media:boulder-mersea-opendap.ppt|OPeNDAP in European oceanography data management]]
+
+==Session 7 (moderator: N. Potter) ==
+
+'''1445-1715 Server-Side Operations with 1530-1600 Break''' &lt;!-- (20 minutes each) --&gt;
+
+* Wenli Yang - [[Media:OPeNDAPDevelopersMeeting2007WCS.ppt|The ROSES ACCESS OPeNDAP/OGC Gateway Project]]
+* Roland Schweitzer - [[Media:RHS-OPeNDAP_Dev_Con.ppt|Server-side OPeNDAP Analysis - A General Approach Utilizing Legacy Applications through TDS]]
+* Daniel L. Wang - [[Media:sld_WZJ07b.pdf|Server-side Data Reduction and Analysis with Script Workflow Analysis for MultiProcessing (SWAMP)]]
+* Thomas LOUBRIEU - [[Media:boulder-dap4cor_presentation.ppt|Dap4cor: A Dapper-like server for CORIOLIS in-situ data centre]]
+
+==Dinner ==
+
+Dinner on your own
+
+= Friday February 23, 2007 =
+
+==Session 9 (moderator: P. Fox) ==
+
+'''0900-0930 Server-side functions (continued)'''
+
+* James Gallagher - [[Media:Server-side-functions-02.22.2007.ppt|Server-side Functions for Geo-spatial Selection]]
+
+'''0930-1200 Strategies and Directions'''
+
+
+* Peter Fox - [[Media:Friday.ppt|Discussion (with nominal time allocations) focusing on...]]
+** community forums for deciding on standards processes within (and beyond) the OPeNDAP community, who is involved, timeframe, prototypes, etc. (1hr)
+** security (20min)
+** semantics (profiles, vocabularies)  (20min)
+** server-side (aggregation)  (20min)
+** response types (e.g. get_capabilities)  (20min)
+** metrics  (10min)
+** others: gateways, Server4, TDS and other general direction issues
+
+==Lunch ==
+
+==Hyrax Tutorial (FL2/1001) ==
+
+'''1300-1630'''</text>
+      <sha1>f3u8580ec6zrgwo82qemclhykgn3d9i</sha1>
+    </revision>
+  </page>
+</mediawiki>

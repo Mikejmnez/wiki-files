@@ -1,0 +1,418 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Metadata on Aggregations Tutorial</title>
+    <ns>0</ns>
+    <id>584</id>
+    <revision>
+      <id>5590</id>
+      <parentid>5587</parentid>
+      <timestamp>2010-04-20T19:31:05Z</timestamp>
+      <contributor>
+        <username>Mjohnson</username>
+        <id>42</id>
+      </contributor>
+      <comment>/* Metadata Specification on the New Coordinate Variable */</comment>
+      <origin>5590</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="14419" sha1="klq9vyqz4ywkuzoeg4j88n4xzsett67" xml:space="preserve">=== Metadata Specification on the New Coordinate Variable ===
+[[Category:Aggregation]]
+[[Category:NCML]]
+
+We can add metadata to the new coordinate variable in two ways:
+
+* Adding it to the &lt;variable&gt; element directly in the case where the new coordinate variable and values is defined explicitly
+* Adding the metadata to an ''automatically created'' coordinate variable by leaving the &lt;values&gt; element out
+
+The first case we have already seen, but we will show it again explicitly.  The second case is a little different and we'll cover it separately.
+
+==== Adding Metadata to the Explicit New Coordinate Variable ====
+
+We have already seen examples of explicitly defining the new coordinate variable and giving its values.  In these cases, the metadata is added to the new coordinate variable exactly like any other variable.  Let's see the example again:
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;netcdf title="joinNew Grid aggregation with explicit map"&gt;
+  
+  &lt;aggregation type="joinNew" dimName="sample_time"&gt;
+    &lt;variableAgg name="dsp_band_1"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97182070958.hdf"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97182183448.hdf"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97183065853.hdf"/&gt;  
+    &lt;netcdf location="data/ncml/agg/grids/f97183182355.hdf"/&gt; 
+  &lt;/aggregation&gt; 
+  
+  &lt;variable name="sample_time" shape="sample_time" type="float"&gt;
+    &lt;!-- Metadata here will also show up in the Grid map --&gt;
+    &lt;attribute name="units" type="string"&gt;Days since 01/01/2010&lt;/attribute&gt;
+    &lt;values&gt;100 200 400 1000&lt;/values&gt;
+  &lt;/variable&gt;
+
+&lt;/netcdf&gt;
+&lt;/pre&gt;
+
+We see that the '''units''' attribute for the new coordinate variable has been specified.  This subset of the DAS (we don't show the extensive global metadata) shows this:
+
+&lt;pre&gt;
+   dsp_band_1 {
+        Byte dsp_PixelType 1;
+        Byte dsp_PixelSize 2;
+        UInt16 dsp_Flag 0;
+        UInt16 dsp_nBits 16;
+        Int32 dsp_LineSize 0;
+        String dsp_cal_name "Temperature";
+        String units "Temp";
+        UInt16 dsp_cal_eqnNumber 2;
+        UInt16 dsp_cal_CoeffsLength 8;
+        Float32 dsp_cal_coeffs 0.125, -4;
+        Float32 scale_factor 0.125;
+        Float32 add_off -4;
+        sample_time {
+ ---&gt;           String units "Days since 01/01/2010";
+        }
+        dsp_band_1 {
+        }
+        lat {
+            String name "lat";
+            String long_name "latitude";
+        }
+        lon {
+            String name "lon";
+            String long_name "longitude";
+        }
+    }
+    sample_time {
+---&gt;        String units "Days since 01/01/2010";
+    }
+&lt;/pre&gt;
+
+We show the new metadata with the "---&gt;" marker.  Note that the metadata for the coordinate variable is also copied into the new map vector of the aggregated Grid.
+
+Metadata can be specified in this way for ''any'' case where the new coordinate variable is listed explicitly.  
+
+==== Adding Metadata to An Autogenerated Coordinate Variable ====
+
+If we expect the coordinate variable to be automatically added, we can also specify its metadata by referring to the variable without setting its values.  This is useful in the case of using ''netcdf@coordValue'' and we will also see it is very useful when using a &lt;scan&gt; element for dynamic aggregations.
+
+Here's a trivial  example using the default  case of the filename:
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;netcdf title="Test of adding metadata to the new map vector in a joinNew Grid aggregation"&gt;
+ 
+  &lt;aggregation type="joinNew" dimName="filename"&gt;
+    &lt;variableAgg name="dsp_band_1"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97182070958.hdf"/&gt; 
+  &lt;/aggregation&gt; 
+
+  &lt;!-- 
+       Add metadata to the created new outer dimension variable after
+       the aggregation is defined by using a placeholder variable
+       whose values will be defined automatically by the aggregation.
+  --&gt;  
+  &lt;variable type="string" name="filename"&gt;
+    &lt;attribute name="units" type="string"&gt;Filename of the dataset&lt;/attribute&gt;
+  &lt;/variable&gt;
+
+&lt;/netcdf&gt;
+&lt;/pre&gt;
+
+Note here that we just neglected to add a &lt;values&gt; element since we want the values to be generated automatically by the aggregation.  Note also that this is ''almost'' the same way we'd modify an existing variable's metadata.  The only difference is we need to "declare" the type of the variable here since technically the variable specified here is a placeholder for the generated coordinate variable.  So after the aggregation is specified, we are simply modifying the created variable's metadata, in this case the newly generated map vector.
+
+Here is the DAS portion with just the aggregated Grid and the new coordinate variable:
+
+&lt;pre&gt;
+   dsp_band_1 {
+        Byte dsp_PixelType 1;
+        Byte dsp_PixelSize 2;
+        UInt16 dsp_Flag 0;
+        UInt16 dsp_nBits 16;
+        Int32 dsp_LineSize 0;
+        String dsp_cal_name "Temperature";
+        String units "Temp";
+        UInt16 dsp_cal_eqnNumber 2;
+        UInt16 dsp_cal_CoeffsLength 8;
+        Float32 dsp_cal_coeffs 0.125, -4;
+        Float32 scale_factor 0.125;
+        Float32 add_off -4;
+        filename {
+            String units "Filename of the dataset";
+        }
+        dsp_band_1 {
+        }
+        lat {
+            String name "lat";
+            String long_name "latitude";
+        }
+        lon {
+            String name "lon";
+            String long_name "longitude";
+        }
+    }
+    filename {
+        String units "Filename of the dataset";
+    }
+&lt;/pre&gt;
+
+Here also the map vector gets a copy of the coordinate variable's metadata.
+
+We can also use this syntax in the case that ''netcdf@coordValue'' was used to autogenerate the coordinate variable:
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;netcdf title="joinNew Grid aggregation with coordValue and metadata"&gt;
+  
+  &lt;aggregation type="joinNew" dimName="sample_time"&gt;
+    &lt;variableAgg name="dsp_band_1"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97182070958.hdf" coordValue="1"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97182183448.hdf" coordValue="10"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97183065853.hdf" coordValue="15"/&gt;  
+    &lt;netcdf location="data/ncml/agg/grids/f97183182355.hdf" coordValue="25"/&gt; 
+  &lt;/aggregation&gt; 
+  
+  &lt;!-- Note: values are contrived --&gt;
+  &lt;variable name="sample_time" shape="sample_time" type="double"&gt;
+    &lt;attribute name="units" type="string"&gt;Days since 01/01/2010&lt;/attribute&gt;
+  &lt;/variable&gt;
+
+&lt;/netcdf&gt;
+&lt;/pre&gt;
+
+Here we see the metadata added to the new coordinate variable and associated map vector:
+
+&lt;pre&gt;
+Attributes {
+   dsp_band_1 {
+        Byte dsp_PixelType 1;
+        Byte dsp_PixelSize 2;
+        UInt16 dsp_Flag 0;
+        UInt16 dsp_nBits 16;
+        Int32 dsp_LineSize 0;
+        String dsp_cal_name "Temperature";
+        String units "Temp";
+        UInt16 dsp_cal_eqnNumber 2;
+        UInt16 dsp_cal_CoeffsLength 8;
+        Float32 dsp_cal_coeffs 0.125, -4;
+        Float32 scale_factor 0.125;
+        Float32 add_off -4;
+        sample_time {
+ ---&gt;           String units "Days since 01/01/2010";
+        }
+        dsp_band_1 {
+        }
+        lat {
+            String name "lat";
+            String long_name "latitude";
+        }
+        lon {
+            String name "lon";
+            String long_name "longitude";
+        }
+    }
+    sample_time {
+---&gt;        String units "Days since 01/01/2010";
+    }
+}
+&lt;/pre&gt;
+
+==== Parse Errors ====
+
+Since the processing of the aggregation takes a few steps, care must be taken in specifying the coordinate variable in the cases of autogenerated variables.  
+
+In particular, it is a Parse Error:
+
+* To specify the shape of the autogenerated coordinate variable if &lt;values&gt; are not set
+* To leave out the type or to use a type that does not match the autogenerated type
+
+The second can be somewhat tricky to remember since for existing variables it can be safely left out and the variable will be "found".  Since aggregations get processed fulled when the &lt;netcdf&gt; element containing them is closed, the specified coordinate variables in these cases are ''placeholders'' for the automatically generated variables, so they must match the name and type, but not specify a shape since the shape (size of the new aggregation dimension) is not known until this occurs.
+
+=== Metadata Specification on the Aggregation Variable Itself ===
+
+It is also possible to add or modify the attributes on the aggregation variable itself.  If it is a Grid, metadata can be modified on the contained array or maps as well.  Note that the aggregated variable begins with the metadata ''from the first dataset specified in the aggregation'' just like in a union aggregation.
+
+We will use a Grid as our primary example since other datatypes are similar and simpler and this case will cover those as well.
+
+==== An Aggregated Grid example ====
+
+Let's start from this example aggregation:
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;netcdf&gt; 
+  &lt;aggregation type="joinNew" dimName="filename"&gt;
+    &lt;variableAgg name="dsp_band_1"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97182070958.hdf"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97182183448.hdf"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97183065853.hdf"/&gt;  
+    &lt;netcdf location="data/ncml/agg/grids/f97183182355.hdf"/&gt; 
+  &lt;/aggregation&gt; 
+&lt;/netcdf&gt;
+&lt;/pre&gt;
+
+Here is the DAS for this unmodifed aggregated Grid (with the global dataset metadata removed):
+
+&lt;pre&gt;
+Attributes {
+   dsp_band_1 {
+        Byte dsp_PixelType 1;
+        Byte dsp_PixelSize 2;
+        UInt16 dsp_Flag 0;
+        UInt16 dsp_nBits 16;
+        Int32 dsp_LineSize 0;
+        String dsp_cal_name "Temperature";
+        String units "Temp";
+        UInt16 dsp_cal_eqnNumber 2;
+        UInt16 dsp_cal_CoeffsLength 8;
+        Float32 dsp_cal_coeffs 0.125, -4;
+        Float32 scale_factor 0.125;
+        Float32 add_off -4;
+        filename {
+        }
+        dsp_band_1 {
+        }
+        lat {
+            String name "lat";
+            String long_name "latitude";
+        }
+        lon {
+            String name "lon";
+            String long_name "longitude";
+        }
+    }
+    filename {
+    }
+}
+&lt;/pre&gt;
+
+We will now add attributes to all the existing parts of the Grid: 
+
+* The Grid Structure itself
+* The Array of data within the Grid
+* Both existing map vectors ('''lat''' and '''lon''')
+
+We have already seen how to add data to the new coordinate variable as well.
+
+Here's the NcML we will use.  Note we have added units data to the subparts of the Grid, and also added some metadata to the grid itself.
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;netcdf title="Showing how to add metadata to all parts of an aggregated grid"&gt;
+  
+  &lt;aggregation type="joinNew" dimName="filename"&gt;
+    &lt;variableAgg name="dsp_band_1"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97182070958.hdf"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97182183448.hdf"/&gt; 
+    &lt;netcdf location="data/ncml/agg/grids/f97183065853.hdf"/&gt;  
+    &lt;netcdf location="data/ncml/agg/grids/f97183182355.hdf"/&gt; 
+  &lt;/aggregation&gt; 
+
+  &lt;variable name="dsp_band_1" type="Structure"&gt; &lt;!-- Enter the Grid level scope --&gt;
+    
+1)  &lt;attribute name="Info" type="String"&gt;This is metadata on the Grid itself.&lt;/attribute&gt;
+    
+    &lt;variable name="dsp_band_1"&gt; &lt;!-- Enter the scope of the Array dsp_band_1 --&gt;
+2)    &lt;attribute name="units" type="String"&gt;Temp (packed)&lt;/attribute&gt; &lt;!-- Units of the array --&gt;
+    &lt;/variable&gt; &lt;!-- dsp_band_1.dsp_band_1 --&gt;
+    
+    &lt;variable name="lat"&gt; &lt;!-- dsp_band_1.lat map --&gt;
+3)    &lt;attribute name="units" type="String"&gt;degrees_north&lt;/attribute&gt;
+    &lt;/variable&gt; 
+    
+    &lt;variable name="lon"&gt; &lt;!-- dsp_band_1.lon map --&gt;
+4)    &lt;attribute name="units" type="String"&gt;degrees_east&lt;/attribute&gt;
+    &lt;/variable&gt; &lt;!-- dsp_band_1.lon map --&gt;    
+  &lt;/variable&gt; &lt;!-- dsp_band_1 Grid --&gt;
+
+  &lt;!-- Note well: this is a new coordinate variable so requires the correct type.
+  Also note that it falls outside of the actual grid since we must specify it 
+  as a sibling coordinate variable it will be made into a Grid when the netcdf is closed. 
+  --&gt;
+  &lt;variable name="filename" type="String"&gt;
+5)  &lt;attribute name="Info" type="String"&gt;Filename with timestamp&lt;/attribute&gt;
+  &lt;/variable&gt; &lt;!-- filename --&gt;
+ 
+&lt;/netcdf
+&lt;/pre&gt;
+
+Here we show metadata being injected in several ways, denoted by the 1) -- 5) notations.
+
+1) We are inside the scope of the top-level Grid variable, so this metadata will show up in the attribute table inside the Grid Structure.
+2) This is the actual data Array of the Grid, '''dsp_band_1.dsp_band_1'''.  We specify the units are a packed temperature.
+3) Here we are in the scope of a map variable, '''dsp_band_1.lat'''.  We add the units specification to this map.
+4) Likewise, we add units to the '''lon''' map vector.
+5) Finally, we must close the actual grid and specify the metadata for the ''NEW'' coordinate variable as a sibling of the Grid since this will be used as the canonical prototype to be added to all Grid's which are to be aggregated on the new dimension.  Note in this case (unlike previous cases) the type of the new coordinate variable is required since we are specifying a "placeholder" variable for the new map until the Grid is actually processed once its containing &lt;netcdf&gt; is closed (i.e. all data is available to it).
+
+The resulting DAS (with global dataset metadata removed for clarity):
+
+&lt;pre&gt;
+Attribute {
+... global data clipped ...
+  dsp_band_1 {
+        Byte dsp_PixelType 1;
+        Byte dsp_PixelSize 2;
+        UInt16 dsp_Flag 0;
+        UInt16 dsp_nBits 16;
+        Int32 dsp_LineSize 0;
+        String dsp_cal_name "Temperature";
+        String units "Temp";
+        UInt16 dsp_cal_eqnNumber 2;
+        UInt16 dsp_cal_CoeffsLength 8;
+        Float32 dsp_cal_coeffs 0.125, -4;
+        Float32 scale_factor 0.125;
+        Float32 add_off -4;
+ 1)   String Info "This is metadata on the Grid itself.";
+        filename {
+ 5)       String Info "Filename with timestamp";
+        }
+        dsp_band_1 {
+2)        String units "Temp (packed)";
+        }
+        lat {
+            String name "lat";
+            String long_name "latitude";
+3)        String units "degrees_north";
+        }
+        lon {
+            String name "lon";
+            String long_name "longitude";
+4)        String units "degrees_east";
+        }
+    }
+    filename {
+5)    String Info "Filename with timestamp";
+    }
+}
+&lt;/pre&gt;
+
+We have annotated the DAS with numbers representing which lines in the NcML above correspond to the injected metadata.</text>
+      <sha1>klq9vyqz4ywkuzoeg4j88n4xzsett67</sha1>
+    </revision>
+  </page>
+</mediawiki>

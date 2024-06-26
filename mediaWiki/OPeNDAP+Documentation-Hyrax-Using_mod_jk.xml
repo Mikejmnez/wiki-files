@@ -1,0 +1,195 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - Using mod jk</title>
+    <ns>0</ns>
+    <id>123</id>
+    <revision>
+      <id>5717</id>
+      <parentid>1414</parentid>
+      <timestamp>2010-06-22T18:31:30Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Configuration Details */</comment>
+      <origin>5717</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7381" sha1="5ypq77coh577q4jyq7w5h8lbl0xmqqc" xml:space="preserve">'''Request for Alternate Solutions''': By no means do I imagine that I have outlined a best solution here. If these suggestions work for you then we are both happy. If you have a better method for achieving the same or similar goals then I would love to hear about it. If you're stuck and can't figure out how to achieve your goals, get in touch and I will try to help. - ndp (ndp at opendap dot org)
+
+=Overview=
+
+==mod_jk==
+
+Most discussions of integrating Tomcat and Apache start (and often end with) an Apache module called ''mod_jk''. This module allows Tomcat to map directly in to the Apache URI space. However it has limitations:
+
+*When using ''mod_jk'' one must specify a "mount point", a place in the Apache servers URI space beneath which all requests get sent to Tomcat. As far as I can tell from using ''mod_jk'' the name of the mount point must be synonymous with the servlet context (and possibly servlet name, depending on the Tomcat configuration). This works well, and if your goal is to build a web site using Apache and Hyrax from the ground up it is probably a reasonable way to proceed. However, it does not address the goal of preserving the existing OPeNDAP data access URL's when migrating to Hyrax. For this you need to use ''mod_rewrite''.&lt;br /&gt;&lt;br /&gt;
+*It is not clear to me if using ''mod_jk'' is more efficient or in any other way preferable to using a reverse proxy.
+
+
+----
+=Install Hyrax=
+Install Hyrax as described in the [[Hyrax 1.2: Installation Instructions | installation instructions]]. No matter how you want things to end up you have to do this first.
+
+
+----
+
+=Integrate Tomcat with Apache 2.x using mod_jk , mod_rewrite, and mod_proxy=
+(This section assumes that your Tomcat server is running on the same system as your Apache server. If not you will need to modify the instructions as needed. )
+
+==Make sure you've got mod_rewrite, and mod_proxy==
+Depending on your Apache installation you may need to rebuild/compile Apache to enable ''rewrite'' and ''proxy''. You should first look at the ''http.conf'' configuration file. Find the ''LoadModule'' directives and look for the lines that load the proxy and rewrite modules. They should look something like this:
+ LoadModule rewrite_module modules/mod_rewrite.so
+ LoadModule proxy_module modules/mod_proxy.so
+
+If you see the modules loaded then your set to go, skip to the next section.
+
+If not then you will probably need to compile Apache from source and enable the rewrite and proxy modules.
+
+#Make sure you have the Apache source.
+#Run the Apache configure script with the --enable-rewrite and --enable-proxy switches. Minimally your configure command should look like this: &lt;br/&gt;&lt;br/&gt;&lt;code&gt;./configure --enable-rerwrite --enable-proxy&lt;/code&gt;&lt;br/&gt;&lt;br/&gt;
+#(Re)compile.
+#(Re)install.
+
+==Install mod_jk==
+
+'''Before proceeding make sure you have installed the ''mod_jk'' library in your Apache ''modules'' directory.'''
+
+==Configuration Details==
+You will need to find an example of a ''workers.properties'' file. An example may be distributed with your Tomcat bundle (I didn't get one with 5.5.15, but I found one in an older - 5.5.9 - distribution). I would use the "minimal" example to start. Get it into your ''$CATALINA_HOME/conf'' directory. It most likely it contains the following 4 lines:
+
+ worker.list=hyrax
+ worker.hyrax.type=ajp13
+ worker.hyrax.host=localhost
+ worker.hyrax.port=8009
+
+Now you need to edit the Tomcat ''server.xml'' file to enable the AJP 1.3 connector. Remember - the ''workers.properties'' file and the connector definition must agree! Inside of ''$CATALINA_HOME/conf/server.xml'' add (or possibly uncomment) the AJP connector definition inside of the service named Catalina:
+&lt;pre&gt;
+    &amp;lt;Service name=&amp;quot;Catalina&amp;quot;&amp;gt;
+    .
+    .
+    .
+    &amp;lt;!-- Define an AJP 1.3 Connector on port 8009 --&amp;gt;
+    &amp;lt;Connector port=&amp;quot;8009&amp;quot;
+    enableLookups=&amp;quot;false&amp;quot; redirectPort=&amp;quot;8443&amp;quot; protocol=&amp;quot;AJP/1.3&amp;quot; /&amp;gt;
+    .
+    .
+    .
+    &amp;lt;/Service&amp;gt;
+&lt;/pre&gt;
+
+Now, follow the ''mod_jk'' instructions for using Tomcat auto-configure. This should create the file ''$CATALINA_HOME/conf/'''auto'''/mod_jk.conf''. I suggest you move this file to ''$CATALINA_HOME/conf/jk/mod_jk.conf'' so that you may edit it with the fear that it may be overwritten. Assuming you have done that, add the following line to your Apache server's ''http.conf'' file:
+
+ Include /usr/local/apache-tomcat-5.5.15/conf/jk/mod_jk.conf
+
+Now you will need to edit the ''$CATALINA_HOME/conf/jk/mod_jk.conf'' file. It should be quite simple to begin with, mine contained this:
+&lt;pre&gt;
+    # load mod_jk
+    &amp;lt;IfModule !mod_jk.c&amp;gt;
+        LoadModule jk_module &amp;quot;/usr/local/apache2/modules/mod_jk.so&amp;quot;
+    &amp;lt;/IfModule&amp;gt;
+&lt;/pre&gt;
+
+To this we need to add the stuff to turn on reverse proxies and rewrite. Then we need to configure ''mod_jk'' and map the old OPeNDAP data URL's to the new ''mod_jk'' service.
+
+To turn on reverse proxies and rewrite. Add the following lines to the file:
+&lt;pre&gt;
+    # Enable the rewrite module 
+    RewriteEngine on
+    # Target it's logging somewhere useful 
+    RewriteLog /usr/local/apache2/logs/rewrite.log
+    # Turn on logging (Set to 0 to disable) 
+    RewriteLogLevel 2
+
+    #Configure mod_proxy to disable everything except reverse proxies.
+    ProxyRequests Off
+    &amp;lt;Proxy *&amp;gt;
+    Order deny,allow
+    Allow from all
+    &amp;lt;/Proxy&amp;gt;
+&lt;/pre&gt;
+
+To configure ''mod_jk'', add the following to the ''$CATALINA_HOME/conf/jk/mod_jk.conf'' file:
+
+&lt;pre&gt;
+    # Set mod_jk for our servlet
+    JkWorkersFile /usr/local/apache-tomcat-5.5.15/conf/workers.properties.minimal
+    JkLogFile /usr/local/apache-tomcat-5.5.15/logs/mod_jk.log
+    JkLogLevel error
+    JKMount /opendap/* ajp13
+&lt;/pre&gt;
+
+To map the old OPeNDAP data URL's to the new service (assuming they were located at ''http://your.server/cgi-bin/nph-dods/...'') add this to the ''$CATALINA_HOME/conf/jk/mod_jk.conf'' file:
+
+&lt;pre&gt;
+    # Use a secure reverse proxy to enable mapping the old URL's too tomcat.
+    RewriteRule ^/cgi-bin/nph-dods(.*) http://localhost:8080/opendap/hyrax/$1 [P]
+&lt;/pre&gt;
+
+In the end my ''$CATALINA_HOME/conf/jk/mod_jk.conf'' file looked like this:
+
+&lt;pre&gt;
+    # We need rewrite and proxy to map the old URL's to the new ones.
+    RewriteEngine on
+    RewriteLog /usr/local/apache2/logs/rewrite.log
+    RewriteLogLevel 2
+    ProxyRequests Off
+
+    &amp;lt;Proxy *&amp;gt;
+        Order deny,allow
+        Allow from all
+    &amp;lt;/Proxy&amp;gt;
+
+    # load mod_jk
+    &amp;lt;IfModule !mod_jk.c&amp;gt;
+        LoadModule jk_module &amp;quot;/usr/local/apache2/modules/mod_jk.so&amp;quot;
+    &amp;lt;/IfModule&amp;gt;
+
+    # Set mod_jk for our servlet
+    JkWorkersFile /usr/local/apache-tomcat-5.5.15/conf/workers.properties.minimal
+    JkLogFile     /usr/local/apache-tomcat-5.5.15/logs/mod_jk.log
+    JkLogLevel    error
+    JKMount       /opendap/* ajp13
+  
+    # Use a secure reverse proxy to enable mapping the old URL's too tomcat.
+    RewriteRule   ^/cgi-bin/nph-dods(.*) http://localhost:8080/opendap/hyrax/$1  [P]
+&lt;/pre&gt;
+
+All of this could be added directly to Apache's ''http.conf'' file, and is included in it by the line that you added earlier that looked like this:
+
+    Include /usr/local/apache-tomcat-5.5.15/conf/jk/mod_jk.conf
+
+Save your files, restart Tomcat and Apache and, that's it...
+
+Don't you think just using proxies to do the whole thing is simpler?</text>
+      <sha1>5ypq77coh577q4jyq7w5h8lbl0xmqqc</sha1>
+    </revision>
+  </page>
+</mediawiki>

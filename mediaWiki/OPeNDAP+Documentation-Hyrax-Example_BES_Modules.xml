@@ -1,0 +1,94 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - Example BES Modules</title>
+    <ns>0</ns>
+    <id>130</id>
+    <revision>
+      <id>5669</id>
+      <parentid>3124</parentid>
+      <timestamp>2010-05-09T19:47:36Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <origin>5669</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2380" sha1="mvo0r4ufd2fisb7nwry9dlbs97dw05m" xml:space="preserve">We have provided you with two example BES modules. These modules are the Hello World module and the CSV data handler module.
+
+Both of these modules are available from the SVN source code repository and are not included in the source tar ball or the binary distributions. To get them you will need to 'check out' the bes source code for [http://scm.opendap.org/svn/trunk/bes/hello_world this module].
+
+=Hello World=
+The Hello World module, the SampleModule class, adds a new command to the BES, the SampleSayXMLCommand. Using the BES command line client you would have an input file with the following:
+
+&lt;pre&gt;
+  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;request reqID="some_unique_value" &gt;
+      &lt;say what="hello" to="world" /&gt;
+  &lt;/request&gt;
+&lt;/pre&gt;
+
+The XML response document would look like the following:
+
+&lt;pre&gt;
+  &lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+  &lt;say&gt;&lt;response&gt;&lt;text&gt;hello world&lt;/text&gt;&lt;/response&gt;&lt;/say&gt;
+&lt;/pre&gt;
+
+It also adds the SampleRequestHandler class, which handles &lt;code&gt;help&lt;/code&gt; and &lt;code&gt;version&lt;/code&gt; requests, the SampleSayResponseHandler class, which handles building AND populating the informational response, and the SayReporter, which reports on what is being said to who in a log file configured in the BES configuration file. You can see the sample input and output in the bes-testsuite directory under bes/hello_world. Adding this sample module to your BES configuration file is also easy. It uses the same mechanism that data handlers use, providing a shell script, bes-sample-data.sh, to add information to the configuration file.
+
+=CSV Data Handler Module=
+
+The CSV Data Handler Module handles requests for data in the CSV format (comma separated). Here is an example file:
+
+&lt;pre&gt;
+"Station&lt;String&gt;","latitude&lt;Float32&gt;","longitude&lt;Float32&gt;","temperature_K&lt;Float32&gt;","Notes&lt;String&gt;"
+"CMWM",-34.7,23.7,264.3,
+"BWWJ",-34.2,21.5,262.1,"Foo"
+"CWQK",-32.7,22.3,268.4,
+"CRLM",-33.8,22.1,270.2,"Blah"
+"FOOB",-32.9,23.4,269.69,"FOOBAR"
+&lt;/pre&gt;
+
+The types of data allowed are:
+* String
+* Byte
+* Int16
+* Int32
+* Float32
+* Float64
+
+The CSV Data Handler Module class CSVModule adds a request handler (CSVRequestHandler) to handle populating DAP2 response objects (DAS, DDS, DataDDS) as well as the standard response for help and version. The Module also tells the BES that it can handle THREDDS catalog requests.
+
+[[Category:BES Modules|Example BES Modules]]</text>
+      <sha1>mvo0r4ufd2fisb7nwry9dlbs97dw05m</sha1>
+    </revision>
+  </page>
+</mediawiki>

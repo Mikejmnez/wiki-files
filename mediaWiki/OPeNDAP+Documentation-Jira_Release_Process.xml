@@ -1,0 +1,78 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Jira Release Process</title>
+    <ns>0</ns>
+    <id>996</id>
+    <revision>
+      <id>13520</id>
+      <parentid>13243</parentid>
+      <timestamp>2024-01-23T21:14:32Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <origin>13520</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2804" sha1="hlfgi0tgzx59m5arxupcl540tqteswv" xml:space="preserve">[[ReleaseSprintNotes | back]]
+
+This is a work in progress... (jhrg 12/05/18)
+
+== OPeNDAP JIRA ==
+
+===Get all the closed tickets for this release ===
+
+[[File:Screenshot 2018-12-05 15.36.01.png|200px|thumb|right|Jira Recently Closed Tickets]]
+
+Get closed tickets, numbers, et c., from Jira. Go to the Issues and Filters page and Look at recently closed issues. Edit the query by clicking on the 'Advanced' link at the upper right, and then get the list of issues as an Excel/CSV file. This makes the issues, their obscure ticket numbers, et c., easy to copy and paste into the release web page.
+
+These steps worked when were not also using Jira for our 'Build releases,' but now that we are, editing the 'fixVersion' makes those more work and does not seem to add much to the 'releases for people outside of NGAP' since they cannot see the 'NASA Jira' and thus have no way of knowing about this change.
+
+Let's stop making this change unless/until a way to do so that works with the Build Releases presents itself.
+
+== Don't Do this &lt;s&gt;Update the Release Version&lt;/s&gt; ==
+
+[[Image:Screenshot 2018-12-05 15.16.27.png|200px|thumb|right|Jira Releases]]
+
+Add a new 'Release version' on the Jira 'Releases' page. Then 'release' the current version, moving all unclosed tickets up to the next logical version.
+
+== Don't do this &lt;s&gt;NASA JIRA&lt;/s&gt; ==
+
+# Go to the [https://bugs.earthdata.nasa.gov/secure/RapidBoard.jspa?rapidView=901&amp;projectKey=HYRAX&amp;view=planning.nodetail&amp;issueLimit=100 Hyrax JIRA page at NASA].
+# Find the Version for the pending Hyrax release. If you can only find the Version for a previous release make a new Version title Hyrax-&lt;numbers&gt; for the new release.
+# Locate the tickets closed since the last Hyrax release date. You can easily find this out by using the [https://bugs.earthdata.nasa.gov/issues/?filter=23327 saved issue filter "Closed Since"]. You may have to edit the filter so the "since date" reflects the date of the previous Hyrax release.
+# Examine each ticket to determine if the work done resulted in a change to Hyrax or to a change to some part of the NGAP stack. Add the Hyrax Version tag to the tickets that have become part of the publicly available Hyrax code. Do not include changes that are associated with NGAP CI/CD, NGAP deployments, or NGAP Cloud provisioning. The idea is to only tag changes that were made to Hyrax that took place in our GitHub repository and that changed the server that we release publicly. In theory this process should be happening as we go along in the NGAP JIRA process, so this step should really be a "sweep" to make sure nothing important was missed.
+# When this has been completed you can go to the Hyrax Version page and make it a Release.
+# Copy the URL for the release page for inclusion in the Hyrax release page on www.opendap.org</text>
+      <sha1>hlfgi0tgzx59m5arxupcl540tqteswv</sha1>
+    </revision>
+  </page>
+</mediawiki>

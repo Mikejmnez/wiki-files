@@ -1,0 +1,80 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>ProgrammerGuideChapter5</title>
+    <ns>0</ns>
+    <id>194</id>
+    <revision>
+      <id>1874</id>
+      <parentid>1198</parentid>
+      <timestamp>2008-01-26T13:35:48Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Linking Your Program */</comment>
+      <origin>1874</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1595" sha1="m2z504p6a6zucf0l44zjwgdvrz4m9ij" xml:space="preserve">=Linking Your Program=
+
+
+
+
+To link a user program to the OPeNDAP client-library version of a data
+access API library, you need only substitute the name of the
+reimplemented API library for the original, and add the OPeNDAP Data
+Access Protocol library (&lt;font color='green'&gt;libdap++&lt;/font&gt;) to the link list.
+
+Because the DAP library and the API have circular dependencies they
+must each be included on the linker command line twice. An example of
+this can be seen in the OPeNDAP-NetCDF Makefile; the value of ''LIBS''
+is passed to the linker &lt;font color='green'&gt;ld&lt;/font&gt;. Note that the API library is listed
+first.
+
+
+&lt;pre&gt;
+LIBS = -lnc-dods -ldap++ -lnc-dods -ldap++
+&lt;/pre&gt;
+
+You should have users link their programs using &lt;font color='green'&gt;gcc&lt;/font&gt; or &lt;font color='green'&gt;g++&lt;/font&gt;
+since the libraries are all built using those tools. In particular,
+&lt;font color='green'&gt;g++&lt;/font&gt; includes libstdc++ (and libg++) by default when it builds an
+executable program from object modules. If you use &lt;font color='green'&gt;gcc&lt;/font&gt; instead
+of &lt;font color='green'&gt;g++&lt;/font&gt; when you link, be sure to include these libraries as well
+after all the libraries listed above. If you don't use &lt;font color='green'&gt;gcc&lt;/font&gt;, but
+instead use the linker directly (i.e, you call &lt;font color='green'&gt;ld&lt;/font&gt; yourself) you
+are on your own - you can use &lt;font color='green'&gt;gcc -V&lt;/font&gt; to determine what flags and
+additional libraries it uses that are specific to your system and then
+experiment with those. We cannot tell you how to proceed since each
+UNIX variant requires different flags and libraries.</text>
+      <sha1>m2z504p6a6zucf0l44zjwgdvrz4m9ij</sha1>
+    </revision>
+  </page>
+</mediawiki>

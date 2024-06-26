@@ -1,0 +1,97 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: DAP4 Replacing Chunking</title>
+    <ns>0</ns>
+    <id>839</id>
+    <revision>
+      <id>9148</id>
+      <parentid>9146</parentid>
+      <timestamp>2012-08-24T18:11:53Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <origin>9148</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2218" sha1="mju0p8tkia9w9hgrmk39xqty9s8vyp7" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+== Background ==
+Assuming one believes that the multipart-mime boundary is
+indeed a unique string in the response, it makes the
+existing specification for chunking of the data part of Data DMR
+redundant.
+
+== Proposal ==
+I propose that we get rid of the chunking and instead
+modify the multipart-mime representation to be three
+parts instead of the current two. The additional, third
+part would indicate the success or failure of the
+preceding parts. Because the multipart-mime boundary is
+(by assumption) unique, it is always possible to
+unambiguously locate the final success/failure part.
+This satisfies the original reason for using chunking,
+which was to allow for the insertion of an error
+message into the output stream at any point.
+
+This proposal has a number of advantages.
+# It simplifies the client and server processing by eliminating the extra processing required by chunking.
+# It removes the need to test the chunking layer.
+# It no longer duplicates the existing HTTP chunked transfer encoding.
+# It works for any data format: binary, json, protobuf, utf. They all are treated the same.
+
+&lt;strike&gt;The cost is in searching the incoming stream of bytes
+for the boundary. Using, for example, the Boyer-Moore [1]
+fast string search I believe that cost is low, especially
+since the boundary string is long.&lt;/strike&gt;
+
+Note that every response will end with the following.
+ (1) --&amp;lt;boundary&amp;gt;
+ (2) success info or error info
+ (3) --&amp;lt;boundary&amp;gt;
+
+So this trailer can be easily located by searching backward from the end of th
+response to locate the first boundary (line 1). This only requires searching
+at most a few hundred bytes.
+
+[[User:dmh|Dennis Heimbigner]]
+
+&lt;strike&gt;[1] [http://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string_search_algorithm Boyer-Moore Search]. Note that this page also contains both C and Java implementation code.&lt;/strike&gt;
+
+=== Possible Extension ===
+It is possible to extend this proposal to do 
+proper semantic chunking by extending the multipart-mime
+format from 2+1 parts to 2+N parts. Each of the N middle parts
+would contain the data for a single variable.</text>
+      <sha1>mju0p8tkia9w9hgrmk39xqty9s8vyp7</sha1>
+    </revision>
+  </page>
+</mediawiki>

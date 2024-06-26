@@ -1,0 +1,3383 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Specification Volume 1</title>
+    <ns>0</ns>
+    <id>826</id>
+    <revision>
+      <id>13089</id>
+      <parentid>13088</parentid>
+      <timestamp>2021-11-05T22:53:29Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Variables */</comment>
+      <origin>13089</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="148489" sha1="grq291er9sl3uy8lw674yhleelqnlm9" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+&lt;!-- Copyright 2016, UCAR/Unidata --&gt;
+&lt;!-- See the COPYRIGHT file for more information. --&gt;
+&lt;!-- When inserting text, AVOID the following situations: --&gt;
+&lt;!-- * multiple occurrences of &lt;a href=...&gt; on a single line. --&gt;
+&lt;!-- * &lt;a ...&gt; and the closing &lt;/a&gt; on different lines. --&gt;
+
+
+
+&lt;div style="font-size: 24pt;line-height: 100%"&gt;'''The Data Access Protocol: DAP Version 4.0'''&lt;/div&gt;&lt;br/&gt;
+&lt;div style="font-size: 24pt;line-height: 100%"&gt;'''Volume 1: Data Model and Serialized Representation'''&lt;/div&gt;
+
+
+&lt;table border=1 width="85%"&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Date:&lt;/td&gt;&lt;td&gt;May 31, 2012&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Last Revised:&lt;/td&gt;&lt;td&gt;24 February 2016&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Status:&lt;/td&gt;&lt;td&gt;Draft&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Authors:&lt;/td&gt;&lt;td&gt;John Caron (Unidata)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;Ethan Davis (Unidata)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;David Fulker (OPeNDAP)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;James Gallagher (OPeNDAP)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;Dennis Heimbigner (Unidata)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;&lt;/td&gt;&lt;td&gt;Nathan Potter (OPeNDAP)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="20%"&gt;Copyright:&lt;/td&gt;&lt;td&gt;2016 University Corporation for Atmospheric Research and Opendap.org&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+
+
+
+'''''Abstract'''''
+
+&lt;i&gt;This document defines the Data Access Protocol (DAP) version
+4.0 (referred to also as DAP4). This data transmission
+protocol is intended to supersede all previous versions of
+the DAP protocol. DAP4 is designed specifically for science
+data, but it is intended to be discipline neutral.
+The protocol relies on widely used and stable
+standards, and is capable of representing a wide variety of
+scientific data types.&lt;/i&gt;
+
+Distribution of this document is unlimited.
+
+This document takes material from the DAP2 specification and
+the OPULS Wiki page.
+
+
+'''Change List'''
+
+&lt;table border=1 width="85%"&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.05.24:&lt;/td&gt;
+    &lt;td&gt;Initial Draft&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.05.27&lt;/td&gt;
+    &lt;td&gt;Added specification of chunk order&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.05.28&lt;/td&gt;
+    &lt;td&gt;Added specification and interpretation of simple queries&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.05.28&lt;/td&gt;
+    &lt;td&gt;Added discussion about nested sequences.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.05.29&lt;/td&gt;
+    &lt;td&gt;Formatting changes&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.6.05&lt;/td&gt;
+    &lt;td&gt;Removed serialized representation sections and constraint sections until James provides direction.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.6.24&lt;/td&gt;
+    &lt;td&gt;Merge all changes from Gallagher, Potter, and Caron, except as noted.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.6.24&lt;/td&gt;
+    &lt;td&gt;Removed all references to Sequences.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.6.24&lt;/td&gt;
+    &lt;td&gt;Inserted James' version of serialized representation.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.6.25&lt;/td&gt;
+    &lt;td&gt;Added DMR RELAX-NG Grammar.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.6.24&lt;/td&gt;
+    &lt;td&gt;Added (semi-)formal description of the DAP4 serialization scheme.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.6.26&lt;/td&gt;
+    &lt;td&gt;Added: (1) Revised Char type (2) Revised unlimited dimension rules (3) revised MAP rules. (4) Removed HTTP references&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.7.09&lt;/td&gt;
+    &lt;td&gt;Added discussion of identifier&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.7.10&lt;/td&gt;
+    &lt;td&gt;Added discussion of XML escaping&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.7.10&lt;/td&gt;
+    &lt;td&gt;Fix discrepancies between the formal definition of the on-th-wire format and the examples.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.7.12&lt;/td&gt;
+    &lt;td&gt;Removed UByte and made Byte == UInt8&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.8.21&lt;/td&gt;
+    &lt;td&gt;Added draft constraints section&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.8.25&lt;/td&gt;
+    &lt;td&gt;Improved the discussion of named slices in constraints.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.9.4&lt;/td&gt;
+    &lt;td&gt;Minor change to the grammar for simple constraints.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.9.6&lt;/td&gt;
+    &lt;td&gt;Updated the Data Response section so that it no longer mentions Multipart MIME; edited the sections on FQNs and Attributes. I've added nested attributes' back into the text. I also added Sequence' in several places where we will need it once we've worked out how those are to be handled. &lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.11.1&lt;/td&gt;
+    &lt;td&gt;Integrate Jame's changes with recent changes&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.11.9&lt;/td&gt;
+    &lt;td&gt;Rebuild the .docx because of repeated Word crashes; minor formatting info changed/lost.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2012.11.23&lt;/td&gt;
+    &lt;td&gt;Add a Dataset construct to make the root group concept clear syntactically.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.3.8&lt;/td&gt;
+    &lt;td&gt;Made unlimited into a boolean attribute because it does have a size.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.4.7&lt;/td&gt;
+    &lt;td&gt;Inserted the new checksum description.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.4.15&lt;/td&gt;
+    &lt;td&gt;Removed all mention of unlimited wrt Dimensions&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.4.15&lt;/td&gt;
+    &lt;td&gt;Remove the base and ns attributes from &amp;lt;Dataset&amp;gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.4.15&lt;/td&gt;
+    &lt;td&gt;Introduce &amp;lt;Sequence&amp;gt; as a replacement for variable length dimensions; The term ''Sequence'' is subject to future change. &lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.10.14&lt;/td&gt;
+    &lt;td&gt;Clarify the maximum number of elements as a function of the maximum
+        number of bytes.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.10.14&lt;/td&gt;
+    &lt;td&gt;Enforce a specific order on declarations in a Group body.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.11.22&lt;/td&gt;
+    &lt;td&gt;Added sections for DSR, Async, and Error responses and their schemas&lt;/td&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2013.11.22&lt;/td&gt;
+    &lt;td&gt;Specified the case sensitivity of XML element names and XML attribute names&lt;/td&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2014.07.04&lt;/td&gt;
+    &lt;td&gt;Make a pass to clean up and clarify (dmh)&lt;/td&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2016.02.14&lt;/td&gt;
+    &lt;td&gt;Rollback to version of 2015.12.16&lt;/td&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2016.02.24&lt;/td&gt;
+    &lt;td&gt;Add back the multiple disjoint slice subset.&lt;br&gt;Provide a general mechanism for arbitrary reserved names.&lt;/td&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2016.10.25&lt;/td&gt;
+    &lt;td&gt;Add _DAP4_Little_Endian attribute to the DMR to reflect the bytorder used to encode the serialized data.&lt;/td&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2016.12.5&lt;/td&gt;
+    &lt;td&gt;Forgot to mention adding the special names section (5.3)&lt;/td&gt;
+&lt;tr&gt;&lt;td width="25%"&gt;2016.12.18&lt;/td&gt;
+    &lt;td&gt;Clarified the reserved names section (5.3) to say that all names beginning with "_" are reserved, but that the reverse DNS case is preferred.&lt;/td&gt;
+&lt;/table&gt;
+
+==Introduction==
+This specification defines the protocol referred to as the Data Access Protocol, version 4.0 ("DAP4").  In this document 'DAP' refers to DAP4 unless otherwise noted.
+
+DAP is intended to be the successor to all previous versions of the DAP (specifically DAP version 2.0). The goal is to provide a very general data model capable of representing a wide variety of existing data sets.
+
+The DAP builds upon a number of existing data representation schemes. Specifically, it is influenced by
+CDM&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#Ref-1|1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;, HDF5 &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#Ref-2|2]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;, DAP version 2.0&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#Ref-3|3]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;, and netCDF-4&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#Ref-5|5]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;.
+
+The DAP is a protocol for access to data organized as variables. It is particularly suited to accesses by a client computer to data stored on remote (server) computers that are networked to the client computer.  DAP was designed to hide the implementation of different collections of data. The assumption is that a wide variety of data sets using a wide variety of data schemas can be translated into the DAP protocol for transmission from the server holding that dataset to a client computer for processing.
+
+It is important to stress the discipline neutrality of the DAP and the relationship between this and adoption of the DAP in disciplines other than the Earth sciences. Because the DAP is agnostic as relates to discipline, it can be used across the very broad range of data types encountered in oceanography - biological, chemical, physical and geological. There is nothing that constrains the use of the DAP to the Earth sciences. 
+
+==Requirements==
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY" and "OPTIONAL" in this document are to be interpreted as described in &lt;nowiki&gt;RFC 2119&lt;/nowiki&gt;. &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#Ref-7|7]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;
+
+==Overall Operation==
+
+The DAP is a stateless protocol that governs clients making requests from servers, and servers issuing responses to those requests. This section provides an overview of the requests and responses (i.e. the messages) that DAP-compliant software MUST support. These messages are used to request information about a server and data made accessible by that server, as well as requesting data values themselves.
+
+For every data resource the DAP defines a number of responses that may elicited by a client. These responses provide services information (i.e. capabilities), structural/semantic descriptions, data access timing  and error information.
+
+The Dataset Services Response (DSR) provides a 'Services' or 'Capabilities' response for the DAP. Dereferencing an unadorned DAP dataset resource URL will return a document describing the DAP services available for the dataset.
+
+The DAP utilizes two responses to represent semantic structural description and data content of a data source.  One response, called the DMR, returns metadata information describing the structure of a request for data. That is, it characterizes the variables, their datatypes, names and attributes. The second response, the Data Response, returns both the metadata about the request, but also the data that was requested. The DMR and the metadata part of the Data Response are represented using a specific XML [16] representation. The syntax of that representation is defined elsewhere in this document (Section [[#Fully Qualified Names|5.3]]).
+ 
+The DAP returns error information using an Error response. If a request for any of the three basic responses cannot be completed then an Error response is returned in its place.
+
+The two responses (DMR and Data Response) are complete in and of themselves so that, for example, a client can use the data response without ever requesting either of the two other responses. In many cases, client programs will request the DMR response first before requesting the Data Response but there is no requirement they do so and no server SHALL require that behavior on the part of clients.
+
+Operationally, communication between a DAP client and a DAP server uses some underlying already existing protocol, most typically HTTP. Volume 2 of this specification discusses how the DAP should utilize HTTP.
+
+In addition to these data objects, a DAP server MAY provide additional "services" which clients may find useful.  For example, many DAP-compliant servers provide HTML-formatted representations or ASCII representations of a data source's structure and data. Such additional services are discussed in Volume 2 of this specification.
+
+The DAP specification also defines extensions to the protocol and representing important, but optional, capabilities. At least the following extensions have been defined.
+1. Asynchronous Response. The DAP Asynchronous Response is returned to a client when the requested resource (DMR, Data Response, etc.) is not immediately available and by making a specific request that it be made available the server is able to retrieve it. If the client makes the "retrieve it" request the server will inform the client through a subsequent Asynchronous Response when and where the client may access the requested resource.
+2. CSV Data Encoding. The DAP4 CSV data encoding represents DAP4 data as structured Comma-Separated Values (CSV) in UTF-8 text. Though based on the text/csv media type described in RFC 4180[RFC 4180], the DAP4 CSV is more complex so that it can fully represent the more complex data structures of the DAP4 data model. Some structure beyond simple CSV is necessary to capture the DAP4 data structures.
+
+==Characterization of a Data Source==
+
+The DAP characterizes a data source as a collection of variables, dimensions, and enumeration types. Each variable consists of a name, a type, a value, and a collection of Attributes. Dimensions have a name and a size. Enumerations list names and values of the enumeration constants. These elements may be grouped into collections using the concept of a "group" that has an identifier and defines a naming scope for the elements within it. Groups may contain other groups.
+
+The distinction between information in a variable and in an Attribute is somewhat arbitrary. However, the intention is that Attributes hold information that aids in the interpretation of data held in a variable. Variables, on the other hand, hold the primary content of a data source.
+
+Section [[#DAP4 DMR Syntax as a RELAX NG Schema|13]] provides a formal syntax for DAP DMR characterizations. It is defined using the RelaxNG standard [13] for describing the context-free syntax of a class of XML documents, the DMR in this case. It should be noted that any syntax specification requires a specification of the lexical elements of the syntax.
+The XML specification [16] provides most of the lexical context for the syntax, but there are certain places where additional lexical elements must be used. Section [[#DAP4 Lexical Elements|11]] describes those additional lexical elements, and those elements are discussed at appropriate points in this specification.
+
+Since the syntax is context-free, there are semantic limitations on what is legal in a DMR. These semantic limitations are noted at appropriate places in the following documentation. It should also be noted that if there are conflicts between what is described here and the RelaxNG syntax, then the syntax takes precedence.
+
+==DMR Declarations==
+
+===DMR XML Format===
+
+;Element and Attribute Names:
+:Within the DMR XML document, it is assumed that XML element and XML attribute names are case sensitive.
+
+;Character Escapes:
+:Any string of characters appearing within an XML attribute in the DMR must apply the standard XML escapes.  Specifically, any attribute value containing any of the following characters must replace them with the corresponding XML escape form.
+
+&lt;table border=1 width="30%"&gt;
+&lt;tr&gt;&lt;th&gt;Character&lt;th&gt;Escaped Form
+&lt;tr&gt;&lt;td&gt;&amp;amp;&lt;td&gt;&amp;amp;amp;
+&lt;tr&gt;&lt;td&gt;&amp;lt;&lt;td&gt;&amp;amp;lt;
+&lt;tr&gt;&lt;td&gt;&amp;gt;&lt;td&gt;&amp;amp;gt;
+&lt;tr&gt;&lt;td&gt;"&lt;td&gt;&amp;amp;quot;
+&lt;/table&gt;
+
+So for example, given the occurrence of the attribute 
+'name="&amp;amp;&amp;lt;&amp;gt;"'
+it must be re-written to this form
+'name="&amp;amp;amp;&amp;amp;lt;&amp;amp;gt;"'.
+
+===Names===
+
+A name (aka identifier) in DAP4 consists of a sequence of any legal non-control UTF-8 characters. A control character is any UTF-8 character in the inclusive range 0x00 &amp;mdash; 0x1F. Names are case sensitive.
+
+===Reserved Names===
+
+Any name that begins with the character sequence "_" is considered reserved. Note that if the receiver encounters such a name and has no information on how to process the name, it may at its discretion either ignore the object with that name, or it may treat the name as an ordinary name.
+
+A special case is when the "_" is followed by a reverse DNS name defining both the definer of that reserved name and possible additional naming information. This form of reserved name is preferred because it provides information about the organization that defined it.
+
+A (reverse) DNS name is of this syntactic form.
+&lt;pre&gt;
+DNS = &amp;lt;name&amp;gt; | DNS '.' &amp;lt;name&amp;gt;
+&lt;/pre&gt;
+An example might be "edu.ucar.unidata.NAME1.NAME2...". This indicates the owner/definer of that name is "edu.ucar.unidata" and that the additional naming information ("NAME1.NAME2...) has meaning to the owner for defining the semantics of the so-named object.
+
+===Fully Qualified Names===
+
+Every object in a DAP4 Dataset has a Fully Qualified Name (FQN), which provides a way to unambiguously reference declarations in a dataset and which can be used in several contexts such as in the DMR in a constraint expression
+(see Section [[#Constraints|8]]).
+
+These FQNs follow the common conventions of names for lexically scoped identifiers.  In DAP4 several kinds of lexical items provide lexical scoping: Dataset, Groups, Structures, Sequences, Enumerations, and AttributeSets. Just as with hierarchical file systems or variables in many programming languages, a simple grammar formally defines how the names are built using the names of the FQN's components (see Section [[#FQN Syntax|10]]).
+
+The FQN for a "top-level" variable &amp;mdash; as opposed to e.g. a field in a structure or sequence &amp;mdash;  is defined purely by the sequence of enclosing groups plus the variable's simple name. This also holds for Enumeration declarations.
+
+Consider the following simple dataset, which contains a Structure named "inner" within a Structure named "outer" all contained in the Dataset "D".
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Dataset name="D"&amp;gt;
+    &amp;lt;Structure name="places"&amp;gt;
+        &amp;lt;String name="name"/&amp;gt;
+        &amp;lt;Structure name="weather"&amp;gt;
+            &amp;lt;Float64 name="temperature"/&amp;gt;
+            &amp;lt;Float64 name="dew_point"/&amp;gt;
+        &amp;lt;/Structure&amp;gt;
+    &amp;lt;/Structure&amp;gt;
+&amp;lt;/Dataset&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+The FQN for the field 'temperature' is
+&lt;pre&gt;'/places.weather.temperature'.&lt;/pre&gt;
+Substituting the keyword ''Sequence'' for one or more occurrences of ''Structure'' in the above example will leave the FQNs unchanged.
+Note that the name of the dataset ("D") is not included; it is implied by the leading "/".
+
+As is the case with Structure or Sequence variables, Groups can be nested to form hierarchies, too, and this example shows that case.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Dataset name="D"&amp;gt;
+    &amp;lt;Group name="environmental_data"&amp;gt;
+        &amp;lt;Structure name="places"&amp;gt;
+            &amp;lt;String name="name"/&amp;gt;
+            &amp;lt;Sequence name="weather"&amp;gt;
+                &amp;lt;Float64 name="temperature"/&amp;gt;
+                &amp;lt;Float64 name="dew_point"/&amp;gt;
+            &amp;lt;/Sequence&amp;gt;
+        &amp;lt;/Structure&amp;gt;
+     &amp;lt;/Group&amp;gt;
+     &amp;lt;Group name="demographic_data"&amp;gt;
+         ...
+     &amp;lt;/Group&amp;gt;
+&amp;lt;/Dataset&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The FQN to the field 'temperature' in the dataset shown is
+&lt;pre&gt;'/environmental_data/places.weather.temperature'.&lt;/pre&gt;
+Note the use of a different separator character &amp;mdash; "." instead of
+"/" &amp;mdash; once we enter the scope of a structure (or sequence).
+
+Enumeration constants are treated similarly to fields. Consider this example.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Dataset name="DE"&amp;gt;
+    &amp;lt;Enumeration name="e"&amp;gt;
+        &lt;EnumConst name="v1" value="5"/&gt;
+    &amp;lt;/Enumeration&amp;gt;
+&amp;lt;/Dataset&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+The FQN for the "v1" constant in "e" is as follows. &lt;pre&gt;/e.v1&lt;/pre&gt;
+
+Notes:
+&lt;ol&gt;
+&lt;li&gt;Every dataset has a single outermost &amp;lt;Dataset&amp;gt; declaration,
+which semantically, acts like the root group.
+Whatever name that dataset has is ignored for the purposes of forming the FQN and instead is treated as if it has the empty name ("").
+&lt;li&gt;There is no limit to the nesting of groups or the nesting of Structures or the nesting of Sequences. Enumerations cannot be nested.
+&lt;li&gt;Reserved names (see above) inherently contain characters ('.') that will require escaping.
+&lt;/ol&gt;
+
+The characters "/" and "." have special meaning in the context of a fully qualified name. This means that if a name is added to the FQN and that name contains either of those two characters, then those characters must be specially escaped so that they will not be misinterpreted. The defined escapes are as follows.
+
+&lt;table border=1 width="25%"&gt;
+&lt;tr&gt;&lt;th&gt;Character&lt;th&gt;Escaped Form
+&lt;tr&gt;&lt;th&gt;.&lt;th&gt;\.
+&lt;tr&gt;&lt;th&gt;/&lt;th&gt;\/
+&lt;tr&gt;&lt;th&gt;\&lt;th&gt;\\
+&lt;tr&gt;&lt;th&gt;blank &lt;th&gt;\blank
+&lt;/table&gt;
+
+Note that the escape character itself must be escaped. Also note that this form of escape using '\' is independent of any required XML escape
+(Section [[#XML Escaping Within the DMR|5.1]]).
+
+===FQN References===
+DAP4 imposes the rule that the definition of any object (e.g. dimension,
+group, or enumeration) must occur before any reference to that object.
+This rule also applies within a group, which in turn implies that,
+for example, all dimensions must be declared before all variables
+that reference them.
+
+===Definitional Declarations versus Data-Bearing Declarations===
+
+The declarations in a DMR can be grouped into two classes.
+One class is &lt;i&gt;definitional&lt;/i&gt;. That is, it defines metadata that is
+used in the rest of the DMR.
+These definitional declarations are Groups (including the outer Dataset),
+Dimensions, and Enumerations.
+Such declarations do not contain data values themselves, although they may define constants such as the dimension size.
+The data-bearing declarations are Variables and Attributes.
+These elements of the data model are used to house data values or semantic metadata read from the dataset (or, in the latter case) synthesized from the values and standards/conventions that the dataset is known to follow.
+
+===Dataset===
+Every DMR contains exactly one Dataset declaration. It is the outermost
+XML element of the DMR.
+
+A dataset is specified using this XML form:
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Dataset name="..." dapVersion="..." dmrVersion="...";
+...
+&amp;lt;/Dataset&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The &lt;i&gt;name&lt;/i&gt;, &lt;i&gt;dapVersion&lt;/i&gt;, and &lt;i&gt;dmrVersion&lt;/i&gt;,
+attributes are required.
+The attributes have the following semantics:
+&lt;ul&gt;
+&lt;li&gt; &lt;i&gt;name&lt;/i&gt; &amp;ndash; an identifier specifying  the name of the dataset.
+Its content is determined solely by the Server and is completely uninterpreted
+with respect to DAP4.
+&lt;li&gt; &lt;i&gt;dapVersion&lt;/i&gt; &amp;ndash; the string &amp;quot;4.0&amp;quot; currently.
+&lt;li&gt; &lt;i&gt;dmrVersion&lt;/i&gt; &amp;ndash; the string &amp;quot;1.0&amp;quot; currently.
+&lt;/ul&gt;
+
+The body of the Dataset is the same
+as the body of a [[#Groups|5.7]],
+and semantically the Dataset acts like the outermost, root, group.
+
+===Groups===
+A group is specified using this XML form:
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Group name="name"&amp;gt;
+...
+&amp;lt;Group&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+A group defines a name space and contains other DAP elements. Specifically, it can contain in this order: dimension, enumerations, variables, and (sub-)groups. The fact that groups can be nested means that the set of groups in a DMR form a tree data structure. For any given DMR, there exists a root group that is the root of this tree.
+
+A nested set of groups defines a variety of name spaces and access to the contents of a group is specified using a notation of the form "/g1/g2/.../gn". This is called a "path". By convention "/" refers to the root group (the Dataset declaration). Thus the path "/g1/g2/g3" indicates that one should start in the root group, move to group g1 within that root group, then to group g2 within group g1, and finally to group g3. This is more fully described in the section on Fully Qualified names (Section [[#Fully Qualified Names|5.3]]).
+
+The order of declarations within a Group is fixed and must conform to
+this order.
+&lt;ol&gt;
+&lt;li&gt; Dimension declarations,
+&lt;li&gt; Enumeration declarations,
+&lt;li&gt; Variable declarations,
+&lt;li&gt; and, finally, nested Group declarations,
+&lt;/ol&gt;
+
+For comparison purposes, DAP groups correspond to netCDF-4 groups and not to the more complex HDF5 Group type: i.e. the set of groups must form a tree.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt;If declared, Groups must be named.
+
+&lt;li&gt;A Group can contain any number of objects, including other Groups.
+
+&lt;li&gt;Each Group declares a new lexical scope for the objects it contains. 
+
+&lt;li&gt;An array of Group is not allowed, and a Group cannot be defined within a Structure or Sequence.
+&lt;/ol&gt;
+
+===Dimensions===
+
+A dimension declaration is specified using this XML form.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Dimension name="name" size="size"/&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The size is a positive integer (which means that a zero
+length dimension is illegal).  As described in the
+Arrays Section, the maximum size of any
+dimension is 2&lt;sup&gt;61&lt;/sup&gt; - 1.  A dimension declaration
+will be referenced elsewhere in the DMR by specifying its
+name. It should also be noted that anonymous dimensions also
+exist. They have a size but no name. Anonymous dimensions
+SHOULD NOT be declared.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; Dimension declarations are not associated with a data type.
+
+&lt;li&gt; Dimension sizes MUST be a capable of being represented as a signed 64-bit integer.
+&lt;/ol&gt;
+
+===Enumeration Types===
+
+An enumeration type defines a set of names with specific values called enumeration constants. As will be seen in Section [[#Variables|5.12]], enumeration types may be used as the type for variables or attributes. The values that can be assigned to such typed objects must come from the set of enumeration constants.
+
+An enumeration type specifies a set of named, integer constants. When a data source has a variable of type 'Enumeration' a DAP 4 server MUST represent that variable using a specified integer type, up to and including a 64-bit unsigned integer. 
+
+An Enumeration type is declared using this XML form.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Enumeration name="name"&amp;gt;
+                basetype="Byte|Int8|UInt8|Int16|UInt16
+                         |Int32|UInt32|Int64|UInt64"/&amp;gt;
+    &amp;lt;EnumConst name="name" value="integer"/&amp;gt;
+    ...
+&amp;lt;/Enumeration&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; The optional "basetype" XML attribute defines the type for the value XML attribute of each enumeration constant. This basetype must be one of the integer types (see Section [[#Integer Types|5.10.1]]). If unspecified, then it defaults to the Atomic type "Int32".
+&lt;/ol&gt;
+
+===Atomic Types===
+
+The DAP4 specification assumes the existence of certain pre-defined, declared types called atomic types. As their name suggests, atomic data types are conceptually indivisible.  Atomic variables are used to store integers, real numbers, strings and URLs. There are five classes of atomic types, with each family containing one or more variations: integer, floating-point, string, enumerations, and opaque.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Integer Types"&gt;Integer Types&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The integer types are summarized in the following table.
+The syntax for integer constants is defined in
+Section [[#The Numeric Constant Classes: integer and float|11.3]].
+
+&lt;table border=1 width="85%"&gt;
+&lt;tr&gt;&lt;th&gt;Type Name&lt;th&gt;Description&lt;th&gt;Range of Legal Values
+&lt;tr&gt;&lt;td&gt;Int8&lt;td&gt;Signed 8-bit integer&lt;td&gt;[-(2&lt;sup&gt;7&lt;/sup&gt;), (2&lt;sup&gt;7&lt;/sup&gt;) - 1]
+&lt;tr&gt;&lt;td&gt;UInt8&lt;td&gt;Unsigned 8-bit integer&lt;td&gt;[0, (2&lt;sup&gt;8&lt;/sup&gt;) - 1]
+&lt;tr&gt;&lt;td&gt;Byte&lt;td&gt;Synonym for UInt8&lt;td&gt;[0, (2&lt;sup&gt;8&lt;/sup&gt;) - 1]
+&lt;tr&gt;&lt;td&gt;Char&lt;td&gt;Synonym for UInt8&lt;td&gt;[0, (2&lt;sup&gt;8&lt;/sup&gt;) - 1]
+&lt;tr&gt;&lt;td&gt;Int16&lt;td&gt;Signed 16-bit integer&lt;td&gt;[-(2&lt;sup&gt;15&lt;/sup&gt;), (2&lt;sup&gt;15&lt;/sup&gt;) - 1]
+&lt;tr&gt;&lt;td&gt;UInt16&lt;td&gt;Unsigned 16-bit integer&lt;td&gt;[0, (2&lt;sup&gt;16&lt;/sup&gt;)  - 1]
+&lt;tr&gt;&lt;td&gt;Int32&lt;td&gt;Signed 32-bit integer&lt;td&gt;[-(2&lt;sup&gt;31&lt;/sup&gt;), (2&lt;sup&gt;31&lt;/sup&gt;) - 1]
+&lt;tr&gt;&lt;td&gt;UInt32&lt;td&gt;Unsigned 32-bit integer&lt;td&gt;[0, (2&lt;sup&gt;32&lt;/sup&gt;)  - 1]
+&lt;tr&gt;&lt;td&gt;Int64&lt;td&gt;Signed 64-bit integer&lt;td&gt;[-(2&lt;sup&gt;63&lt;/sup&gt;), (2&lt;sup&gt;63&lt;/sup&gt;) - 1]
+&lt;tr&gt;&lt;td&gt;UInt64&lt;td&gt;Unsigned 64-bit integer&lt;td&gt;[0, (2&lt;sup&gt;64&lt;/sup&gt;)  - 1]
+&lt;/table&gt;
+
+Note that for historical reasons, the Char type is defined to be a synonym of UInt8, this mean that technically, the Char type has no associated character set encoding. However, servers and clients are free to infer typical character semantics to this type. The inferred character set encoding is chosen purely at the discretion of the server or client using whatever conventions they agree to use, possibly specified using attributes. Note specifically that multi-byte character encodings such as UTF-8 are problematic precisely because they can be multi-byte.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Floating Point Types"&gt;Floating Point Types&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The floating-point data types are summarized in Table 2. The two floating-point data types use IEEE 754 [6] to represent values. The two types correspond to ANSI C's float and double data types. The syntax for floating point constants is defined in Section [[#The Numeric Constant Classes: integer and float|11.3]].
+
+&lt;table border=1 width="85%"&gt;
+&lt;tr&gt;&lt;th&gt;Type Name&lt;th&gt;Description&lt;th&gt;Range of Legal Values
+&lt;tr&gt;&lt;td&gt;Float32&lt;td&gt;32-bit Floating-point number&lt;td&gt;Refer to the IEEE Floating Point Standard [6]
+&lt;tr&gt;&lt;td&gt;Float64&lt;td&gt;64-bit Floating-point number&lt;td&gt;Refer to the IEEE Floating Point Standard [6]
+&lt;/table&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="String Types"&gt;String Types&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The string data types are summarized in Table 3.  Again, the syntax for these is defined in Section [[#The String/URL Constant Class|11.4]]
+
+Strings are individually sized. This means that in an array of strings, for example, each instance of that string MAY be of a different size.
+
+&lt;table border=1 width="85%"&gt;
+&lt;tr&gt;&lt;th&gt;Type Name&lt;th&gt;Description&lt;th&gt;Range of Legal Values
+&lt;tr&gt;&lt;td&gt;String&lt;td&gt;A variable length string of UTF-8 characters&lt;td&gt;As defined in [14]
+&lt;tr&gt;&lt;td&gt;URI&lt;td&gt;A Uniform Resource Identifier&lt;td&gt;As defined in IETF RFC 2396 [8]
+&lt;/table&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="The Opaque Type"&gt;The Opaque Type&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The XML scheme for declaring an Opaque type is as follows.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Opaque&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The Opaque type is use to hold objects like JPEG images and other Binary Large Object (BLOB) data that have significant internal structure which might be understood by clients (e.g., an image display program) but that would be very cumbersome to describe using the DAP4 built-in types. Defining a variable of type "Opaque" does not communicate any information about its content, although an attribute could be used to do that.
+
+Opaque instances are individually sized. This means that in an array of opaques, for example, each instance of that opaque MAY be of a different size.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; The content of an opaque object is completely un-interpreted by the DAP4 implementation. The Opaque type is an Atomic Type, which might seem odd because instances of Opaque can be of different sizes. However, by thinking of Opaque as equivalent to a byte-string type, the analogy with strings makes it clear that it should be an Atomic type.
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="The Enum Type"&gt;The Enum Type&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The XML scheme for declaring an Enum type is as follows.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Enum enum="FQN"&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The Enum type is intended to be used in the definition of a variable. It should not be confused with the definition of an Enumeration, but rather references such a definition.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; The Enum typed requires the an attribute that references a previously defined &amp;lt;Enumeration&amp;gt; declaration.
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="A Note Regarding Implementation of the Atomic Types"&gt;A Note Regarding Implementation of the Atomic Types&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+When implementing the DAP, it is important to match information in a data source or read from a DAP response to the local data type which best fits those data. In some cases an exact match may not be possible. For example Java lacks unsigned integer types [4]. Implementations faced with such limitations MUST ensure that clients will be able to retrieve the full range of values from the data source. If this is impractical, then the server or client may implement this rule by hiding the variable in question or returning an error.
+
+===Container Types===
+
+There are currently two container types: &amp;lt;Structure&amp;gt; and &amp;lt;Sequence&amp;gt;.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="The Structure Type"&gt;The Structure Type&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+A Structure groups a list of variables so that the collection can be manipulated as a single item. The variables in a Structure may also be referred to as "fields" to conform to conventional use of that term, but there is otherwise no distinction between fields and variables.  The Structure's fields MAY be of any type, including ''Structure'' or ''Sequence''.  The order of items in the Structure is significant only in relation to the serialized representation of that Structure.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="The Sequence Type"&gt;The Sequence Type&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+A Sequence is intended to represent a ''sequence'' of instances of objects.
+Suppose that we have a sequence of this form.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Sequence name="s"&amp;gt;
+    &amp;lt;Float64 name="field1"/&amp;gt;
+    &amp;lt;Float64 name="field2"/&amp;gt;
+&amp;lt;/Sequence&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The ''corresponding'' Structure object
+is obtained by substituting the ''Sequence''
+keyword with ''Structure''. Our above example
+then has this associated Structure.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Structure name="s"&amp;gt;
+    &amp;lt;Float64 name="field1"/&amp;gt;
+    &amp;lt;Float64 name="field2"/&amp;gt;
+&amp;lt;/Structure&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The semantics of a sequence are that it represents a sequence
+of instances of the corresponding Structure. The length of the Sequence MAY be different for every instance of a Sequence. Consider this array of Sequence.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Sequence name="s"&amp;gt;
+    ...
+    &amp;lt;Dim size="3"&amp;gt;
+    &amp;lt;Dim size="2"&amp;gt;
+&amp;lt;/Sequence&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+This represents an array of six (3 times 2) sequence instances. However, the length MAY be different for each of those six instances.
+
+Note that the &amp;lt;Sequence&amp;gt; construct was introduced to replace the concept of variable length dimensions. It turns out that trying to treat variable length dimensions as dimensions causes significant conceptual and implementation difficulties. It is hoped that isolating such variable length objects syntactically is a better representation.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; Structures and Sequences MAY freely nested.
+&lt;/ol&gt;
+
+===Variables===
+
+Each variable in a data source MUST have a name, a type and one or more values. Using just this information and armed with an understanding of the definition ofv the DAP data types, a program can read any or all of the information from a data source.
+
+The DAP variables come in several different types. There are several atomic types, the basic indivisible types representing integers, floating point numbers and the like, and a container type &amp;ndash; the Structure or Sequence type &amp;ndash; that supports aggregation of other variables into a single unit. A container type may contain both atomic typed variable as well as other container typed variables, thus allowing nested type definitions.
+
+The DAP variables describe the data when it is being transferred from the server to the client.  It does not necessarily describe the format of the data inside the server or client. The DAP defines, for each data type described in this document, a serialized representation, which is the information actually communicated between DAP servers and DAP clients.  The serialized representation consists of two parts:  the declaration of the type and the serialized encoding of its value(s). The data representation is presented in
+Section [[#Response Format|6.1]]".
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Arrays"&gt;Arrays&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+An Array is a multi-dimensional indexed data structure. An Array's member
+variable MUST be of some DAP data type. Array indexes MUST
+start at zero. Arrays MUST be stored in row-major order (as
+is the case with ANSI C), which means that the order of
+declaration of dimensions is significant. The size of each
+Array's dimensions MUST be given.
+The total number of elements in an Array is fixed as that
+given by the product of the size(s) of its
+dimension(s). Note that a dimension size of zero is illegal.
+
+For practical reasons having to do with current hardware
+limitations, the total number of bytes allocated to an array
+must fit in an unsigned 64-bit integer.
+The largest atomic types currently defined in this document
+are the floating point double and the (U)Int64 integer types.
+This means that the practical limit on the total number of elements
+is 2&lt;sup&gt;64&lt;/sup&gt; / 8 = 2&lt;sup&gt;61&lt;/sup&gt;. Thus the dimension indices
+will run from 0 to a maximum of 2&lt;sup&gt;61&lt;/sup&gt; - 1.
+Of course this limit on the maximum number of elements also
+applies to the maximum dimension size since the total number
+of elements is the product of all the dimensions sizes of the array.
+
+There is a prescribed limit of 64 on the number of of
+dimensions for a variable (i.e. its arity). This is actually
+larger than will occur in practice.
+Assuming a dimension must be at least 1 bit in size,
+this effectively limits the number of dimensions to 61.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; Simple variables (see below) MAY be arrays.
+&lt;li&gt; Structures and Sequences MAY be arrays.
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Simple Variables"&gt;Simple Variables&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+A simple, dimensioned variable is declared using this XML form.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Int32 name="name"&amp;gt;
+  &amp;lt;Dim name="{fqn}"/&amp;gt;
+  ...
+  &amp;lt;Dim size="{integer}"/&amp;gt;
+&amp;lt;/Int32&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+Note the use of two types of dimensions:
+&lt;ol&gt;
+&lt;li&gt; name="{fqn}" &amp;ndash; specify the fully qualified name of a Dimension
+that has been declared previously in the XML document order. ''[https://www.w3.org/TR/DOM-Level-3-Core/glossary.html See the W3C DOM-3 glossary for the definition of XML document order.]''
+
+&lt;li&gt; size="{integer}" &amp;ndash; specify an anonymous dimension of a given size, 
+&lt;/ol&gt;
+
+A simple variable is one whose type is one of the Atomic Types
+(see Section [[#Atomic Types|5.10]]). The name of the Atomic Type (Int32 in this example) is used as the XML element name. Within the body of that element, it is possible to specify zero or more dimension references. A dimension reference (&amp;lt;Dim.../&amp;gt;) MAY refer to a previously defined dimension declaration. It MAY also define an anonymous dimension with no name, but with a size specified as an integer constant.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; N.A.
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Dimension Ordering"&gt;Dimension Ordering&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+Consider this example.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Int32  name="i"&amp;gt;
+    &amp;lt;Dim name="/d1"/&amp;gt;
+    &amp;lt;Dim name="/d2"/&amp;gt;
+    ...
+    &amp;lt;Dim name="/dn"/&amp;gt;
+&amp;lt;/Int32&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+The dimensions are considered ordered from top to bottom. From this, a corresponding left-to-right order [d1][d2]...[dn] can be inferred where the top dimension is the left-most and the bottom dimension is the right-most. The assumption of row-major order means that in enumerating all possible combinations of these dimensions, the right-most is considered to vary the fastest. The terms "right(most)" or "left(most") refer to this left-to-right ordering of dimensions.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Structure Variables"&gt;Structure Variables&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+As with simple variables, a structure variable specifies a type as well as any dimension for that variable. The type, however, is a Structure.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Structures"&gt;Structures&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+The XML scheme for a Structure typed variable is as follows.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Structure name="name"&amp;gt;
+  {variable definition}
+  {variable definition}
+  ...
+  {variable definition}
+  &amp;lt;Dim ... /&amp;gt;
+  ...
+  &amp;lt;Dim ... /&amp;gt;
+&amp;lt;/Structure&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+The Structure contains within it a list of variable definitions
+(Section [[#Variables|5.12]]).
+For discussion convenience, each such variable may be referred to as a "field" of the Structure. The list of fields may optionally be followed with a list of dimension references indicating the dimensions of the Structure typed variable.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; Structure variables MAY be dimensioned.
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Sequence Variables"&gt;Sequence Variables&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+As with simple variables, a sequence variable specifies a type as well as any dimension for that variable. The type, however, is a Sequence.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Sequences"&gt;Sequences&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The XML scheme for a Sequence typed variable is as follows.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Sequence name="name"&amp;gt;
+  {variable definition}
+  {variable definition}
+  ...
+  {variable definition}
+  &amp;lt;Dim ... /&amp;gt;
+  ...
+  &amp;lt;Dim ... /&amp;gt;
+&amp;lt;/Sequence&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The Sequence contains within it a list of variable definitions
+(Section [[#Variables|5.12]]).
+For discussion convenience, each such variable may be referred to as a "field" of the Sequence. The list of fields may optionally be followed with a list of dimension references indicating the dimensions of the Sequence typed variable.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; Sequence variables MAY be dimensioned.
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Coverage Variables and Maps"&gt;Coverage Variables and Maps&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+A "Discrete Coverage" is a concept commonly found in many disciplines, where the term refers to a sampled function with both its domain and range explicitly enumerated by variables. DAP2 uses the name 'Grid' to denote what the OGC calls a 'rectangular grid' [12]. DAP4 expands on this so that other types of discrete coverages (hereafter 'coverage(s)') can be explicitly represented.
+Note that the DAP2 ''Grid'' construct is gone, and is replaced by these coverages, which are more general than DAP2 Grids.
+
+Consider the example coverage function
+
+:Temp: ''lat'' X ''lon'' -&gt; Float32
+:where
+:''lat'' and ''lon'' subsets are of Float32 in the range [0,360).
+
+The range is, of course, ''Float32'' and the domain is ''lat X lon''. The Temp function as a coverage is a sampled subset of the continuous function and is defined at some finite set of pairs from lat X lon.
+
+In DAP4, the range for a coverage is represented by a variable, Temp in this example, whose values are the range of the sampled function. Because the domain of ''Temp'' is a two-tuple (lat,lon), the DAP4 variable must have rank two. In order to complete the sampling of Temp, it is necessary to also define two 'Map' (also called 'coordinate') variables representing the sampling of lat and lon. These two variables, lat and lon, have rank one each. Taken as whole, this collection of a variable plus maps is called a "grid" for convenience sake.
+
+Suppose we want to access the value of the Temp function at position (x,y), where x is a value
+in the lat variable and y is a value in the lon variable. The lat variable is consulted to find ilat
+such that lat[ilat] = x. Similarly, we want the ilon index such that lon[ilon] = y. We can then obtain Temp(x,y) as the value of Temp[ilat][ilon]. This is probably the simplest example for using coverages and more complex examples exist for, for example, satellite swathes.
+
+Using OGC coverage terminology, we have this.
+&lt;ol&gt;
+&lt;li&gt; The maps (e.g. lat and lon) specify the "Domain"
+
+&lt;li&gt; The array (e.g. Temp) specifies the "Range"
+
+&lt;li&gt; The Grid itself is a "Coverage" per OGC.
+
+&lt;li&gt; The Domain and Range are sampled functions
+&lt;/ol&gt;
+
+A map is defined using the following XML scheme.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Map name="{FQN for some variable previously defined in the DMR}"/&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+An example might look like this.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Float32 name="Temp"&amp;gt;
+  &amp;lt;Dim name="/lat"/&amp;gt;
+  &amp;lt;Dim name="/lon"/&amp;gt;
+  &amp;lt;Map name="/lat"/&amp;gt;
+  &amp;lt;Map name="/lon"/&amp;gt;
+&amp;lt;/Float32&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+Where the map variables are defined elsewhere like this.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Float32 name="lat"&amp;gt;
+  &amp;lt;Dim name="/lat"/&amp;gt;
+&amp;lt;/Float32&amp;gt;
+
+&amp;lt;Float32 name="/lon"&amp;gt;
+  &amp;lt;Dim name="/lon"/&amp;gt;
+&amp;lt;/Float32&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The containing variable, temp in the example, will be referred to as the "array variable".
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; Each map variable MUST have a rank no more than that of the array.
+
+&lt;li&gt; An array variable can have as many maps as desired.
+
+&lt;!-- Why did we do this?
+&lt;li&gt; The dimensions of the array variable may not contain duplicates so A[x,x] is disallowed.
+--&gt;
+
+&lt;li&gt; Any map duplicates are ignored
+
+&lt;li&gt; The order of declaration (top to bottom) MAY be significant.
+&lt;!-- why this limitations?
+ and the order of declaration of the maps is irrelevant.
+--&gt;
+
+&lt;li&gt; The fully qualified name of a map must either be in the same lexical scope as the array variable, or the map must be in some enclosing scope.
+
+&lt;li&gt; The set of named "associated dimensions for a map must be a subset of the set of named "associated dimensions" for the array variable.
+&lt;/ol&gt;
+
+The term "associated dimensions" is computed as follows.
+&lt;ol&gt;
+&lt;li&gt; The set of associated dimensions is initialized to empty.
+
+&lt;li&gt; For each element mentioned in the fully qualified name (FQN) of the map or the array variable, add any named dimensions associated with FQN element to the set of associated dimensions (removing duplicates, of course).
+&lt;/ol&gt;
+
+In practice, the means that an array variable or map variable must take into account any dimensions associated with any enclosing dimensioned Structure or Sequence.
+
+===Attributes and Arbitrary XML===
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Attributes"&gt;Attributes&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+Simple attributes are defined using the following XML scheme.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Attribute name="name" type="{atomicTypeName|EnumType fqn}"&amp;gt;
+  &amp;lt;Namespace href="http://netcdf.ucar.edu/cf"/&amp;gt; &amp;lt;!--optional--&amp;gt;
+  &amp;lt;Value value="value"/&amp;gt;
+  ...
+  &amp;lt;Value value="value"/&amp;gt;
+&amp;lt;/Attribute&amp;gt;
+
+or
+
+&amp;lt;Attribute name="name" type="{atomicTypeName|EnumType fqn}" value="value"/&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+Attributes may also serve as containers for other attributes (and other containers). In this case, no type is specified, only a name.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Attribute name="name"&amp;gt;
+  &amp;lt;Namespace href="http://netcdf.ucar.edu/cf"/&amp;gt;
+
+  &amp;lt;Attribute name="name" type="..."&amp;gt;
+    ...
+  &amp;lt;/Attribute&amp;gt;
+
+  ...
+
+  &amp;lt;Attribute name="name" type="..."&amp;gt;
+    ...
+  &amp;lt;/Attribute&amp;gt;
+
+&amp;lt;/Attribute&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+In DAP4, Attributes (not to be confused with XML attributes) are tuples with four components: 
+&lt;ul&gt;
+&lt;li&gt; Name,
+&lt;li&gt; Type (one of the defined atomic types such as Int16, String, Enum fqn, etc.).
+&lt;li&gt; value as an alternate form for attributes with a single value,
+&lt;li&gt; Vector of one or more value declarations,
+&lt;li&gt; OR a set of contained attributes,
+&lt;li&gt; Zero or more Namespaces
+&lt;/ul&gt;
+
+This differs slightly from DAP2 Attributes because the namespace feature has been added, although clients can choose to ignore it. For more about namespaces, refer to Section [[#Namespaces|5.14]]. The intent of including the namespace information is to simplify interactions with semantic web applications where certain schemas or standards have formal definitions of attributes. 
+
+Attributes are typically used to associate semantic metadata with the variables in a data source. Attributes are similar to variables in their range of types and values, except that they are somewhat limited when compared to those for variables: they cannot use Structure or Sequence types
+
+Attributes defined at the top-level within a group are also referred to as "group attributes". Attributes defined at the root group (i.e. Dataset) are "global attributes," which many file formats such as HDF4 or netCDF formally recognize. 
+
+While the DAP does not require any particular Attributes, some may be required by various metadata conventions. The semantic metadata for a data source comprises the Attributes associated with that data source and its variables. Thus, Attributes provide a mechanism by which semantic metadata may be represented without prescribing that a data source use a particular semantic metadata convention or standard.
+
+''&lt;ins&gt;Semantic Notes&lt;/ins&gt;''
+&lt;ol&gt;
+&lt;li&gt; DAP4 explicitly treats an attribute with one value as an attribute whose value is a one-element vector. 
+&lt;li&gt; All of the atomic types are allowed as the type for an attribute
+&lt;li&gt; If the attribute has type Enum, it must also have an XML attribute, ''enum'', that references a previously defined &amp;lt;Enumeration&amp;gt; declaration.
+&lt;li&gt; Attribute value constants MUST conform to the appropriate constant format for the given attribute type and as defined in Section [[#DAP4 Lexical Elements|11]].
+&lt;li&gt; Attribute containers may may only contain attributes. Container attributes may not have values; only lowest level (leaf) attributes may have values.
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Arbitrary XML content "&gt;Arbitrary XML content &lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+Dap4 supports an explicit type to hold "arbitrary XML" markup that provides a way for the protocol to transport information encoded in XML. This is useful for "annotating" meta-data with information more complex than simple attributes. This can be used, for example, for passing semantic web information, or for passing out-of-band information: e.g about the conversion from some other meta-data system into DAP4.
+
+The form on an otherXML declaration is as follows.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;otherXML name="name"&amp;gt;
+{arbitrary xml}
+&amp;lt;/otherXML&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+There are no &amp;lt;value/&amp;gt; elements because the value of otherXML
+is the xml inside the &amp;lt;otherXML&amp;gt;...&amp;lt;/otherXML&amp;gt;.
+The text content of the otherXML element must be valid XML and must be distinct from the XML markup used to encode elements of the DAP4 data model (i.e., in a practical sense, the content of an &amp;lt;OtherXML&amp;gt; attribute will be in a namespace other than DAP4). XML content may appear anywhere that an attribute may appear.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Attribute and OtherXML Specification and Placement"&gt;Attribute and OtherXML Specification and Placement&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+Attribute and OtherXML declarations MAY occur within the body of the following XML elements: Group, Dataset, Dimension, Variable, Structure, Sequence, and Attribute.
+
+===Namespaces===
+
+All elements of the DMR &amp;ndash; Dataset, Groups, Dimensions, Variables, and Attributes &amp;ndash; can contain an associated Namespace element. The namespace's value is defined in the form of an XML style URI string defining the context for interpreting the element containing the namespace. Suppose, hypothetically, that we wanted to specify that an Attribute is to be interpreted as a CF convention [15]. One might specify this as follows.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Attribute name="latitude"&amp;gt;
+  &amp;lt;Namespace href="http://cf.netcdf.unidata.ucar.edu"/&amp;gt;
+  ...
+&amp;lt;/Attribute&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+Note that this is not to claim that this is how to specify a CF convention [15].; this is purely illustrative.
+
+==Data Representation==
+
+Data can be an elusive concept. Data may exist in some storage format on some disk somewhere, on paper somewhere else, in active memory on some server, or transmitted along some wire between two computers. All these can still represent the same data. That is, there is an important distinction to be made between the data and its representation. The data can consist of numbers: abstract entities that usually represent measurements of something, somewhere. Data also consist of the relationships between those numbers, as when one number defines a time at which some quantity was measured.
+
+The abstract existence of data is in contrast to its concrete representation, which is how we manipulate and store it. Data can be stored as ASCII strings in a file on a disk, or as twos-complement integers in the memory of some computer, or as numbers printed on a page.  It can be stored in HDF5 [2], netCDF [5], GRIB[17], a relational database, or any number of other digital storage forms.
+
+The DAP specifies a particular representation of data, to be used in transmitting that data from one computer to another. This representation of some data is sometimes referred to as the serialized representation of that data, as distinguished from the representations used in some computer's memory. The DAP standard outlined in this document has nothing at all to say about how data is stored or represented on either the sending or the receiving computer. The DAP transmission format is completely independent of these details.
+
+===Response Format===
+
+There are two response formats that a server MUST provide to the client.
+&lt;ol&gt;
+&lt;li&gt; DMR-only response
+&lt;li&gt; (DMR +) Data response
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="DMR-Only Response"&gt;DMR-Only Response&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+If the client requests only the DMR, then it is returned as a standard XML encoded document. If constraints were specified, then the returned DMR may differ from the full DMR in that, for example, meta-data about only variables specified in the constraint will be returned. The DMR-Only response MUST be ''self-contained''. This means that all declarations directly or transitively mentioned in the selected variables must be included in the returned DMR. Additionally, all attributes associated with the included declarations MUST be included as well.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Data Response"&gt;Data Response&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+The DAP4 data response uses a format very similar to that used for DAP2;
+the data payload is broken into two pieces.
+The first part holds metadata describing the names and types of the variables in the response while the second part holds the values of those variables.
+
+The metadata information, sent as part 1 of the Data Response, is the DMR limited to just those variables included in the response. The response, however, MUST be self-contained (in the DMR-Only sense). DAP attributes for all included declarations MUST be included, but MAY be ignored by the receiving client.
+
+Part 2 of the response consists of the binary data for each variable in the order they are listed in the DMR given as the response preface. DAP4 uses a receiver makes it right encoding, so the servers MAY simply write out binary data as they store it with the exceptions that floating-point data must be encoded according to IEEE 754[6] and Integer data must use twos-complement notation for signed types. Clients are responsible for performing byte-swapping operations needed to compute using the values retrieved.
+
+The Data Response is encoded using chunking scheme 
+(see Section [[#How the Chunked Encoding Affects the Data Response Format|6.2]]).
+that breaks it into N parts where each part is prefixed with a chunk type and chunk byte count header. Chunk types include data and error types, making it simple for servers to indicate to clients that an error occurred during the transmission of the Data Response and (relatively) simple for clients to detect that error.
+
+As with DAP2, the response describe here is a document that can be stored on disk or sent as the payload using a number of network transport protocols, HTTP being the primary transport in practice. However, any protocol that can transmit a document can be used to transmit these responses. As such, all critical information needed to decode the response is completely self-contained.
+
+In the rest of this section we will describe the Data Response in the context of DAP4 using HTTP as its transport protocol.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Format of the DMR Part"&gt;Format of the DMR Part&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The first part (''part'' is not to be confused with ''chunk'') of the Data Response always contains the DMR. The Data Response, when DAP is using HTTP as a transport protocol, is the payload for an HTTP response. It is separated from the last of the HTTP response's MIME headers by a single blank line, which MIME defines as a carriage return (ASCII character with byte value of 13) followed by a line feed (ASCII character with byte value of 10). This combination can be abbreviated as CRLF.
+
+&lt;i&gt;Format Related DMR Attributes&lt;/i&gt;&lt;br&gt;
+The DMR MAY contain attributes that reflect information from the serialized data.
+Specifically, the following attributes are defined.
+&lt;ol&gt;
+&lt;li&gt; &lt;Attribute name="_DAP4_Checksum_CRC32" type="Int32"/&gt; &amp;mdash;
+this attribute may be attached to each top-level variable to show
+the CRC-32 checksum of the content of that data. See Section
+[[#The DAP4 Serialized Representation|6.2]]
+for more information.
+&lt;li&gt; &lt;Attribute name="_DAP4_Little_Endian" type="UInt8"/&gt; &amp;mdash;
+this attribute exists in the root group (the dataset) to indicate if
+the serialized data byte order is little-endian. The value "1" indicates
+that little-endian order was used and "0" indicates that big-endian order was used.
+If missing, little-endian is assumed.
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Format of the Data Part"&gt;Format of the Data Part&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+The second part of the Data response consists of the serialized variables as specified by the data DMR. The variable serializations are concatenated to form a single binary dataset. If requested, each variable's serialization is followed by a CRC32 checksum.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Relationship to the Chunking format"&gt;Relationship to the Chunking format&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+The data response format is technically independent of the chunking format
+(see [[#How the Chunked Encoding Affects the Data Response Format|6.1.3]]&lt;/h3&gt;).
+The assumption is that the DMR will be in a chunk of its own, the first chunk,
+and the serialized binary data will be in one or more additional chunks.
+This produces a format like this
+&lt;blockquote&gt;
+&lt;pre&gt;
+CRLF
+{DMR Length in binary form}
+{DMR}
+CRLF
+{Chunk 1 containing some portion of the serialized data}
+...
+{Chunk n containing the last portion of the serialized data}
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+In the above and in the following, the form '{xxx}'
+is intended to represent any instance of the xxx.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="How the Chunked Encoding Affects the Data Response Format"&gt;How the Chunked Encoding Affects the Data Response Format&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+In a sense, the chunked encoding does not affect the format of the Data Response at all. Conceptually, the entire binary Data Response is built and then passed through a 'chunking encoder' transforming it into one that is broken up into a series of chunks. That 'chunked document' is then sent as the payload of some transport protocol, e.g., HTTP. In practice, that would be a wasteful implementation because a server would need to hold the entire response in memory. A better implementation would, for HTTP, write the initial parts of the HTTP response (its response code and headers) and then use a pipeline of filters to perform the encoding operations. The intent of the chunking scheme is to make it possible for servers to build responses in small chunks, and once they know those parts have been built without error, send them to the client. Thus a server should choose the chunk size to be small enough to fit comfortably in memory but large enough to limit the amount of overhead spent by the software that encodes and decodes those chunks. When an error is detected, the normal flow of building chunks and sending the data along is broken and an error chunk should be sent
+(See Section [[#DAP4 Error Response Format|12]]).
+
+===The DAP4 Serialized Representation===
+
+Given a DMR and the corresponding data, the serialized representation is formally described in this section.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="A Note on Dimension Ordering"&gt;A Note on Dimension Ordering&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+Consider this example.
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;Int32  name="i"&amp;gt;
+  &amp;lt;Dimension name="d1"/&amp;gt;
+  &amp;lt;Dimension name="d2"/&amp;gt;
+  ...
+  &amp;lt;Dimension name="dn"/&amp;gt;
+&amp;lt;/Int32&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+The dimensions are considered ordered top-to-bottom textually. This order is linearized into a corresponding left-to-right order [d1][d2]...[dn]. The assumption of row-major order means that in enumerating all possible combinations of these dimensions, the rightmost is considered to vary the fastest. The terms "right(most)" or "left(most") refer to this ordering of dimensions.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Order of Serialization"&gt;Order of Serialization&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The data appearing in a serialized representation is the concatenation of the variables specified in the tree of Groups within a DMR, where the variables in a group are taken in depth-first, top-to-bottom order. The term "top-to-bottom" refers to the textual ordering of the variables in an XML document specifying a given DMR.
+
+If a variable is a Structure variable, then its data representation will be the concatenation of the variables it contains, which will appear in top-to-bottom order.
+
+If a variable is a Sequence variable, then its data representation will have two parts.
+&lt;ol&gt;
+&lt;li&gt; A 64-bit signed ''count'' of the number of elements in the sequence
+&lt;li&gt; ''Count'' instances of the [[#The Sequence Type|5.11.2]] for the Sequence.
+&lt;/ol&gt;
+
+If a variable has dimensions, then the contents of each dimensioned data item will appear concatenated and taken in row-major order.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Variable Representation"&gt;Variable Representation&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+Given a dimensioned variable, it is represented as the N scalar values concatenated in row-major order.
+
+If the variable is scalar, then it is represented as a single scalar value.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Numeric Scalar Atomic Types"&gt;Numeric Scalar Atomic Types&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+For the numeric atomic types, scalar instances are represented as follows. In all cases a consistent byte ordering is assumed, but the choice of byte order is at the discretion of the program that generates the serial representation, typically a server program.
+
+&lt;table border=1 width="50%"&gt;
+&lt;tr&gt;&lt;th&gt;Type Name&lt;th&gt;Description&lt;th&gt;Representation
+&lt;tr&gt;&lt;td&gt;Int8&lt;td&gt;Signed 8-bit integer&lt;td&gt;8 bits 
+&lt;tr&gt;&lt;td&gt;UInt8&lt;td&gt;Unsigned 8-bit integer&lt;td&gt;8 bits
+&lt;tr&gt;&lt;td&gt;Byte&lt;td&gt;Unsigned 8-bit integer&lt;td&gt;Same as UInt8 
+&lt;tr&gt;&lt;td&gt;Char&lt;td&gt;Unsigned 8-bit integer&lt;td&gt;Same as UInt8 
+&lt;tr&gt;&lt;td&gt;Int16&lt;td&gt;Signed 16-bit integer&lt;td&gt;16 bits
+&lt;tr&gt;&lt;td&gt;UInt16&lt;td&gt;Unsigned 16-bit integer&lt;td&gt;16 bits
+&lt;tr&gt;&lt;td&gt;Int32&lt;td&gt;Signed 32-bit integer&lt;td&gt;32-bits
+&lt;tr&gt;&lt;td&gt;UInt32&lt;td&gt;Unsigned 32-bit integer&lt;td&gt;32-bits
+&lt;tr&gt;&lt;td&gt;Int64&lt;td&gt;Signed 64-bit integer&lt;td&gt;64-bits
+&lt;tr&gt;&lt;td&gt;UInt64&lt;td&gt;Unsigned 64-bit integer&lt;td&gt;64-bits
+&lt;tr&gt;&lt;td&gt;Float32&lt;td&gt;32-bit IEEE floating point&lt;td&gt;32-bits
+&lt;tr&gt;&lt;td&gt;Float64&lt;td&gt;64-bit IEEE floating point&lt;td&gt;64-bits
+&lt;/table&gt;
+
+In narrative form: all numeric quantities are used as a raw, unsigned vector of N bytes, where N is 1 for Char, Int8, and UInt8; it is 2 for Int16 and UInt16; it is 4 for Int32, UInt32, and Float32; and it is 8 for Int64, UInt64, and Float64.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Byte Swapping Rules"&gt;Byte Swapping Rules&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+If the server chooses to byte swap transmitted values, then the following swapping rules are used.
+
+&lt;table border=1 width="50%"&gt;
+&lt;tr&gt;&lt;th width="20%"&gt;Size (bytes)&lt;th&gt;Byte Swapping Rules&lt;th&gt;
+&lt;tr&gt;&lt;th&gt;1&lt;td&gt;Not Applicable.&lt;td&gt;
+&lt;tr&gt;&lt;th&gt;2&lt;td&gt;Byte 0 -&gt; Byte 1&lt;br&gt;
+Byte 1 -&gt;Byte 0&lt;td&gt;
+&lt;tr&gt;&lt;th&gt;4&lt;td&gt;Byte 0 -&gt; Byte 3&lt;br&gt;
+Byte 1 -&gt;Byte 2&lt;br&gt;
+Byte 2 -&gt; Byte 1&lt;br&gt;
+Byte 3 -&gt;Byte 0&lt;td&gt;
+&lt;tr&gt;&lt;th&gt;8&lt;td&gt;Byte 0 -&gt; Byte 7&lt;br&gt;
+Byte 1 -&gt;Byte 6&lt;br&gt;
+Byte 2 -&gt; Byte 5&lt;br&gt;
+Byte 3 -&gt;Byte 4
+&lt;td&gt;Byte 4 -&gt; Byte 3&lt;br&gt;
+Byte 5 -&gt;Byte 2&lt;br&gt;
+Byte 6 -&gt; Byte 1&lt;br&gt;
+Byte 7 -&gt;Byte 0
+&lt;/table&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Variable-Length Scalar Atomic Types"&gt;Variable-Length Scalar Atomic Types&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The variable length atomic values are all represented as a signed 64-bit count followed by the data of the value.
+
+&lt;table border=1 width="85%"&gt;
+&lt;tr&gt;&lt;th&gt;Type Name&lt;th&gt;Description&lt;th&gt;Representation
+&lt;tr&gt;&lt;td&gt;String&lt;td&gt;Vector of 8-bit bytes representing a UTF-8 String&lt;td&gt;The number of bytes in the string (in Int64 format) followed by the bytes.
+&lt;tr&gt;&lt;td&gt;URL&lt;td&gt;Vector of 8-bit bytes representing a URL&lt;td&gt;Same as String
+&lt;tr&gt;&lt;td&gt;Opaque&lt;td&gt;Vector of un-interpreted 8-bit bytes&lt;td&gt;The number of bytes in the vector (in Int64 format) followed by the bytes.
+&lt;/table&gt;
+
+In narrative form, instances of String, Opaque, and URL types are represented as a 64 bit length (treated as Int64) of the instance followed by the vector of bytes comprising the value.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Structure Variable Representation"&gt;Structure Variable Representation&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+A Structure typed variable is represented as the concatenation of the representations of the variables contained in the Structure taken in textual top-to-bottom order. This representation may be nested if one of the variables itself is a Structure variable. Dimensioned structures are represented in a form analogous to dimensioned variables of atomic type. The Structure array is represented by the concatenation of the instances of the dimensioned Structure, where the instances are listed in row-major order. 
+
+It should be noted that no padding is present in the structure representation.
+One field's content is immediately followed by the next field's content.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Sequence Variable Representation"&gt;Sequence Variable Representation&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+A Sequence typed variable is represented as a count specifying the number of objects (not bytes) of the sequence followed by count instances of the corresponding Structure using the Structure representation rules. This representation may be nested if one of the variables itself is a Sequence variable. Dimensioned sequences are represented in a form analogous to dimensioned variables of atomic type. The Sequence array is represented by the concatenation of the instances of the dimensioned Sequence, where the instances are listed in row-major order. 
+
+Each Sequence variable, then, consists of a length, L say, in Int64 form and giving the number of elements for a specific occurrence of the variable-length dimension. The count, L, is then followed by L instances of the serialized form of the sequence's corresponding structure.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Checksums"&gt;Checksums&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+As an option, checksums will be computed for the values of
+all the "top-level" variables present in the DMR of a returned
+response from a server. The term "top-level" means that the variable
+is not a field of a Structure (or Sequence) typed variable.
+
+The purpose of the checksum is to detect changes in data
+over time. That is, if a client requests the same variable
+and the returned checksums are the same, then the client may
+infer that the data has not changed. The checksum is not
+intended for transmission error detection, although the
+client MAY use it for that purpose if it chooses. Note that the
+value of the checksum will change depending on the byte order used
+to serialize the data.
+
+The checksum is made visible to the client by adding an attribute to each top-level variable in the DMR. This attribute is named "_DAP4_Checksum_CRC32".
+
+In all cases, the checksum is computed over the serialized representation of each top-level variable. The checksum is computed before any chunking
+Section [[#DAP4 Chunked Data Representation|7]]) is applied.
+
+If the request to the server is a dmr-only request, then the
+server will compute the checksum for each variable mentioned
+in the DMR and will insert the "_DAP4_Checksum_CRC32"
+attribute in the DMR.
+Note that this can have significant performance consequences
+since the server may need to read and serialize
+all of the data for all of the variables mentioned in the DMR
+even though that data is not transmitted to the client.
+
+If the request to the server is a data
+request, then the checksum value will follow the value of
+the variable in the data part of the response.
+The computed checksum is appended to the
+serialized representation for transmission to the
+client. Note that in this case, the client is expected to
+add the "_DAP4_Checksum_CRC32" attribute to the DMR.
+
+The default checksum algorithm is CRC32.  So the size of
+each checksum inserted in the serialization will be a 32 bit
+integer. The checksum integer will use the same endian
+representation as for the all other data.
+Note that CRC32 is not a cryptographically strong checksum, so it
+is not suitable for detecting man-in-the-middle attacks.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Historical Note"&gt;Historical Note&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The encoding described in Section [[#Response Format|6.1]]
+is similar to the serialization form of the DAP2 protocol [3], but has been extended to support arrays with a varying dimension and stripped of redundant information added by various XDR implementations.
+
+The DAP4 Serialization rules are derived from, but not the same as, XDR [10]. The differences are as follows.
+&lt;ol&gt;
+&lt;li&gt; Values are encoded using the byte order of the server. This is the so-called "receiver makes it right" rule.
+
+&lt;li&gt; No padding is used.
+
+&lt;li&gt; Floating point values always use the IEEE 754 standard.
+
+&lt;li&gt; One and two-byte values are not converted to four byte values.
+&lt;/ol&gt;
+
+===Example responses===
+
+In these examples, spaces and newlines have been added to make them easier to read. The real responses are more compact. Since this proposal is just about the form of the response - and it really focuses on the BLOB part - there is no mention of 'chunking.' For information on how this BLOB will/could be chunked.
+see Section [[#DAP4 Chunked Data Representation|7]].
+NB: Some poetic license used in the following and the checksums for single integer values seems silly, but these are really simple examples.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="A single scalar"&gt;A single scalar&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+...
+Content-Type: application/vnd.opendap.org.dap4.data
+CRLF
+{chunk count+tag}
+&amp;lt;Dataset name="foo"&amp;gt;
+&amp;lt;Int32 name="x"/&amp;gt;
+&amp;lt;/Dataset&amp;gt;
+CRLF
+{chunk count+tag}
+x
+{checksum}
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="A single array"&gt;A single array&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+...
+Content-Type: application/vnd.opendap.org.dap4.data
+CRLF
+{chunk count+tag}
+&amp;lt;Dataset name="foo"&amp;gt;
+&amp;lt;Int32 name="x"&amp;gt;
+&amp;lt;Dim size="2"&amp;gt;
+&amp;lt;Dim size="4"&amp;gt;
+&amp;lt;/Int32&amp;gt;
+&amp;lt;/Dataset&amp;gt;
+CRLF
+{chunk count+tag}
+x00 x01 x02 x03 x10 x11 x12 x13
+{checksum}
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="A single structure"&gt;A single structure&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+...
+Content-Type: application/vnd.opendap.org.dap4.data
+CRLF
+{chunk count+tag}
+&amp;lt;Dataset name="foo"&amp;gt;
+  &amp;lt;Structure name="S"&amp;gt;
+    &amp;lt;Int32 name="x"&amp;gt;
+      &amp;lt;Dim size="2"&amp;gt;
+      &amp;lt;Dim size="4"&amp;gt;
+    &amp;lt;/Int32&amp;gt;
+    &amp;lt;Float64 name="y"/&amp;gt;
+  &amp;lt;/Structure&amp;gt;
+&amp;lt;/Dataset&amp;gt;
+CRLF
+{chunk count+tag}
+x00 x01 x02 x03 x10 x11 x12 x13
+y
+{checksum}
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+Note that in this example, there is a single variable at the top-level of the root Group, and that is S; so it is S for which we compute the checksum.
+
+&lt;i&gt;&lt;u&gt;&lt;span id="An array of structures"&gt;An array of structures&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+...
+Content-Type: application/vnd.opendap.org.dap4.data
+CRLF
+{chunk count+tag}
+&amp;lt;Dataset name="foo"&amp;gt;
+  &amp;lt;Structure name="s"&amp;gt;
+    &amp;lt;Int32 name="x"&amp;gt;
+      &amp;lt;Dim size="2"/&amp;gt;
+      &amp;lt;Dim size="4"/&amp;gt;
+    &amp;lt;/Int32&amp;gt;
+    &amp;lt;Float64 name="y"/&amp;gt;
+    &amp;lt;Dim size="3"/&amp;gt;
+  &amp;lt;/Structure&amp;gt;
+&amp;lt;/Dataset&amp;gt;
+CRLF
+{chunk count+tag}
+x00 x01 x02 x03 x10 x11 x12 x13 y x00 x01 x02 x03 x10 x11 x12 x13 y x00 x01 x02 x03 x10 x11 x12 x13 y
+{checksum}
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Single array with sequence"&gt;Single array with sequence&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+...
+Content-Type: application/vnd.opendap.org.dap4.data
+CRLF
+{chunk count+tag}
+&amp;lt;Dataset name="foo"&amp;gt;
+  &amp;lt;String name="s"/&amp;gt;
+  &amp;lt;Sequence name="a-star"&amp;gt;
+      &amp;lt;Int32 name="a"/&amp;gt;
+  &amp;lt;/Sequence&amp;gt;
+  &amp;lt;Sequence name="x-star"&amp;gt;
+      &amp;lt;Int32 name="x"/&amp;gt;
+      &amp;lt;Dim size="2"/&amp;gt;
+  &amp;lt;/Sequence&amp;gt;
+&amp;lt;/Dataset&gt;
+CRLF
+{chunk count+tag}
+16 This is a string
+{checksum}
+5 a0 a1 a2 a3 a4
+{checksum}
+3 x00 x01 x02 6 x00 x01 x02 x03 x04 x05
+{checksum}
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+Notes:
+&lt;ol&gt;
+&lt;li&gt; The checksum calculation includes only the values of the variable, not the containing chunk's length bytes.
+
+&lt;li&gt; The Sequence objects are treated 'like strings' and prefixed with a length count. In the last of the three variables, the dimensioned sequence ''x-star'' has two sequence instances
+where the first sequence has 3 elements and the second has 6.
+&lt;/ol&gt;
+
+&lt;i&gt;&lt;u&gt;&lt;span id="Nested Sequences"&gt;Nested Sequences&lt;/span&gt;&lt;/u&gt;&lt;/i&gt;
+
+The sequence 'x-star' has a field that is itself a sequence. In the example, at the time of serialization 'x-star' has three elements the inner sequence (of which there are three instances) have three, six and one element, respectively.
+&lt;blockquote&gt;
+&lt;pre&gt;
+...
+Content-Type: application/vnd.opendap.org.dap4.data
+CRLF
+{chunk count+tag}
+&amp;lt;Dataset name="foo"&amp;gt;
+  &amp;lt;Sequence name="x-star"&amp;gt;
+      &amp;lt;Sequence name="y-star"&amp;gt;
+          &amp;lt;Int32 name="z"/&amp;gt;
+      &amp;lt;/Sequence"&amp;gt;
+  &amp;lt;/Sequence"&amp;gt;
+&amp;lt;/Dataset&amp;gt;
+CRLF
+{chunk count+tag}
+3 3 x00 x01 x02 6 x10 x11 x12 x3 x14 x15 1 x20
+{checksum}
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+==DAP4 Chunked Data Representation==
+
+An important capability for DAP4 is supporting clients in determining when a data transmission fails. This is especially difficult when sending binary data
+(Section [[#Response Format|6.1]]).
+In order to support such a capability, the DAP4 protocol uses a simplified variation on the HTTP/1.1 chunked transmission format [9] to serialize the data part of the response document so that errors are simple to detect. Furthermore, this format is independent of the form or content of that part of the response, so the same format can be used with different response forms or dropped when/if DAP is used with protocols that support out-of-band error signaling, simplifying our ongoing refinement of the protocol.
+
+The data part of a response document is "chunked" in a fashion similar to that outlined in HTTP/1.1. However, in addition to a prefix indicating the size of the chunk, DAP4 includes a chunk-type code. This provides a way for the receiver to know if the next chunk is part of the data response or if it contains an error response (Section [[#DAP4 Error Response Format|12]]).
+In the latter case, the client should assume that the data response has ended, even though the correct closing information was not provided.
+
+Each chunk is prefixed by a chunk header consisting of a chunk type and byte count, all contained in a single four-byte word. The encoding of this word is always network byte order (i.e. Big-Endian)
+The chunk type will be encoded in the high-order byte of the four-byte word and chunk size will be given by the three remaining bytes of that word. The maximum chunk size possible is 2&lt;sup&gt;24&lt;/sup&gt; bytes. Immediately following the four-byte chunk header will be chunk-count bytes followed by another chunk header. More precisely the initial four bytes of the chunk are decoded using the following steps.
+&lt;ol&gt;
+&lt;li&gt; Treat the 32 bit header a single, big-endian, unsigned integer.
+
+&lt;li&gt; Convert the integer to the local machine byte order by swapping bytes as necessary (Section [[#Byte Swapping Rules|6.2.3.2]]).
+Let the resulting integer be called H.
+
+&lt;li&gt; Compute the chunk type by the following expression: type = (H &amp;gt;&amp;gt; 24) &amp;amp; 0xff (Using C-language operators).
+
+&lt;li&gt; Compute the chunk length by the following expression: length = (H &amp;amp; 0x00ffffff) (Using C-language operators).
+&lt;/ol&gt;
+
+The chunk type is determined as a set of one or more flags.
+Currently, the possible flags are as follows:
+{| class="wikitable
+|+Chunk Type Encoding
+!|Bit #
+!Value of 0
+!Value of 1
+|-
+|0
+|A data containing chunk
+|The last data chunk
+|-
+|1
+| The current chunk is not an error chunk.
+| The current chunk is an "error chunk" and contains an error message
+|-
+|2
+|The data in this response is encoded using Big-Endian (i.e. network byte order)
+|The data in this response is encoded using Little-Endian
+|}
+
+It is possible for a chunk type to have more than one of the
+flags. So, for example, if the data fits into a single chunk, and we assume little-endian encoding,
+then its chunk type would be End + LittleEndian.
+
+Error implies End, but if the Error flag is set,
+then bit 0 should be treated as set even if it is not. 
+Note that in order for this to work, the chunk flags
+values must be powers of two: e.g. 1, 2, 4.
+
+The Endian flag must be set only in the first Data
+chunk. It applies to the whole response. If set in any
+subsequent chunk type, it will be ignored.
+
+===Chunked Format Grammar===
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+chunked_response: chunklist ;
+chunklist: chunk | chunklist chunk ;
+chunk: CHUNKTYPE SIZE CHUNKDATA ;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+Note that there is semantic limitation in the definition of 'chunk':
+the number of bytes in the CHUNKDATA must be equal to SIZE.
+
+===Lexical Structure===
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+/* A single 8-bit byte,
+   with the encoding 0 = data, 1 = end, 2 = error, 4 = Little-Endian */
+CHUNKTYPE = '\x00'|'\x01'|'\x02'|'\x4'|'\x06'
+/* A sequence of three 8-bit bytes,
+  interpreted as an integer on network byte order */
+SIZE = [\0x00-\0xFF][\0x00-\0xFF][\0x00-\0xFF]
+CHUNKDATA = [\0x00-\0xFF]*
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+==Constraints==
+A request to a DAP4 server for either metadata (the DMR) or data may include a constraint expression. This constraint expression specifies which variables are to be returned and what subset of the data for each variable is to be returned.
+
+This section defines the a constraint language that MUST be supported by any implementation claiming to support the DAP4 protocol. The method by which a server is provided with a constraint is specified in Volume 2. But as a typical example, if such a constraint were to be embedded in a URL, then it is presumed that it is prefixed with a "?dap4.ce=constraint-expression" that is appended to the end of the URL.
+
+The DAP4 Constraint Expression (CE) syntax is an extension of the syntax used by DAP2 that adds some important new features for Arrays as well as addressing some ambiguities and structural problems in the DAP2 syntax. In this design we also introduce some new terminology to make the explanation of the CE syntax clearer. Additionally, we use a 'curly brace' notation for datasets to streamline the description of datasets because the XML documents that DAP4 servers produce is verbose and hard for humans to read.
+
+When a client makes a request to a DAP4 server, it MAY send a CE where a missing (or empty) CE is interpreted to mean that the client wants the entire dataset sent. A CE is made up of a list of clauses, e
+ach of which names a variable in the dataset that the client would like the server to send to it. Each clause can further be broken down into two parts: The subset expression and the filter expression. There are limitations on the CE clauses depending on variable type. For scalar variables, getting the variable is the only option available, so filter expression is supported, and if present, the only subset expression allowed is ''[0]'' or ''[]''. Structure variables can be subset by field but do not support filter expressions (although fields within a Structure may support filtering). Sequences can be subset by field and do support filters. Arrays support index subsets.
+
+Specifically, the new features added for DAP4 constraints include:
+* Using a grouping operator for Structures and Sequences.
+* Sequence filtering expressions explicitly bound to a specific Sequence variable.
+* Multiple, disjoint index subsets.
+
+=== Terminology used by this section ===
+;selection expression: The entire expression passed to the server that is used to choose specific parts of a dataset.
+;subset: The act of choosing parts of a dataset based on the ''type'' of one or more of its variables. We define several types of subsetting operations as follows:
+;index subsetting: Choosing parts of an array based on the indexes of that array's dimensions. This operation always returns an array of the same rank as the original, although the size of the return array will (likely) be smaller. Index subsetting uses the bracket syntax described subsequently.
+;field subsetting: Choosing specific variables (fields) from the dataset. A dataset in DAP4 is made up of a number of variables and those may be Structures or Sequences that contain fields. Field subsetting uses the brace syntax described later. One or more fields can be specified using a semicolon (''';''') as the separator.
+;filter: A filter is a predicate that can be used to choose sequence rows based on the values of fields of the sequence. the vertical bar ('''|''') is used as a prefix operator for the filter predicate. Filters can be applied to fields of a Sequence. A filter predicate consists of one or more filter subexpressions. One or more subexpressions can be specified, using a comma (''',''') as the separator. Implicitly, multiple filter subexpressions are logically and'ded together.
+;filter subexpression: A simple expression that consists of a single variable/field; the expression is composed from traditional set of binary and unary operators: comparison operators (=, !=, &lt;, &lt;=, &gt;, &gt;=) for numbers and strings, and a string specific regular expression comparison operator (~=). The operands of the operators must be either numeric or string constants or a field of the Sequence. Specifically, only atomic-valued, scalar fields can be used in the filter expression.
+&lt;!-- and new operators for Arrays and Coverages (&lt;&lt;, &gt;&gt;, @=).--&gt;
+;id: The name of a variable. These must be absolute, with some specific exceptions. Absolute names are fully qualified names (See Section [[#Fully Qualified Names|5.3]]).
+&lt;!--
+;domain, range: A function is a mapping from a  set of ''domain'' values to a set of ''range'' values; in a ''discrete function'', these sets are finite.
+;discrete coverage: A ''discrete coverage'' is a (discrete) function where the indices of the arrays that hold the ''domain'' and ''range'' values have a one-to-one and onto mapping, with the important exception that in cases where the dimension of the arrays containing the domain values can be reduced without loosing information, that is done. This is purely an implementation optimization, but where applicable, it is nearly universally used. In DAP4 we call discrete coverages simply ''coverages'' or ''grids''.
+;coverage: Synonymous with ''grid'' in this document.
+--&gt;
+
+=== Subsetting Constraints ===
+The simplest constraint is the null string and it means 'return everything' from the dataset. Choosing variables in a dataset is referred to as the ''subset''. To choose a subset of the variables in a dataset, enumerate them in a semicolon-separated list. To choose parts of a Structure, name those parts explicitly using the syntax ''structure_name{field name}'' or ''structure_name.field name''. Each DAP4 dataset contains one or more Groups; the top-level Group is always present and is named ''/'' (pronounced 'root').
+&lt;!--
+If the root Group is the only Group in the dataset, it does not need to be named when listing variables in the CE. However, if there are other Groups in the dataset, each Group other than the root Group must be named. In any case, naming the root Group is optional.
+--&gt;
+
+==== Example: subsetting by variable or field ====
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_1" 
+  dapVersion="4.0" 
+  dmrVersion="1.0" 
+  xml:base="file:dap4/test_ce_1.xml"
+  xmlns="http://xml.opendap.org/ns/DAP/4.0#"
+  xmlns:dap="http://xml.opendap.org/ns/DAP/4.0#"&gt;
+
+  &lt;Int32 name="u"/&gt;
+  &lt;Int32 name="v"/&gt;
+  &lt;Structure name="Point"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"/&gt;
+  &lt;/Structure&gt;
+
+&lt;/Dataset&gt;
+&lt;/source&gt;
+'''Note''': The syntax used for the examples is (hopefully) easier to read than the DAP4 DMR which uses XML; Curly braces indicate hierarchy.
+&lt;source lang="c"&gt;
+Dataset {
+    Int32 u;
+    Int32 v;
+    Structure {
+        Int32 x;
+        Int32 y;
+    } Point;
+} vol_1_ce_1;
+&lt;/source&gt;
+
+; Access just ''u'': ''/u''
+; Access just ''u'' and ''v'': ''/u;/v''
+; Access just ''x'' within ''Point'': ''/Point{x}''
+&lt;!--
+This notation is based on the use of brackets in [[DAP4: Proposal for Structure Projection]] and [[DAP4: DAP4 Filter Constraints]] with the exception that braces ('''''{}''''') are likely easier to parse than brackets ('''''[]''''') given that arrays of both Structure and Sequence are possible and thus with arrays of these structures the grammar that defines the constraint expression syntax would become context sensitive.
+--&gt;
+; Equivalent expression to access just ''x'' within ''Point'':  ''/Point.x''
+&lt;!--
+; Access ''u'' and ''v'' by explicitly naming their Group: ''/u;/v''. Every dataset in DAP4 has a root Group, written ''/''. When that is the only Group in a dataset, it is implicit in the CE, but you can still use its name explicitly.
+--&gt;
+
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_2"&gt;
+  &lt;Int32 name="u"/&gt;
+  &lt;Int32 name="v"/&gt;
+  &lt;Group name="inst2"&gt;
+    &lt;Int32 name="u"/&gt;
+    &lt;Int32 name="v"/&gt;
+    &lt;Structure name="Point"&gt;
+      &lt;Int32 name="x"/&gt;
+      &lt;Int32 name="y"/&gt;
+    &lt;/Structure&gt;
+  &lt;/Group&gt;
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;source lang="c"&gt;
+Dataset {
+    Int32 u;
+    Int32 v;
+    Group {
+        Int32 u;
+        Int32 v;
+	Structure {
+	    Int32 x;
+	    Int32 y;
+	} Point;
+   } inst2;
+} vol_1_ce_2;
+&lt;/source&gt;
+
+; Access 'top-level' ''u'' and ''v'': ''/u;/v''.
+; Access  'top-level' ''u'' and ''v'' and ''inst2'''s ''u'' and ''v'': ''/u;/v;/inst2/u;/inst2/v''.
+; Access ''inst2'''s ''u'' and ''v'': ''/inst2/u;/inst2/v''
+; Access field ''x'' in ''Point'', which is inside the ''inst2'' Group: ''/inst2/Point{x}'' or ''/inst2/Point.x''.
+
+'''Notes'''
+* Using a semicolon is a change from DAP2 where clauses in the ''project part'' of the constraint were separated using a comma ('',''). We used semicolon because the comma is used elsewhere and using comma here made for a convoluted grammar. We wanted the grammar to be LALR(1) so that both table-driven and recursive-descent parsers would be easy to write.because it's easy to make both table and recursive descent parsers for these.
+* Every name in a constraint should be a fully qualified name, except that if a simple name is referenced inside curly braces (e.g. {x}) for a variable whose type is a structure or sequence type, S say, and "x" is a top-level field in S, then that is allowed.
+&lt;!--As a notational simplification, we assume that non-qualified names are actually at the top dataset level (i.e., in the root group).--&gt;
+
+=== Array Subsetting in Index Space ===
+Subsetting fixed-size arrays in their ''index space'' is accomplished using square brackets. The syntax closely follows that of DAP2, with some extensions. For an array with ''N'' dimensions, ''N'' sets of brackets are used, even if the array is only subset on some of the dimensions. The names of array variables are fully qualified names (FQNs) so it's possible to name arrays in structures and/or Groups. Array index values are ''zero-based'' as with a number of programming languages such as C and Java. Every array has a known starting index value of zero. Within the square brackets, several subexpressions are allowed:
+; [ ] : return all of elements elements for a particular dimension ''or'' apply a shared dimension slice (more on this later).
+; [ ''n'' ] : return only the value at a single index, where 0 &lt;= n &lt; N for a dimension of size ''N''. This slicing operator does not reduce the dimensionality of an array, but does return a dimension size of one for the dimension to which this is applied.
+; [ ''start'' &lt;nowiki&gt;:&lt;/nowiki&gt; ''step'' &lt;nowiki&gt;:&lt;/nowiki&gt; ''last'' ] : return every value whose index is in the range ''start &amp;lt;= index &amp;lt;= last'' and where ''(index - start) % step == 0''. This is the complete version of the syntax.
+; [ ''start'' &lt;nowiki&gt;:&lt;/nowiki&gt;  ''last'' ] : return the values whose index is in the range ''start &amp;lt;= index &amp;lt;= last''.
+; [ ''start'' &lt;nowiki&gt;:&lt;/nowiki&gt; ] : return the values whose index is in the range ''start &amp;lt;= index &amp;lt;= the dimension size - 1''.
+; [ ''start'' &lt;nowiki&gt;:&lt;/nowiki&gt; ''step'' &lt;nowiki&gt;:&lt;/nowiki&gt; ] : return every value whose index is in the range ''start &amp;lt;= index &amp;lt;= dimension size - 1'' and where ''(index - start) % step == 0''.
+
+Subsetting can be applied to any array. It can also be applied
+to a scalar, but in this case, the only legal forms are ''[0]'' or ''[]''.
+
+==== Example: Subsetting in Index Space ====
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_3"&gt;
+  
+  &lt;Int32 name="u"&gt;
+    &lt;Dim size="256"/&gt;
+    &lt;Dim size="256"/&gt;
+  &lt;/Int32&gt;
+  &lt;Int32 name="v"&gt;
+    &lt;Dim size="256"/&gt;
+    &lt;Dim size="256"/&gt;
+  &lt;/Int32&gt;
+  &lt;Structure name="Point"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"/&gt;
+    &lt;Dim size="256"/&gt;
+  &lt;/Structure&gt;
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;source lang="c"&gt;
+Dataset {
+    Int32 u[256][256];
+    Int32 v[256][256];
+    Structure {
+        Int32 x;
+        Int32 y;
+    } Point[256];
+} vol_1_ce_3;
+&lt;/source&gt;
+
+; Access all of ''u'': ''/u''
+; Access all of ''Point'' 's ''x'' field: ''/Point{x}'' or ''/Point.x''. This returns an array of Structures with a single (Int32) element, not an array of Int32.
+; Access elements 10 through 19 of array ''Point'': ''/Point[10:19]''. DAP4, like DAP2, uses zero-based indexes. This CE will return the 10th through the 19th elements (Structures in this case) of the array.
+; Access every 4th element in the ''Point'' array: ''/Point[0:4:255]'', or ''/Point[0:4:]''. This is a simple decimation operation; this CE would return 64 Structures corresponding to elements at indexes 0, 3, 7, ..., 255 of the array.
+; The index-space and field subsetting may be combined in the logical way: ''/Point[0:4:]{x}'' will return an array of structures (with 64 elements) named ''Point'' that contains a single ''Int32'' field named ''x''.
+&lt;!-- Note that &lt;del&gt;''/Point[0:4:].x''&lt;/del&gt; is not accepted
+; Access parts of ''u'' and ''v'': ''/u[4:2:9];/v[4:2:9]''--&gt;
+
+Other possible CEs: 
+; ''/u[0:4:][0:4:]'': every fourth element in both dimensions; this would return 1/16&lt;sup&gt;th&lt;/sup&gt; of the array's data.
+; ''/u[][10:19]'': elements corresponding to every row and columns 10 through 19.
+; ''/u[7][10:19]'': elements corresponding to the 8&lt;sup&gt;th&lt;/sup&gt; row and columns 10 through 19.
+; ''u[10:19][10:19]'': elements corresponding to rows 10 through 19 and columns 10 through 19.
+; ''/u[0:19][0:19]'': elements corresponding to rows 0 through 19 and columns 0 through 19.
+; ''/u[][]'': identical to ''/u'', as are ''/u[0:][0:]'' and ''/u[0:1:][0:1:]''.
+
+==== More complex subsetting examples ====
+
+The data model for DAP4 is very similar to that of a modern structured programming language where ''constructor types'' like ''Structure'' may contain any allowed type (including other Structures, etc.) as well as being arrays themselves. The basic syntax for subsetting outlined so far can be applied to the fields of a Structure using braces to enclose the subsetting expression that apply to the fields of the Structure. This can be applied recursively.
+
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_4"&gt;
+  &lt;Int32 name="u"&gt;
+    &lt;Dim size="256"/&gt;
+    &lt;Dim size="1024"/&gt;
+  &lt;/Int32&gt;
+  &lt;Structure name="Point"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"&gt;
+      &lt;Dim size="256"/&gt;
+    &lt;/Int32&gt;
+    &lt;Int32 name="z"&gt;
+      &lt;Dim size="1024"/&gt;
+    &lt;/Int32&gt;
+    &lt;Dim size="256"/&gt;
+  &lt;/Structure&gt;
+&lt;/Dataset&gt;
+&lt;/source&gt;
+
+&lt;source lang="c"&gt;
+Dataset {
+    Int32 u[256][1024];
+    Structure {
+        Int32 x;
+        Int32 y[1024];
+        Int32 z[256];
+    } Points[256];
+} vol_1_ce_4;
+&lt;/source&gt;
+
+; ''/Points{y[7:256]}'' or ''/Points.y[7:256]'': Get all of the elements of the Array of Structure ''Points'' and for each of those elements get the elements 7 through 256 from the field array ''y''. Do not return the field ''x''.
+; ''/Points[0:9]{y[0:9]}'' or ''/Points[0:9].y[0:9]'': Get the first ten elements of ''Points'' and, for each of those, only the  first ten elements of the array ''y''.
+; ''/Points[0:9]{x;y[0:9]}'': Get the first ten elements of ''Points'' and, for each of those, return only all of ''x' and the first ten elements of the array ''y''.
+; ''/Points[0:9]'': Get the first ten elements of ''Points'' (both fields are included)
+; ''/Points'' or ''/Points[]'' or ''/Points[0:]'': Get all of ''Points'' with the subtle difference that if ''Points'' uses a shared dimension, the last of the three CEs will replace that with an anonymous dimension (see the section on shared dimensions, below).
+
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_5"&gt;
+  &lt;Int32 name="u"&gt;
+    &lt;Dim size="256"/&gt;
+    &lt;Dim size="1024"/&gt;
+  &lt;/Int32&gt;
+  &lt;Structure name="Points"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"/&gt;
+    &lt;Structure name="sounding"&gt;
+      &lt;Int32 name="height"&gt;
+        &lt;Dim size="1024"/&gt;
+      &lt;/Int32&gt;
+      &lt;Int32 name="pressure"&gt;
+        &lt;Dim size="1024"/&gt;
+      &lt;/Int32&gt;
+    &lt;/Structure&gt;
+    
+    &lt;Dim size="256"/&gt;
+  &lt;/Structure&gt;
+&lt;/Dataset&gt;
+&lt;/source&gt;
+
+&lt;source lang="c"&gt;
+Dataset {
+    Int32 u[256][1024];
+    Structure {
+        Int32 x;
+        Int32 y;
+        Structure {
+            Int32 height[1024];
+            Int32 pressure[1024];
+        } sounding;
+    } Points[256];
+} vol_1_ce_5;
+&lt;/source&gt;
+
+; ''/Points[0]{x,y,sounding{height[0:8:]}}'': Get only the first element of ''Points'' and, for that, get the fields ''x'', ''y'' and a slice of ''sounding'' where the ''sounding'' slice is every 8&lt;sup&gt;th&lt;/sup&gt; element of the field ''height'' and elide the field ''pressure''. An equivalent way of writing this expression is ''/Points[0]{x,y,sounding.height[0:8:]}''. The ''{}'' syntax provides an easy way to request ''x'', ''y'' and ''sounding.height[0:8:]'' without having to repeat ''/Points[0]'' three times. A CE like ''/Points[0].x;/Points[0].y;Points[0].soundings.height[0:8:]'' is legal, but ''/Points[0]'' will only appear once in the result and a CE where ''Points'' is sliced differently is not legal. That is, &lt;del&gt;''Points[0].x;Points[0:10].y;Points[15].soundings.height[0:8:]''&lt;/del&gt; is not legal because ''Points'' can appear only once in the result but has been sliced three different ways in the CE. In any CE, each variable can be constrained only one way.
+
+===Array subsetting with Disjoint Index Subsets===
+As a new feature in DAP4 constraints, index subset within square brackets can contain multiple, disjoint slices, where each slice is of any of the previously defined slice formats (most generally ''start:stride:last''). The disjoint slices are separated by commas.
+
+Using the preceding example (dataset ''vol_1_ce_4''), some disjoint index examples might be as follows.
+; ''/u[10:12,19:23]'': Access elements 10 through 12 and 19 through 23 of array ''u''. The result will be an array of size 3+5 = 11 elements. The values returned will be, in order,
+''u[10] u[11] u[12] u[19] u[20] u[21] u[22] u[23]''.
+; ''/u[19:23, 10:12]'': Access elements 19 through 23 and 10 through 12 of array ''u''. The result will be an array of size 11, but the values returned will be in a different order, namely
+''u[19] u[20] u[21] u[22] u[23] u[10] u[11] u[12]''.
+
+In the event that the slices are not disjoint, the result is undefined.
+
+=== How Sequences fit into this syntax ===
+
+The ''Sequence'' type is more general data type in DAP4 than in DAP2 where it was significantly limited. In DAP4 Arrays of Sequences will be supported as will Sequence fields that are themselves Arrays or Sequences. A Sequence variable is conceptually like a table of rows where each field in the Sequence is a column in the table (or like an array of Structures, where the size of the single array dimension is a secret). Note that while there is a big difference between the value held by a Structure and a Sequence, each has the same subsetting syntax in the CE (although Sequences may have filters applied while Structures may not).
+
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_6"&gt;
+  &lt;Sequence name="s1"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"/&gt;
+  &lt;/Sequence&gt;
+  
+  &lt;Sequence name="s2"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"/&gt;
+    &lt;Dim size="100"/&gt;
+  &lt;/Sequence&gt;
+  
+  &lt;Sequence name="s3"&gt;
+    &lt;Int32 name="z"/&gt;
+    &lt;Int32 name="x"&gt;
+      &lt;Dim size="10"/&gt;
+    &lt;/Int32&gt;
+  &lt;/Sequence&gt;
+  
+  &lt;Sequence name="s4"&gt;
+    &lt;Int32 name="z"/&gt;
+    &lt;Int32 name="x"&gt;
+      &lt;Dim size="1024"/&gt;
+    &lt;/Int32&gt;
+    &lt;Dim size="100"/&gt;
+  &lt;/Sequence&gt;
+  
+&lt;/Dataset&gt;
+&lt;/source&gt;
+
+&lt;source lang="c"&gt;
+Dataset {
+    Sequence {
+        Int32 x;
+        Int32 y;
+    } s1;
+
+   Sequence {
+        Int32 x;
+        Int32 y;
+    } s2[100];
+
+    Sequence {
+        Int32 z;
+        Int32 x[10];
+    } s3;
+
+     Sequence {
+        Int32 z;
+        Int32 x[1024];
+    } s4[100];
+} example;
+&lt;/source&gt;
+
+; ''/s1'': All of Sequence ''s1''.
+; ''/s1{x;y}'': Also all of Sequence ''s1''.
+; ''/s1{x}'' or ''/s1.x'': every 'row' of Sequence ''s1'', but just field ''x''.
+; ''/s2{x;y}'': All one hundred Sequences instances (not rows, but full sequences) of the Array ''s2''. Same as ''/s2'' and ''/s2[0:99]{x,y}'' and ''/s2[]{x;y}''.
+; ''/s2[0:9]{x;y}'': The first ten Sequence instances of ''s2''. That would be 10 Sequences and for each, both the fields ''x'' and ''y''.
+; ''/s3{} | z &lt; 10'': Every instance of the Sequence ''s3'' where z is less than 10. Note that this is the first example of a ''filter'', a topic that is discussed in much more detail later on.
+
+=== Subsetting and Shared Dimensions ===
+
+''Shared Dimensions'' provide additional information to indicate that a group of arrays share certain relationships; that specific groups of the arrays form ''coverages''  by indicating how dimensions of ''Maps'' and ''Arrays'' are linked. The DAP4 CE syntax provides a way to slice a Shared Dimension so that slice can be used by all of the arrays that use it without repeating the slicing operation for each Array. The syntax can be read 'Assign the shared dimension ''X'' this slice,' where the slice looks like, for example, ''row=[10:19]''.
+&lt;!--
+The only difference syntactically between a shared dimension slice and the slice operator applied to a one  dimensional array is the assignment operator (''='').--&gt;
+All of the variations of the slice operator possible for an array are accepted for shared dimension slicing. In any CE, all of the shared dimension slicing clauses must precede the variable subsetting clauses.
+
+'''Note''' DAP4 uses XML for it's actual grammar, and because that's wordy this document includes a mock notation. I will extend that notation used so far so it includes concepts needed to mimic DAP4's notation for a coverage:
+* The keyword ''Dimensions'' introduces a list of symbols and their sizes. (That is the definition of a Dimension in DAP4; a size bound to an identifier.)
+* Arrays where every dimension uses a ''Dimension'' to supply its extent are DAP4 ''Maps''. Maps are the arrays that hold the ''domain'' values for a ''coverage''.
+&lt;!--
+* Arrays that use parenthesis '''''()''''' in place of brackets to indicate the sizes of dimensions and which ''use the names of maps'' to do so ''for at least one dimension'' hold the ''range'' values for the coverage. These are the coverage's ''data array'' (aka ''array'' as distinct from ''maps'').
+* As with the previous examples, both the official and the mock syntax are shown and these datasets are available from the OPeNDAP test server.--&gt;
+
+&lt;font color="red"&gt;New 4/15/16&lt;/font&gt;
+
+Using Shared Dimensions for array slicing adds some complexity to the processing of constraints. Two cases are important to consider and are shown in the examples. 
+* When a request is made for an Array with Maps but the request names only the Array and not the Maps, the assumption is made that the requester intended to receive ''only'' the Array and not the Maps. For example, the client might have already requested/received the Maps. Note that in this case the CDMR included with the data response will still include the ''Map'' element(s) for the Array, and the receiving client must know that the associated (Map) variable is not present in the response. 
+* A second case involves requests for two or more Arrays that share Maps and that constrain (i.e. 'slice') those Maps differently. Because this can introduce a logical inconsistency, when a local dimension slice is applied to an Array's dimension that has a Map, using that local dimension slice will cause the Map to be removed from the data response's CDMR.
+The examples make these two cases clearer.
+
+&lt;font color="red"&gt;/New&lt;/font&gt;
+==== Example of this syntax ====
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_7"&gt;
+  &lt;Dimension name="nlat" size="100"/&gt;
+  &lt;Dimension name="nlon" size="50"/&gt;
+  
+  &lt;Float32 name="lat"&gt;
+    &lt;Dim name="nlat"/&gt;
+  &lt;/Float32&gt;
+  &lt;Float32 name="lon"&gt;
+    &lt;Dim name="nlon"/&gt;
+  &lt;/Float32&gt;
+  
+  &lt;Float32 name="temp"&gt;
+    &lt;Dim name="nlon"/&gt;
+    &lt;Dim name="nlat"/&gt;
+    &lt;Map name="lat"/&gt;
+    &lt;Map name="lon"/&gt;
+  &lt;/Float32&gt;
+
+  &lt;Float32 name="sal"&gt;
+    &lt;Dim name="nlon"/&gt;
+    &lt;Dim name="nlat"/&gt;
+    &lt;Map name="lat"/&gt;
+    &lt;Map name="lon"/&gt;
+  &lt;/Float32&gt;
+  
+  &lt;Float32 name="O2"&gt;
+    &lt;Dim name="nlat"/&gt;
+    &lt;Dim name="nlon"/&gt;
+    &lt;Map name="lon"/&gt;
+    &lt;Map name="lat"/&gt;
+  &lt;/Float32&gt;
+  
+  &lt;Float32 name="CO2"&gt;
+    &lt;Dim name="nlon"/&gt;
+    &lt;Dim name="nlat"/&gt;
+    &lt;Dim size="10"/&gt;
+    &lt;Map name="lat"/&gt;
+    &lt;Map name="lon"/&gt;
+  &lt;/Float32&gt;
+  
+&lt;/Dataset&gt;
+&lt;/source&gt;
+
+&lt;source lang="c"&gt;
+Dataset {
+    Dimensions: nlat=100, nlon=50; 
+    Float32 lat[nlat];
+    Float32 lon[nlon];
+
+    // The maps ''lat'' and ''lon'' are used here and define a coverage
+    Float32 temp[lon][lat];
+    Float32 sal[lon][lat];
+    Float32 O2[lat][lon];
+    Float32 CO2[lon][lat][10];
+} shared_dimensions;
+&lt;/source&gt;
+
+==== Examples of subsetting using shared dimensions ====
+
+; ''nlat=[0:9];nlon=[10:19];lat[nlat];lon[nlon];temp[nlat][nlon]'': This will return Dimensions nlat=10, nlon = 10, ''lat'', ''lon'' and ''temp'' such that lat an lon are 10 element vectors and ''temp'' is a 10 x 10 array.
+Because the arrays are dimensioned using nlat and nlon in the original DMR, this expression can also be written as ''nlat=[0:9];nlon=[10:19];lat[];lon[];temp[][]'' or ''nlat=[0:9];nlon=[10:19];lat;lon;temp''
+; ''nlat=[0:9];nlon=[10:19];lat; lon; temp; sal'': Same as above, but with both ''temp'' and ''sal'' included. This example shows how two or more arrays variables can be accessed along with their Maps without sending multiple copies of the Maps. Similarly, ...
+; ''nlat=[0:9];nlon=[10:19];lat; lon'': This CE requests just the arrays that hold the domain values, while ...
+; ''nlat=[0:9];nlon=[10:19];temp; sal'': This CE requests just the arrays that hold the range values. Taken together, the two preceding examples support clients that read the domain values first and then display a map (for example) providing a way for someone to view the data's geographical extent before accessing the values them selves. Also note that there is no restriction that the same shared dimension slices must be used for both requests; like DAP2, each request in DAP4 is ''stateless''.
+; ''nlat=[0:9];nlon=[10:19];temp[][]; sal[][]'': This CE requests exactly the same data as the previous one, but uses the ''[]'' notation to indicate that the shared dimensions should be used for the subset. An example below shows how this notation can be used to mix local and shared dimension slicing.
+; ''nlat=[0:4:];nlon=[0:4:];CO2'': This CE decimates ''CO2'' by returning every fourth value in the first two dimensions
+; ''nlat=[0:4:];nlon=[0:4:];CO2[][][0:4:]'': This CE introduces the second meaning for ''[]''. When the empty braces are used for a dimension that corresponds to a shared dimension, it means ''use the shared dimension slice''. This is useful because some arrays contain a mixture of shared and anonymous dimensions and it's desirable to slice both, using a shared dimension slice previously defined where applicable and an anonymous slice where that's needed. This expression will decimate ''CO2'' by four in each of its three dimensions.
+; ''nlat=[0:4:];nlon=[0:4:];CO2[][1][0:4:]'': To override the slicing provided by a shared dimension slice, simply replace the ''[]'' with a local dimension slice.
+
+&lt;font color="red"&gt;New 4/15/16&lt;/font&gt;
+; ''temp'': This will return only the Array ''temp''. The constraint ''lat;lon;temp'' will return three Arrays: The Map Arrays ''lat'' and ''lon'' and the 'value Array' '' temp. In both cases the CDMR returned in the response will include mention of the Maps ''lat' and ''lon''. In the first case where only ''temp'' is requested, the client must be savvy (or permissive) enough to realize that the Map Arrays are not present. In summary, it is the requester's responsibility to understand that the Maps are separate variables and must be explicitly requested. Here are example CDMR responses:
+&lt;blockquote&gt;
+The CDMR for the CE ''temp'':
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_7"&gt;
+  &lt;Dimension name="nlat" size="100"/&gt;
+  &lt;Dimension name="nlon" size="50"/&gt;
+    
+  &lt;Float32 name="temp"&gt;
+    &lt;Dim name="nlon"/&gt;
+    &lt;Dim name="nlat"/&gt;
+    &lt;Map name="lat"/&gt;
+    &lt;Map name="lon"/&gt;
+  &lt;/Float32&gt;
+
+&lt;/Dataset&gt;
+&lt;/source&gt;
+
+The CDMR for the CE ''lat;lon;temp'':
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_7"&gt;
+  &lt;Dimension name="nlat" size="100"/&gt;
+  &lt;Dimension name="nlon" size="50"/&gt;
+  
+  &lt;Float32 name="lat"&gt;
+    &lt;Dim name="nlat"/&gt;
+  &lt;/Float32&gt;
+  &lt;Float32 name="lon"&gt;
+    &lt;Dim name="nlon"/&gt;
+  &lt;/Float32&gt;
+  
+  &lt;Float32 name="temp"&gt;
+    &lt;Dim name="nlon"/&gt;
+    &lt;Dim name="nlat"/&gt;
+    &lt;Map name="lat"/&gt;
+    &lt;Map name="lon"/&gt;
+  &lt;/Float32&gt;
+
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;/blockquote&gt;
+
+; ''nlat=[0:9];nlon=[10:19];lat; lon; temp; sal[][8:9]'': This request is almost the same as the third example, but notice that ''sal'' uses a local dimension slice for its second dimension. This means that it will not use the ''nlon=[10:19]'' slice that ''temp'' uses. To avoid a conflict with the ''nlon'' slice and the fact that that is being applied to ''temp'' (and ''lon'' in this example), applying a local dimension slice to an Array with Maps will cause the associated Maps to be elided from the response's CDMR. For Arrays with no Maps, this has no effect.
+
+&lt;blockquote&gt;
+The CDMR for the CE ''temp'':
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_7"&gt;
+  &lt;Dimension name="nlat" size="10"/&gt; &lt;!-- The effect of ''nlat=[0:9]'' --&gt;
+  &lt;Dimension name="nlon" size="10"/&gt; &lt;!-- ... nlon=[10:19] -&gt;
+  
+  &lt;Float32 name="lat"&gt;               &lt;!-- We asked for lat and lon --&gt;
+    &lt;Dim name="nlat"/&gt;
+  &lt;/Float32&gt;
+  &lt;Float32 name="lon"&gt;
+    &lt;Dim name="nlon"/&gt;
+  &lt;/Float32&gt;
+  
+  &lt;Float32 name="temp"&gt;              &lt;!-- ... and temp --&gt;
+    &lt;Dim name="nlon"/&gt;
+    &lt;Dim name="nlat"/&gt;
+    &lt;Map name="lat"/&gt;
+    &lt;Map name="lon"/&gt;
+  &lt;/Float32&gt;
+
+  &lt;Float32 name="sal"&gt;              &lt;!-- ... and sal, but... --&gt;
+    &lt;Dim name="nlon"/&gt;
+    &lt;Dim size=2/&gt;                   &lt;!-- for this dimension, we use a local dim slice --&gt;
+    &lt;Map name="lat"/&gt;               &lt;!-- and thus only one of the two Maps is shown. --&gt;
+  &lt;/Float32&gt;
+    
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;/blockquote&gt;
+&lt;font color="red"&gt;/New&lt;/font&gt;
+
+=== Constrained DMR Objects ===
+
+When a DAP4 server receives a request for a Data response, it must build and return a Data Response Document that contains a text/xml part containing a DMR, a separator and a binary part that contains the data values. The organization of the Data Response Document is described in detail elsewhere in this document. In this section the focus is on the DMR returned in the first part of the response and how it relates to the DMR for the original unconstrained dataset. We refer to the original dataset's DMR as the ''DMR'' and the DMR associated with the data response as the ''CDMR'' (short-hand for Constrained DMR), although a data response can be generated using a null CE, we consider that a constraint, too.
+
+The DMR contains a number of declarations for the dataset: Enumerations, Dimensions, Attributes, Groups and Variables. Each DMR and CDMR must follow the rules for the DMR described in this specification and, because DAP4 is a stateless protocol, each response from a server must stand on its own. Since a Constraint Expression alters the data returned (limiting variables, changing the size of dimensions and so on), it stands to reason that the contents of the CDMR will vary for any given dataset based on the CE. Furthermore, a goal of DAP4 is to specify that the CDMR be 'minimal' containing no unused definitions. 
+
+Because filters alter the values of variables, but not whether a variable is returned, they have no affect on the CDMR. Only the subsetting operators will be discussed here.
+
+==== Enumerations ====
+An enumeration is included in the CDMR if and only if some variable or attribute in the CE references it. A null CE returns the entire dataset, so it effectively references every variable.
+&lt;!--FIXME Make sure that 'variable' and 'field' are defined correctly in the terms section. jhrg 12/31/13--&gt;
+
+==== Shared Dimensions ====
+Shared Dimension declarations from the DMR are not included in the CDMR unless the Shared Dimension is used by a variable that has been projected and that variable does not override that shared dimension using a local slicing operation.
+&lt;!--FIXME Refer to the DMR from the previous section and show some examples.  jhrg 12/31/13--&gt;
+
+==== Variables ====
+Each clause in the constraint must specify a variable and that variable will be declared in the CDMR. The variable must be referenced by a FQN.
+&lt;!--unless it is declared at the top level of the DMR and the short-hand notation is used where the leading slash (''/'') is elided.--&gt;
+
+==== Array Variables ====
+Array variables follow all the rules for ''Variables'' with the additional conditions that their dimensions may appear altered depending on the CE. If the local slicing operations are used, then the sliced dimensions will have the size given be the slice operator, not the size as shown in the full dataset's DMR. If a shared dimension is sliced and the Array uses that slice, then its size will reflect that. Arrays may mix shared dimension slices and local slices and the result must be correctly reflected in the specific variable's declaration.
+
+Note that slicing never affects the ''rank'' of an array.
+
+==== Structure Variables ====
+If the variable is a Structure, then either the entire Structure is included or a subset of its fields will be included in the variable declaration where the fields are those specifically mentioned in a constraint projection. As with all other variables, each variable in the structure will have the same rank and type as the original declaration in the DMR.
+
+==== Sequence Variables ====
+If the variable is a Sequence, then for declaration
+purposes, it is treated like a Structure (as above).
+Note that applying a filter to a Sequence will not change
+its declaration form because the number of records in the
+sequence is not specified in the DMR. Note also that mentioning
+a Sequence field in the filter does not necessarily mean it will
+be included in the DMR. It will only be included if it is mentioned
+in the projection part of the constraint clause.
+
+==== Groups ====
+Each declaration in the CDMR that corresponds to a declaration
+in the DMR will cause its containing group (and that group's parents)
+to be included in the CDMR. This ensures that the FQN for a declaration
+in the CDMR is the same as in the DMR.
+
+==== Attributes ====
+Attributes are unaffected by the CE and are simply included in the CDMR, with the stipulation that attributes for variables that are not included in the CDMR won't be part of the CDMR. Essentially DAP4 views those attributes as part of the variables and explicitly excluding the variable from the CDMR (by providing a CE that does not include it) excludes its attributes too. Group level attributes
+will be included if and only that group appears in the CDMR.
+
+There is one situation that bears mention, however. Many datasets contain variables which include attributes that describe domain-specific values for for the variables value(s). For example, imagine a atmospheric profile that includes information about the minimum and maximum temperatures of that profile. If the values are stored in an array and the array is sliced so that only a subset of values are returned, the attributes will provide correct values for the original data ''but possibly not the data returned in the response'' because the slicing operation has removed some of the values of the array. Because DAP4 is a ''domain neutral'' protocol, it has no knowledge about how the values of a specific attribute relate to the values of the variable and cannot adjust the values of the attribute to match the CE.
+
+=== Filters ===
+While ''subsetting'' provides ways to choose data based on the dataset structure and the types of the variables, ''filters'' provide a way to choose data based on their values. The values to be returned are denoted using one or more simple predicates. The general syntax for a filter expression is to follow a subset (projection) expression with a pipe ('''|''') and one or more filter predicates. Multiple predicates are separated by commas and the value of complete predicate is the logical AND of the comma-separated subexpressions. 
+
+Filter expressions can only be applied to Sequence variables (or arrays of them).
+In each case the result of the filter operation returns ''the same type'' variable. A Sequence variable is essentially a table of values and thus can be thought of as containing a number of rows and the filter expression is applied to ''each row'' in the order those rows are provided to the expression evaluator. Every row that satisfies the predicate will be included in the value returned; those that don't will not be included in the result. Note that no new values are computed by these operations; no interpolations, means, etc., are performed.
+
+The behavior of filtering expressions on Sequences will be covered in the following sections.
+
+&lt;!--
+==== Filters on Sequences  ====
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_8"&gt;
+
+  &lt;Sequence name="Points"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"/&gt;
+  &lt;/Sequence&gt;
+  
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;source lang="c"&gt;
+Dataset {
+    Sequence {
+        Int32 x;
+        Int32 y;
+    } Points;
+} arrays;
+&lt;/source&gt;
+--&gt;
+
+=== Filters and more complex data types ===
+The basic syntax for filters is that there is a subsetting expression, a pipe ('''|''') and then one or more filter predicates. This syntax can appear any place a ''selection expression'' can appear, so it can be used inside braces when an Array or Sequence is a field of a Structure or Sequence. Note that the filter expression prefix operator binds to the index subset immediately to its left at the same level (i.e. eliding braces). Some examples follow.
+
+==== Example: Filters on complex types ====
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_9"&gt;
+  &lt;Sequence name="Points1"&gt;
+    &lt;Int32 name="x"&gt;
+      &lt;Dim size="100"/&gt;
+    &lt;/Int32&gt;
+    &lt;Int32 name="y"/&gt;
+  &lt;/Sequence&gt;
+  
+  &lt;Sequence name="Points2"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"/&gt;
+    &lt;Sequence name="sounding"&gt;
+      &lt;Int32 name="depth"/&gt;
+      &lt;Int32 name="temp"/&gt;
+    &lt;/Sequence&gt;
+  &lt;/Sequence&gt;
+
+  &lt;Sequence name="Points3"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"/&gt;
+    &lt;Sequence name="sounding"&gt;
+      &lt;Int32 name="depth"/&gt;
+      &lt;Int32 name="temp"/&gt;
+    &lt;/Sequence&gt;
+    &lt;Dim size="20"/&gt;
+  &lt;/Sequence&gt;
+  
+  &lt;Structure name="Points4"&gt;
+    &lt;Int32 name="x"/&gt;
+    &lt;Int32 name="y"/&gt;
+    &lt;Sequence name="raw"&gt;
+      &lt;Int32 name="depth"/&gt;
+      &lt;Int32 name="temps"&gt;
+        &lt;Dim size="4"/&gt;
+      &lt;/Int32&gt;
+      &lt;Dim size="300"/&gt;
+    &lt;/Sequence&gt;
+  &lt;/Structure&gt;
+  
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;source lang="c"&gt;
+Dataset {
+    Sequence {
+        Int32 x[100];
+        Int32 y;
+    } Points1;
+
+    Sequence {
+        Int32 x;
+        Int32 y;
+        Sequence {
+            Int32 depth;
+            Int32 temp;
+        } sounding;
+    } Points2;
+
+    Sequence {
+        Int32 x;
+        Int32 y;
+        Sequence {
+            Int32 depth;
+            Int32 temp;
+        } sounding;
+    } Points3[20];
+
+    Structure {
+        Int32 x;
+        Int32 y;
+        Sequence {
+            Int32 depth;
+            Int32 temps[4];
+        } raw;
+    } Points4[100]
+
+} complex_types_example;
+&lt;/source&gt;
+
+; ''/Points1{x[0:9]}|y&lt;3'': For the Sequence ''Points1'', return the rows of data where ''y'' is less than 3. In those rows, subset ''x'' so that only the first ten elements are included. Note that y is mentioned in the filter, but not in the selection so it will not appear in the resulting DMR.
+; ''/Points2{x; y; sounding | depth &gt; 20} | x &gt; 17'': This show, without the added complexity of an array, how filter expressions associate with Sequences. For the sequence ''sounding'' the filter expression can use only ''depth'' and ''temp'' (and constants). When filtering the values of a child sequence, the sequence name must be used and thus the names of all of the fields of the parent sequence needed in the result must be listed.
+; ''/Points3[10:19] { x; y; sounding | depth &gt; 10 } | 20 &lt; x &lt; 40, y &lt;35'': This selection expression first finds the index subset of ''Points3'' and arranges to return the fields ''x'', ''y'' and ''sounding'' where ''x''and ''y'' satisfy the predicates ''20 &lt; x &lt; 40'' and ''y &lt;35'' and for the field ''sounding'', which is a Sequence itself, it will return both fields where ''depth &gt; 10''. This example points out an important aspect to the syntax and to expression evaluation: the order of evaluation of the filter predicates happens after the index and  variable and/or field subsetting. The order of evaluation of the complete filter predicates can happen in any order (i.e., the ''20 &lt; x &lt; 40, y &lt;35'' and ''depth &gt; 10'' predicates can happen in any order. The order of evaluation of the filter predicate subexpressions (i.e., ''20 &lt; x &lt; 40'' and  ''y &lt;35'') is also unspecified.
+; ''/Points4[3:2:8] {x; y; raw{temps[2] | temps &gt; 7,ND=-1}}'': In this expression the ''temps'' field of the Sequence ''raw'' is still an Array, it's just an Array with a single element, which illustrates that neither the subsetting nor filtering operations alter the types of the variables.
+
+&lt;!--
+=== The Mask operator may be applied only to an Array ===
+For this predicate, the syntax is ''dest *= source'' where any element&lt;sub&gt;'''i,j'''&lt;/sub&gt; in the ''source'' array with the value equal to the given ''No Data'' value will result in the corresponding element of the ''dest'' array being set to that array's ''No Data'' value. Other values in the ''dest'' array are not affected. The intent of this is that filtering performed on a map array can then be applied to a data array that uses the map (although there's no actual restriction that this be only used with coverages; any two isomorphic arrays in an anonymous group can be used). To use the Mask (''*='') predicate, the array on the Right Hand Side of the sub-clause must have been previously filtered (and so must have a given ND value).
+
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_10"&gt;
+  &lt;Float32 name="lat"&gt;
+    &lt;Dim size="100"/&gt;
+    &lt;Dim size="50"/&gt;
+  &lt;/Float32&gt;
+  
+  &lt;Float32 name="lon"&gt;
+    &lt;Dim size="100"/&gt;
+    &lt;Dim size="50"/&gt;
+  &lt;/Float32&gt;
+  
+  &lt;Float32 name="temp"&gt;
+    &lt;Dim size="100"/&gt;
+    &lt;Dim size="50"/&gt;
+  &lt;/Float32&gt;
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;source lang="c"&gt;
+Dataset {
+	Float32 lat[100][50];
+	Float32 lon[100][50];
+	Float32 temp[100][50];
+} vol_1_ce_10;
+&lt;/source&gt;
+
+; ''lat | lat &lt; 20, ND=-255; temp | temp *= lat, ND=-255'': Filter ''lat'' so that all values  &lt; 20 are replaced with the No Data value, then use that as a mask, making all of the corresponding elements of 'temp'' also be No Data. Note that this operator forces an order on filter evaluation.
+; ''lat[0:20][0:20] | lat &lt; 20, ND=-255; lon[0:20][0:20] | -100 &lt; lon &lt; -80, ND=-255; temp[0:20][0:20] | temp *= lon, temp *= lat, ND=-255'': This will result in ''temp'' effectively being masked by the logical AND of ''lat'' and ''lon''
+
+==== Filters and Coverages ====
+The same filtering operations that can be applied to simple arrays can be applied to a coverage by simply using its Maps in the Constraint expression (i.e., the subset and filter sub-expressions). The array filtering operation previously described can easily be applied to a coverage. Below we show two cases; where the maps are vectors and where they are two-dimensional arrays.
+
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_11" dapVersion="4.0" dmrVersion="1.0" xml:base="file:dap4/vol_1_ce_11.xml"
+  xmlns="http://xml.opendap.org/ns/DAP/4.0#" xmlns:dap="http://xml.opendap.org/ns/DAP/4.0#"&gt;
+  &lt;Dimension name="nlat" size="100"/&gt;
+  &lt;Dimension name="nlon" size="50"/&gt;
+  
+  &lt;Float32 name="lat"&gt;
+    &lt;Dim name="nlat"/&gt;
+  &lt;/Float32&gt;
+  &lt;Float32 name="lon"&gt;
+    &lt;Dim name="nlon"/&gt;
+  &lt;/Float32&gt;
+  
+  &lt;Float32 name="temp"&gt;
+    &lt;Dim name="nlon"/&gt;
+    &lt;Dim name="nlat"/&gt;
+    &lt;Map name="lon"/&gt;
+    &lt;Map name="lat"/&gt;
+  &lt;/Float32&gt;
+  
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;source lang="c"&gt;
+Dataset {
+	Dimensions: nlat=100, nlon=50; 
+	Float32 lat[nlat];
+	Float32 lon[nlon];
+
+	Float32 temp(lon)(lat);
+} vector_maps;
+&lt;/source&gt;
+
+; ''lat | lat &lt; 20,ND=-255; lon | -100 &lt; lon &lt; -80, ND=-255'; temp'': Return all of ''lat'', ''lon'' and ''temp'' where ''lat'' and ''lon'' have ben filtered as per the predicates. The values of ''temp'' are not altered.
+; ''nlat=[0:20]; nlon=[0:20]; lat | lat &lt; 20, ND=-255; lon | -100 &lt; lon &lt; -80, ND=-255'; temp'': The same as above, but the maps ''lat'' and ''lon'' and the array ''temp'' are subset using the index subsetting expression and the resulting arrays are filtered. Note that because this is a coverage, the Maps' dimensions are tied to ''temp'''s dimensions using Shared Dimensions and we can use the Shared Dimension slicing to specify the slicing once and use it for all three of the Maps/Arrays. That is, ''lat'', ''lon'' and ''temp'' are each subset using ''[0:20][0:20]''. Contrast this with the corresponding example in the previous section where the slicing subset had to be explicitly specified for each Array.
+; ''nlat=[0:20]; nlon=[0:20]; lat | lat &lt; 20, ND=-255; lon | -100 &lt; lon &lt; -80, ND=-255'; temp &gt; 7, ND=-255'': Same as above, but now ''temp'' is filtered too. Note that the filters applied to ''lat'' and ''lon'' have no affect on ''temp''.
+
+&lt;source lang="xml"&gt;
+&lt;Dataset name="vol_1_ce_12" dapVersion="4.0" dmrVersion="1.0" xml:base="file:dap4/vol_1_ce_12.xml"
+  xmlns="http://xml.opendap.org/ns/DAP/4.0#" xmlns:dap="http://xml.opendap.org/ns/DAP/4.0#"&gt;
+  &lt;Dimension name="x" size="100"/&gt;
+  &lt;Dimension name="y" size="50"/&gt;
+  
+  &lt;Float32 name="lat"&gt;
+    &lt;Dim name="x"/&gt;
+    &lt;Dim name="y"/&gt;
+  &lt;/Float32&gt;
+  &lt;Float32 name="lon"&gt;
+    &lt;Dim name="x"/&gt;
+    &lt;Dim name="y"/&gt;
+  &lt;/Float32&gt;
+  
+  &lt;Float32 name="temp"&gt;
+    &lt;Dim name="x"/&gt;
+    &lt;Dim name="y"/&gt;
+    &lt;Map name="lon"/&gt;
+    &lt;Map name="lat"/&gt;
+  &lt;/Float32&gt;
+  
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;source lang="c"&gt;
+Dataset {
+	Dimensions: x=100, y=50;
+	Float32 lat[x][y];
+	Float32 lon[x][y];
+
+	Float32 temp(lon)(lat);
+} two_dim_maps;
+&lt;/source&gt;
+
+; ''lat | lat &lt; 20,ND=-255; lon | -100 &lt; lon &lt; -80, ND=-255'; temp'': These examples repeat the above three, but show that the same syntax applies to the case where the maps are N-dimensional (in this case N == 2).
+:; ''lat=[0:20][0:20]; lon=[0:20][0:20]; lat | lat &lt; 20, ND=-255; lon | -100 &lt; lon &lt; -80, ND=-255'; temp'': 
+:; ''lat=[0:20][0:20]; lon=[0:20][0:20]; lat | lat &lt; 20, ND=-255; lon | -100 &lt; lon &lt; -80, ND=-255'; temp &gt; 7, ND=-255'':
+--&gt;
+
+==References==
+
+&lt;ol&gt;
+&lt;li&gt;&lt;div id="Ref-1"&gt;&lt;/div&gt;
+Caron, J.,
+&lt;i&gt;Unidata's Common Data Model Version 4&lt;/i&gt;, 2012
+(http://www.unidata.ucar.edu/software/netcdf-java/CDM/).
+
+&lt;li&gt;&lt;div id="Ref-2"&gt;&lt;/div&gt;
+Folk, M. and E. Pourmal,
+&lt;i&gt;HDF5 Data Model, File Format and Library &amp;mdash; HDF5 1.6&lt;/i&gt;,
+Category: Recommended Standard January 2007
+NASA Earth Science Data Systems Recommended Standard ESDS-RFC-007, 2007
+(http://earthdata.nasa.gov/sites/default/files/esdswg/spg/rfc/ese-rfc-007/ESDS-RFC-007v1.pdf).
+
+&lt;li&gt;&lt;div id="Ref-3"&gt;&lt;/div&gt;
+Gallagher J., N. Potter, T. Sgouros, S. Hankin, and G. Flierl,
+&lt;i&gt;The Data Access Protocol&amp;mdash;DAP 2.0&lt;/i&gt;,
+NASA Earth Science Data Systems Recommended Standard ESE-RFC-004.1.2
+(http://opendap.org/pdf/ESE-RFC-004v1.2.pdf).
+
+&lt;li&gt;&lt;div id="Ref-4"&gt;&lt;/div&gt;
+Gosling, J., B. Joy, G. Steele, G. Bracha, A Buckley,
+&lt;i&gt;The Java™ Language Specification &amp;mdash; 7th Editition&lt;/i&gt;
+Oracle Corporation, 2012,
+(http://docs.oracle.com/javase/specs/jls/se7/html/).
+
+&lt;li&gt;&lt;div id="Ref-5"&gt;&lt;/div&gt;
+Hartnett, E.,
+&lt;i&gt;netCDF-4/HDF5 File Format&lt;/i&gt;,
+NASA Earth Science Data Systems Recommended Standard ESDS-RFC-022, 2011
+(http://earthdata.nasa.gov/sites/default/files/field/document/ESDS-RFC-022v1.pdf).
+
+&lt;li&gt;&lt;div id="Ref-6"&gt;&lt;/div&gt;
+IEEE, &lt;i&gt;IEEE Standard for Binary Floating-Point Arithmetic, ANSI/IEEE Std 754-1985&lt;/i&gt;, Digital Object Identifier: 10.1109/IEEESTD.1985.82928, 1985.
+
+&lt;li&gt;&lt;div id="Ref-7"&gt;&lt;/div&gt;
+The Internet Society, &lt;i&gt;IETF RFC 2119:
+Key words for use in RFCs to Indicate Requirement Levels
+&lt;/i&gt;, 1997
+(http://tools.ietf.org/html/rfc2119).
+
+&lt;li&gt;&lt;div id="Ref-8"&gt;&lt;/div&gt;
+The Internet Society, &lt;i&gt;IETF RFC 2396:
+Uniform Resource Identifiers (URI): Generic Syntax
+&lt;/i&gt;, 1998
+(http://tools.ietf.org/html/rfc2396).
+
+&lt;li&gt;&lt;div id="Ref-9"&gt;&lt;/div&gt;
+The Internet Society, &lt;i&gt;IETF RFC 2616:
+Hypertext Transfer Protocol &amp;mdash; HTTP/1.1
+&lt;/i&gt;, 1999
+(http://tools.ietf.org/html/rfc2616).
+
+&lt;li&gt;&lt;div id="Ref-10"&gt;&lt;/div&gt;
+The Internet Society, &lt;i&gt;IETF RFC 4506: XDR: External Data Representation Standard&lt;/i&gt;, 2006
+(http://tools.ietf.org/html/rfc4506).
+
+&lt;li&gt;&lt;div id="Ref-11"&gt;&lt;/div&gt;
+ISO/IEC,
+&lt;i&gt;Information technology &amp;mdash; Portable Operating System Interface (POSIX) &amp;mdash; Part 2: Shell and Utilities&lt;/i&gt;,
+ISO/IEC 9945-2,1993
+(http://www.iso.org/iso/catalogue_detail.htm?csnumber=17841).
+
+&lt;li&gt;&lt;div id="Ref-12"&gt;&lt;/div&gt;
+The Open Geospatial Consortium Inc.,
+&lt;i&gt;Abstract Specifications&lt;/i&gt;,
+(http://www.opengeospatial.org/standards/as).
+
+&lt;li&gt;&lt;div id="Ref-13"&gt;&lt;/div&gt;
+The Organization for the Advancement of Structured Information Standards,
+&lt;i&gt;RELAX NG Specification&lt;/i&gt;,
+Committee Specification: 2001,
+J. Clark, M. Makoto (eds.)
+(http://relaxng.org/spec-20011203.html).
+
+&lt;li&gt;&lt;div id="Ref-14"&gt;&lt;/div&gt;
+The Unicode Consortium. &lt;i&gt;The Unicode Standard, Version 6.2.0&lt;/i&gt;,  ISBN 978-1-936213-07-8, 2012.
+
+&lt;li&gt;&lt;div id="Ref-15"&gt;&lt;/div&gt;
+Unidata,
+&lt;i&gt;CF Metadata&lt;/i&gt;,
+(http://www.cfconventions.org/).
+
+&lt;li&gt;&lt;div id="Ref-16"&gt;&lt;/div&gt;
+W3C, &lt;i&gt;Extensible Markup Language (XML) 1.0&lt;/i&gt;,
+T. Bray, J. Paoli, C. M. Sperberg-McQueen, E. Maler, F. Yergeau (eds.),
+Fifth Edition. 2008
+(http://www.w3.org/TR/2008/REC-xml-20081126/).
+
+&lt;li&gt;&lt;div id="Ref-17"&gt;&lt;/div&gt;
+World Meteorological Organization,
+&lt;i&gt;FM 92 GRIB&lt;/i&gt;,
+edition 2, version 2, 2003
+(http://www.wmo.int/pages/prog/www/DPS/FM92-GRIB2-11-2003.pdf).007
+&lt;/ol&gt;
+
+=Appendices=
+
+==Appendix 1. DAP4 DMR Syntax as a RELAX NG Schema==
+
+This RELAX NG grammar is the definitive formal grammar for the DMR.
+
+&lt;source lang="xml"&gt;
+&lt;!-- RELAX NG Grammar --&gt;
+&lt;!-- Date: June 15, 2012 --&gt;
+&lt;!-- Last Revised: November 23, 2012 --&gt;
+
+&lt;grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         datatypeLibrary="http://xml.opendap.org/datatypes/dap4"
+         ns="http://xml.opendap.org/ns/DAP/4.0#"
+         &gt;
+&lt;start&gt;
+  &lt;ref name="dataset"/&gt;
+&lt;/start&gt;
+
+&lt;define name="dataset"&gt;
+  &lt;element name="Dataset"&gt;
+    &lt;a:documentation&gt;
+        Semantic restriction: dapVersion, dmrVersion are required.
+    &lt;/a:documentation&gt;
+    
+    &lt;attribute name="dapVersion"&gt;&lt;data type="dap4_string"/&gt;&lt;/attribute&gt;
+    &lt;attribute name="dmrVersion"&gt;&lt;data type="dap4_string"/&gt;&lt;/attribute&gt;
+
+    &lt;ref name="groupbody"/&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="groupdef"&gt;
+  &lt;element name="Group"&gt;
+    &lt;ref name="groupbody"/&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="groupbody"&gt;
+  &lt;attribute name="name"&gt;&lt;data type="dap4_id"/&gt;&lt;/attribute&gt;
+  
+  &lt;zeroOrMore&gt;
+    &lt;ref name="dimdef"/&gt;
+  &lt;/zeroOrMore&gt;
+  &lt;zeroOrMore&gt;
+    &lt;ref name="enumdef"/&gt;
+  &lt;/zeroOrMore&gt;
+  &lt;zeroOrMore&gt;
+    &lt;ref name="variable"/&gt;
+  &lt;/zeroOrMore&gt;
+  &lt;zeroOrMore&gt;
+    &lt;ref name="metadata"/&gt;
+  &lt;/zeroOrMore&gt;
+  &lt;zeroOrMore&gt;
+    &lt;ref name="groupdef"/&gt;
+  &lt;/zeroOrMore&gt;
+
+&lt;/define&gt;
+
+&lt;define name="enumdef"&gt;
+  &lt;element name="Enumeration"&gt;
+    &lt;attribute name="name"&gt;&lt;data type="dap4_id"/&gt;&lt;/attribute&gt;
+    &lt;attribute name="basetype"&gt;
+        &lt;choice&gt; &lt;!-- Must be consistent with atomictype and variable --&gt;
+            &lt;value&gt;Byte&lt;/value&gt; &lt;!-- equivalent to UInt8 --&gt;
+            &lt;value&gt;Int8&lt;/value&gt;
+            &lt;value&gt;UInt8&lt;/value&gt;
+            &lt;value&gt;Int16&lt;/value&gt;
+            &lt;value&gt;UInt16&lt;/value&gt;
+            &lt;value&gt;Int32&lt;/value&gt;
+            &lt;value&gt;UInt32&lt;/value&gt;
+            &lt;value&gt;Int64&lt;/value&gt;
+            &lt;value&gt;UInt64&lt;/value&gt;
+        &lt;/choice&gt;
+    &lt;/attribute&gt;
+    &lt;oneOrMore&gt;&lt;ref name="enumconst"/&gt;&lt;/oneOrMore&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="enumconst"&gt;
+  &lt;element name="EnumConst"&gt;
+    &lt;attribute name="name"&gt;&lt;data type="dap4_id"/&gt;&lt;/attribute&gt;
+    &lt;attribute name="value"&gt;&lt;data type="dap4_integer"/&gt;&lt;/attribute&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="namespace"&gt;
+  &lt;zeroOrMore&gt;
+    &lt;element name="Namespace"&gt;
+      &lt;attribute name="href"&gt;&lt;data type="dap4_uri"/&gt;&lt;/attribute&gt;
+    &lt;/element&gt;
+  &lt;/zeroOrMore&gt;
+&lt;/define&gt;
+
+&lt;define name="dimdef"&gt;
+  &lt;element name="Dimension"&gt;
+    &lt;a:documentation&gt;
+      A Dimension is a binding of a name to a size; when two or more variables
+      use the same 'name' it can be inferred that they 'share' that dimension.
+      The 'size' attribute must be a positive integer.
+    &lt;/a:documentation&gt;
+    &lt;attribute name="name"&gt;&lt;data type="dap4_id"/&gt;&lt;/attribute&gt;
+    &lt;attribute name="size"&gt;&lt;data type="dap4_dim"/&gt;&lt;/attribute&gt;
+    &lt;ref name="metadatalist"/&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="dimref"&gt;
+  &lt;element name="Dim"&gt;
+    &lt;optional&gt;
+        &lt;attribute name="name"&gt;&lt;data type="dap4_fqn"/&gt;&lt;/attribute&gt;
+    &lt;/optional&gt;
+    &lt;optional&gt;
+      &lt;attribute name="size"&gt;
+          &lt;data type="dap4_dim"/&gt;
+      &lt;/attribute&gt;
+    &lt;/optional&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;!-- Atomictype define is only a way
+     to list the set of atomictypes;
+     it is never used in the grammar
+--&gt;
+&lt;define name="atomictype"&gt;
+  &lt;!-- This must be consistent with "variable" below --&gt;
+  &lt;choice&gt;
+    &lt;value&gt;Char&lt;/value&gt;
+    &lt;value&gt;Byte&lt;/value&gt;
+    &lt;value&gt;Int8&lt;/value&gt;
+    &lt;value&gt;UInt8&lt;/value&gt;
+    &lt;value&gt;Int16&lt;/value&gt;
+    &lt;value&gt;UInt16&lt;/value&gt;
+    &lt;value&gt;Int32&lt;/value&gt;
+    &lt;value&gt;UInt32&lt;/value&gt;
+    &lt;value&gt;Int64&lt;/value&gt;
+    &lt;value&gt;UInt64&lt;/value&gt;
+    &lt;value&gt;Float32&lt;/value&gt;
+    &lt;value&gt;Float64&lt;/value&gt;
+    &lt;value&gt;String&lt;/value&gt;
+    &lt;value&gt;URL&lt;/value&gt;
+    &lt;value&gt;Opaque&lt;/value&gt;
+    &lt;value&gt;Enum&lt;/value&gt;
+  &lt;/choice&gt;
+&lt;/define&gt;
+
+&lt;define name="variable"&gt;
+  &lt;choice&gt;
+    &lt;ref name="simplevariable"/&gt;
+    &lt;ref name="structurevariable"/&gt;
+    &lt;ref name="sequencevariable"/&gt;
+  &lt;/choice&gt;
+&lt;/define&gt;
+
+&lt;define name="simplevariable"&gt;
+  &lt;choice&gt;
+    &lt;!-- Following  must be consistent with "atomictype" --&gt;
+    &lt;element name="Char"   &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="Byte"   &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="Int8"   &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="UInt8"  &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="Int16"  &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="UInt16" &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="Int32"  &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="UInt32" &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="Int64"  &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="UInt64" &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="Float32"&gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="Float64"&gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;!-- Made 'string' capitalized. jhrg --&gt;
+    &lt;element name="String" &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;!-- Added URL type. jhrg --&gt;
+    &lt;element name="URL" &gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="Opaque"&gt;&lt;ref name="variabledef"/&gt;&lt;/element&gt;
+    &lt;element name="Enum"&gt;
+      &lt;attribute name="enum"&gt;&lt;data type="dap4_fqn"/&gt;&lt;/attribute&gt;
+      &lt;ref name="variabledef"/&gt;
+    &lt;/element&gt;
+  &lt;/choice&gt;
+&lt;/define&gt;
+
+&lt;define name="variabledef"&gt;
+  &lt;attribute name="name"&gt;&lt;data type="dap4_id"/&gt;&lt;/attribute&gt;
+  &lt;zeroOrMore&gt;
+    &lt;choice&gt;
+      &lt;ref name="dimref"/&gt;
+      &lt;ref name="mapref"/&gt;
+      &lt;ref name="metadata"/&gt;
+    &lt;/choice&gt;
+  &lt;/zeroOrMore&gt;
+&lt;/define&gt;
+
+&lt;define name="mapref"&gt;
+  &lt;element name="Map"&gt;
+    &lt;attribute name="name"&gt;&lt;data type="dap4_fqn"/&gt;&lt;/attribute&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="structurevariable"&gt;
+  &lt;element name="Structure"&gt;
+    &lt;attribute name="name"&gt;&lt;data type="dap4_id"/&gt;&lt;/attribute&gt;
+    &lt;zeroOrMore&gt;
+      &lt;choice&gt;
+        &lt;ref name="dimref"/&gt;
+        &lt;ref name="variable"/&gt;
+        &lt;ref name="metadata"/&gt;
+      &lt;/choice&gt;
+    &lt;/zeroOrMore&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="sequencevariable"&gt;
+  &lt;element name="Sequence"&gt;
+    &lt;attribute name="name"&gt;&lt;data type="dap4_id"/&gt;&lt;/attribute&gt;
+    &lt;zeroOrMore&gt;
+      &lt;choice&gt;
+        &lt;ref name="dimref"/&gt;
+        &lt;ref name="variable"/&gt;
+        &lt;ref name="metadata"/&gt;
+      &lt;/choice&gt;
+    &lt;/zeroOrMore&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="metadatalist"&gt;
+  &lt;zeroOrMore&gt;
+    &lt;ref name="metadata"/&gt;
+  &lt;/zeroOrMore&gt;
+&lt;/define&gt;
+
+&lt;define name="metadata"&gt;
+    &lt;choice&gt;
+    &lt;ref name="otherxml"/&gt;
+    &lt;ref name="attribute"/&gt;
+    &lt;/choice&gt;
+&lt;/define&gt;
+
+&lt;define name="attribute"&gt;
+  &lt;choice&gt;
+    &lt;ref name="atomicattribute"/&gt;
+    &lt;ref name="containerattribute"/&gt;
+  &lt;/choice&gt;
+&lt;/define&gt;
+
+&lt;define name="atomicattribute"&gt;
+  &lt;element name="Attribute"&gt;
+      &lt;attribute name="name"&gt;&lt;data type="dap4_id"/&gt;&lt;/attribute&gt;
+      &lt;a:documentation&gt;
+        Semantic constraint: type must be compatible
+        with the set of attribute value types
+      &lt;/a:documentation&gt;
+      &lt;attribute name="type"&gt;
+        &lt;choice&gt;
+          &lt;value&gt;Char&lt;/value&gt;
+          &lt;value&gt;Byte&lt;/value&gt;
+          &lt;value&gt;Int8&lt;/value&gt;
+          &lt;value&gt;UInt8&lt;/value&gt;
+          &lt;value&gt;Int16&lt;/value&gt;
+          &lt;value&gt;UInt16&lt;/value&gt;
+          &lt;value&gt;Int32&lt;/value&gt;
+          &lt;value&gt;UInt32&lt;/value&gt;
+          &lt;value&gt;Int64&lt;/value&gt;
+          &lt;value&gt;UInt64&lt;/value&gt;
+          &lt;value&gt;Float32&lt;/value&gt;
+          &lt;value&gt;Float64&lt;/value&gt;
+          &lt;value&gt;String&lt;/value&gt;
+          &lt;value&gt;URL&lt;/value&gt;
+          &lt;value&gt;Enum&lt;/value&gt;
+          &lt;value&gt;Opaque&lt;/value&gt;
+        &lt;/choice&gt;
+      &lt;/attribute&gt;
+      &lt;optional&gt;
+          &lt;ref name="namespace"/&gt;
+      &lt;/optional&gt;
+      &lt;zeroOrMore&gt;
+	&lt;choice&gt;
+          &lt;element name="Value"&gt;
+              &lt;attribute name="value"&gt;
+                &lt;choice&gt; &lt;!-- technical ambiguity --&gt;
+                    &lt;data type="dap4_integer"/&gt;
+                    &lt;data type="dap4_float"/&gt;
+                    &lt;data type="dap4_opaque"/&gt;
+                    &lt;data type="dap4_char"/&gt;
+                    &lt;data type="dap4_string"/&gt;
+                    &lt;data type="dap4_fqn"/&gt; &lt;!-- for enum types --&gt;
+                &lt;/choice&gt;
+              &lt;/attribute&gt;
+         &lt;/element&gt;
+	 &lt;element name="Value"&gt;&lt;data type="dap4_text"/&gt;&lt;/element&gt;
+	&lt;/choice&gt;
+      &lt;/zeroOrMore&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="containerattribute"&gt;
+  &lt;element name="Attribute"&gt;
+    &lt;attribute name="name"&gt;&lt;data type="dap4_id"/&gt;&lt;/attribute&gt;
+    &lt;zeroOrMore&gt;
+	&lt;ref name="attribute"/&gt;
+    &lt;/zeroOrMore&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="otherxml"&gt;
+  &lt;element name="OtherXML"&gt;
+    &lt;ref name="arbitraryxml"/&gt;
+  &lt;/element&gt;
+&lt;/define&gt;
+
+&lt;define name="arbitraryxml"&gt;
+    &lt;element&gt;
+      &lt;anyName/&gt;
+      &lt;zeroOrMore&gt;
+        &lt;choice&gt;
+          &lt;attribute&gt;
+            &lt;anyName/&gt;
+          &lt;/attribute&gt;
+          &lt;text/&gt;
+          &lt;ref name="arbitraryxml"/&gt;
+        &lt;/choice&gt;
+      &lt;/zeroOrMore&gt;
+    &lt;/element&gt;
+&lt;/define&gt;
+&lt;/grammar&gt;
+&lt;/source&gt;
+
+==Appendix 2. DAP4 RELAX NG Lexical Elements==
+Within the RELAXNG DAP4 grammar there are markers for occurrences of primitive type such as integers, floats, or strings (ignoring case). The markers typically look like this when defining an attribute that can occur in the DAP4 DMR.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+&amp;lt;attribute name="Principal_Investigator"&amp;gt;
+&amp;lt;datatype="dap4_string"/&amp;gt;
+&amp;lt;/attribute&amp;gt;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+The "&amp;lt;data type="dap4_string"/&amp;gt;" specifies the lexical class for the values that this attribute can have. In this case, the "Principal_Investigator" attribute is defined to have a DAP4 string value. Similar notation is used for values occurring as text within an xml element.
+
+The lexical specification later in this section defines the legal lexical structure for such items. Specifically, it defines the format of the following lexical items.
+&lt;ol&gt;
+&lt;li&gt; Constants, namely: string, float, integer, character, and opaque.
+&lt;li&gt; Identifiers
+&lt;li&gt; Fully qualified names (also referred to as FQNs)
+(Section [[#Fully Qualified Names|5.3]]).
+&lt;/ol&gt;
+The specification is written using the extended POSIX regular expression notation [11] with some additions.
+&lt;ol&gt;
+&lt;li&gt; Names are assigned to regular expressions using the notation "name = regular-expression"
+&lt;li&gt; Named expressions can be used in subsequent regular expressions by using the notation "{name}". Such occurrences are equivalent to textually substituting the expression associated with name for the "{name}" occurrence.
+&lt;/ol&gt;
+Notes:
+&lt;ol&gt;
+&lt;li&gt; The definition of {UTF8} is deferred to the next section.
+&lt;li&gt; Comments are indicated using the "//" notation. Standard xml escape formats (&amp;amp;x#DDD; or &amp;amp;{name};) are assumed to be used as needed.
+&lt;/ol&gt;
+
+===Basic character set definitions===
+&lt;blockquote&gt;
+&lt;pre&gt;
+CONTROLS   = [\x00-\x1F] // ASCII control characters
+
+WHITESPACE = [ \r\n\t\f]+
+
+HEXCHAR    = [0-9a-zA-Z]
+
+// ASCII printable characters
+
+ASCII = [0-9a-zA-Z !"#$%&amp;amp;'()*+,-./:;&amp;lt;=&amp;gt;?@[\\\]\\^_`|{}~]
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+===Ascii characters that may appear unescaped in Identifiers===
+
+This is assumed to be basically all ASCII printable characters except these characters: '.', '/', '"', '&amp;#39;',  and '&amp;amp;'. Occurrences of these characters are assumed to be representable using the standard XML &amp;amp;{name}; notation (e.g. &amp;amp;amp;). In this expression, backslash is interpreted as an escape character.
+
+&lt;blockquote&gt;
+&lt;pre&gt;
+IDASCII=[0-9a-zA-Z!#$%()*+:;&lt;=&gt;?@\[\]\\^_`|{}~]
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+===The Numeric Constant Classes: integer and float===
+&lt;blockquote&gt;
+&lt;pre&gt;
+INTEGER    = {INT}|{UINT}|{HEXINT}
+
+INT        = [+-][0-9]+{INTTYPE}?
+
+UINT       = [0-9]+{INTTYPE}?
+
+HEXINT     = {HEXSTRING}{INTTYPE}?
+
+INTTYPE    = ([BbSsLl]|"ll"|"LL")
+
+HEXSTRING  = (0[xX]{HEXCHAR}+)
+
+FLOAT      = ({MANTISSA}{EXPONENT}?)|{NANINF}
+
+EXPONENT   = ([eE][+-]?[0-9]+)
+
+MANTISSA   = [+-]?[0-9]*\.[0-9]*
+
+NANINF     = (-?inf|nan|NaN)B.1.4 The String Constant Class
+
+STRING     = ([^"&amp;amp;&amp;lt;&amp;gt;]|{XMLESCAPE})*
+
+CHAR       = ([^'&amp;amp;&amp;lt;&amp;gt;]|{XMLESCAPE})
+
+URL        = (http|https|[:][/][/][a-zA-Z0-9\-]+
+             ([.][a-zA-Z\-]+)+([:][0-9]+)?
+             ([/]([a-zA-Z0-9\-._,'\\+%)*
+             ([?].+)?([#].+)?
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+===The String/URL Constant Class===
+&lt;blockquote&gt;
+&lt;pre&gt;
+STRING = "\({SIMPLESTRING}{ESCAPEDQUOTE}?\)*"
+SIMPLESTRING = [^"\\]
+ESCAPEDQOTE=\\"
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+===The Opaque Constant Class===
+&lt;blockquote&gt;
+&lt;pre&gt;
+OPAQUE = 0x([0-9A-Fa-f] [0-9A-Fa-f])+
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+There is a semantic constraint that if there is an odd
+number of hex digits in the opaque constant, a zero hex digit
+will be added to the end to ensure that the constant represents
+a set of 8-bit bytes.
+
+===The Identifier Class===
+&lt;blockquote&gt;
+&lt;pre&gt;
+ID         = {IDCHAR}+
+
+IDCHAR     = ({IDASCII}|{XMLESCAPE}|{UTF8})
+
+XMLESCAPE  = [&amp;amp;][#][0-9]+;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+
+===The Atomic Type Class===
+&lt;blockquote&gt;
+&lt;pre&gt;
+ATOMICTYPE =   Char | Byte
+             | Int8 | UInt8 | Int16 | UInt16
+             | Int32 | UInt32 | Int64 | UInt64
+             | Float32 | Float64
+             | String | URL
+             | Enum
+             | Opaque ;
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+This list should be consistent with the atomic types in the grammar. 
+
+===The Fully Qualified Name Class===
+&lt;blockquote&gt;
+&lt;pre&gt;
+FQN      = ([/]{EID})+([.]{EID})*
+EID      = {EIDCHAR}+
+EIDCHAR  =  ({EIDASCII}|{XMLESCAPE}|{UTF8})
+EIDASCII = [0-9a-zA-Z!#$%()*+:;&lt;=&gt;?@\[\]\\^_`|{}~]
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+This should be consistent with the definition in Section [[#Fully Qualified Names|5.3]].
+
+==Appendix 2. DAP4 Type Definitions==
+
+The RELAXNG [13] grammar references the following specific types. For each type, the following table give the lexical format as defined by the patterns previously given or by specific patterns as listed.
+
+&lt;table border=1 width="50%"&gt;
+&lt;tr&gt;&lt;th&gt;RELAXNG Data Type Name&lt;th&gt;Lexical Pattern
+&lt;tr&gt;&lt;td&gt;dap4_integer&lt;td&gt;{INTEGER}
+&lt;tr&gt;&lt;td&gt;dap4_float&lt;td&gt;{FLOAT}
+&lt;tr&gt;&lt;td&gt;dap4_char&lt;td&gt;{CHAR}
+&lt;tr&gt;&lt;td&gt;dap4_string&lt;td&gt;{STRING}
+&lt;tr&gt;&lt;td&gt;dap4_opaque&lt;td&gt;{OPAQUE}
+&lt;tr&gt;&lt;td&gt;dap4_id&lt;td&gt;{ID}
+&lt;tr&gt;&lt;td&gt;dap4_fqn&lt;td&gt;{FQN}
+&lt;tr&gt;&lt;td&gt;dap4_uri&lt;td&gt;{URL}
+&lt;tr&gt;&lt;td&gt;dap4_dim&lt;td&gt;[1-9][0-9]*
+&lt;/table&gt;
+
+Note that the above lexical element classes are not disjoint.  The type element "&amp;lt;datatype=.../&amp;gt;" should be sufficient to interpret the type within the DMR.
+
+==Appendix 3. UTF-8==
+The UTF-8 specification [14] defines several ways to validate a UTF-8 string of characters.
+
+The full (most correct) validating version of UTF8 character set is as follows.
+&lt;blockquote&gt;
+&lt;pre&gt;
+UTF8 =   ([\xC2-\xDF][\x80-\xBF])
+       | (\xE0[\xA0-\xBF][\x80-\xBF])
+       | ([\xE1-\xEC][\x80-\xBF][\x80-\xBF])
+       | (\xED[\x80-\x9F][\x80-\xBF])
+       | ([\xEE-\xEF][\x80-\xBF][\x80-\xBF])
+       | (\xF0[\x90-\xBF][\x80-\xBF][\x80-\xBF])
+       | ([\xF1-\xF3][\x80-\xBF][\x80-\xBF][\x80-\xBF])
+       | (\xF4[\x80-\x8F][\x80-\xBF][\x80-\xBF])
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+The lines of the above expression cover the UTF-8 characters as follows:
+1. non-overlong 2-byte
+2.  excluding overlongs
+3. straight 3-byte
+4. excluding surrogates
+5. straight 3-byte
+6. planes 1-3
+7. planes 4-15
+8. plane 16
+
+Note that values from 0 through 127 (ASCII and control characters)
+are not included in any of these definitions.
+
+The above reference also defines some alternative regular expressions. First, there is what is termed the partially relaxed version of UTF8 defined by this regular expression.
+&lt;blockquote&gt;
+&lt;pre&gt;
+UTF8 =    ([\xC0-\xD6][\x80-\xBF])
+        | ([\xE0-\xEF][\x80-\xBF][\x80-\xBF])
+        | ([\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF])
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+Second, there is what is termed the most-relaxed version of UTF8 defined by this regular expression.
+&lt;blockquote&gt;
+&lt;pre&gt;
+UTF8 = ([\xC0-\xD6]...)|([\xE0-\xEF)...)|([\xF0 \xF7]...)
+&lt;/pre&gt;
+&lt;/blockquote&gt;
+Any conforming DAP4 implementation MUST use at least the most-relaxed expression for validating UTF-8 character strings, but MAY use either the partially-relaxed or the full validation expression. 
+
+==Appendix 4. LALR(1) Grammar for DMR using Bison Notation==
+It is conventient to have a Bison grammar that corresponds to the above RELAX NG grammar. If there is a conflict, then the RELAX NG grammar is considered correct.
+
+&lt;source lang="bnf"&gt;
+%start dataset
+%%
+dataset:
+	DATASET_
+	xml_attribute_list
+	groupbody
+	_DATASET
+	;
+
+group:
+	GROUP_
+	ATTR_NAME
+	groupbody
+	_GROUP
+	;
+
+groupbody:
+	  %empty
+	| groupbody dimdef
+	| groupbody enumdef
+	| groupbody variable
+	| groupbody metadata
+	| groupbody group
+	;
+
+enumdef:
+	ENUMERATION_
+	xml_attribute_list
+	enumconst_list
+	_ENUMERATION
+	;
+
+enumconst_list:
+	  enumconst
+	| enumconst_list enumconst
+	;
+
+enumconst:
+	  ENUMCONST_ ATTR_NAME ATTR_VALUE _ENUMCONST
+	| ENUMCONST_ ATTR_VALUE ATTR_NAME _ENUMCONST
+	;
+
+dimdef:
+	DIMENSION_
+	xml_attribute_list
+	metadatalist
+	_DIMENSION
+	;
+
+dimref:
+	  DIM_ ATTR_NAME _DIM
+	| DIM_ ATTR_SIZE _DIM
+	;
+
+variable:
+	  atomicvariable
+	| enumvariable
+	| structurevariable
+	| sequencevariable
+	;
+
+atomicvariable:
+	atomictype_
+	ATTR_NAME
+	varbody
+	_atomictype
+	;
+
+enumvariable:
+	ENUM_
+	xml_attribute_list
+	varbody
+	_ENUM
+	;
+
+atomictype_:
+	  CHAR
+	| BYTE
+	| INT8
+	| UINT8
+	| INT16
+	| UINT16
+	| INT32
+	| UINT32
+	| INT64
+	| UINT64
+	| FLOAT32
+	| FLOAT64
+	| STRING
+	| URL
+	| OPAQUE
+	;
+
+_atomictype:
+	  _CHA
+	| _BYT
+	| _INT
+	| _UINT
+	| _INT1
+	| _UINT1
+	| _INT3
+	| _UINT3
+	| _INT6
+	| _UINT6
+	| _FLOAT3
+	| _FLOAT6
+	| _STRIN
+	| _UR
+	| _OPAQU
+	| _ENUM
+	;
+
+varbody:
+	  %empty
+	| varbody dimref
+	| varbody mapref
+	| varbody metadata
+	;
+
+mapref:
+	MAP_
+	ATTR_NAME
+	metadatalist
+	_MAP
+	;
+
+structurevariable:
+	STRUCTURE_
+	ATTR_NAME
+	structbody
+	_STRUCTURE
+	;
+
+structbody:
+	  %empty
+	| structbody variable
+	| structbody dimref
+	| structbody mapref
+	| structbody metadata
+	;
+
+sequencevariable:
+	SEQUENCE_
+	ATTR_NAME
+	sequencebody
+	_SEQUENCE
+	;
+
+sequencebody:
+	  %empty
+	| sequencebody dimref
+	| sequencebody variable
+	| sequencebody mapref
+	| sequencebody metadata
+	;
+
+metadatalist:
+	  %empty
+	| metadatalist metadata
+	;
+
+metadata:
+	  attribute
+	;
+
+attribute:
+	  atomicattribute
+	| containerattribute
+	| otherxml
+	;
+
+
+atomicattribute:
+	  ATTRIBUTE_
+	  xml_attribute_list
+	  namespace_list
+	  valuelist
+	  _ATTRIBUTE
+	|
+	  ATTRIBUTE_
+	  xml_attribute_list
+	  namespace_list
+	  _ATTRIBUTE
+	;
+
+namespace_list:
+	  %empty
+	| namespace_list namespace
+	;
+
+namespace:
+	NAMESPACE_
+	ATTR_HREF
+	_NAMESPACE
+	;
+
+containerattribute:
+	  ATTRIBUTE_
+	  xml_attribute_list
+	  namespace_list
+	  attributelist
+	  _ATTRIBUTE
+	;
+
+attributelist:
+	  attribute
+	| attributelist attribute
+	;
+
+valuelist:
+	  value
+	| valuelist value
+	;
+
+value:
+	  VALUE_ TEXT _VALUE
+	| VALUE_ ATTR_VALUE _VALUE
+	;
+
+otherxml:
+	OTHERXML_
+	xml_attribute_list
+	xml_body
+	_OTHERXML
+	;
+
+xml_body:
+	  element_or_text
+	| xml_body element_or_text
+	;
+
+element_or_text:
+	  xml_open
+	  xml_attribute_list
+	  xml_body
+	  xml_close
+	| TEXT
+	;
+
+xml_attribute_list:
+	  %empty
+	| xml_attribute_list xml_attribute
+	;
+
+xml_attribute:
+	  ATTR_BASE
+	| ATTR_BASETYPE
+	| ATTR_DAPVERSION
+	| ATTR_DMRVERSION
+	| ATTR_ENUM
+	| ATTR_HREF
+	| ATTR_NAME
+	| ATTR_NAMESPACE
+	| ATTR_NS
+	| ATTR_SIZE
+	| ATTR_TYPE
+	| ATTR_VALUE
+	;
+
+xml_open:
+	  DATASET_
+	| GROUP_
+	| ENUMERATION_
+	| ENUMCONST_
+	| NAMESPACE_
+	| DIMENSION_
+	| DIM_
+	| ENUM_
+	| MAP_
+	| STRUCTURE_
+	| SEQUENCE_
+	| VALUE_
+	| ATTRIBUTE_
+	| OTHERXML_
+	| CHAR_
+	| BYTE_
+	| INT8_
+	| UINT8_
+	| INT16_
+	| UINT16_
+	| INT32_
+	| UINT32_
+	| INT64_
+	| UINT64_
+	| FLOAT32_
+	| FLOAT64_
+	| STRING_
+	| URL_
+	| OPAQUE_
+	;
+
+xml_close:
+	  _DATASET
+	| _GROUP
+	| _ENUMERATION
+	| _ENUMCONST
+	| _NAMESPACE
+	| _DIMENSION
+	| _DIM
+	| _ENUM
+	| _MAP
+	| _STRUCTURE
+	| _SEQUENCE
+	| _VALUE
+	| _ATTRIBUTE
+	| _OTHERXML
+	| _CHAR
+	| _BYTE
+	| _INT8
+	| _UINT8
+	| _INT16
+	| _UINT16
+	| _INT32
+	| _UINT32
+	| _INT64
+	| _UINT64
+	| _FLOAT32
+	| _FLOAT64
+	| _STRING
+	| _URL
+	| _OPAQUE
+	;
+&lt;/source&gt;
+
+===Lexical Tokens for Bison Grammar===
+The above Bison grammar assumes a corresponding lexer
+that will return a set of token types (listed below).
+The token with a trailing underscore represents an opening XML element
+and a token with a leading underscore represents a closing XML element.
+So, for example, token ''DATASET_'' is ''&amp;lt;Dataset&amp;gt;''
+and token ''_DATASET'' is ''&amp;lt;/Dataset&amp;gt;''.
+
+&lt;source lang="bnf"&gt;
+/* XML Element Names */
+%token DATASET_ _DATASET
+%token GROUP_ _GROUP
+%token ENUMERATION_ _ENUMERATION
+%token ENUMCONST_ _ENUMCONST
+%token NAMESPACE_ _NAMESPACE
+%token DIMENSION_ _DIMENSION
+%token DIM_ _DIM
+%token MAP_ _MAP
+%token STRUCTURE_ _STRUCTURE
+%token SEQUENCE_ _SEQUENCE
+%token VALUE_ _VALUE
+%token ATTRIBUTE_ _ATTRIBUTE
+%token OTHERXML_ _OTHERXML
+%token ERROR_ _ERROR
+%token MESSAGE_ _MESSAGE
+%token CONTEXT_ _CONTEXT
+%token OTHERINFO_ _OTHERINFO
+
+/* XML Element Names for Atomic Types*/
+%token CHAR_ _CHAR
+%token BYTE_ _BYTE
+%token INT8_ _INT8
+%token UINT8_ _UINT8
+%token INT16_ _INT16
+%token UINT16_ _UINT16
+%token INT32_ _INT32
+%token UINT32_ _UINT32
+%token INT64_ _INT64
+%token UINT64_ _UINT64
+%token FLOAT32_ _FLOAT32
+%token FLOAT64_ _FLOAT64
+%token STRING_ _STRING
+%token URL_ _URL
+%token OPAQUE_ _OPAQUE
+%token ENUM_ _ENUM
+
+/* XML Attribute Names */
+%token ATTR_BASE ATTR_BASETYPE ATTR_DAPVERSION ATTR_DMRVERSION
+%token ATTR_ENUM ATTR_HREF ATTR_NAME ATTR_NAMESPACE
+%token ATTR_NS ATTR_SIZE ATTR_TYPE ATTR_VALUE 
+%token ATTR_HTTPCODE
+
+/* Arbitrary XML Text */
+%token TEXT
+&lt;/source&gt;
+
+==Appendix 5. LALR(1) Grammar for Constraints using Bison Notation==
+&lt;source lang="bnf"&gt;
+%start constraint
+%%
+constraint:
+	dimredeflist
+	clauselist
+	;
+
+dimredeflist:
+          %empty
+        | dimredeflist ';' dimredef
+        ;
+
+clauselist:
+          clause
+        | clauselist ';' clause
+        ;
+
+clause:
+          projection
+	| selection
+        ;
+
+projection:
+	segmenttree
+        ;
+
+segmenttree:
+          segment
+        | segmenttree '.' segment
+        | segmenttree '.' '{' segmentforest '}'
+        | segmenttree '{' segmentforest '}'
+        ;
+
+segmentforest:
+	  segmenttree
+	| segmentforest ',' segmenttree
+	;
+
+segment:
+          NAME
+        | NAME slicelist
+        ;
+
+slicelist: 
+          slice
+        | slicelist slice
+        ;
+
+slice:
+          '[' ']'
+        | '[' subsetlist ']'
+	;
+
+subsetlist:
+	  subset
+	| subsetlist ',' subset
+	;
+	
+subset:
+           index 
+        |  index ':' index 
+        |  index ':' index ':' index 
+        |  index ':' 
+        |  index ':' index ':' 
+        ;
+
+index:  INTEGER ;
+
+selection:
+        segmenttree '|' filter
+        ;
+
+filter:
+          predicate
+        | predicate ',' predicate  /* ',' == AND */
+        | '!' predicate %prec NOT
+        ;
+
+predicate:
+          primary relop primary
+        | primary relop primary relop primary
+        | primary eqop primary
+        ;
+
+relop:
+	  '&amp;lt;' '='
+	| '&amp;gt;' '='
+	| '&amp;lt;'
+	| '^gt;'
+	;
+
+eqop:
+	  '=' '='
+	| '!' '='
+	| '~' '='
+	;
+
+primary:
+          fieldname
+        | constant
+        | '(' predicate ')'
+	;
+
+dimredef: NAME '=' slice ;
+
+fieldname: NAME
+
+constant: STRING | INTEGER | DOUBLE | BOOLEAN ;
+&lt;/source&gt;
+
+===Lexical Tokens for Bison Grammar for Constraints===
+
+The primary lexical tokens for constraints are:
+NAME, STRING, INTEGER, DOUBLE, BOOLEAN.
+
+These lexemes are intended to match the patterns defined for the RELAX NG grammar.</text>
+      <sha1>grq291er9sl3uy8lw674yhleelqnlm9</sha1>
+    </revision>
+  </page>
+</mediawiki>

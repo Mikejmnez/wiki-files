@@ -1,0 +1,72 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Other Hyrax Admin Interface Features That Would Be Nice But Need Funding</title>
+    <ns>0</ns>
+    <id>609</id>
+    <revision>
+      <id>5988</id>
+      <parentid>5985</parentid>
+      <timestamp>2010-11-08T22:10:01Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>5988</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1666" sha1="2on2bsrzdqtju6hs3iou0o8669ohq37" xml:space="preserve">[[Category:HAI]]
+'''Point Of Contact:''' ''[[User:ndp | Nathan Potter]]''
+
+== Hyrax OLFS and BES's data access service ==
+# View list of OLFS and BES's services
+# View service's data requests, request status, and statistics
+# Control (e.g. Start/stop) OLFS and BES's data access services
+# Notification of OLFS and BES service status
+# Notification of OLFS and BES service status when thresholds are exceeded
+# Notification of OLFS and BES heartbeat signal (e.g. traffic lights)
+# View/set OLFS service configuration settings
+# View/set BES service configuration setting
+# Modify service notification features and thresholds.
+==   Hyrax data catalog service ==
+# View data catalog and statistics
+# Control data catalog service
+# Send copy of data catalog and output level of attribute information
+# View/set OLFS and BES data catalog service settings
+== User Managment ==
+# View user service access history and data requests. ''I think this will require too much information be retained about users and their past actions. You could implement this with log analysis, but given that the logs' content can be changed and the logs are logs and thus likely not complete (truncated, rotated, etc.) I think it's just too much to bite off now. [[User:jimg]]''
+# Manage user access rights to data
+# &lt;del&gt;Manage user and service access rights, quotas, thresholds, and priorities&lt;/del&gt; Have these been covered?
+==  Debugging Tools==
+# [[HAI Use Case: Compare Server output with debugging associated with the request|Compare Server output with debugging associated with the request]]
+# [[HAI Use Case: View/set OLFS and BES's log settings|View/set OLFS and BES's log settings]]</text>
+      <sha1>2on2bsrzdqtju6hs3iou0o8669ohq37</sha1>
+    </revision>
+  </page>
+</mediawiki>

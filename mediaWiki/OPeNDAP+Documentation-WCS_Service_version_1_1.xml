@@ -1,0 +1,417 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>WCS Service version 1.1</title>
+    <ns>0</ns>
+    <id>597</id>
+    <revision>
+      <id>7579</id>
+      <parentid>7578</parentid>
+      <timestamp>2012-03-09T03:20:00Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Installation */</comment>
+      <origin>7579</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="22970" sha1="fb6qaxu8ddrxnxeu662fb0kmobg0u2f" xml:space="preserve">[[Category:WCS]]
+
+----
+== Overview ==
+
+This WCS service is designed to be used in conjunction with one or more Hyrax data servers. The Hyrax servers may be either local or remote to the WCS service. 
+
+See also:  [[WCS Technical Description]]
+
+=== Catalog Implementation ===
+
+One of the challenges encountered when implementing a WCS service for Hyrax is catalog generation: ''How do we generate a list of coverages from existing holdings in Hyrax? '' The DAP contains the mechanism for transmitting the information, but lacks the explicit semantics required to describe a WCS Coverage. Luckily many of the users of DAP servers have provided metadata that complies to some type of metadata convention or standard.  This WCS service can build its catalog by using semantic web technology to crosswalk from existing DAP data sets which use the Climate Forecast (CF-1.0) and Unidtata Dataset Discovery v1.0 metadata conventions into the WCS metadata space. 
+
+==== [[StaticRdfCatalog | WCS Catalog]] ====
+
+The WCS catalog uses semantic web technologies to create mappings between DAP data sets and WCS Coverages. A WCS Coverage is a very specific data type and is much more constrained than the more general DAP data model. Thus, only certain DAP data sets will be representable as WCS Coverages. Evaluating which ones can be represented as WCS Coverages requires analysis of the metadata associated with each data set. Since the DAP has no actual semantic metadata requirements for metadata it is necessary (at least for the moment) to look only at DAP data sets that have metadata that conforms to some well known metadata convention or standard. Since the semantics of the convention are known it is possible to write inferencing rules that relate pieces of information in one convention/standard to the equivalent information in another convention/standard.
+
+== Requirements ==
+
+The WCS service needs:
+* [http://www.java.com/en/download/manual.jsp  Java 1.6 virtual machine] or newer.
+* [http://tomcat.apache.org/ Tomcat 6.x] (''The WCS service has not been tested against Tomcat 7.x'')
+
+In addition, the WCS service requires DAP datasets served by [http://www.opendap.org/download/hyrax Hyrax 1.8] or newer.
+
+== Installation ==
+
+=== Install The Software ===
+* [http://tomcat.apache.org/download-60.cgi Download and install Tomcat 6.x]
+* Download the WCS Service distribution, a gzipped tar file, and it's associated gpg signature.
+* Verify the distribution. (You will need to [http://www.opendap.org/security_at_opendap.org.pub.asc  get the public security key for OPeNDAP] first) In the directory containing the file and the downloaded signature run the command:
+:: &lt;font size="2"&gt;&lt;code&gt;gpg --verify &lt;file&gt;.sig&lt;/code&gt;&lt;/font&gt;
+: If that fails - don't proceed and please contact support@opendap.org
+* Unpack the distribution
+* Copy the WCS.war file to $CATALINA_HOME/webapps
+* Start Tomcat. Make sure that you tell Tomcat to use a JVM with at minimum 1GB of memory. You can do this easily by setting the environment variable JAVA_OPTS to 1000MB prior to launching Tomcat. (csh: &lt;font size="2"&gt;'&lt;tt&gt;setenv JAVA_OPTS -Xmx1000m&lt;/tt&gt;&lt;/font&gt;',  bash: &lt;font size="2"&gt;'&lt;tt&gt;export JAVA_OPTS=-Xmx1000m&lt;/tt&gt;&lt;/font&gt;')
+
+=== Wait... ===
+
+Once the server is up it won't show any Coverages for a few minutes. The default set of Coverages will take from between 2 - 30 minutes to process, depending on network speeds (loading documents) and the host system's processing capability. You can watch the processing by viewing the log file ''&lt;code&gt;$CATALINA_HOME/logs/catalina.out&lt;/code&gt;''
+
+Once the semantic engine completes it's run the WCS catalog should be updated and you should be able to see the default coverages generated by datasets on http://test.opendap.org:8080/opendap/
+
+If that's not the case and no coverages are found then STOP and start trouble shooting.
+
+== Testing the sample data ==
+
+The WCS service comes with some sample datasets already configured. To view a web page listing these, type the following URL in a browser: ''&lt;nowiki&gt;http://localhost:8080/WCS&lt;/nowiki&gt;''. Of course, adjust ''localhost:8080'' to match your site.
+
+To force the service to update its catalog, either:
+# Start and stop Tomcat
+# If enabled in the web.xml for the WCS service you can access the URL ''&lt;nowiki&gt;http://localhost:8080/WCS/update()&lt;/nowiki&gt;''.
+
+If you choose the later, go back to the main web page for the WCS service (&lt;nowiki&gt;http://localhost:8080/WCS&lt;/nowiki&gt;) and refresh that page. While the catalog is rebuilding the main page will display the message: "''WCS catalog is currently being updated.''" that will change to "''WCS catalog is up to date.''" when the process is complete. What is happening here? The inferencing software is reevaluating the information describing your datasets and then using that new information to build coverages.
+
+== Configuration == 
+
+''Note: Configuration changes will not take effect until Tomcat is restarted.''
+
+In order to correctly configure your WCS service you will need to:
+
+# Localize the WCS service metadata
+#* Edit &lt;font face="Courier&gt;$CATALINA_HOME/content/WCS/ServiceProvider.xml&lt;/font&gt; so that the specific information about the contact point, address and other information about the service reflect the needs of your organization. ([[#Service Provider|Jump to Service Provider localization details on this page.]])
+#*  Edit  &lt;font face="Courier&gt;$CATALINA_HOME/content/WCS/ServiceIdentification.xml&lt;/font&gt; so that the Title and Abstract sections reflect your needs. '''''DO NOT alter the ServiceType or ServiceTypeVersion element content.''''' ([[#Service Identification|Jump to Service Identification localization details on this page.]])
+#* Edit &lt;font face="Courier&gt;$CATALINA_HOME/content/WCS/OperationsMetadata.xml&lt;/font&gt; so that the links to the service reflect the domain names and ports upon which you are running the service.  ([[#Operations Metadata|Jump to Operations Metadata localization details on this page.]])
+# Configure the catalog (i.e. add datasets) for the WCS service. [[#WCS Catalog Configuration |Jump to WCS Catalog Configuration details on this page.]]
+# Stop and restart Tomcat. 
+
+=== WCS Service Configuration ===
+
+The WCS Service utilizes its own configuration directory and files which are stored in a well known location within the directory  content/''context'' directory (where ''context'' of the web application that the WCS service is running. By default ''context='WCS'''):
+&lt;font size="2"&gt;
+ $CATALINA_HOME/content/'''&lt;context&gt;'''
+&lt;/font&gt;
+where &lt;font  face="Courier"&gt;'''&lt;context&gt;'''&lt;/font&gt; is context of the WCS web application. By default this value is '''WCS'''. 
+
+
+In the WCS Service directory (&lt;font  face="Courier"&gt;'''$CATALINA_HOME/content/WCS'''&lt;/font&gt;) is kept various documents used by the WCS Service including:
+
+;[[#WCS Catalog Configuration | wcs_service.xml]]
+:The &lt;font face="Courier"&gt;wcs_service.xml&lt;/font&gt; file controls which datasets are contained in the catalog and the catalog update behavior..
+
+;[[#Service Identification|ServiceIdentification.xml]]
+:The &lt;font face="Courier"&gt;ServiceIdentification.xml&lt;/font&gt; file contains WCS metadata used in the wcs:Capabilities document.
+
+;[[#Service Provider|ServiceProvider.xml]]
+:The &lt;font face="Courier"&gt;ServiceProvider.xml&lt;/font&gt; file contains WCS metadata used in the wcs:Capabilities document.
+
+;[[#Operations Metadata| OperationsMetadata.xml]] 
+:The &lt;font face="Courier"&gt;OperationsMetadata.xml&lt;/font&gt; file contains WCS metadata used in the wcs:Capabilities document.
+
+Every installation of a WCS service requires a localization step in which much of the required metadata about the particular service instance and its keepers is captured so that it can be returned to clients.
+
+From a client's perspective a WCS service is made up of three commands:
+# wcs:GetCapabilities
+# wcs:DescribeCoverage
+# wcs:GetCoverage
+The response for a wcs:GetCapaibilities request requires localization information that can only be determined by the individual(s) that are installing the service. The responses for both the  wcs:DescribeCoverage and wcs:GetCoverage requests can be generated directly from the WCS "catalog".
+
+The wcs:Capabilites document contains 4 sections:
+* Service Identification (ows:ServiceIdentification)
+* Service Provider (ows:ServiceProvider)
+* Operations Metadata (ows:OperationsMetadata)
+* Contents (wcs:Contents)
+For any given installation of a WCS service the first three sections must be carefully localized. Their contents cannot realistically be ascertained by an automation. Thus, they are really part of the WCS configuration activity that must be performed by the service installer. The last section, Contents, can be automatically generated from the catalog of Coverages.
+
+In this WCS implementation the ows:ServiceIdentification, ows:ServiceProvider and ows:OperationsMetadata sections are each stored as a separate XML file that is loaded by the server at startup.  Default versions of these files are installed into the OLFS's persistent content directory the first time that the WCS Service is launched. They can be found in the directory:
+&lt;font size="2"&gt;
+ $CATALINA_HOME/content/'''&lt;context&gt;'''
+&lt;/font&gt;
+where &lt;font  face="Courier"&gt;'''&lt;context&gt;'''&lt;/font&gt; is defined by the Tomcat ''service context'' in which the WCS web application is running. By default the value of &lt;font  face="Courier"&gt;'''&lt;context&gt;'''&lt;/font&gt; is '''WCS'''
+
+
+==== Service Identification ====
+
+The Service Identification metadata as described in section 7.4.4 of  OGC document ''[http://www.opengeospatial.org/standards/common OGC 06-121r3]''.  
+
+Localization should include (but may not be limited to)  updating the ows:Keytwords, ows:Fees and ows:AccessConstraints
+
+===== Example Document =====
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;!-- * SERVICE IDENTIFICATION SECTION                           * --&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;ows:ServiceIdentification xmlns="http://www.opengis.net/wcs/1.1"
+xmlns:ows="http://www.opengis.net/ows/1.1"
+xmlns:xlink="http://www.w3.org/1999/xlink" &gt;
+  &lt;ows:Title&gt;OPeNDAP Hyrax Prototype WCS Service&lt;/ows:Title&gt;
+  &lt;ows:Abstract&gt;A prototype WCS server intended to provide WCS 1.1 (1.1.2) access to DAP datasets&lt;/ows:Abstract&gt;
+  &lt;ows:Keywords&gt;
+     &lt;ows:Keyword&gt;Web Coverage Service&lt;/ows:Keyword&gt;
+     &lt;ows:Keyword&gt;OPeNDAP&lt;/ows:Keyword&gt;
+     &lt;ows:Keyword&gt;nectcdf&lt;/ows:Keyword&gt;
+     &lt;ows:Keyword&gt;DAP&lt;/ows:Keyword&gt;
+  &lt;/ows:Keywords&gt;
+  &lt;ows:ServiceType&gt;WCS&lt;/ows:ServiceType&gt;
+  &lt;ows:ServiceTypeVersion&gt;1.1.2&lt;/ows:ServiceTypeVersion&gt;
+  &lt;ows:Fees&gt;NONE&lt;/ows:Fees&gt;
+  &lt;ows:AccessConstraints&gt;NONE&lt;/ows:AccessConstraints&gt;
+&lt;/ows:ServiceIdentification&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+;File Location
+:&lt;font  face="Courier"&gt;$CATALINA_HOME/content/'''&lt;context&gt;'''/ServiceIdentification.xml&lt;/font&gt; where &lt;font  face="Courier"&gt;'''&lt;context&gt;'''&lt;/font&gt; is the Tomcat ''service context'' in which the WCS web application is running. By default this ''''WCS''''. (So the default location of the ServiceIdentification.xml file would be:&lt;font  face="Courier"&gt;$CATALINA_HOME/content/WCS/ServiceIdentification.xml&lt;/font&gt;)
+
+==== Service Provider ====
+
+The Service Provider metadata as described in section 7.4.5 of  OGC document ''[http://www.opengeospatial.org/standards/common OGC 06-121r3]''.  
+
+The ows:ServiceProvider section should be localized to identify the local operator of the system. Typically this would be the name and contact information of the individual or group responsible for installing and maintaing the WCS service.
+
+===== Example Document =====
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;!-- * SERVICE PROVIDER SECTION                                 * --&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;ows:ServiceProvider  xmlns="http://www.opengis.net/wcs/1.1"
+xmlns:ows="http://www.opengis.net/ows/1.1"
+xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+  &lt;ows:ProviderName&gt;OPeNDAP Inc.&lt;/ows:ProviderName&gt;
+  &lt;ows:ProviderSite xlink:href="http://www.opendap.org"/&gt;
+  &lt;ows:ServiceContact&gt;
+     &lt;ows:IndividualName&gt;Nathan D. Potter&lt;/ows:IndividualName&gt;
+     &lt;ows:PositionName&gt;Senior Software Engineer&lt;/ows:PositionName&gt;
+     &lt;ows:ContactInfo&gt;
+        &lt;ows:Phone&gt;
+           &lt;ows:Voice&gt;123-456-7890&lt;/ows:Voice&gt;
+           &lt;ows:Facsimile&gt;234-567-8901&lt;/ows:Facsimile&gt;
+        &lt;/ows:Phone&gt;
+        &lt;ows:Address&gt;
+           &lt;ows:DeliveryPoint&gt;165 Dean Knauss Dr&lt;/ows:DeliveryPoint&gt;
+           &lt;ows:City&gt;Narragansett&lt;/ows:City&gt;
+           &lt;ows:AdministrativeArea&gt;Rhode Island&lt;/ows:AdministrativeArea&gt;
+           &lt;ows:PostalCode&gt;02882&lt;/ows:PostalCode&gt;
+           &lt;ows:Country&gt;USA&lt;/ows:Country&gt;
+           &lt;ows:ElectronicMailAddress&gt;support[a.t]opendap[d.o.t]org&lt;/ows:ElectronicMailAddress&gt;
+        &lt;/ows:Address&gt;
+        &lt;ows:OnlineResource xlink:href="http://ndp.opendap.org:8080/opendap/"/&gt;
+        &lt;ows:HoursOfService&gt;24x7x365&lt;/ows:HoursOfService&gt;
+        &lt;ows:ContactInstructions&gt;email&lt;/ows:ContactInstructions&gt;
+     &lt;/ows:ContactInfo&gt;
+     &lt;ows:Role&gt;Developer&lt;/ows:Role&gt;
+  &lt;/ows:ServiceContact&gt;
+&lt;/ows:ServiceProvider&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+;File Location
+:&lt;font  face="Courier"&gt;$CATALINA_HOME/content/'''&lt;context&gt;'''/ServiceProvider.xml&lt;/font&gt; where &lt;font  face="Courier"&gt;'''&lt;context&gt;'''&lt;/font&gt; is the Tomcat ''service context'' in which the WCS web application is running. By default this ''''WCS''''. (So the default location of the ServiceProvider.xml file would be:&lt;font  face="Courier"&gt;$CATALINA_HOME/content/WCS/ServiceProvider.xml&lt;/font&gt;)
+
+==== Operations Metadata ====
+
+The Operations Metadata  as described in section 7.4.6 of  OGC document ''[http://www.opengeospatial.org/standards/common OGC 06-121r3]''.  
+
+The service will look at the ''xlink:href'' links in the Operations Metadata document and it will detect the default value of &lt;font  face="Courier"&gt;''http://your.domain.name:8080/opendap/WCS'''&lt;/font&gt; and replace it with the service URL that it determines from the incoming request. For most situations this will be completely adequate and the Operations Metadata will require no localization.  
+
+However,  if the server is behind a firewall which is port-forwarding the incoming requests the URL's may only reflect the local network configuration and not the clients view of the service from outside the firewall. Careful localization of this information is crucial to the correct function of the WCS service. Many clients will use this section of the wcs:Capabilities document to ascertain where and how they can interact with the service. It is required that the Get and Post URL's for each WCS operation point to the correct terminus on your server. 
+
+'''''Edit this file very thoughtfully'''''
+
+===== Example Document =====
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;!-- * OPERATIONS METADATA                                      * --&gt;
+&lt;!-- ************************************************************ --&gt;
+&lt;ows:OperationsMetadata xmlns="http://www.opengis.net/wcs/1.1"
+                        xmlns:ows="http://www.opengis.net/ows/1.1"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+    &lt;ows:Operation name="GetCapabilities"&gt;
+        &lt;ows:DCP&gt;
+            &lt;ows:HTTP&gt;
+                &lt;ows:Get xlink:href="http://ndp.opendap.org:8080/opendap/WCS?"/&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/post"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;XML&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/soap"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;SOAP&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+            &lt;/ows:HTTP&gt;
+        &lt;/ows:DCP&gt;
+    &lt;/ows:Operation&gt;
+    &lt;ows:Operation name="GetCoverage"&gt;
+        &lt;ows:DCP&gt;
+            &lt;ows:HTTP&gt;
+                &lt;ows:Get xlink:href="http://ndp.opendap.org:8080/opendap/WCS?"/&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/post"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;XML&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/soap"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;SOAP&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+            &lt;/ows:HTTP&gt;
+        &lt;/ows:DCP&gt;
+        &lt;ows:Parameter name="Format"&gt;
+            &lt;ows:AllowedValues&gt;
+                &lt;ows:Value&gt;application/x-netcdf-cf1.0&lt;/ows:Value&gt;
+                &lt;ows:Value&gt;application/x-dap2.0&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+        &lt;/ows:Parameter&gt;
+    &lt;/ows:Operation&gt;
+    &lt;ows:Operation name="DescribeCoverage"&gt;
+        &lt;ows:DCP&gt;
+            &lt;ows:HTTP&gt;
+                &lt;ows:Get xlink:href="http://ndp.opendap.org:8080/opendap/WCS?"/&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/post"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;XML&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+                &lt;ows:Post xlink:href="http://ndp.opendap.org:8080/opendap/WCS/soap"&gt;
+                    &lt;ows:Constraint name="PostEncoding"&gt;
+                        &lt;ows:AllowedValues&gt;
+                            &lt;ows:Value&gt;SOAP&lt;/ows:Value&gt;
+                        &lt;/ows:AllowedValues&gt;
+                    &lt;/ows:Constraint&gt;
+                &lt;/ows:Post&gt;
+            &lt;/ows:HTTP&gt;
+        &lt;/ows:DCP&gt;
+        &lt;ows:Parameter name="Format"&gt;
+            &lt;ows:AllowedValues&gt;
+                &lt;ows:Value&gt;text/xml&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+        &lt;/ows:Parameter&gt;
+    &lt;/ows:Operation&gt;
+&lt;/ows:OperationsMetadata&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+;File Location
+:&lt;font  face="Courier"&gt;$CATALINA_HOME/content/'''&lt;context&gt;'''/OperationsMeadata.xml&lt;/font&gt; where &lt;font  face="Courier"&gt;'''&lt;context&gt;'''&lt;/font&gt; is the Tomcat ''service context'' in which the WCS web application is running. By default this ''''WCS''''. (So the default location of the OperationsMetadata.xml file would be:&lt;font  face="Courier"&gt;$CATALINA_HOME/content/WCS/OperationsMetadata.xml&lt;/font&gt;)
+
+=== WCS Catalog Configuration ===
+
+The WCS service must maintain a catalog of ''Coverages''.  In the Hyrax WCS service, the implementation of this catalog is identified at server start-up from the WCS service configuration file. 
+
+;File Location
+:The configuration file is located (by default) here: &lt;font  face="Courier"&gt;$CATALINA_HOME/content/WCS/wcs_service.xml&lt;/font&gt;.
+
+:The default location of the file can be changed by changing the name of the WCS servlet's ''service context''. If you do that, the catalog file will be located at: &lt;font  face="Courier"&gt;$CATALINA_HOME/content/'''&lt;context&gt;'''/wcs_service.xml&lt;/font&gt;, where &lt;font  face="Courier"&gt;'''&lt;context&gt;'''&lt;/font&gt; is the Tomcat ''service context'' in which the WCS web application is running.
+
+The default  '''''wcs_service.xml''''' file contains:
+
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;WcsService&gt;
+    &lt;WcsCatalog&gt;
+        &lt;useUpdateCatalogThread updateInterval="28800" firstUpdateDelay="10"/&gt;
+
+        &lt;dataset&gt;http://test.opendap.org:8080/opendap/ioos/200803061600_HFRadar_USEGC_6km_rtv_SIO.ncml&lt;/dataset&gt;
+        &lt;dataset&gt;http://test.opendap.org:8080/opendap/ioos/ECMWF_ERA-40_subset.ncml&lt;/dataset&gt;
+        &lt;dataset&gt;http://test.opendap.org:8080/opendap/ioos/mday_joinExist.ncml.ddx&lt;/dataset&gt;
+
+    &lt;/WcsCatalog&gt;
+&lt;/WcsService&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+==== Adding Datasets To The Catalog ====
+
+In order for the WCS service to work it must know which DAP data sets are to be served as WCS coverages. Datasets can be added to the catalog in the following ways.
+
+;&lt;dataset&gt;
+:A '''dataset''' element identifies a single DAP data set that is to be served as a WCS coverage. The '''dataset''' element must contain the fully qualified data access URL for a DAP data set.  This URL will be examined and the software will attempt to get the RDF version of the data set's DDX from the DAP server. 
+
+Example:
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+ &lt;WcsCatalog&gt;
+   &lt;dataset&gt;http://localhost:8080/opendap/data/nc/examples/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx&lt;/dataset&gt;
+ &lt;/WcsCatalog&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+;&lt;ThreddsCatalog&gt;
+
+:A '''ThreddsCatalog''' element identifies a THREDDS catalog which contains DAP data access URLs that point to DAP data sets that will be served as WCS coverages. Each DAP data set  in the catalog will be served as a separate wcs:Coverage. The '''recurse'''  attribute determines if the software will follow '''catalogRef''' links in the THREDDS catalog to ingest the entire catalog hierarchy starting at the node identified by the URL.
+
+Example:
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+ &lt;WcsCatalog&gt;
+    &lt;ThreddsCatalog recurse="false" &gt;http://test.opendap.org:8080/opendap/coverage/catalog.xml&lt;/ThreddsCatalog&gt;
+ &lt;/WcsCatalog&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+==== Controlling Catalog Update Behavior ====
+The '''useUpdateCatalogThread''' element is used to control the way in which the catalog updates its semantic repository and Coverage catalog. Using this element will cause the catalog to spawn a worker thread that will update the semantic repository (and thus the WCS catalog holdings) in the background. If the  '''useUpdateCatalogThread''' element is omitted the catalog will not spawn a worker thread, and will attempt to update it's holdings at startup, and no additional catalog update attempts will be made.
+
+The '''firstUpdateDelay'''  attribute controls how long (in seconds)  the worker thread will wait before making the first update, I like to use 10 seconds, or whatever number allows tomcat to fully start before the worker thread goes to work. It also makes the log easier to understand. 
+
+The '''updateInterval''' attribute is used to specify how frequently (in seconds) the catalog should be updated.
+
+Example:
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+ &lt;WcsCatalog&gt;
+    &lt;useUpdateCatalogThread updateInterval="3600" firstUpdateDelay="60"/&gt;
+ &lt;/WcsCatalog&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+
+[[StaticRdfCatalog| More detailed catalog configuration instructions can be found here]]</text>
+      <sha1>fb6qaxu8ddrxnxeu662fb0kmobg0u2f</sha1>
+    </revision>
+  </page>
+</mediawiki>

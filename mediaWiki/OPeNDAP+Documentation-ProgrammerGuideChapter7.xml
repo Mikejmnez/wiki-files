@@ -1,0 +1,111 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>ProgrammerGuideChapter7</title>
+    <ns>0</ns>
+    <id>196</id>
+    <revision>
+      <id>1895</id>
+      <parentid>1200</parentid>
+      <timestamp>2008-01-26T14:11:14Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Overview of the OPeNDAP Client */</comment>
+      <origin>1895</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1892" sha1="jcogvt1uwcab9jhcmeopetik75bw25b" xml:space="preserve">=Overview of the OPeNDAP Client=
+
+
+A OPeNDAP client is any web client that makes a service request to a OPeNDAP
+server.  Since several of the OPeNDAP services return ASCII and HTML
+data, any web browser, such as Netscape Navigator can be considered a
+OPeNDAP client, so long as it is in the process of making a suitable
+request to a OPeNDAP server.  The clients of interest in this appendix,
+however, are clients that use the OPeNDAP DAP (Data Access Protocol)
+library to make their requests for data.
+
+Of these clients, there are two varieties: clients that have been
+written expressly for OPeNDAP, and clients that existed in some form
+already, and that have been adapted to use with a OPeNDAP client
+library.
+
+&lt;center&gt;
+
+[[Image:orig-client.gif|actual size]] 
+
+The Original Program
+
+&lt;/center&gt;
+
+ 
+
+The Original Program, untouched by
+OPeNDAP.  The application's code accesses data by calls to the netCDF
+library functions, linked with the program.  Data access is direct,
+with the application program accessing local disk files to read
+data.
+
+ 
+&lt;center&gt;
+
+[[Image:client-arch1.gif|actual size]] 
+
+The Modified Program
+
+&lt;/center&gt;
+
+ 
+
+The Modified Program, using the
+OPeNDAP netCDF client library.  The application's code now accesses
+data by calls to the OPeNDAP netCDF library functions.  These are
+written to be functionally identical to the original netCDF
+functions, but instead of using a local disk to retrieve data, this
+library invokes functions from the OPeNDAP DAP library, which makes
+HTTP GET requests to a OPeNDAP server.  The client code is unchanged.
+
+&lt;center&gt;
+
+[[Image:client-arch2.gif|actual size]] 
+
+The Another Way
+
+&lt;/center&gt;
+
+ 
+ 
+
+Another Way.  An application program can also call the OPeNDAP DAP directly, eliminating the need for a client library.  When starting from scratch, this is probably easiest, unless you are an old hand at one of the supported data access APIs.</text>
+      <sha1>jcogvt1uwcab9jhcmeopetik75bw25b</sha1>
+    </revision>
+  </page>
+</mediawiki>

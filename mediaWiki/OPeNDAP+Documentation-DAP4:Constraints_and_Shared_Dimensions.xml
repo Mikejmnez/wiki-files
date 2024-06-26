@@ -1,0 +1,152 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Constraints and Shared Dimensions</title>
+    <ns>0</ns>
+    <id>741</id>
+    <revision>
+      <id>7959</id>
+      <parentid>7958</parentid>
+      <timestamp>2012-04-13T17:31:58Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <origin>7959</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="8060" sha1="6ijc6ye7tv890j02w7h5jezacfe3byb" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+== Projections ==
+Let us assume, for now, that the DAP4 constraint language will be closely related to the DAP2 constraint language. We will start with projections and address the issue of selections later.
+
+As with DAP2, it can be assumed that a projection walks a path from the root dataset to some simple variable (i.e. one of a cardinal type); also, the path may be annotated with dimension ranges ([a:b:c]).
+
+Mostly this will work fine in DAP4, except for the problem of shared dimensions. Suppose we have this case.
+&lt;pre&gt;
+&lt;Dataset name="dataset"&gt;
+  &lt;Dimensions&gt;
+    &lt;Dimension name="lat" size="10"/&gt;
+    &lt;Dimension name="lon" size="20"/&gt;
+  &lt;Dimensions&gt;
+  &lt;Variables&gt;
+    &lt;Float32 name="lat"&gt;
+      &lt;Dimensions&gt;
+        &lt;Dimension name="lat"/&gt;
+      &lt;/Dimensions&gt;
+    &lt;/Float32&gt;
+    &lt;Float32 name="lon"&gt;
+      &lt;Dimensions&gt;
+        &lt;Dimension name="lon"/&gt;
+      &lt;/Dimensions&gt;
+    &lt;/Float32&gt;
+    &lt;Float32 name="temp"&gt;
+      &lt;Dimensions&gt;
+        &lt;Dimension name="lat"/&gt;
+        &lt;Dimension name="lon"/&gt;
+      &lt;Dimensions&gt;
+      &lt;Maps&gt;
+        &lt;Map name="lat"/&gt;&lt;Map name="lon"/&gt;
+      &lt;/Maps&gt;
+  &lt;/Variables&gt;
+&lt;/Dataset&gt;
+&lt;/pre&gt;
+So we have an array variable (temp) with two coordinate variables (lat and lon) and shared dimensions lat and lon.
+
+Suppose we request the following projections.
+&lt;pre&gt;
+temp[0:5][2:3],lat[0:3],lon[0]
+&lt;/pre&gt;
+The key thing to note is that we just broke the shared dimension because the three variables no longer have the standard coordinate variable relationship. This would seem like a bad idea. The problem is further exacerbated when there are two variables such as temp and salinity that use the same or overlapping sets of coordinate variables.
+
+The only way I can think of to handle this is to modify the projection syntax so non-anonymous (shared) dimensions ranges are specified in the projection.
+For example, we might write something like this.
+ lat=[0:5],lon=[2:3],temp[lat,lon],lat[lat],lon[lon]
+or more compactly
+ lat=[0:5],lon=[2:3],temp,lat,lon
+The assumption is, then, that the same range is used everywhere for that dimension.
+
+Other Open Issues:
+# Should it be possible to stop a projection path at a structure and return the whole structure instance?
+
+''-Dennis Heimbigner''
+
+== Discussion ==
+I'm not exactly sure what the proposal here is, but I thought I'd elaborate a bit more on the problems and present, without any particular syntax, a solution. That said, I think this proposal and my 'discussion' are basically in sync, modulo the syntax, which I omit. [[User:Jimg|Jimg]]
+
+=== Regarding Grids and Subsetting ===
+I'm going to focus on the problems/issues associated with Grid subsetting. I think we need to focus on this because it's such an important feature of DAP - the ability to subset Grids.
+
+Suppose we have two Grids G&lt;sub&gt;1&lt;/sub&gt; and G&lt;sub&gt;2&lt;/sub&gt; that share two maps M&lt;sub&gt;1&lt;/sub&gt; and M&lt;sub&gt;2&lt;/sub&gt;. If we subsample  G&lt;sub&gt;1&lt;/sub&gt; and G&lt;sub&gt;2&lt;/sub&gt; using two different intervals over M&lt;sub&gt;1&lt;/sub&gt; and M&lt;sub&gt;2&lt;/sub&gt;, then we have a problem because we need one set of M&lt;sub&gt;1&lt;/sub&gt; and M&lt;sub&gt;2&lt;/sub&gt;  for G&lt;sub&gt;1&lt;/sub&gt; and a different set of M&lt;sub&gt;1&lt;/sub&gt; and M&lt;sub&gt;2&lt;/sub&gt;  for G&lt;sub&gt;2&lt;/sub&gt;. This only gets more complex when ''shared dimensions'' (aka ''Dimensions'' from now on) are added into the mix; however, any solution that solves the problem for shared coordinate variables (aka Maps) does so for Dimensions if there is a one-to-one relationship between Maps and Dimensions for any set of Grids that are subset.
+
+Potential solutions:
+===== Add the enclosing Lexical Scope back into the Data Model =====
+We can go back to the old data model where each Grid (G&lt;sub&gt;1&lt;/sub&gt; and G&lt;sub&gt;2&lt;/sub&gt;, e.g.) is wrapped in its own scope. Problems with this solution:
+# The scope is 'fictitious' in that while it is part of the DAP representation for the dataset, it is not present in the original;
+# The extra scope has semantics associated with it that 'fail' when some subsetting operations in DAP2 are applied (e.g., when just the 'array part' was projected but not the 'maps'), so we'll have to address those issues; and
+# A side effect of this data model is that the storage/transmission size increased. I don't feel optimizing for transmission size is as important as a flexible data model, but we should obviously not transmit excess information.
+
+===== Change the way Grid subsetting works =====
+We can change the way Grid subsetting works. Grids are defined a class of a relational type - the indices of the Maps and Arrays function like foreign keys - but that does not mean that we have to return the Maps with each Grid subset. When a client subsets the two grids (G&lt;sub&gt;1&lt;/sub&gt; and G&lt;sub&gt;2&lt;/sub&gt;) it gets back only the Arrays that hold their data. This introduces some problems/issues:
+# The 'Grid-ness' of G&lt;sub&gt;1&lt;/sub&gt; and G&lt;sub&gt;2&lt;/sub&gt; has been lost
+# Clients must either make a coordinated request for the Maps M&lt;sub&gt;1&lt;/sub&gt; and M&lt;sub&gt;2&lt;/sub&gt; and we must solve the question of how to make two or ''different'' requests for the same variable (cf namespace issues) or...
+# Clients must make two or more requests, one for each Grid and each of those must still contain requests for several variables to be really useful and ...
+# How does the client find out about the Dimensions?
+
+===== Restrict the kinds of subsetting allowed =====
+We can limit the ways in which a Grid can be subset. This might be what Dennis proposes in [[DAP4:_Constraints_and_Shared_Dimensions]] but I'm not sure. In this scheme, for any given request, a set of Grids like G&lt;sub&gt;1&lt;/sub&gt; and G&lt;sub&gt;2&lt;/sub&gt; that share maps could only be subset using one interval over  M&lt;sub&gt;1&lt;/sub&gt; and M&lt;sub&gt;2&lt;/sub&gt;. If a client attempts to use two or more intervals, it gets an error. This introduces some problems, too:
+# If a client wants to subset of different intervals of the maps, it must make several requests
+# Since clients get back 'consistent' responses, a client might, as John says, get back more data than it wants.
+
+=== Proposed Solution: Restrict the kinds of subsetting allowed ===
+''I thought a more formal version of this might be useful in ferreting out any more problems besides the two already mentioned (which are repeated below)''
+
+Definitions: 
+;Grid: A Grid is an Array variable that has, in addition to it's dimensions which define its rank and extent, a set of maps that provide coordinate space values for the data stored in the Array.
+;Map: A Map is an Array that uses one or more Dimensions to define a coordinate space and are used by Grids. NB: A plain Array can use Dimensions, but it's not a Map if it is not used by a Grid as such.
+;Dimension: A Dimension is the binding of a name to a size and is used to define the rank and extent of an Array.
+
+* Grid subsetting can only take place using intervals defined over its maps. 
+* When one or more Grids share maps, any given subsetting request can subset one or more of those Grids, but must use the same map interval for them all.
+* The result of a Grid subsetting operation includes the tuple of Dimension(s), Map(s) and Array(s) that make up the subset Grids.
+* It is possible to subset the 'Array part' of a Grid and get back just the Array.
+
+Problems/issues:
+# If a client wants to subset of different intervals of the maps, it must make several requests
+# Since clients get back 'consistent' responses, a client might, as John says, get back more data than it wants.
+
+[[User:Jimg|Jimg]] 13:57, 6 March 2012 (PST)
+
+==Alternate Proposal==
+[[User:dmh|Dennis]] 04/12/2012
+After further consideration, I have come to the conclusion that this is non-issue. My belief is that the result of applying a constraint to a dataset results in a new dataset and that any constraints on the original dataset need not apply to the new dataset. This means that if the dimension/map constraints in the original are violated in the newly derived dataset, then so be it; the requestor who initiated the derivation is presumed to know what they are doing.</text>
+      <sha1>6ijc6ye7tv890j02w7h5jezacfe3byb</sha1>
+    </revision>
+  </page>
+</mediawiki>

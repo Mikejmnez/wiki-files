@@ -1,0 +1,58 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Document Templates</title>
+    <ns>0</ns>
+    <id>503</id>
+    <revision>
+      <id>11520</id>
+      <parentid>11517</parentid>
+      <timestamp>2015-01-27T20:45:17Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <origin>11520</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="901" sha1="axm3a75wrm1kcs86xvxb8t581pzdsh0" xml:space="preserve">
+To use the templates, you include the template using MediaWiki's &lt;nowiki&gt;{{ ... }}&lt;/nowiki&gt; syntax. In a normal template substitution, the mediawiki rendering engine goes and gets the template text every time the page is rendered. If, however, the template name is preceded with ''subst:'' then the mediawiki markup is copied to the destination page and can be edited without affecting, or being affected by, the original template code. See http://en.wikibooks.org/wiki/MediaWiki_User_Guide/Templates and http://www.mediawiki.org/wiki/Help:Templates
+
+''To include the markup for a skeleton use case, as defined by the template below, include '''&lt;nowiki&gt;{{subst:Template:Use Case}}&lt;/nowiki&gt;''' in a blank page and then Save the page.''
+
+== Current Document Templates ==
+* [[Template:Use Case]]
+* [[Template:Project Description]]
+* [[Template:Handler Documentation]]
+* [[Template:DAP4 Design Proposal]]</text>
+      <sha1>axm3a75wrm1kcs86xvxb8t581pzdsh0</sha1>
+    </revision>
+  </page>
+</mediawiki>

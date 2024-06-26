@@ -1,0 +1,148 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>BALTO:FIND DATA</title>
+    <ns>0</ns>
+    <id>1006</id>
+    <revision>
+      <id>12753</id>
+      <parentid>12751</parentid>
+      <timestamp>2019-04-10T23:21:18Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Basic Flow */</comment>
+      <origin>12753</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5444" sha1="a8a8zl3o0au5mj1dimzgwc4m2j5jiev" xml:space="preserve">'''Point Of Contact:''' ''James or Nathan''
+
+== Description ==
+&lt;font size="-2" color="green"&gt;''Give a short descriptive name for the use case to serve as a unique identifier.''&lt;/font&gt;
+
+BALTO:FIND_DATA
+
+== Goal ==
+&lt;font size="-2" color="green"&gt;''The goal briefly describes what the user intends to achieve with this use case.''&lt;/font&gt;
+
+Find data to use with ASPECT
+
+== Summary == 
+&lt;font size="-2" color="green"&gt;''Give a summary of the use case to capture the essence of the use case (no longer than a page). It provides a quick overview and includes the goal and principal actor.''&lt;/font&gt;
+
+Search for a data file, served by BALTO, using Google.
+
+== Actors ==
+&lt;font size="-2" color="green"&gt;''List actors, people or things outside the system that either acts on the system (primary actors) or is acted on by the system (secondary actors). Primary actors are ones that invoke the use case and benefit from the result. Identify sensors, models, portals and relevant data resources. Identify the primary actor and briefly describe role.''&lt;/font&gt;
+* Google general search web site
+* BALTO broker site (a specific instance of Hyrax)
+* Data provider - the person who puts the data file on BALTO or who configures BALTO so that it can access the data if it's 'served' by some other source on the Internet.
+* Data user - person who searches for data
+
+== Preconditions ==
+&lt;font size="-2" color="green"&gt;''Here we state any assumptions about the state of the system that must be met for the trigger (below) to initiate the use case. Any assumptions about other systems can also be stated here, for example, weather conditions. List all preconditions.''&lt;/font&gt;
+
+* The data are either:
+# served by BALTO, or
+# BALTO can broker requests to the server that holds/serves these data
+* Google has indexed BALTO and that index operation has included the data it can access using its brokering capabilities
+
+Note that ''using'' the remote data is a separate use case.
+
+== Triggers ==
+&lt;font size="-2" color="green"&gt;''Here we describe in detail the event or events that brings about the execution of this use case. Triggers can be external, temporal, or internal. They can be single events or when a set of conditions are met, List all triggers and relationships.''&lt;/font&gt;
+
+The Data user decides they want to use data set X and search for it.
+
+== Basic Flow ==
+&lt;font size="-2" color="green"&gt;''Often referred to as the primary scenario or course of events. In the basic flow we describe the flow that would be followed if the use case where to follow its main plot from start to end. Error states or alternate states that might be highlighted are not included here. This gives any browser of the document a quick view of how the system will work. Here the flow can be documented as a list, a conversation or as a story.(as much as required)''&lt;/font&gt;
+
+# The Data user goes to Google and enters text they hope will find the data set
+# Google returns a page of links
+# The Data user copies the one that seems like it 'is from BALTO' and pastes it into an application (e.g., ASPECT)
+
+== Alternate Flow ==
+&lt;font size="-2" color="green"&gt;''Here we give any alternate flows that might occur. May include flows that involve error conditions. Or flows that fall outside of the basic flow.''&lt;/font&gt;
+
+# The Data user doesn't find any BALTO link but does find a link that looks like it references something BALTO could broker.
+## Goto [[BALTO:ADD_BROKERED_DATA]]
+# The Data user finds nothing useful.
+## Stop; fail
+
+== Post Conditions ==
+&lt;font size="-2" color="green"&gt;''Here we give any conditions that will be true of the state of the system after the use case has been completed.''&lt;/font&gt;
+
+# Normal flow: Data set URL found
+# Alternate flow: Data set URL not found
+# Alternate flow: Data set URL found, but it's not currently accessible using BALTO. BALTO might be able to broker it, but it will have to be added to broker. See [[BALTO:ADD_BROKERED_DATA]]
+
+== Activity Diagram ==
+&lt;font size="-2" color="green"&gt;''Here a diagram is given to show the flow of events that surrounds the use case.''&lt;/font&gt;
+
+== Notes ==
+&lt;font size="-2" color="green"&gt;''There is always some piece of information that is required that has no other place to go. This is the place for that information.''&lt;/font&gt;
+
+# Should we include cases where Google Dataset Search is used instead of the regular Google search?
+# Should we include cases where some kind of local Balto site search is used?
+
+== Resources ==
+&lt;font size="-2" color="green"&gt;''In order to support the capabilities described in this Use Case, a set of resources must be available and/or configured.  These resources include data and services, and the systems that offer them.  This section will call out examples of these resources.''&lt;/font&gt;
+
+
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|&lt;font size="-2" color="green"&gt;''name''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Organization that owns/ manages resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Short description of the resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''How often the resource is available''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Name of system which provides resource''&lt;/font&gt;
+|-
+|BALTO
+|OPeNDAP, then...?
+|An instance of Hyrax, configured to broker specific datasets served from other network locations
+|24/7
+|AWS (who pays in the long term?)
+|-
+|Google search 
+|Google
+|I think we know what this does
+|24/7
+|Capitalism
+|}</text>
+      <sha1>a8a8zl3o0au5mj1dimzgwc4m2j5jiev</sha1>
+    </revision>
+  </page>
+</mediawiki>

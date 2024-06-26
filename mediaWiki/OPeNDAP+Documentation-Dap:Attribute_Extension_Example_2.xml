@@ -1,0 +1,882 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Dap:Attribute Extension Example 2</title>
+    <ns>0</ns>
+    <id>402</id>
+    <revision>
+      <id>2928</id>
+      <parentid>2862</parentid>
+      <timestamp>2009-01-17T03:07:51Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>2928</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="45945" sha1="8wizm5fbm7lovcsifg40xoa7fugsw3d" xml:space="preserve">== Example 2 ==
+
+Here we use a transform that maps arbitary XML into a subset of the DAP Attribute space. 
+
+Xml elements with xml attributes or child elements '''map to''' dap:Attribute container with namespace or prefix attributes.
+
+Xml elements without xml attributes or child elements '''map to''' dap:Attribute of type String with namespace or prefix attributes.
+
+The mapping requires extending the dap:Attribute model to include:
+# A "namespace" attribute.
+# A "prefix" attribute.
+# A new type called xmlAttributeNode
+
+Although this requires fewer changes to the dap:Attribute model it forces any software attempting to extract the original XML to understand the implicit semantics of the encoding.
+
+For example, when the extracting software encounters this:
+                  &lt;dap:Attribute name="LowerCorner" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value&gt;-97.8839 21.736&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+
+It must "know" that this is a special dap:Attribute that represents an xml element with simple text content:
+               &lt;LowerCorner xmlns="http://www.opengis.net/ows/1.1" &gt;-97.8839 21.736&lt;/LowerCorner&gt;
+
+And that this:
+        &lt;dap:Attribute name="LowerCorner" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+            &lt;dap:Attribute name="crs" type="xmlAttributeNode" namespace="http://www.opengis.net/gml/3.2"&gt;
+                &lt;dap:value&gt;urn:ogc:def:crs:EPSG::4326&lt;/dap:value&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="textNode" type="String"&gt;
+                &lt;dap:value&gt;-97.8839 21.736&lt;/dap:value&gt;
+            &lt;/dap:Attribute&gt;
+       &lt;/dap:Attribute&gt;
+
+Represents an xml element with an xml attribute called '''crs''' (in the gml namespace) and plain text content:
+        &lt;LowerCorner xmlns="http://www.opengis.net/ows/1.1" 
+                     xmlns:gml="http://www.opengis.net/gml/3.2" 
+                     gml:crs="urn:ogc:def:crs:EPSG::4326" &gt;-97.8839 21.736&lt;/LowerCorner&gt;
+
+I think that's much less useful than example 1's explicit tagging, but more in line with the current DAP data model (which is namespace ignorant)
+
+
+
+
+==== Source XML ====
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;CoverageDescriptions xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:owcs="http://www.opengis.net/wcs/1.1/ows" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:schemaLocation="http://www.opengis.net/wcs/1.1  http://schemas.opengis.net/wcs/1.1.0/wcsDescribeCoverage.xsd  http://www.opengis.net/ows/1.1  http://schemas.opengis.net/ows/1.1.0/owsAll.xsd  http://www.opengis.net/wcs/1.1/ows http://schemas.opengis.net/wcs/1.1.0/owsDataIdentification.xsd http://www.opengis.net/gml/3.2  http://schemas.opengis.net/gml/3.2.1/gml.xsd"&gt;
+    &lt;CoverageDescription&gt;
+        &lt;ows:Title&gt;Near-Real Time Surface Ocean Velocity&lt;/ows:Title&gt;
+        &lt;ows:Abstract&gt;CoverageDescription generated by OPeNDAP WCS UseCase 2.0&lt;/ows:Abstract&gt;
+        &lt;Identifier&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/Identifier&gt;
+        &lt;Domain&gt;
+            &lt;SpatialDomain&gt;
+                &lt;ows:BoundingBox crs="urn:ogc:def:crs:EPSG::4326"&gt;
+                    &lt;ows:LowerCorner&gt;-97.8839 21.736&lt;/ows:LowerCorner&gt;
+                    &lt;ows:UpperCorner&gt;-57.2312 46.4944&lt;/ows:UpperCorner&gt;
+                &lt;/ows:BoundingBox&gt;
+            &lt;/SpatialDomain&gt;
+            &lt;TemporalDomain&gt;
+                &lt;gml:timePosition&gt;2008-03-27T16:00:00.000Z&lt;/gml:timePosition&gt;
+            &lt;/TemporalDomain&gt;
+        &lt;/Domain&gt;
+        &lt;Range&gt;
+            &lt;Field&gt;
+                &lt;ows:Title&gt;surface_eastward_sea_water_velocity&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;Eastward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;u&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+            &lt;Field&gt;
+                &lt;ows:Title&gt;surface_northward_sea_water_velocity&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;Northward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;v&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+            &lt;Field&gt;
+                &lt;ows:Title&gt;longitudinal dilution of precision&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;The longitudinal dilution of precision (DOPx) represents the\\012contribution of the radars&amp;apos; configuration geometry to\\012uncertainty in the eastward velocity estimate (u). DOPx is a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the eastward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for filtering\\012errant velocities due to poor geometry.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;DOPx&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+            &lt;Field&gt;
+                &lt;ows:Title&gt;latitudinal dilution of precision&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;The latitudinal dilution of precision (DOPy) represents the\\012contribution of the radars&amp;apos; configuration geometry to\\012uncertainty in the northward velocity estimate (v). DOPy is a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the northward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for filtering\\012errant velocities due to poor geometry.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;DOPy&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+            &lt;Field&gt;
+                &lt;ows:Title&gt;Contributing radar site latitudes&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;Contributing radar site latitudes&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;site_lat&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+            &lt;Field&gt;
+                &lt;ows:Title&gt;Contributing radar site longitudes&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;Contributing radar site longitudes.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;site_lon&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+            &lt;Field&gt;
+                &lt;ows:Title&gt;Contributing radar site code.&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;Contributing radar site code.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;site_code&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+            &lt;Field&gt;
+                &lt;ows:Title&gt;Contributing radar site network affiliation code.&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;Contributing radar site network affiliation code.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;site_netCode&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+            &lt;Field&gt;
+                &lt;ows:Title&gt;RTV processing parameters&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;Contributing radar site network affiliation code.&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;procParams&lt;/Identifier&gt;
+                &lt;Definition&gt;
+                    &lt;ows:AnyValue/&gt;
+                &lt;/Definition&gt;
+                &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                &lt;owcs:InterpolationMethods&gt;
+                    &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                &lt;/owcs:InterpolationMethods&gt;
+            &lt;/Field&gt;
+        &lt;/Range&gt;
+        &lt;SupportedCRS&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt;
+        &lt;SupportedFormat&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+        &lt;SupportedFormat&gt;dap2.0&lt;/SupportedFormat&gt;
+    &lt;/CoverageDescription&gt;
+&lt;/CoverageDescriptions&gt;
+&lt;/pre&gt;
+
+==== Transform ( xml -xslt-&gt; dap)  ====
+&lt;pre&gt;
+    &lt;xsl:stylesheet version="1.0"
+                    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                    xmlns:dap="http://xml.opendap.org/ns/DAP2"
+            &gt;
+        &lt;xsl:output method='xml' version='1.0' encoding='UTF-8' indent='yes'/&gt;
+
+        &lt;xsl:strip-space elements="*" /&gt;
+
+
+        &lt;xsl:template match="/"&gt;
+            &lt;dap:Dataset&gt;
+                &lt;xsl:apply-templates/&gt;
+            &lt;/dap:Dataset&gt;
+
+        &lt;/xsl:template&gt;
+        &lt;xsl:template match="*"&gt;
+            &lt;!-- Create a dap:Attribute element to wrap this XML element --&gt;
+            &lt;xsl:element name="dap:Attribute"&gt;
+
+                &lt;!-- The name of the dap:Attribute is the non-prefixed QName of the source XML element --&gt;
+                &lt;xsl:attribute name="name"&gt;
+                    &lt;xsl:value-of select="local-name()"/&gt;
+                &lt;/xsl:attribute&gt;
+
+                &lt;!-- Add the namespace of the source XML element as an attribute --&gt;
+                &lt;xsl:attribute name="namespace"&gt;
+                    &lt;xsl:value-of select="namespace-uri()"/&gt;
+                &lt;/xsl:attribute&gt;
+
+                &lt;!--  Map it to a namespaced dap:Attribute --&gt;
+
+                &lt;xsl:choose&gt;
+                    &lt;!--  If it has child elements or xml attributes it's going into an Attribute Container. --&gt;
+                    &lt;xsl:when test="* | @*"&gt;
+                        &lt;xsl:attribute name="type"&gt;Container&lt;/xsl:attribute&gt;
+
+                        &lt;!-- Make special Attributes for each of the xml elements attributes. --&gt;
+                        &lt;xsl:for-each select="@*"&gt;
+                            &lt;xsl:element name="dap:Attribute"&gt;
+                                &lt;xsl:attribute name="name"&gt;
+                                    &lt;xsl:value-of select="local-name()"/&gt;
+                                &lt;/xsl:attribute&gt;
+                                &lt;xsl:attribute name="type"&gt;xmlAttributeNode&lt;/xsl:attribute&gt;
+                                &lt;xsl:attribute name="namespace"&gt;
+                                    &lt;xsl:value-of select="namespace-uri()"/&gt;
+                                &lt;/xsl:attribute&gt;
+                                &lt;xsl:element name="dap:value"&gt;
+                                    &lt;xsl:value-of select="."/&gt;
+                                &lt;/xsl:element&gt;
+                            &lt;/xsl:element&gt;
+                        &lt;/xsl:for-each&gt;
+
+                        &lt;!--
+                           - And it's text value has to be wrapped in another dap:Attribute because dap:Attribute
+                           - elements may not have a type of Container AND have values
+                          --&gt;
+                        &lt;xsl:if test="text()"&gt;
+                            &lt;xsl:element name="dap:Attribute"&gt;
+                                &lt;xsl:attribute name="name"&gt;textNode&lt;/xsl:attribute&gt;
+                                &lt;xsl:attribute name="type"&gt;String&lt;/xsl:attribute&gt;
+                                &lt;xsl:element name="dap:value"&gt;
+                                    &lt;xsl:copy-of select="text()"/&gt;
+                                &lt;/xsl:element&gt;
+                            &lt;/xsl:element&gt;
+                        &lt;/xsl:if&gt;
+                    &lt;/xsl:when&gt;
+
+                    &lt;xsl:otherwise&gt;
+                        &lt;!--
+                           - IT looks like an element with only text (or empty content) so we
+                           - can make the dap:Attribute of type String.
+                          --&gt;
+                        &lt;xsl:attribute name="type"&gt;String&lt;/xsl:attribute&gt;
+                                &lt;xsl:element name="dap:value"&gt;
+                                    &lt;xsl:copy-of select="text()"/&gt;
+                            &lt;/xsl:element&gt;
+
+                    &lt;/xsl:otherwise&gt;
+                &lt;/xsl:choose&gt;
+
+                &lt;xsl:apply-templates/&gt;
+
+
+            &lt;/xsl:element&gt;
+        &lt;/xsl:template&gt;
+
+        &lt;xsl:template name="text"&gt;
+            &lt;xsl:copy-of select="text()"/&gt;
+        &lt;/xsl:template&gt;
+
+        &lt;xsl:template  match="@*|text()" /&gt;
+
+
+    &lt;/xsl:stylesheet&gt;
+&lt;/pre&gt;
+
+==== Result ====
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;dap:Dataset xmlns:dap="http://xml.opendap.org/ns/DAP2"&gt;
+   &lt;dap:Attribute name="CoverageDescriptions" namespace="http://www.opengis.net/wcs/1.1"
+                  type="Container"&gt;
+      &lt;dap:Attribute name="CoverageDescription" namespace="http://www.opengis.net/wcs/1.1"
+                     type="Container"&gt;
+         &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+            &lt;dap:value&gt;Near-Real Time Surface Ocean Velocity&lt;/dap:value&gt;
+         &lt;/dap:Attribute&gt;
+         &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+            &lt;dap:value&gt;CoverageDescription generated by OPeNDAP WCS UseCase 2.0&lt;/dap:value&gt;
+         &lt;/dap:Attribute&gt;
+         &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+            &lt;dap:value&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/dap:value&gt;
+         &lt;/dap:Attribute&gt;
+         &lt;dap:Attribute name="Domain" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+            &lt;dap:Attribute name="SpatialDomain" namespace="http://www.opengis.net/wcs/1.1"
+                           type="Container"&gt;
+               &lt;dap:Attribute name="BoundingBox" namespace="http://www.opengis.net/ows/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="crs" type="xmlAttributeNode" namespace="http://www.opengis.net/gml/3.2"&gt;
+                     &lt;dap:value&gt;urn:ogc:def:crs:EPSG::4326&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+                  &lt;dap:Attribute name="LowerCorner" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value&gt;-97.8839 21.736&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+                  &lt;dap:Attribute name="UpperCorner" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value&gt;-57.2312 46.4944&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="TemporalDomain" namespace="http://www.opengis.net/wcs/1.1"
+                           type="Container"&gt;
+               &lt;dap:Attribute name="timePosition" namespace="http://www.opengis.net/gml/3.2" type="String"&gt;
+                  &lt;dap:value&gt;2008-03-27T16:00:00.000Z&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+         &lt;/dap:Attribute&gt;
+         &lt;dap:Attribute name="Range" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+            &lt;dap:Attribute name="Field" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+               &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;surface_eastward_sea_water_velocity&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Eastward component of a 2D sea surface velocity vector.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;u&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Definition" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="AnyValue" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value/&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="NullValue" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;-32768&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="InterpolationMethods" namespace="http://www.opengis.net/wcs/1.1/ows"
+                              type="Container"&gt;
+                  &lt;dap:Attribute name="DefaultMethod" namespace="http://www.opengis.net/wcs/1.1/ows"
+                                 type="String"&gt;
+                     &lt;dap:value&gt;nearest&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="Field" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+               &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;surface_northward_sea_water_velocity&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Northward component of a 2D sea surface velocity vector.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;v&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Definition" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="AnyValue" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value/&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="NullValue" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;-32768&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="InterpolationMethods" namespace="http://www.opengis.net/wcs/1.1/ows"
+                              type="Container"&gt;
+                  &lt;dap:Attribute name="DefaultMethod" namespace="http://www.opengis.net/wcs/1.1/ows"
+                                 type="String"&gt;
+                     &lt;dap:value&gt;nearest&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="Field" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+               &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;longitudinal dilution of precision&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;The longitudinal dilution of precision (DOPx) represents the\\012contribution of the radars' configuration geometry to\\012uncertainty in the eastward velocity estimate (u). DOPx is a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the eastward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for filtering\\012errant velocities due to poor geometry.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;DOPx&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Definition" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="AnyValue" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value/&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="NullValue" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;-32768&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="InterpolationMethods" namespace="http://www.opengis.net/wcs/1.1/ows"
+                              type="Container"&gt;
+                  &lt;dap:Attribute name="DefaultMethod" namespace="http://www.opengis.net/wcs/1.1/ows"
+                                 type="String"&gt;
+                     &lt;dap:value&gt;nearest&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="Field" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+               &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;latitudinal dilution of precision&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;The latitudinal dilution of precision (DOPy) represents the\\012contribution of the radars' configuration geometry to\\012uncertainty in the northward velocity estimate (v). DOPy is a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the northward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for filtering\\012errant velocities due to poor geometry.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;DOPy&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Definition" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="AnyValue" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value/&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="NullValue" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;-32768&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="InterpolationMethods" namespace="http://www.opengis.net/wcs/1.1/ows"
+                              type="Container"&gt;
+                  &lt;dap:Attribute name="DefaultMethod" namespace="http://www.opengis.net/wcs/1.1/ows"
+                                 type="String"&gt;
+                     &lt;dap:value&gt;nearest&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="Field" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+               &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Contributing radar site latitudes&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Contributing radar site latitudes&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;site_lat&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Definition" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="AnyValue" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value/&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="NullValue" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;-32768&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="InterpolationMethods" namespace="http://www.opengis.net/wcs/1.1/ows"
+                              type="Container"&gt;
+                  &lt;dap:Attribute name="DefaultMethod" namespace="http://www.opengis.net/wcs/1.1/ows"
+                                 type="String"&gt;
+                     &lt;dap:value&gt;nearest&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="Field" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+               &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Contributing radar site longitudes&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Contributing radar site longitudes.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;site_lon&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Definition" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="AnyValue" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value/&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="NullValue" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;-32768&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="InterpolationMethods" namespace="http://www.opengis.net/wcs/1.1/ows"
+                              type="Container"&gt;
+                  &lt;dap:Attribute name="DefaultMethod" namespace="http://www.opengis.net/wcs/1.1/ows"
+                                 type="String"&gt;
+                     &lt;dap:value&gt;nearest&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="Field" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+               &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Contributing radar site code.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Contributing radar site code.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;site_code&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Definition" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="AnyValue" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value/&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="NullValue" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;-32768&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="InterpolationMethods" namespace="http://www.opengis.net/wcs/1.1/ows"
+                              type="Container"&gt;
+                  &lt;dap:Attribute name="DefaultMethod" namespace="http://www.opengis.net/wcs/1.1/ows"
+                                 type="String"&gt;
+                     &lt;dap:value&gt;nearest&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="Field" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+               &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Contributing radar site network affiliation code.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Contributing radar site network affiliation code.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;site_netCode&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Definition" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="AnyValue" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value/&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="NullValue" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;-32768&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="InterpolationMethods" namespace="http://www.opengis.net/wcs/1.1/ows"
+                              type="Container"&gt;
+                  &lt;dap:Attribute name="DefaultMethod" namespace="http://www.opengis.net/wcs/1.1/ows"
+                                 type="String"&gt;
+                     &lt;dap:value&gt;nearest&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+            &lt;dap:Attribute name="Field" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+               &lt;dap:Attribute name="Title" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;RTV processing parameters&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Abstract" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                  &lt;dap:value&gt;Contributing radar site network affiliation code.&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Identifier" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;procParams&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="Definition" namespace="http://www.opengis.net/wcs/1.1" type="Container"&gt;
+                  &lt;dap:Attribute name="AnyValue" namespace="http://www.opengis.net/ows/1.1" type="String"&gt;
+                     &lt;dap:value/&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="NullValue" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+                  &lt;dap:value&gt;-32768&lt;/dap:value&gt;
+               &lt;/dap:Attribute&gt;
+               &lt;dap:Attribute name="InterpolationMethods" namespace="http://www.opengis.net/wcs/1.1/ows"
+                              type="Container"&gt;
+                  &lt;dap:Attribute name="DefaultMethod" namespace="http://www.opengis.net/wcs/1.1/ows"
+                                 type="String"&gt;
+                     &lt;dap:value&gt;nearest&lt;/dap:value&gt;
+                  &lt;/dap:Attribute&gt;
+               &lt;/dap:Attribute&gt;
+            &lt;/dap:Attribute&gt;
+         &lt;/dap:Attribute&gt;
+         &lt;dap:Attribute name="SupportedCRS" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+            &lt;dap:value&gt;urn:ogc:def:crs:EPSG::4326&lt;/dap:value&gt;
+         &lt;/dap:Attribute&gt;
+         &lt;dap:Attribute name="SupportedFormat" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+            &lt;dap:value&gt;netcdf-cf1.0&lt;/dap:value&gt;
+         &lt;/dap:Attribute&gt;
+         &lt;dap:Attribute name="SupportedFormat" namespace="http://www.opengis.net/wcs/1.1" type="String"&gt;
+            &lt;dap:value&gt;dap2.0&lt;/dap:value&gt;
+         &lt;/dap:Attribute&gt;
+      &lt;/dap:Attribute&gt;
+   &lt;/dap:Attribute&gt;
+&lt;/dap:Dataset&gt;
+&lt;/pre&gt;
+
+==== Transform Back (dap -xslt-&gt; xml) ====
+&lt;pre&gt;
+&lt;xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dap="http://xml.opendap.org/ns/DAP2"
+                xmlns:wcs="http://www.opengis.net/wcs/1.1"
+                xmlns:ows="http://www.opengis.net/ows/1.1"
+                xmlns:owcs="http://www.opengis.net/wcs/1.1/ows"
+                xmlns:gml="http://www.opengis.net/gml/3.2"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+        &gt;
+    &lt;xsl:output method='xml' version='1.0' encoding='UTF-8' indent='yes'/&gt;
+
+
+    &lt;xsl:template match="dap:Attribute"&gt;
+        &lt;xsl:copy&gt;
+            &lt;xsl:call-template name="copyTextAndAttributes"/&gt;
+            &lt;xsl:apply-templates /&gt;
+        &lt;/xsl:copy&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;!--
+       - xmlElementNode
+      --&gt;
+    &lt;xsl:template match="dap:Attribute[@type!='xmlAttributeNode' and (boolean(@namespace) or boolean(@prefix))]"&gt;
+        &lt;xsl:call-template name="xmlElement"/&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Attribute[@type='xmlAttributeNode']" /&gt;
+
+
+    &lt;!--
+       - xmlAttributeNode
+      --&gt;
+    &lt;xsl:template match="dap:Attribute[@type='xmlAttributeNode']" mode="xmlAttributeMode"&gt;
+            &lt;xsl:choose&gt;
+                &lt;xsl:when test="@prefix"&gt;
+                    &lt;xsl:attribute name="{@prefix}:{@name}"&gt;
+                        &lt;xsl:value-of select="normalize-space(dap:value)" /&gt;
+                    &lt;/xsl:attribute&gt;
+                &lt;/xsl:when&gt;
+                &lt;xsl:when test="@namespace"&gt;
+                    &lt;xsl:attribute name="{@name}" namespace="{@namespace}"&gt;
+                        &lt;xsl:value-of select="normalize-space(dap:value)" /&gt;
+                    &lt;/xsl:attribute&gt;
+                &lt;/xsl:when&gt;
+                &lt;xsl:otherwise&gt;
+                    &lt;xsl:attribute name="{@name}"&gt;
+                        &lt;xsl:value-of select="normalize-space(dap:value)" /&gt;
+                    &lt;/xsl:attribute&gt;
+                &lt;/xsl:otherwise&gt;
+            &lt;/xsl:choose&gt;
+
+    &lt;/xsl:template&gt;
+
+    &lt;!--
+       - xmlTextNode
+      --&gt;
+    &lt;xsl:template name="xmlTextNode"&gt;
+        &lt;xsl:choose&gt;
+            &lt;xsl:when test="@type='Container'"&gt;
+                &lt;xsl:if test="dap:Attribute[@type=String]"&gt;
+                    &lt;xsl:value-of select="dap:Attribute[@type=String]/dap:value"/&gt;
+                &lt;/xsl:if&gt;
+
+            &lt;/xsl:when&gt;
+            &lt;xsl:otherwise&gt;
+                &lt;xsl:value-of select="dap:value"/&gt;
+            &lt;/xsl:otherwise&gt;
+
+        &lt;/xsl:choose&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;!--
+       - supress regular text and attributes.
+      --&gt;
+    &lt;xsl:template  match="@*|text()" /&gt;
+    &lt;xsl:template  match="@*|text()" mode="xmlAttributeMode"/&gt;
+
+
+    &lt;xsl:template name="xmlElement"&gt;
+        &lt;xsl:choose&gt;
+            &lt;xsl:when test="@prefix"&gt;
+                &lt;xsl:choose&gt;
+                    &lt;xsl:when test="@namespace"&gt;
+                        &lt;xsl:element name="{@prefix}:{@name}" namespace="{@namespace}"&gt;
+                            &lt;xsl:apply-templates select="." mode="xmlAttributeMode"/&gt;
+                            &lt;xsl:call-template name="xmlTextNode"/&gt;
+                            &lt;xsl:apply-templates /&gt;
+                        &lt;/xsl:element&gt;
+                    &lt;/xsl:when&gt;
+                    &lt;xsl:otherwise &gt;
+                        &lt;xsl:element name="{@prefix}:{@name}"&gt;
+                            &lt;xsl:apply-templates select="." mode="xmlAttributeMode"/&gt;
+                            &lt;xsl:call-template name="xmlTextNode"/&gt;
+                            &lt;xsl:apply-templates /&gt;
+                        &lt;/xsl:element&gt;
+                    &lt;/xsl:otherwise&gt;
+                &lt;/xsl:choose&gt;
+            &lt;/xsl:when&gt;
+            &lt;xsl:when test="@namespace" &gt;
+                &lt;xsl:choose&gt;
+                    &lt;xsl:when test="@namespace"&gt;
+                        &lt;xsl:element name="{@name}" namespace="{@namespace}"&gt;
+                            &lt;xsl:apply-templates select="." mode="xmlAttributeMode"/&gt;
+                            &lt;xsl:call-template name="xmlTextNode"/&gt;
+                            &lt;xsl:apply-templates /&gt;
+                        &lt;/xsl:element&gt;
+                    &lt;/xsl:when&gt;
+                    &lt;xsl:otherwise&gt;
+                        &lt;xsl:element name="{@name}"&gt;
+                            &lt;xsl:apply-templates select="." mode="xmlAttributeMode"/&gt;
+                            &lt;xsl:call-template name="xmlTextNode"/&gt;
+                            &lt;xsl:apply-templates /&gt;
+                        &lt;/xsl:element&gt;
+                    &lt;/xsl:otherwise&gt;
+                &lt;/xsl:choose&gt;
+            &lt;/xsl:when&gt;
+            &lt;xsl:otherwise &gt;
+                &lt;BONK /&gt;
+            &lt;/xsl:otherwise&gt;
+        &lt;/xsl:choose&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template name="copyTextAndAttributes" &gt;&lt;xsl:copy-of select="text()|@*" /&gt;&lt;/xsl:template&gt;
+
+&lt;/xsl:stylesheet&gt;
+&lt;/pre&gt;
+
+==== Result ====
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;CoverageDescriptions xmlns="http://www.opengis.net/wcs/1.1" xmlns:gml="http://www.opengis.net/gml/3.2"
+                      gml:crs="urn:ogc:def:crs:EPSG::4326"&gt;
+   &lt;CoverageDescription gml:crs="urn:ogc:def:crs:EPSG::4326"&gt;
+      &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;Near-Real Time Surface Ocean Velocity&lt;/Title&gt;
+      &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;CoverageDescription generated by OPeNDAP WCS UseCase 2.0&lt;/Abstract&gt;
+      &lt;Identifier&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/Identifier&gt;
+      &lt;Domain gml:crs="urn:ogc:def:crs:EPSG::4326"&gt;
+         &lt;SpatialDomain gml:crs="urn:ogc:def:crs:EPSG::4326"&gt;
+            &lt;BoundingBox xmlns="http://www.opengis.net/ows/1.1" gml:crs="urn:ogc:def:crs:EPSG::4326"&gt;
+               &lt;LowerCorner&gt;-97.8839 21.736&lt;/LowerCorner&gt;
+               &lt;UpperCorner&gt;-57.2312 46.4944&lt;/UpperCorner&gt;
+            &lt;/BoundingBox&gt;
+         &lt;/SpatialDomain&gt;
+         &lt;TemporalDomain&gt;
+            &lt;timePosition xmlns="http://www.opengis.net/gml/3.2"&gt;2008-03-27T16:00:00.000Z&lt;/timePosition&gt;
+         &lt;/TemporalDomain&gt;
+      &lt;/Domain&gt;
+      &lt;Range&gt;
+         &lt;Field&gt;
+            &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;surface_eastward_sea_water_velocity&lt;/Title&gt;
+            &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;Eastward component of a 2D sea surface velocity vector.&lt;/Abstract&gt;
+            &lt;Identifier&gt;u&lt;/Identifier&gt;
+            &lt;Definition&gt;
+               &lt;AnyValue xmlns="http://www.opengis.net/ows/1.1"/&gt;
+            &lt;/Definition&gt;
+            &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+            &lt;InterpolationMethods xmlns="http://www.opengis.net/wcs/1.1/ows"&gt;
+               &lt;DefaultMethod&gt;nearest&lt;/DefaultMethod&gt;
+            &lt;/InterpolationMethods&gt;
+         &lt;/Field&gt;
+         &lt;Field&gt;
+            &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;surface_northward_sea_water_velocity&lt;/Title&gt;
+            &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;Northward component of a 2D sea surface velocity vector.&lt;/Abstract&gt;
+            &lt;Identifier&gt;v&lt;/Identifier&gt;
+            &lt;Definition&gt;
+               &lt;AnyValue xmlns="http://www.opengis.net/ows/1.1"/&gt;
+            &lt;/Definition&gt;
+            &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+            &lt;InterpolationMethods xmlns="http://www.opengis.net/wcs/1.1/ows"&gt;
+               &lt;DefaultMethod&gt;nearest&lt;/DefaultMethod&gt;
+            &lt;/InterpolationMethods&gt;
+         &lt;/Field&gt;
+         &lt;Field&gt;
+            &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;longitudinal dilution of precision&lt;/Title&gt;
+            &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;The longitudinal dilution of precision (DOPx) represents the\\012contribution of the radars' configuration geometry to\\012uncertainty in the eastward velocity estimate (u). DOPx is a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the eastward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for filtering\\012errant velocities due to poor geometry.&lt;/Abstract&gt;
+            &lt;Identifier&gt;DOPx&lt;/Identifier&gt;
+            &lt;Definition&gt;
+               &lt;AnyValue xmlns="http://www.opengis.net/ows/1.1"/&gt;
+            &lt;/Definition&gt;
+            &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+            &lt;InterpolationMethods xmlns="http://www.opengis.net/wcs/1.1/ows"&gt;
+               &lt;DefaultMethod&gt;nearest&lt;/DefaultMethod&gt;
+            &lt;/InterpolationMethods&gt;
+         &lt;/Field&gt;
+         &lt;Field&gt;
+            &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;latitudinal dilution of precision&lt;/Title&gt;
+            &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;The latitudinal dilution of precision (DOPy) represents the\\012contribution of the radars' configuration geometry to\\012uncertainty in the northward velocity estimate (v). DOPy is a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the northward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for filtering\\012errant velocities due to poor geometry.&lt;/Abstract&gt;
+            &lt;Identifier&gt;DOPy&lt;/Identifier&gt;
+            &lt;Definition&gt;
+               &lt;AnyValue xmlns="http://www.opengis.net/ows/1.1"/&gt;
+            &lt;/Definition&gt;
+            &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+            &lt;InterpolationMethods xmlns="http://www.opengis.net/wcs/1.1/ows"&gt;
+               &lt;DefaultMethod&gt;nearest&lt;/DefaultMethod&gt;
+            &lt;/InterpolationMethods&gt;
+         &lt;/Field&gt;
+         &lt;Field&gt;
+            &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;Contributing radar site latitudes&lt;/Title&gt;
+            &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;Contributing radar site latitudes&lt;/Abstract&gt;
+            &lt;Identifier&gt;site_lat&lt;/Identifier&gt;
+            &lt;Definition&gt;
+               &lt;AnyValue xmlns="http://www.opengis.net/ows/1.1"/&gt;
+            &lt;/Definition&gt;
+            &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+            &lt;InterpolationMethods xmlns="http://www.opengis.net/wcs/1.1/ows"&gt;
+               &lt;DefaultMethod&gt;nearest&lt;/DefaultMethod&gt;
+            &lt;/InterpolationMethods&gt;
+         &lt;/Field&gt;
+         &lt;Field&gt;
+            &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;Contributing radar site longitudes&lt;/Title&gt;
+            &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;Contributing radar site longitudes.&lt;/Abstract&gt;
+            &lt;Identifier&gt;site_lon&lt;/Identifier&gt;
+            &lt;Definition&gt;
+               &lt;AnyValue xmlns="http://www.opengis.net/ows/1.1"/&gt;
+            &lt;/Definition&gt;
+            &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+            &lt;InterpolationMethods xmlns="http://www.opengis.net/wcs/1.1/ows"&gt;
+               &lt;DefaultMethod&gt;nearest&lt;/DefaultMethod&gt;
+            &lt;/InterpolationMethods&gt;
+         &lt;/Field&gt;
+         &lt;Field&gt;
+            &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;Contributing radar site code.&lt;/Title&gt;
+            &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;Contributing radar site code.&lt;/Abstract&gt;
+            &lt;Identifier&gt;site_code&lt;/Identifier&gt;
+            &lt;Definition&gt;
+               &lt;AnyValue xmlns="http://www.opengis.net/ows/1.1"/&gt;
+            &lt;/Definition&gt;
+            &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+            &lt;InterpolationMethods xmlns="http://www.opengis.net/wcs/1.1/ows"&gt;
+               &lt;DefaultMethod&gt;nearest&lt;/DefaultMethod&gt;
+            &lt;/InterpolationMethods&gt;
+         &lt;/Field&gt;
+         &lt;Field&gt;
+            &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;Contributing radar site network affiliation code.&lt;/Title&gt;
+            &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;Contributing radar site network affiliation code.&lt;/Abstract&gt;
+            &lt;Identifier&gt;site_netCode&lt;/Identifier&gt;
+            &lt;Definition&gt;
+               &lt;AnyValue xmlns="http://www.opengis.net/ows/1.1"/&gt;
+            &lt;/Definition&gt;
+            &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+            &lt;InterpolationMethods xmlns="http://www.opengis.net/wcs/1.1/ows"&gt;
+               &lt;DefaultMethod&gt;nearest&lt;/DefaultMethod&gt;
+            &lt;/InterpolationMethods&gt;
+         &lt;/Field&gt;
+         &lt;Field&gt;
+            &lt;Title xmlns="http://www.opengis.net/ows/1.1"&gt;RTV processing parameters&lt;/Title&gt;
+            &lt;Abstract xmlns="http://www.opengis.net/ows/1.1"&gt;Contributing radar site network affiliation code.&lt;/Abstract&gt;
+            &lt;Identifier&gt;procParams&lt;/Identifier&gt;
+            &lt;Definition&gt;
+               &lt;AnyValue xmlns="http://www.opengis.net/ows/1.1"/&gt;
+            &lt;/Definition&gt;
+            &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+            &lt;InterpolationMethods xmlns="http://www.opengis.net/wcs/1.1/ows"&gt;
+               &lt;DefaultMethod&gt;nearest&lt;/DefaultMethod&gt;
+            &lt;/InterpolationMethods&gt;
+         &lt;/Field&gt;
+      &lt;/Range&gt;
+      &lt;SupportedCRS&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt;
+      &lt;SupportedFormat&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+      &lt;SupportedFormat&gt;dap2.0&lt;/SupportedFormat&gt;
+   &lt;/CoverageDescription&gt;
+&lt;/CoverageDescriptions&gt;
+&lt;/pre&gt;
+
+
+[[Category:Development|DAP3/4]] [[Category:DAP4|DAP3/4]]</text>
+      <sha1>8wizm5fbm7lovcsifg40xoa7fugsw3d</sha1>
+    </revision>
+  </page>
+</mediawiki>

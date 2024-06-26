@@ -1,0 +1,228 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>OPULS: NOAA S3 Data Access</title>
+    <ns>0</ns>
+    <id>886</id>
+    <revision>
+      <id>10827</id>
+      <parentid>10800</parentid>
+      <timestamp>2014-09-16T21:50:02Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>10827</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="11939" sha1="4q0di3smlxk9r1wdgtzdztgfuakxltb" xml:space="preserve">
+== Overview ==
+With NOAA funding OPeNDAP collaborated with Deirdre Byrne, Jeff Ogata ,  and John Relph. This NOAA team had created a publicly accessible S3 bucket of data files, along with a directed graph catalog built of  XML files. We wrote software for Hyrax that allowed Hyrax to provide THREDDS (with XSLT) catalogs of the holdings along with DAP data access. This was accomplished by writing a special version of the OLFS that could traverse the S3 held catalogs and could utilize the BES gateway function to retrieve (and cache) data files from S3 and provide DAP access to them.
+
+What follows is a description of how one might obtain, configure, and run the software against an appropriately populated S3 bucket provided by OPeNDAP.
+
+== Get  ==
+You will need to get and install Hyrax. Then you'll need to get the OLFS source code tree and compile and install a new java component.
+
+=== Hyrax ===
+Get and install the latest version of [http://www.opendap.org/download/hyrax/1.9 Hyrax 1.9.x] or later. That is easiest since you can get binaries. If you must build from source use the [https://scm.opendap.org/svn/branch/shrew/hyrax_1.9_release/ Hyrax 1.9 release branch]
+
+Verify that Hyrax is working correctly before moving on.
+
+=== S3 Service ===
+
+The S3 DAP Service is really an alternate OLFS. To use it, you will need to check out the OLFS project from our subversion repository:  https://scm.opendap.org/svn/branch/olfs/release/hyrax-1.9/
+
+== Build  ==
+
+
+Build the S3 DAP service:
+: &lt;code&gt;ant -f s3-build.xml server &lt;/code&gt;
+
+== Install ==
+
+1. Install the S3 DAP Service into the same Tomcat server into which you previously installed the OLFS/Hyrax by copying the s3.war file that you just built into Tomcat's webapps directory.
+::&lt;code&gt;cp build/dist/s3.war $CATALINA_HOME/webapps&lt;/code&gt;
+2. Restart Tomcat. This will cause the S3 DAP service to start and install it's default configuration into &lt;code&gt;$CATALINA_HOME/content/s3&lt;/code&gt;
+
+== Configure ==
+
+=== S3 DAP Service ===
+The configuration for the S3 DAP Service is located in the file &lt;code&gt;$CATALINA_HOME/content/s3/s3.xml&lt;/code&gt;
+
+Here is the default configuration:
+&lt;source lang="xml"&gt;
+&lt;S3Config&gt;
+    &lt;DapService context="/dap" /&gt;
+    &lt;CatalogService context="/catalog" /&gt;
+    &lt;CatalogCache&gt;/Users/ndp/scratch/s3Test/catalogCache&lt;/CatalogCache&gt;
+    &lt;Bucket name="opendap.test" context="/test" loadCatalogOnStart="true" /&gt;
+&lt;/S3Config&gt;
+&lt;/source&gt;
+
+Note that the bucket name is set to OPeNDAP's test bucket which already has data and /index.xml files waiting. Once you build your own bucket you simply add a new Bucket element to the configuration, restart Tomcat, and off you go.
+
+
+=== BES Gateway Module ===
+
+The S3 Bucket service will need to be added to the Gateway.Whitelist in the BES Gateway Module. Here's the line I added to my gateway.conf file to enable my BES to provide gateway services to the bucket contents:
+
+&lt;source lang="c"&gt;Gateway.Whitelist+=https://opendap.test.s3.amazonaws.com&lt;/source&gt;
+
+[[BES - Modules - Gateway Module | Click through HERE for a full explanation of the configuration of the BES Gateway module.]]
+
+== Run ==
+
+Actually if you've done all the previous stuff your S3 DAP Service should be running. Try visiting the URL 
+:&lt;code&gt;http://your.server:8080/s3&lt;/code&gt;
+
+== Theory of Operation ==
+
+=== The S3 Bucket ===
+
+''In which we encode catalog path data into the unique '''key''' values of each file in our bucket.''
+
+While an S3 bucket is truly "flat" in that each item in it is identified by a unique and opaque "key". However we utilize a convention in which we make the key value a file path with the data file's basename at the end.
+
+This allows us to easily make a hierarchical directed graph style catalog where each node names its parent, leaves, and child nodes 
+
+
+=== Data Files ===
+An S3 bucket must be constructed that contains a collection of data files. When the data files are added to the bucket the S3 bucket '''key''' value must be set to the catalog path of the file followed by it's base name. This use of the '''key''' allows the files in the bucket to easily represent a filesystem organization.
+
+=== /index.xml Files (aka The Catalog) ===
+
+In addition to the data files the S3 bucket must contain a special catalog or index file whose '''key''' value is set to ''/index.xml''. (Keep reading for format and content information). There can be additional ''/index.xml'' files (''data//index.xml'', ''data/nc//index.xml'', etc.)
+
+These files are read by the Hyrax S3 DAP service and once ingested are used to generate data access URL's, and THREDDS catalogs (with XSLT) which allow users to navigate the holdings described in the /index.xml files.
+
+; Why name them "/index.xml"?
+: "''The reason for the doubled delimiter // is to prevent confusion of the generated S3 index documents with documents uploaded to the bucket in the normal manner. As i'm sure you know, while // is equivalent to / in a UNIX path, in Amazon S3, bucket keys are simply strings following the convention that / is a directory delimiter, but with no interpretation or canonicalization happening at the S3 end. So in S3 it is possible to store a file named /index.xml as a distinct document from one named index.xml, and this is the strategy the script is employing to keep the index documents out of the namespace of the uploaded content that the indexes are providing a listing of.''" - '''Jeff Ogata'''
+: "When I recently created our test bucket I discovered that I needed to re-inperpret Jeff's statement. It is now the case, that while the keys are still just keys (opaque ID's), AWS has changed the GUI for S3 so that it shows the content as a directed graph of things informed by the collection of "/" separated strings in the keys. But AWS interprets the occurrence of "//" in the key as an "nameless" subdirectory. So by naming the catalog files "/index.xml" we are essentially creating nameless directory/folder (unsupported by most OS's) and dumping the index.xml file into it. Just another twist on the concept. " - [[User:Ndp|ndp]] ([[User talk:Ndp|talk]])
+
+=== Example Catalog (''/index.xml'') Files  ===
+
+* These are fairly simple XML files and rather than explain them in great detail I will just provide some minimal examples. 
+* The following examples are taken from the S3 bucket "opendap.test".
+* The well known entry point into the catalog is the key "/index.xml"
+
+====  /index.xml ====
+'''key:''' /index.xml &lt;br/&gt;
+'''URL:''' http://s3.amazonaws.com/opendap.test//index.xml
+
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type='text/xsl' href='/opendap.test//index.xsl'?&gt;
+&lt;index xmlns="http://nodc.noaa.gov/s3/catalog/1.0" base="https://s3.amazonaws.com/opendap.test" path="" name="opendap.test" delimiter="/" encoding="UTF-8"&gt;
+  &lt;folder name="data" size="231402720" count="1"/&gt;
+&lt;/index&gt;
+&lt;/source&gt;
+
+
+==== data//index.xml ====
+'''key:''' data//index.xml  &lt;br/&gt;
+'''URL:''' http://s3.amazonaws.com/opendap.test/data//index.xml
+
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type='text/xsl' href='/opendap.test//index.xsl'?&gt;
+&lt;index xmlns="http://nodc.noaa.gov/s3/catalog/1.0" base="https://s3.amazonaws.com/opendap.test" path="/data" name="opendap.test" delimiter="/" encoding="UTF-8"&gt;
+  &lt;folder name="nc" size="231402720" count="1"/&gt;
+&lt;/index&gt;
+&lt;/source&gt;
+
+
+
+==== data/nc//index.xml ====
+'''key:''' data/nc//index.xml &lt;br/&gt;
+'''URL:''' http://s3.amazonaws.com/opendap.test/data/nc//index.xml
+
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type='text/xsl' href='/opendap.test//index.xsl'?&gt;
+&lt;index xmlns="http://nodc.noaa.gov/s3/catalog/1.0" base="https://s3.amazonaws.com/opendap.test" path="/data/nc" name="opendap.test" delimiter="/" encoding="UTF-8"&gt;
+  &lt;file name="coads_climatology.nc" last-modified="2008-05-29T16:31:52.000Z" size="3114044"/&gt;
+  &lt;file name="fnoc1.nc" last-modified="2008-05-28T14:28:52.000Z" size="24230"/&gt;
+  &lt;file name="sst.mnmean.nc" last-modified="2013-09-16T17:00:52.000Z" size="59547208"/&gt;
+  &lt;file name="200803061600_HFRadar_USEGC_6km_rtv_SIO.nc" last-modified="2013-07-02T20:00:52.000Z" size="2590804"/&gt;
+  &lt;file name="AG2006001_2006003_ssta.nc" last-modified="2013-07-02T20:00:52.000Z" size="21647220"/&gt;
+  &lt;file name="MB2006001_2006001_chla.nc" last-modified="2013-07-02T20:00:52.000Z" size="140904652"/&gt;
+  &lt;file name="a21160601.nc" last-modified="2013-07-02T20:00:52.000Z" size="3574848"/&gt;
+&lt;/index&gt;
+&lt;/source&gt;
+
+=== The Software ===
+
+==== S3 DAP Service ====
+The S3 DAP Service is a sibling to the OLFS and utilizes much of the code found there. It requires a running BES with all the appropriate data handlers and the gateway module installed. At startup the service reads it's configuration file which contains the context names for the DAP and Catalog services, the local filesystem location to be used for a catalog cache, and a collection of S3 bucket names to be used as source data collections. Collection names and bucket names are specified independently so that the S3 bucket name need not be a path component in the URLs formed by the S3 DAP Service.  Once configured, the /index.xml catalog files are loaded by the server at startup where they are used to generate THREDDS catalogs (with XSLT) for client and browser traversal.
+
+So for example, an S3 bucket mapped by the configuration to the context "test" would have a  top-level THREDDS catalog URL of http://localhost:8080/s3/catalog/test/catalog.xml and might return this THREDDS catalog:
+
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="/s3/xsl/threddsPresentation.xsl"?&gt;
+&lt;catalog xmlns="http://www.unidata.ucar.edu/namespaces/thredds/InvCatalog/v1.0" xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+  &lt;service name="dap" serviceType="OPeNDAP" base="/s3/dap" /&gt;
+  &lt;dataset name="/" ID="/s3/catalog/"&gt;
+    &lt;catalogRef name="data" xlink:title="data" xlink:type="simple" ID="/data/" xlink:href="/s3/catalog/test/data/catalog.xml" /&gt;
+  &lt;/dataset&gt;
+&lt;/catalog&gt;
+&lt;/source&gt;
+(Note: ''The returned XML contains a style sheet reference that allows browsers to render the THREDDS catalog as HTML'')
+
+Which was generated from the file with the key ''/index.xml'':
+
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type='text/xsl' href='/opendap.test//index.xsl'?&gt;
+&lt;index xmlns="http://nodc.noaa.gov/s3/catalog/1.0" base="https://s3.amazonaws.com/opendap.test" path="" name="opendap.test" delimiter="/" encoding="UTF-8"&gt;
+  &lt;folder name="data" size="231402720" count="1"/&gt;
+&lt;/index&gt;
+&lt;/source&gt;
+
+
+In support of the DAP services stack, the S3 DAP Service software maintains lists of the S3 resource ID's gleaned from the catalog and uses these to construct BES requests for DAP services by access the BES Gateway Module which can retrieve/cache HTTP resources and provide DAP services for them.
+
+==== BES Gateway Module ====
+
+The S3 service relies on the BES gateway module to do the heavy lifting of retrieving/caching data objects from S3 and providing DAP services for them. [[BES - Modules - Gateway_Module | The BES Gateway module and it's configuration are explained here]].
+
+== Additional Thing's That Could Be Done ==
+
+# Integrate with the Glacier Async Service so that glacier products are unpacked into a target S3 bucket with the appropriate key and from there served by the Hyrax S3 service. This would provide a tiered storage architecture where the most expensive (and fastest) storage is only used as local cache by each instance of the server.
+# In addition to reading the NOAA /index.xml files for the catalog this code could (should!) be extended to read THREDDS catalogs cached in S3 along side the data and provide the catalog service that way (or even both ways). This could probably be done by subclassing the openda.threddsHandler.StaticCatalogDispatch class (and surely other stuff too)
+
+
+== Questions ==
+
+Ask us questions at support@opendap.org and we'll help as best we can.</text>
+      <sha1>4q0di3smlxk9r1wdgtzdztgfuakxltb</sha1>
+    </revision>
+  </page>
+</mediawiki>

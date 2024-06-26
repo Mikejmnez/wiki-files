@@ -1,0 +1,206 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>WCS GetCapabilities Pre-built Response</title>
+    <ns>0</ns>
+    <id>370</id>
+    <revision>
+      <id>2665</id>
+      <timestamp>2009-01-08T05:58:26Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>New page: This is based on this data set: http://dev1.opendap.org:8080/opendap/netcdf/examples/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx    &lt;?xml version="1.0" encoding="UTF-8"?&gt;  &lt;Capabilities ...</comment>
+      <origin>2665</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6936" sha1="heepghinp17s2dgm34ep0u0gavs3ji4" xml:space="preserve">This is based on this data set: http://dev1.opendap.org:8080/opendap/netcdf/examples/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx
+
+
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ &lt;Capabilities xmlns="http://www.opengis.net/wcs/1.1" 
+ xmlns:ows="http://www.opengis.net/ows/1.1" 
+ xmlns:xlink="http://www.w3.org/1999/xlink" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xsi:schemaLocation="http://www.opengis.net/wcs/1.1  ../wcsGetCapabilities.xsd
+ http://www.opengis.net/ows/1.1 ../../../ows/1.1.0/owsAll.xsd" 
+ version="1.1.2" updateSequence="1.0"&gt;
+   &lt;!-- ************************************************************ --&gt;
+   &lt;!-- * SERVICE IDENTIFICATION SECTION                 * --&gt;
+   &lt;!-- ************************************************************ --&gt;
+   &lt;ows:ServiceIdentification&gt;
+      &lt;ows:Title&gt;OPeNDAP Development WCS&lt;/ows:Title&gt;
+      &lt;ows:Abstract&gt;A WCS service under development as a part of the OPeNDAP Hyrax server.&lt;/ows:Abstract&gt;
+      &lt;ows:Keywords&gt;
+         &lt;ows:Keyword&gt;Web Coverage Service&lt;/ows:Keyword&gt;
+         &lt;ows:Keyword&gt;OPeNDAP&lt;/ows:Keyword&gt;
+         &lt;ows:Keyword&gt;NetCDF&lt;/ows:Keyword&gt;
+      &lt;/ows:Keywords&gt;
+      &lt;ows:ServiceType&gt;WCS&lt;/ows:ServiceType&gt;
+      &lt;ows:ServiceTypeVersion&gt;1.1.2&lt;/ows:ServiceTypeVersion&gt;
+      &lt;ows:Fees&gt;NONE&lt;/ows:Fees&gt;
+      &lt;ows:AccessConstraints&gt;NONE&lt;/ows:AccessConstraints&gt;
+   &lt;/ows:ServiceIdentification&gt;
+   &lt;!-- ************************************************************ --&gt;
+   &lt;!-- * SERVICE PROVIDER SECTION                         * --&gt;
+   &lt;!-- ************************************************************ --&gt;
+   &lt;ows:ServiceProvider&gt;
+      &lt;ows:ProviderName&gt;OPeNDAP&lt;/ows:ProviderName&gt;
+      &lt;ows:ProviderSite xlink:href="http://www.opendap.org"/&gt;
+      &lt;ows:ServiceContact&gt;
+         &lt;ows:IndividualName&gt;Nathan Potter&lt;/ows:IndividualName&gt;
+         &lt;ows:PositionName&gt;Senior Developer&lt;/ows:PositionName&gt;
+         &lt;ows:ContactInfo&gt;
+            &lt;ows:Phone&gt;
+               &lt;ows:Voice&gt;401-555-7890&lt;/ows:Voice&gt;
+               &lt;ows:Facsimile&gt;401-555-8901&lt;/ows:Facsimile&gt;
+            &lt;/ows:Phone&gt;
+            &lt;ows:Address&gt;
+               &lt;ows:DeliveryPoint&gt;165 Dean Knauss Dr.&lt;/ows:DeliveryPoint&gt;
+               &lt;ows:City&gt;Narragansett&lt;/ows:City&gt;
+               &lt;ows:AdministrativeArea&gt;Rhode Island&lt;/ows:AdministrativeArea&gt;
+               &lt;ows:PostalCode&gt;02882&lt;/ows:PostalCode&gt;
+               &lt;ows:Country&gt;USA&lt;/ows:Country&gt;
+               &lt;ows:ElectronicMailAddress&gt;support[at]opendap[dot]org&lt;/ows:ElectronicMailAddress&gt;
+            &lt;/ows:Address&gt;
+            &lt;ows:OnlineResource xlink:href="http://www.opendap.org/support/index.html"/&gt;
+            &lt;ows:HoursOfService&gt;24x7x365&lt;/ows:HoursOfService&gt;
+            &lt;ows:ContactInstructions&gt;email&lt;/ows:ContactInstructions&gt;
+         &lt;/ows:ContactInfo&gt;
+         &lt;ows:Role&gt;Developer&lt;/ows:Role&gt;
+      &lt;/ows:ServiceContact&gt;
+   &lt;/ows:ServiceProvider&gt;
+   &lt;!-- ************************************************************ --&gt;
+   &lt;!-- * OPERATIONS METADATA                                * --&gt;
+   &lt;!-- ************************************************************ --&gt;
+   &lt;ows:OperationsMetadata&gt;
+      &lt;ows:Operation name="GetCapabilities"&gt;
+         &lt;ows:DCP&gt;
+            &lt;ows:HTTP&gt;
+               &lt;ows:Get xlink:href="http://ndp.opendap:8080/opendap/WCS?"/&gt;
+            &lt;/ows:HTTP&gt;
+         &lt;/ows:DCP&gt;
+         &lt;ows:Parameter name="service"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;WCS&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+         &lt;ows:Parameter name="version"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;1.1.2&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+         &lt;ows:Parameter name="AcceptVersions"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;1.1.2&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+      &lt;/ows:Operation&gt;
+      &lt;ows:Operation name="DescribeCoverage"&gt;
+         &lt;ows:DCP&gt;
+            &lt;ows:HTTP&gt;
+               &lt;ows:Get xlink:href="http://ndp.opendap:8080/opendap/WCS?"/&gt;
+            &lt;/ows:HTTP&gt;
+         &lt;/ows:DCP&gt;
+         &lt;ows:Parameter name="service"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;WCS&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+         &lt;ows:Parameter name="version"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;1.1.2&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+         &lt;ows:Parameter name="Identifier"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+      &lt;/ows:Operation&gt;
+      &lt;ows:Operation name="GetCoverage"&gt;
+         &lt;ows:DCP&gt;
+            &lt;ows:HTTP&gt;
+               &lt;ows:Get xlink:href="http://ndp.opendap:8080/opendap/WCS?"/&gt;
+            &lt;/ows:HTTP&gt;
+         &lt;/ows:DCP&gt;
+         &lt;ows:Parameter name="service"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;WCS&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+         &lt;ows:Parameter name="version"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;1.1.2&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+         &lt;ows:Parameter name="Identifier"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+         &lt;ows:Parameter name="InterpolationType"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;nearest&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+         &lt;ows:Parameter name="format"&gt;
+            &lt;ows:AllowedValues&gt;
+               &lt;ows:Value&gt;netcdf-cf1.0&lt;/ows:Value&gt;
+               &lt;ows:Value&gt;dap2.0&lt;/ows:Value&gt;
+            &lt;/ows:AllowedValues&gt;
+         &lt;/ows:Parameter&gt;
+      &lt;/ows:Operation&gt;
+   &lt;/ows:OperationsMetadata&gt;
+   &lt;!-- ************************************************************ --&gt;
+   &lt;!-- * CONTENTS SECTION                                        * --&gt;
+   &lt;!-- ************************************************************ --&gt;
+   &lt;Contents&gt;
+      &lt;CoverageSummary&gt;
+         &lt;ows:Title&gt;6km HF Radar data&lt;/ows:Title&gt;
+         &lt;ows:Abstract&gt;A test dataset for use developing WCS services.&lt;/ows:Abstract&gt;
+         &lt;ows:Metadata xlink:href="http://ndp.opendap:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.das"/&gt;
+         &lt;ows:WGS84BoundingBox&gt;
+            &lt;ows:LowerCorner&gt;-97.8839 21.736&lt;/ows:LowerCorner&gt;
+            &lt;ows:UpperCorner&gt;-57.2312 46.4944&lt;/ows:UpperCorner&gt;
+         &lt;/ows:WGS84BoundingBox&gt;
+         &lt;Identifier&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/Identifier&gt;
+      &lt;/CoverageSummary&gt;
+      &lt;SupportedCRS&gt;urn:ogc:def:crs,crs:EPSG:6.3:4326&lt;/SupportedCRS&gt;
+      &lt;SupportedFormat&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+      &lt;SupportedFormat&gt;dap2.0&lt;/SupportedFormat&gt;
+   &lt;/Contents&gt;
+ &lt;/Capabilities&gt;
+----
+[[Category:WCS]]</text>
+      <sha1>heepghinp17s2dgm34ep0u0gavs3ji4</sha1>
+    </revision>
+  </page>
+</mediawiki>

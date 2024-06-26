@@ -1,0 +1,134 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - OLFS Build Instructions</title>
+    <ns>0</ns>
+    <id>131</id>
+    <revision>
+      <id>9608</id>
+      <parentid>9441</parentid>
+      <timestamp>2013-04-26T22:52:43Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* From Subversion */</comment>
+      <origin>9608</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4611" sha1="lgvyhzxqgsbn8uzhegarneqt3aa4osd" xml:space="preserve">How to build the OLFS from either a source code distribution, or directly from our [http://subversion.tigris.org/ Subversion] repository.
+
+
+-----
+=Dependencies=
+
+==[http://java.sun.com/javaee/index.jsp Java 5 Enterprise Edition (J2EE)]==
+
+'''''Minimum''''': Java 1.5
+
+'''''Recommended''''': Java 1.5.0 or newer.
+
+This software was developed and tested against the 1.5.0_06-112 JVM on OS-X.
+
+==[http://tomcat.apache.org/index.html Apache Tomcat]==
+
+'''''Minimum''''': 5.5 
+
+'''''Recommended''''': 6.x
+
+The servlets were developed and tested using Jakarta/Tomcat 6.0.14. In particular, the code was linked against the servlet.jar bundled with this particular version of Tomcat.
+
+==[http://ant.apache.org/ ANT]==
+
+'''''Minimum''''': 1.6.5
+
+'''''Recommended''''': 1.6 or higher
+
+This software now builds entirely with ANT. If you haven't already got ANT, then go get it: You need it. There is a build file in the top level directory, ''olfs/build.xml'' which relies on a couple of build files located in the ''olfs/buildfiles'' directory. The serious developer will want to read and understand all of the build related files.
+
+'''''Compiling the source''''': This should be straight forward. Just go to the top level directory and type "ant compile". For more detailed instructions you should read the master build file, ''olfs/build.xml''
+
+==Additional Libraries==
+
+The core software depends on several third part libraries. All of these are included with the distribution, and these (should) be the ones that the code was compiled against for development and testing purposes. It is possibly (in fact likely) that newer versions of these libraries are available from the various development teams that create these products. Replace them at your own risk.
+
+* The [http://jakarta.apache.org/commons/cli/ Apache Commons Command Line Interface] package, version 1.0
+* The [http://www.jdom.org/ JDOM] package, version 1.1.1
+&lt;!-- * The [http://www.unidata.ucar.edu/software/netcdf-java/ Java NetCDF] package, version 2.2.18 --&gt;
+&lt;!-- * The [http://www.unidata.ucar.edu/projects/THREDDS/ THREDDS] package, version 3.14.00 --&gt;
+* The [http://www.slf4j.org/nlog4j/ NLOG4J] package, version 1.5.8 and [http://logback.qos.ch/ logback], version 0.9.16
+* The [http://xerces.apache.org/xerces2-j/index.html Xerces XML Parser] package, version 2.8.1 (you will need both the '''''xercesimpl.jar''''' and the '''''xml-apis.jar''''')
+
+
+----
+
+=Getting The Source Code=
+
+===As A Source Code Distribution===
+
+The most recent source code distribution will available at both the [http://opendap.org/download/hyrax.html Hyrax download page] and the [http://opendap.org/download/olfs.html OLFS download page]. If you are attempting to build the OLFS in conjunction with the BES  - for example you are building Hyrax - then get both the source distributions from the same Hyrax release on the  [http://opendap.org/download/hyrax.html Hyrax download page], other wise you may experience compatibility issues. 
+
+Got get the source code bundle. It will be a file named something like olfs-''x.x.x''-src.jar
+
+Unpack the bundle using the command:
+
+ jar -xvf olfs.''x.x.x''-src.jar
+
+This will unpack the source code distribution into a directory called ''olf.x.x.x-src''
+
+
+
+===From Subversion===
+* Check out the software for the OLFS from our [http://subversion.tigris.org/ Subversion] repository located at https://scm.opendap.org/svn/trunk/olfs:
+ svn co https://scm.opendap.org/svn/trunk/olfs
+
+
+
+----
+
+=Building the code=
+
+Building the OLFS software should be very simple.
+
+# Make sure you have installed the current J2EE and ANT (see above)&lt;br /&gt;&lt;br /&gt;
+# Enter the top level directory of the OLFS source code tree (''olfs'' if you got the source code from Subversion, ''olfs-.x.x.x-src'' if you got it from a distribution bundle.)&lt;br /&gt;&lt;br /&gt;
+# Run the command:&lt;br /&gt;&lt;br /&gt;&lt;code&gt;ant compile&lt;/code&gt;&lt;br /&gt;&lt;br /&gt; This will compile all of the distributed software, but nothing more. For more detailed information you should read (and try to understand) the ANT build file, ''build.xml'' and the related files in the ''buildfiles'' directory. ''For those of you using an IDE you will have to follow your own "path" to get this going.''&lt;br /&gt;&lt;br /&gt;
+# To perform an end to end compile that builds the webb application and bundles it in a ''.war'' file, run the command:&lt;br /&gt;&lt;br /&gt;&lt;code&gt;ant server&lt;/code&gt;&lt;br /&gt;&lt;br /&gt;Find the file ''olfs/build/dist/opendap.war'', that's the thing you want!
+
+
+----
+
+=Installing the OLFS from a source code build=
+# Copy the file  ''olfs/build/dist/opendap.war'' tp ''$CATALINA_HOME/webapps''
+# (Re)start Tomcat.
+#Done!</text>
+      <sha1>lgvyhzxqgsbn8uzhegarneqt3aa4osd</sha1>
+    </revision>
+  </page>
+</mediawiki>

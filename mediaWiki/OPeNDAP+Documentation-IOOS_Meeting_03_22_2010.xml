@@ -1,0 +1,128 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>IOOS Meeting 03.22.2010</title>
+    <ns>0</ns>
+    <id>575</id>
+    <revision>
+      <id>5493</id>
+      <parentid>5492</parentid>
+      <timestamp>2010-04-02T21:41:15Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Why are updates so slow? */</comment>
+      <origin>5493</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4351" sha1="azru1pmgg5e6ohdjiqu613ruu4zw04u" xml:space="preserve">== WCS Semantic Software Activities ==
+
+
+=== Code Review ===
+Need code review to see if we can make it more robust and efficient. I think there are patterns of use in the code that can be factored into common methods. [http://scm.opendap.org/trac/ticket/1518 Ticket 1518]
+
+=== Why are updates so slow? [http://scm.opendap.org/trac/ticket/1521 Ticket 1521] ===
+It takes a long time to verify if changes have been made to the imports.
+* Even when no changes have been made to the imports list, semantic operations are still run. This seems counterintuitive: Can we change that? If nothing has changed then no additional semantic operations should be undertaken. Currently the last modified times of the imports are stored in the repository. This seems to be a very slow and unreliable mechanism for reevaluating the imports.
+* We need to evaluate what do to when things have changed. Is it more expedient to remove and replace changed values from the repository, or should we just rebuild the whole thing?
+* Can we pre-compute a starting point repository that contains all of the inferencing rules and ontologies? This would allow us to avoid the long slow acquisition of all of these files every time we rebuild the repository.
+* Should we consider caching the import list and last modified times as directly accessible java objects so that we can write simple java procedural code to evaluate the imports list?
+
+=== Caching ===
+At start up the catalog is empty prior to the completion of the semantic operations. [http://scm.opendap.org/trac/ticket/1517 Ticket 1517]
+* Should we cache the complete catalog? (Currently Haibo is writing out the results of the repository processing, but since additional elements are added by the java code his copy is not complete.)
+* Should we consider making the service simply create the appropriate inputs for the LocalFileCatalog and skip more tightly coupled integration?
+
+=== Servlet/Webapp ===
+Let's make the WCS service a stand alone web app. A seperate jar file that runs in it's own context in the servlet engine.
+* Fix the local/universal ID problem.  [http://scm.opendap.org/trac/ticket/1511 Ticket 1511]
+* Re-factor the code as a servlet (or maybe even as its own web app) with it's own servlet context. [http://scm.opendap.org/trac/ticket/1516 Ticket 1516]
+
+=== Additional Semantic Functions ===
+; DAP Variable Access [http://scm.opendap.org/trac/ticket/1520 Ticket 1520]
+: Need to access the data values of dap arrays from the inferencing.  In particular, we need the first and last values of arrays associated with map vectors (or more likely their "bounds" vectors) so that we can create bounding boxes.   A function should take dataseturi, local variable names, and indexing constraints expressed in some reasonable fashion
+
+; General semantic Function framework [http://scm.opendap.org/trac/ticket/1519 Ticket 1519]
+
+== GeoTIFF Module ==
+
+
+See [[GeoTIFF responses for Hyrax]]
+
+== KML Module ==
+
+See [[KML_responses_for_Hyrax]]
+
+== THREDDS Catalog Clients ==
+
+IDV seems like it might be a client that can navigate catalogs. (Not surprising, considering it's a UNIDATA thing)
+
+Several clients demonstrated at IOOS meeting that allowed users to navigate THREDDS catalogs in search of data:
+
+* Environmental Data Connector
+* ERDDAP
+* IOOS National Catalog Viewer (See [[#THREDDS_Catalog_Metadata]])
+
+
+== THREDDS Catalog Metadata ==
+
+See [[THREDDS Catalog Metadata]]
+
+== Dap Capabilities Response ==
+
+See [[DAP Capabilities]]
+
+== DAP Asynchronous Responses ==
+
+Comment added to [[DAP 4.0 Design#Organization_of_the_multipart_MIME_document| DAP 4.0 Design]]
+
+== DAP 3.x and 4.x == 
+
+* TDS and new DAP standards 
+:;Claim: For DAP 3.x and 4.x to become widely adopted we will need to get the TDS to become compatible with these versions. 
+:: The TDS is clearly the dominant DAP service software. This position makes it difficult (if not impossible) for us to push the DAP standards forward without enabling the TDS. INn order for the TDS to produce DAP 3.x and 4.x output we will need to start supporting these updated protocols in  the Java-DAP. 
+
+:;Assertion
+:: If we don't do this, then changes to the DAP will be irrelevant. 
+
+* Do we want to make the DAP 3.2 DDX the default DDX response?
+** Are there any users of the DAP 2.0 DDX?
+
+
+
+
+
+== To Do ==
+
+* Look at [http://www.fudgemsg.org  Fudge Messaging]</text>
+      <sha1>azru1pmgg5e6ohdjiqu613ruu4zw04u</sha1>
+    </revision>
+  </page>
+</mediawiki>

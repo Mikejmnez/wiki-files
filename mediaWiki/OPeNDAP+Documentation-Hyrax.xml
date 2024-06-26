@@ -1,0 +1,201 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax</title>
+    <ns>0</ns>
+    <id>10</id>
+    <revision>
+      <id>12467</id>
+      <parentid>12466</parentid>
+      <timestamp>2017-10-26T18:47:39Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <origin>12467</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="10615" sha1="g30b4g5dop2f5wy3c7df1i067ijclpl" xml:space="preserve">&lt;font size="+1"&gt;This is the '''OPeNDAP 4 Data Server''', also known as '''Hyrax'''. See our new '''[https://opendap.github.io/hyrax_guide/Master_Hyrax_Guide.html Hyrax Installation and Configuration Guide]'''.&lt;/font&gt;
+----
+&lt;font color="red"&gt;
+Note: The documentation on this is somewhat out of date as of October 2017.
+&lt;/font&gt;
+
+This page leads you through implementing and configuring Hyrax. Work through this page from top to bottom.
+
+== Hyrax Operational Overview ==
+[[Image:HyraxArchitecture.jpg|right|thumb]]
+
+Hyrax uses the Java servlet mechanism to hand off requests from a general web daemon to DAP format-specific software. This results in higher performance for small requests. The servlet front end, which we call the '''O'''PeNDAP '''L'''ightweight '''F'''ront end '''S'''erver (OLFS) looks at each request and formulates a query to a second server (which may or may not on the same machine as the OLFS) called the '''B'''ack '''E'''nd '''S'''erver (BES). 
+
+The BES is the high-performance server software from HAO. It handles reading data from the data stores and returning DAP-compliant responses to the OLFS. In turn, the OLFS may pass these response back to the requestor with little or no modification or it may use them to build more complex responses. The nature of the Inter Process Communication (IPC) between the OLFS and BES is such that they should both be on the same machine or be able to communicate over a very high bandwidth channel.
+
+Both the OLFS and the BES will run and serve test data immediately after a default installation. Additional configuration is required for them to serve site specific data.
+
+{|  class="wikitable"
+|+ Hyrax Features
+| '''THREDDS Catalog Support'''
+| Hyrax supports the THREDDS catalogs. It can serve user supplied static catalogs and it will dynamically generate THREDDS catalogs of it's internal holdings.
+|-
+| '''Dataset Aggregation'''
+| Collections of related data resources can be collected into a single dataset using the aggregation features. Typically these are formed for geographic tiles, time series, etc.
+|-
+|'''Adding/modifying dataset content'''
+| Datasets can be modified by the server without having to actually change the underlying files. These views are independently accessible from the original data. Both dataset metadata and data values may be added or changed. 
+|-
+|'''Multiple source data formats'''
+| Server can ingest source data stored as HDF4, HDF4-EOS, HDF5, HDF5-EOS, NetCDF-3, NetCDF-4, CEDAR, FITS, Comma Separated Values, and raw ASCII and Binary formats. Because of Hyrax's extensible design, it's easy to add new source data formats.
+|-
+|'''Multiple Return Formats For Data rRetrieval in multiple return formats'''
+| Hyrax is able to return data in DAP, DAP4, NetCDF-3, NetCDF-4, JSON, CSV, and ASCII formats, Or, you can add your own response types.
+|-
+|'''Gateway Service'''
+| Hyrax supports a gateway service feature that allows it to provide DAP (and other Hyrax) services for remotely held datasets that are stored in any of Hyrax's source data formats.
+|-
+|'''RDF'''
+| Hyrax provides RDF descriptions of it's data holdings. These can enable semantic web tools to operate upon the metadata content held in the server.
+|-
+|'''[[Server_Side_Processing_Functions | Server side functions]]'''
+|Hyrax supports a number of server side functions out of the box including (but not limited to):
+* ''[[Server_Side_Processing_Functions#geogrid.28.29|geogrid]]'': Subset applicable DAP Grids using latitude and longitude values.
+* ''[[Server_Side_Processing_Functions#grid.28.29|grid]]'': Subset any DAP Grid object using the values of it's map vectors.
+* ''[[Server_Side_Processing_Functions#linear_scale|linear_scale]]'': Apply a linear equation to the data returned, including automatic use of CF attributes.
+* ''[[Server_Side_Processing_Functions#version.28.29|version]]'': The version function provides a list of the server-side processing functions available.
+* New ones are easy to add.
+|-
+|'''Extensible WebStart functionality for data clients'''
+| Hyrax provides WebStart functionality for a number of Java based DAP clients. It's simple to add new clients to the list that Hyrax supports.
+|-
+|'''Extensible WebStart functionality for data clients'''
+|Hyrax provides WebStart functionality for a number of Java based DAP clients. It's simple to add new clients to the list that Hyrax supports.
+|-
+|'''Extensible/Configurable web interface'''
+|The web interface for both Hyrax and the administrator's interface can be customized using CSS and XSL. You can add your organizations logo and specialize the colors and fonts in the presentation of data sets.
+|-
+|'''Administrator's interface'''
+|Control and dynamically update Hyrax from a convenient web interface. See [[Hyrax_-_Administrators_Interface| the Admin interface documentation]].
+|-
+|'''WMS services'''
+|[[Hyrax WMS|Hyrax now supports WMS services via integration with ncWMS.]]
+|-
+|'''JSON responses'''
+|[[Hyrax JSON| Both metadata and data are now available in a JSON encoding.]]
+|-
+|'''JSON responses'''
+|[[Hyrax JSON| Both metadata and data are now available in a JSON encoding.]]
+|-
+|'''w10n'''
+|Hyrax comes with a complete w10n service stack. W10n navigation is supported through the default catalog where all datasets and "structure" variables appear as graph nodes. Data can be acquired for atomic types or arrays of atomic types in a number of formats.
+|}
+
+;Feature Request
+: Is there a feature you would like to see but don't? Let us know: [mailto:support@opendap.org support@opendap.org] or [mailto:opendap-tech@opendap.org opendap-tech@opendap.org] (You need to [http://mailman.opendap.org/mailman/listinfo/opendap-tech subscribe] first)
+
+== Downloading and Installing ==
+
+The download and installation instructions are kept together. 
+For the latest release look at &lt;font size="2"&gt;[https://www.opendap.org/index.php/software/hyrax-data-server the Hyrax downloads page]&lt;/font&gt;.
+
+=== Building And Installing From Source ===
+
+[[Hyrax GitHub Source Build|Getting and Building The Code From GitHub]]
+
+== Server Configuration ==
+At this point, you should have a running Hyrax server, but it will not be configured for your needs. In this section you will configure your Hyrax server. To do this, you will need to  configure BES and OLFS; optionally, you can configure THREDDS catalogs to provide a custom virtual view of the servers holdings. 
+* [[Hyrax - Configuration|Hyrax Configuration Instructions]]
+** [[Hyrax - BES Configuration|BES Configuration]]
+** [[Hyrax - OLFS Configuration|OLFS Configuration]]
+** [[Hyrax - THREDDS Configuration|THREDDS Catalog Configuration]]
+
+=== Apache Integration ===
+This is an optional step after configuring BES and OLFS. Integrating Hyrax with Apache allows you to integrate your Hyrax server with existing web infrastructure and is the recommended path for enabling user authentication and authorization.  
+* [[Hyrax - Apache Integration|Hyrax integration with the Apache Web Server]]
+==== User Authentication ====
+**  [[Hyrax_-_User_Identification_(Authentication) | Hyrax User Authentication and Identification]] Configure Hyrax to support user authentication. Explains how to integrate Hyrax with LDAP, Earthdata Login, Shibboleth, etc.
+** [[DAP Clients - Authentication]] Instruction to configure various DAP (and other generic HTTP clients) to work with the various authentication schemes
+
+=== And then there's more...===
+* [[Hyrax - Customizing Hyrax| Customizing Hyrax]]. Here you will find instructions on how to change the colors, fonts, and logo images presented in the Hyrax web pages.
+* [[Australian BOM System Administrator's Agenda and Presentations|System Administrators Workshop]] Here are slides from a system administrators workshop we gave to the Australian BOM on how to manage a Hyrax instance. 
+* [[Hyrax - Administrators Interface]] Here are the instruction for using the Hyrax Admin Interface, a web UI that allows one to view logs, restart, reconfigure, and otherwise fiddle with a Hyrax instance.
+&lt;!-- * [[Hyrax - Release Notes|Release Notes]] --&gt;
+
+== Modules ==
+Hyrax has a number of modules that provide the actual functionality of the server: Reading data files, building different kinds of responses and performing different kinds of server processing operations. Most of these modules work with the BES but some are part of the front (web facing) part of the server.
+
+=== BES modules ===
+* [[BES - Modules - The NetCDF Handler|NetCDF data handler]]
+* [[BES - Modules - The HDF4 Handler|HDF4 data handler]]
+* [[BES - Modules - The HDF5 Handler|HDF5 data handler]]
+* [[The_FreeForm_Data_Handler|FreeForm data handler]]
+* [[BES - Modules - NcML Module|NcML data handler]] 
+** [http://docs.opendap.org/index.php/BES_-_Modules_-_NcML_Module#Functionality Variable and Metadata modification] 
+** [http://docs.opendap.org/index.php/BES_-_Modules_-_NcML_Module#Aggregation_Tutorials Aggregated Datasets]'')
+* [[BES - Modules - Gateway Module|Gateway handler]] (Interoperability between Hyrax and other web services)
+* [[BES - Modules - CSV Handler | CSV handler ]]
+* [[BES - Modules - GeoTiff, GRIB2, JPEG2000 Handler| GeoTiff, GRiB2, JPEG2000 hander]]
+* [[BES - Modules - FileOut Netcdf|NetCDF File Response handler]]
+* [[BES_-_Modules_-_FileOut_GDAL | GDAL (GeoTIFF, JPEG2000) File Response handler]]
+
+=== Additional Java Modules that use the BES ===
+* [[Hyrax WMS | WMS]] - Web Mapping Service via integration with ncWMS.
+* [[Aggregation enhancements]]
+
+Unsupported:
+* [[BES - Modules - SQL Hander | SQL handler]]
+
+== Technical Support ==
+
+'''Technical Support:''' 
+* [mailto:support@opendap.org support@opendap.org]
+* [mailto:opendap-tech@opendap.org opendap-tech@opendap.org] (You need to [http://mailman.opendap.org/mailman/listinfo subscribe] first)
+
+'''Hyrax Java Development:''' 
+* ndp &lt;at&gt; opendap &lt;dot&gt; org
+
+'''Hyrax C++ Development:'''  
+* pwest &lt;at&gt; ucar &lt;dot&gt; edu (''bes'')
+* jgallagher &lt;at&gt; opendap &lt;dot&gt; org (''libdap'')
+
+== Sponsorship ==
+
+OPeNDAP Hyrax development is sponsored by:
+
+[[Image:Nasa-logo.jpg|95px]] '''[http://www.nasa.gov  National Aeronautics and Space Administration]'''
+
+[[Image:Nsf-logo.png|95px]]  '''[http://www.nsf.gov National Science Foundation]'''
+
+This material is based on work supported by the National Science Foundation under Grant No. 0430822. Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation (NSF).
+
+[[Image:Noaa-logo.jpg|90px]]  '''[http://www.noaa.gov National Oceanic and Atmospheric Administration]'''</text>
+      <sha1>g30b4g5dop2f5wy3c7df1i067ijclpl</sha1>
+    </revision>
+  </page>
+</mediawiki>

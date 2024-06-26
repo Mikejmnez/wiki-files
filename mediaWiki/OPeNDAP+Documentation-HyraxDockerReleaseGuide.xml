@@ -1,0 +1,254 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>HyraxDockerReleaseGuide</title>
+    <ns>0</ns>
+    <id>986</id>
+    <revision>
+      <id>13356</id>
+      <parentid>13295</parentid>
+      <timestamp>2022-06-21T22:24:07Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Update Documention */</comment>
+      <origin>13356</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="11133" sha1="5bp4s7r3g8234oubo3vatnppbux2vye" xml:space="preserve">== Overview ==
+This document describes how to make a release of the official Hyrax Docker image
+
+Each of our official Docker image builds are based on an associated official release of the Hyrax server. The images are built using the official release tar/war files whose authenticity is verified during the build.
+
+In our Docker project, each release of Hyrax has its own directory. Making a new release begins with copying the template files to a new release directory, editing their contents, and of course testing that it works.
+
+== Automated Build (hyrax-xx.yy.zz docker containers) ==
+
+This build will utilize version numbers to grab the components of Hyrax from www.opendap.org/pub and build the docker container with them.
+
+=== Create And Build Release Images ===
+
+From the command line make the working directory the top of the '''hyrax-docker''' project.
+
+==== Update the mkDist script ====
+Edit the '''mkDist''' file and update the values at the top of the file to reflect the various release components and the release date.
+
+Example:
+&lt;pre&gt;
+HYRAX_MAJOR_VERSION="1.15"
+HYRAX_FULL_VERSION="1.15.3"
+OLFS_VERSION="1.18.3"
+LIBDAP_VERSION="3.20.3-1"
+BES_VERSION="3.20.3-1"
+RELEASE_DATE="2019-02-25"
+&lt;/pre&gt;
+
+Save the ''mkDist'' file.
+
+==== Run the mkDist  script ====
+: &lt;tt&gt;./mkDist&lt;/tt&gt;
+
+At this point, unless errors were encountered, all the images should be built.
+
+=== Test the images. ===
+
+They should already be tagged with the various names, including the images that will be needed for docker hub:
+
+: '''opendap/hyrax:xx.yy.zz'''
+: '''opendap/hyrax:latest'''
+: '''opendap/hyrax_ncwms:xx.yy.zz'''
+: '''opendap/hyrax_ncwms:latest'''
+
+Test the Hyrax image like this:
+
+: &lt;tt&gt;docker run -d -h hyrax -p 8080:8080 --name=hyrax opendap/hyrax:latest&lt;/tt&gt;
+
+Test the Hyrax with ncWMS image like this:
+
+: &lt;tt&gt;docker run -d -h hyrax -p 8080:8080 --name=hyrax_ncwms opendap/hyrax_ncwms:latest -n http://localhost:8080&lt;/tt&gt;
+
+And to see the ncWMS working look here: 
+: &lt;tt&gt;http://localhost:8080/ncWMS2/Godiva3.html?server=http://localhost:8080/ncWMS2/wms/lds/data/nc/coads_climatology.nc&lt;/tt&gt;
+
+=== Upload the tested images to DockerHub ===
+
+To get them into docker hub:
+
+: &lt;tt&gt;docker push opendap/hyrax:xx.yy.zz&lt;/tt&gt;
+: &lt;tt&gt;docker push opendap/hyrax:latest&lt;/tt&gt;
+: &lt;tt&gt;docker push opendap/hyrax_ncwms:xx.yy.zz&lt;/tt&gt;
+: &lt;tt&gt;docker push opendap/hyrax_ncwms:latest&lt;/tt&gt;
+
+=== Update The DockerHub Landing Pages ===
+
+In DockerHub each of our published Docker images has a landing page. The landing pages for the hyrax and the hyrax_ncwms images contain exaplanation and a list of links to official release version. These need to be updated.
+
+To update:
+# Log into DockerHub
+# Navigate to https://hub.docker.com/repository/docker/opendap/hyrax
+## Add the new release to the list of Release and Docker files.
+## Update the link to the ''Latest' Docker file.
+# Navigate to https://hub.docker.com/repository/docker/opendap/hyrax_ncwms
+## Add the new release to the list of Release and Docker files.
+## Update the link to the ''Latest' Docker file.
+
+=== Update Documention ===
+In GitHub, update the '''hyrax-docker/README.md''' file with the new release numbers and associated DOI badges and verify that the instructions continue to reflect the current build.
+
+=== Tag the Release ===
+# Make sure all changes have been pushed and merged to the master branch.
+# Since the Docker project is essentially linked to a Hyrax Release, tag this point in the master branch with the Hyrax release number
+#* &lt;tt style="font-size: 1.1em; font-weight: bold;"&gt;git tag -a hyrax-&lt;numbers&gt; -m "Hyrax &lt;number&gt;"&lt;/tt&gt;
+#* &lt;tt style="font-size: 1.1em; font-weight: bold;"&gt;git push origin hyrax-&lt;numbers&gt;&lt;/tt&gt;
+
+
+----
+
+
+----
+
+
+----
+
+
+----
+
+
+----
+
+
+----
+
+
+----
+
+
+----
+
+== Manually build the Hyrax release docker container ==
+Follow the basic instructions to build the docker containers in the [https://github.com/OPENDAP/hyrax-docker github project's README].
+
+=== Overview: Building For Distribution ===
+Here are the basics steps: 
+* Clone the repo
+* Copy the ''hyrax-latest'' dir to the next version number if needed and re-assign the symbolic link
+* cd into the directory and build the ''hyrax'' container both with and without ncWMS ''It is easiest todo all the steps for the plain image, then repeat for the image with ncWMS''
+* Build the image
+* Test the image by running it.
+* Stop the running container (Running image is called a container)
+* Create an image from the stopped container (via the container_id) using the name of the target repository_id and &lt;tt&gt;docker commit&lt;/tt&gt;
+* Login to Docker.
+* Tag the image.
+* Push the image.
+
+==== Cheat sheet ====
+
+
+; Run an interactive shell in a container
+: To grab a container and run a shell, use ''docker run -it --name=builder opendap/centos7_hyrax_builder:1.1 /bin/bash'' where ''-it'' is the magic option.
+; Update the state of a container
+: This includes adding new packages to an existing container
+* First run an interactive shell in the container: ''docker run -it --name=builder opendap/centos7_hyrax_builder:1.1 /bin/bash''
+* Run commands in the container's shell to do whatever needs to be done to add/remove/configure the container. For example, to add the ''aws cli'' tools, I ran ''yum install epel-release'', ''yum install python-pip'', ''pip install --upgrade pip'', and ''pip install --user awscli''
+* Then, exist from the shell back to the controlling terminal. The 'container' (''builder'' in the above) will be stopped once you exit (using ctrl-d).
+* Commit the container: ''docker commit builder opendap/centos6_hyrax_builder:1.2'' where ''centos6_hyrax_builder'' is the basename of the container from the Docker Hub repo in the first step
+* Push the updated and committed container: ''docker push opendap/centos6_hyrax_builder:1.2''
+
+
+
+; Run an interactive shell in a container
+: To grab a container and run a shell, use ''docker run -it --name=builder opendap/centos7_hyrax_builder:1.1 /bin/bash'' where ''-it'' is the magic option.
+
+; Update the state of a container
+: (This includes adding new packages to an existing container)
+:* First run an interactive shell in the container: ''docker run -it --name=builder opendap/centos7_hyrax_builder:1.1 /bin/bash''
+:* Run commands in the container's shell to do whatever needs to be done to add/remove/configure the container. For example, to add the ''aws cli'' tools, I ran ''yum install epel-release'', ''yum install python-pip'', ''pip install --upgrade pip'', and ''pip install --user awscli''
+:* Then, exist from the shell back to the controlling terminal. The 'container' (''builder'' in the above) will be stopped once you exit (using ctrl-d).
+:* Commit the container: ''docker commit builder opendap/centos6_hyrax_builder:1.2'' where ''centos6_hyrax_builder'' is the basename of the container from the Docker Hub repo in the first step
+:* Push the updated and committed container: ''docker push opendap/centos6_hyrax_builder:1.2''
+
+=== Build and push the hyrax image ===
+
+* Build the image
+:: &lt;tt&gt;docker build -t hyrax_image hyrax&lt;/tt&gt;
+* Run the image like this
+:: &lt;tt&gt;docker run -h hyrax -p 8080:8080 --name=hyrax_container hyrax_image&lt;/tt&gt;
+: And have a look at http://localhost:8080/opendap You should see Hyrax running in Docker[[File:Screenshot 2018-12-08 10.09.41.png |200px|thumb|right|Hyrax Running in Docker]]
+* Find the 'container ID' for the docker image. If you used the &lt;tt&gt;--name&lt;/tt&gt; parameter when you invoked &lt;tt&gt;docker run&lt;/tt&gt; above then that's the container_id, otherwise you can find it using
+:: &lt;tt&gt;docker ps&lt;/tt&gt;
+: For this example it's &lt;tt&gt;hyrax_container&lt;/tt&gt;
+* Stop the running container
+:: &lt;tt&gt;docker container stop hyrax_container &lt;/tt&gt;
+* Use &lt;tt&gt;docker commit&lt;/tt&gt; to create a repository image of the container using the container_id and its target repository name. (In this example we use &lt;tt&gt;hyrax_container&lt;/tt&gt; for the container_id and &lt;tt&gt;hyrax&lt;/tt&gt; as the repository name.)
+:: &lt;tt&gt;docker commit hyrax_container hyrax&lt;/tt&gt;
+* Login to the OPeNDAP docker hub account using an account name linked to the opendap repo on the Docker Hub main site
+:: &lt;tt&gt;docker login&lt;/tt&gt;
+* Tag and Push the repository image. Do this two times, first using the tag '&lt;tt&gt;opendap/hyrax:&lt;version&gt;&lt;/tt&gt;' and then '&lt;tt&gt;opendap/hyrax:latest&lt;/tt&gt;'. The string format for the tags for the docker container/image are structured like this,
+::: '''''&lt;reponame&gt;'''/'''&lt;repo_id&gt;''':'''&lt;tag&gt;'''''
+: Where:
+:* ''&lt;reponame&gt;'' is the ''opendap'' repo name (this is really the opendap section of the main Docker Hub repository), 
+:* ''&lt;repo_id&gt;'' is the commit name from the ''docker commit ...'' command above
+:* ''&lt;tag&gt;'' is version (for example 1.15.2) or the string 'latest'. 
+: Once tagged, push the container up to the repo using ''docker push &lt;tagged name&gt;''
+:: &lt;tt&gt;docker tag ''hyrax_container opendap/hyrax:x.y.z''&lt;/tt&gt;
+:: &lt;tt&gt;docker push ''opendap/hyrax:x.y.z''&lt;/tt&gt;
+:: &lt;tt&gt;docker tag ''hyrax_container opendap/hyrax:latest''&lt;/tt&gt;
+:: &lt;tt&gt;docker push ''opendap/hyrax:latest''&lt;/tt&gt;
+
+=== Build and push the hyrax_ncwms image ===
+* Build the image
+:: &lt;tt&gt;docker build -t hyrax_ncwms_image --build-arg USE_NCWMS=true hyrax&lt;/tt&gt;
+* Run the image like this
+:: &lt;tt&gt;docker run -h hyrax -p 8080:8080 --name=hyrax_ncwms_container hyrax_ncwms_image -n http://localhost:8080&lt;/tt&gt;
+: And then have a look at http://localhost:8080/opendap You should see Hyrax running in Docker[[File:Screenshot 2018-12-08 10.09.41.png |200px|thumb|right|Hyrax Running in Docker]]
+: &lt;blockquote&gt;'''''Note:''' The value of the &lt;tt&gt;-n&lt;/tt&gt; parameter at the end of the &lt;tt&gt;docker run&lt;/tt&gt; command should be the outward facing IP/domain_name of your docker container's tomcat endpoint. If you are building and running this on your local system then http://localhost:8080 will probably work great. If you are deploying the Hyrax container in AWS then you'll have to do more work to get that value.''&lt;/blockquote&gt;
+* Find the 'container ID' for the docker image. If you used the &lt;tt&gt;--name&lt;/tt&gt; parameter when you invoked &lt;tt&gt;docker run&lt;/tt&gt; above then that will work, otherwise you can find it using
+:: &lt;tt&gt;docker ps&lt;/tt&gt;
+: For this example it's &lt;tt&gt;hyrax_ncwms_container&lt;/tt&gt;
+* Stop the running container
+:: &lt;tt&gt;docker container stop hyrax_ncwms_container&lt;/tt&gt; 
+* Use &lt;tt&gt;docker commit&lt;/tt&gt; to create a repository image of the container using the container_id and its target repository name. (In this example we use &lt;tt&gt;hyrax_ncwms_container&lt;/tt&gt; for the container_id and &lt;tt&gt;hyrax_ncwms&lt;/tt&gt; as the repository name.)
+:: &lt;tt&gt;docker commit hyrax_ncwms_container hyrax_ncwms&lt;/tt&gt;
+* Login 
+:: &lt;tt&gt;docker login&lt;/tt&gt;
+* Tag and Push the repository image.
+:: &lt;tt&gt;docker tag ''hyrax_ncwms opendap/hyrax_ncwms:x.y.z''&lt;/tt&gt;
+:: &lt;tt&gt;docker push ''opendap/hyrax_ncwms:x.y.z''&lt;/tt&gt;
+:: &lt;tt&gt;docker tag ''hyrax_ncwms opendap/hyrax_ncwms:latest''&lt;/tt&gt;
+:: &lt;tt&gt;docker push ''opendap/hyrax_ncwms:latest''&lt;/tt&gt;
+
+=== Docker command info ===
+
+;For the tag command: [https://docs.docker.com/engine/reference/commandline/tag/ Docker Tag]
+;For the push command (this shows the commit, tag, push sequence as an example): [https://docs.docker.com/engine/reference/commandline/push/#parent-command Docker Push]</text>
+      <sha1>5bp4s7r3g8234oubo3vatnppbux2vye</sha1>
+    </revision>
+  </page>
+</mediawiki>

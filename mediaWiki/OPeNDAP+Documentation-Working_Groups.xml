@@ -1,0 +1,98 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Working Groups</title>
+    <ns>0</ns>
+    <id>83</id>
+    <revision>
+      <id>4270</id>
+      <parentid>4265</parentid>
+      <timestamp>2009-05-12T21:41:44Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <origin>4270</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3006" sha1="sw8g7hrlxq8ysrj1qftpi3tlz5wxhw4" xml:space="preserve">== Formulation of Working Groups ==
+
+The process for establishing and running a working group was developed at the [[Report_on_the_2007_OPeNDAP_Developer%27s_Workshop|2007 Developer's Workshop]]. The essence of the process is that a small group is formed to work on a problem and agrees to reach a conclusion within a short time frame. See [[Formulation_of_Working_Groups|Formulation of Working Groups]] for more information about the process.
+
+== The Working Group Executive ==
+
+Working groups can be proposed by anyone but must be chartered within the OPeNDAP community by the executive.
+The Working Group Executive is nominated by the community and appointed by the OPeNDAP advisory board. There is a nominal term limit for membership is 2 years. Members may serve more than one term (with advisory board approval). The executive makes recommendations on how to take working group outcomes to standards processes and other relevant organizations for broader community comment, adoption, etc.
+
+The current Working Group Executive members are:
+* James Gallagher (OPeNDAP, [mailto:jgallagher@opendap.org jgallagher at opendap dot org])
+* Steve Hankin (NOAA, [mailto:Steven.C.Hankin@noaa.gov Steven.C.Hankin at noaa dot gov])
+* Denis Nadeau (NASA, [mailto:dnadeau@pop600.gsfc.nasa.gov dnadeau at pop600 dot gsfc dot nasa dotgov])
+* Tim Pugh (Bureau of Meteorology, Australia, [mailto:T.Pugh@bom.gov.au T.Pugh at bom dot gov dot au])
+* Russ Rew (Unidata, UCAR, [mailto:russ@unidata.ucar.edu russ at unidata dot ucar dot edu])
+
+The executive can be reached collectively at [mailto:owg-executive@opendap.org owg-executive at opendap dot org].
+
+The OPeNDAP Working Group [[Terms of Reference]] Describe how the Executive will make decisions about the working groups.
+
+== Active Working Groups ==
+
+* [[Hyrax Administration]]
+
+* [[Authentication]]
+
+* [[Security]]
+
+* [[Server-side Functions]]
+
+== Possible Working Groups==
+
+Add topics for possible working groups here.
+
+* Virtualization (Aggregation): [mailto:dnadeau@pop600.gsfc.nasa.gov Denis Nadeau] [mailto:rob@pydap.org Rob De Almeida] [mailto:antonio.cofino@unican.es Antonio S. Cofiño]
+* Geospatial Interoperability [mailto:benno@iri.columbia.edu Benno Blumenthal] [mailto:rob@pydap.org Rob De Almeida]
+* Hyrax and *DS (TDS, GDS, FDS, etc.)
+* Semantics [mailto:benno@iri.columbia.edu Benno Blumenthal] [mailto:pfox@ucar.edu Peter Fox]
+* DAPPER  [mailto:rob@pydap.org Rob De Almeida]
+* netCDF C++ client
+* Response types  [mailto:rob@pydap.org Rob De Almeida]
+* Metrics
+* Asynchronous transactions [mailto:edavis@unidata.ucar.edu Ethan Davis] [mailto:antonio.cofino@unican.es Antonio S. Cofiño]
+* DAP4 [mailto:benno@iri.columbia.edu Benno Blumenthal] [mailto:edavis@unidata.ucar.edu Ethan Davis]
+* Relational Database access via DAP  [mailto:rob@pydap.org Rob De Almeida]
+
+== Related Documents ==
+
+Here is an interesting document about the [http://www.ietf.org/IESG/content/ions/ion-procdocs.html IETF process].
+
+[[Category:Working Groups|Working Groups]]</text>
+      <sha1>sw8g7hrlxq8ysrj1qftpi3tlz5wxhw4</sha1>
+    </revision>
+  </page>
+</mediawiki>

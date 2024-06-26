@@ -1,0 +1,93 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Character Arrays in the netCDF 3 handler for Hyrax</title>
+    <ns>0</ns>
+    <id>395</id>
+    <revision>
+      <id>2715</id>
+      <parentid>2714</parentid>
+      <timestamp>2009-01-09T19:35:12Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Discussion and Resolution */</comment>
+      <origin>2715</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4044" sha1="q1l1g96im7p8a7mdzah5xm6n3kj7m4v" xml:space="preserve">The problem facing the netCDF 3 handler is that it needs to provide a representation of character arrays so that common clients can easily use those types. These character arrays are often used in netCDF 3 to hold strings. Thus, one logical choice is to encode a netCDF 3 character array as a DAP String. However, a client that models data as arrays where the size of all (or most) data objects is know prior to accessing their value will have a hard time with the DAP String since it's declaration does not convey its length. 
+
+==Problem Summary==
+
+''This is from an email from John Caron''
+
+The semantic mismatch between OpenDAP and netCDF has led to several possible conventions in mapping from netCDF to OpenDAP on the server, and from OpenDAP to netCDF on the client.  One design goal is that netCDF files on the server should be semantically equivalent as seen by a client using the netCDF API. Another goal is to make the common case of a rank 1 char array in netCDF map to an OpenDAP String. 
+
+Older versions of the netCDF - OpenDAP C++ library mapped char[n] arrays to a DArray of element type DString, where each DString has length 1. Currently, the following convention is the "correct" way for a OpenDAP server to represent netCDF char[n] arrays:
+
+# A char[n] array maps to a DString. (this is the common case)
+# A rank k char[n, m, …, p, q] NetCDF array maps to a rank k-1 OpenDAP DArray[n, m, …p] of element type DString, where each DString has length q. An attribute "strlen" is added to the variable, inside an attribute table called "DODS" (to distinguish it as an attribute added by the DODS layer). The strlen attribute means that all of the DString data elements have the same data length (in this example, length q).
+&lt;pre&gt;
+Attributes {
+    var1 {
+        DODS {
+	    Int32 strlen 54;
+	}
+    } 
+}
+&lt;/pre&gt;
+
+===Another Approach===
+
+Also from John: Another approach to this problem is "to add a 'this is really a char' attribute and use a byte type. At the moment, that seems like a simpler choice."
+
+==Discussion and Resolution==
+
+Dennis suggested that we used an array of Byte for the character array. This means that we would loose the notion of string-ness but there would be no size ambiguity. We could add an attribute that the Byte array contains data from the char type.
+
+[[User:Jimg|jimg]] 16:08, 8 January 2009 (PST) My suggestion is that we adopt the solution John has implemented in TDS and the Java DAP since there's code (client code in particular) already out there that recognizes it. I will look into the changes that need to be made in the netCDF handler and also how those will affect the more prominent clients. 
+
+[[User:Jimg|jimg]] 11:35, 9 January 2009 (PST) I just looked at the code and the three files we will need to modify are NCArray.cc, NCStr.cc and ncdds.cc. We might look at the whole attribute thing, too.
+
+&lt;!--
+
+Old intro text:
+
+The solution to this problem taken in the netcDF 3 handler is to represent a char array as an array of Strings, each of which has only one character. This does not really solve the problem because there's still no way to know that the individual Strings that are the elements of the array hold only one character, but if a client sees the NC_GLOBAL attribute container, it likely is the case. However, to be certain that the String array really holds just one character per element, a client must access each and look at its value.
+
+Another solution, used by the TDS, is to package an array of char in a single String and include an attribute bound to the variable named ''string_length'' which contains the length of the string (number of characters, not including a null as would be required to store the string in a C program).
+
+John: How does the TDS handle a variable like char[10][128] which might well be an array of ten Strings? I guess you could say that the all have a ''string_length'' of 128. But to a client that thinks that any DAP String[] is really an array of one-character strings, it will probably do something very wrong with those data.
+
+--&gt;</text>
+      <sha1>q1l1g96im7p8a7mdzah5xm6n3kj7m4v</sha1>
+    </revision>
+  </page>
+</mediawiki>

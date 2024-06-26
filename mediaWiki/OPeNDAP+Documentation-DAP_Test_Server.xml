@@ -1,0 +1,75 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP Test Server</title>
+    <ns>0</ns>
+    <id>803</id>
+    <revision>
+      <id>7928</id>
+      <parentid>7927</parentid>
+      <timestamp>2012-04-12T15:15:59Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Background */</comment>
+      <origin>7928</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1586" sha1="17t88bp3z6adjs38ynf7ze7tla7ztdj" xml:space="preserve">== Background ==
+
+When I finished Jake Hamby's work on the Java-DAP I wrote the DODS Test Server. This server utilized the Java-DAP to build synthetic datasets. This was accomplished by:
+
+# Subclasssing all of the datatypes to provide a specialization of the type that would generate synthetic data using algorithms such as trigonometric functions, Fibonacci series, etc. 
+# These test classes where packaged in class factory.
+# The parsers were passed an instance of this class factory and a one (or more) DAP2 metadata documents (DDX, DDS, DAS) from which the parser would build a DDS object in memory.
+# Calling the serialize() method of the DDS object would cause it to generate a DAP2 Data object conforming to the ingested metadata document(s) and carrying the synthetically generated data payload.
+#* Sequences all had the same length, controlled by a configuration option.
+
+== Problem addressed ==
+Both libdap and Hyrax suffer from the absence of similar code written for the BES and Hyrax using C++. 
+
+The DTS would provide an excellent mechanism with which to:
+* Test fringe cases in the data model for which the data model should work but no regular dataset modeling the structure is readily available.
+* Allow us to test the code with more complete code coverage.
+* Allows client developers to easily test their clients against a variety of data representations.
+* Because the data are generated algorithmically, test verification becomes easier.
+
+== Proposed solution ==
+
+Implement a DTS in C++ using the BES and libdap.
+
+== Rationale for the solution ==
+
+
+== Discussion ==</text>
+      <sha1>17t88bp3z6adjs38ynf7ze7tla7ztdj</sha1>
+    </revision>
+  </page>
+</mediawiki>

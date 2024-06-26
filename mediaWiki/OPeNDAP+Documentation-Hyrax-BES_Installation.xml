@@ -1,0 +1,141 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - BES Installation</title>
+    <ns>0</ns>
+    <id>115</id>
+    <revision>
+      <id>11825</id>
+      <parentid>11810</parentid>
+      <timestamp>2015-04-28T15:57:07Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>11825</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6753" sha1="8lus71a94xkh0qu8mlbh32cfwwxjd6f" xml:space="preserve">&lt;font size="5"&gt;
+;This page is deprecated
+:These instructions apply to Hyrax version 1.10 and older (BES 3.13.x and earlier)
+&lt;/font&gt;
+
+:: &lt;font size="4"&gt;For Hyrax 1.11 and newer, please see the [http://www.opendap.org/download/hyrax Hyrax release page] for information about the binary installation or see the [http://docs.opendap.org/index.php/Hyrax_GitHub_Source_Build github page] for information about source builds.&lt;/font&gt;
+
+
+The BES comes with a default configuration that is compatible with the default configuration of the OLFS. If you do a default install of each one you should get a running Hyrax server that will be pre-populated with test data suitable for running the integrity tests.
+
+&lt;!-- font size="+1" color="red"&gt;
+;'''NB'''
+: These instructions were written for versions of Hyrax numbered 1.10 and older. For Hyrax 1.11 and newer, please see the [http://www.opendap.org/download/hyrax Hyrax release page] for information about the binary installation or see the [http://docs.opendap.org/index.php/Hyrax_GitHub_Source_Build github page] for information about source builds.
+&lt;/font --&gt;
+
+=Download=
+
+If you haven't already got it, go [http://www.opendap.org/download/hyrax Hyrax get the latest BES distribution from the distribution page].
+
+=Install=
+
+General installation tip: Since you're running the BES as part of Hyrax, there's no need to take advantage of the ability to communicate directly with the BES, except possibly for diagnosing certain installation problems. Once you have the BES installed, you should seriously consider closing access to the port on which it listens. This is easy to do by simply configuring your firewall to block access to the port (port 10022 by default, see your bes.conf file).
+
+==Installing from RPMs==
+
+Get the RPMs from the [http://www.opendap.org/download/hyrax Hyrax distribution page]. You will need the full complement of RPMs, which include libdap, bes, dap-server, and probably some of the data handlers. You can install them with the command
+
+ sudo rpm -Uvh &lt;list the RPMs&gt;
+
+Once you have installed the individual handler packages, you can install sample data and configure the Back End Server (BES) componenet of Hyrax for those handlers using scripts provided in the handler's rpm packages. These scripts are all named '''bes-&lt;handler&gt;-data.sh''' and are installed in the '''bin''' directory so you should be able to run them at any command line prompt. For example, bes-nc-data.sh will add netcdf_handler configuration to the BES configuration file.
+
+Here's a list of the required RPM packages for a typical Hyrax installation. 
+# libdap: The DAP implementation used by the handlers
+# bes: The BES component of Hyrax
+# dap-server: These handlers provide basic services for Hyrax
+Plus you must have at least one data handler:
+* netcdf_handler: A handler for netCDF 2.x and 3.x files
+* hdf4_handler: A handler for HDF4 files, including HDF-EOS stored in HDF4
+* freeform_handler: A handler for text and binary files where you can tell the handler how those files are formatted
+* hdf5_handler: A handler for HDF5 files.
+* csv_handler: A handler for data stored as '''c'''oma ''s'''eperated '''a'''scii values.
+* fits_handler: A handler for serving data stored in FITS format.
+
+There is also a set of handlers that can be installed that increase the scope of the services provided by Hyrax. We recommend you install them all!
+* fileout_netcdf: A handler that enables Hyrax to return data in netCDF-3 format.
+* xml_data_handler: A handler that enables Hyrax to return data in an XML document based on the DAP DDX.
+* ncml_handler: A handler that provides Hyrax with the ability to aggregate and to add/change/remove metadata for datasets.
+* gateway_handler: A handler that enables Hyrax to provide DAP services for netCDF, hdf4, and hdf5 files stored at remote locations..
+
+In addition to these RPM packages you will need the OLFS Java jar file.
+* OLFS: This is the Java Servlet front end component of Hyrax
+
+==Installing from DMG for Mac OSX==
+
+Get the DMGs from the [http://www.opendap.org/download/hyrax Hyrax distribution page]. You will need the full complement of DMGs, which include libdap, bes, dap-server, and probably some of the data handlers. Be sure to get the DMG for your particular system, either Intel based (i386) or PowerPC (ppc) DMG files.
+
+You will need to install the DMGs in a particular order:
+# libdap: The DAP implementation used by the handlers
+# bes: The BES component of Hyrax
+# dap-server: These handlers provide basic services for Hyrax
+Plus you must have at least one data handler:
+* netcdf_handler: A handler for netCDF 2.x and 3.x files
+* hdf4_handler: A handler for HDF4 files, including HDF-EOS stored in HDF4
+* freeform_handler: A handler for text and binary files where you can tell the handler how those files are formatted
+* hdf5_handler: A handler for HDF5 files.
+* csv_handler: A handler for data stored as '''c'''oma ''s'''eperated '''a'''scii values.
+* fits_handler: A handler for serving data stored in FITS format.
+There is also a set of handlers that can be installed that increase the scope of the services provided by Hyrax. We recommend you install them all!
+* fileout_netcdf: A handler that enables Hyrax to return data in netCDF-3 format.
+* xml_data_handler: A handler that enables Hyrax to return data in an XML document based on the DAP DDX.
+* ncml_handler: A handler that provides Hyrax with the ability to aggregate and to add/change/remove metadata for datasets.
+* gateway_handler: A handler that enables Hyrax to provide DAP services for netCDF, hdf4, and hdf5 files stored at remote locations..
+
+To install a DMG, download the DMG to your local disk. Double click on the .dmg file. This will mount the disk image and open up a finder window. Read the README file included in the disk image. Double click on the .pkg file and follow the instructions for installation. This will install the package under /usr.
+
+In addition to these RPM packages you will need the OLFS Java jar file.
+* OLFS: This is the Java Servlet front end component of Hyrax
+
+=[[Hyrax - BES Configuration|BES Configuration]]=
+
+You will need to configure the BES next, pointing the BES to your data and setting up some other options.
+
+=[[Hyrax - Starting and stopping the BES | Starting and stopping the BES]]=
+
+Once you have the BES installed and configured you will want to start it.
+
+=[[Hyrax - Running bescmdln | Testing the BES with the command line client]]=
+
+Let's make sure your installation and configuration are working properly.
+
+=[[Hyrax - Sample BES Installations | Sample installations and configurations of the BES]]=
+The page will show a few different methods of installing the BES and configuring it, with a sample installation with some modules
+
+----</text>
+      <sha1>8lus71a94xkh0qu8mlbh32cfwwxjd6f</sha1>
+    </revision>
+  </page>
+</mediawiki>

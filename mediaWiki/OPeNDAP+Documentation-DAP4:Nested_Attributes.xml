@@ -1,0 +1,66 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Nested Attributes</title>
+    <ns>0</ns>
+    <id>806</id>
+    <revision>
+      <id>9307</id>
+      <parentid>9306</parentid>
+      <timestamp>2012-09-05T22:00:06Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Discussion */</comment>
+      <origin>9307</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1629" sha1="h4scs8b2q46qxr6z5m2efbfyj7k9obl" xml:space="preserve">==Background==
+In DAP2, the DAS allowed nested sets of attributes. The primary reason for this (I assume) was that the DAS was separate from the DDS and nesting in the DAS could be made to match nesting in the DDS. This allowed for the setting of attributes on nested variables in structures, for example. [[User:Jimg|Jimg]] 14:51, 5 September 2012 (PDT) I never clarified this: No, nested attributes were not added for this reason. They were added because HDF4 supported them. Subsequently, we found them useful for other things and, separately, other people did too.
+
+In his original DAP4 xsd schema, James again allowed for nested attributes.
+
+==Proposal==
+I propose that we do not allow nested attributes in DAP4.
+
+==Rationale==
+The current rng/xsd DAP4 schema allows one to directly place attributes almost anywhere in the DDX. It seems to me that this makes any need for nested attributes superfluous. [[User:Jimg|Jimg]] 14:55, 5 September 2012 (PDT) No. Limiting attributes to the DMR (aka DDX) is a limitation that we can easily avoid by supporting 'nested attributes'. 
+
+''Dennis Heimbigner''
+
+==Discussion==
+
+[[User:Jimg|Jimg]] 12:36, 13 April 2012 (PDT) HDF4 and HDF5 allow nested attributes - we added them to DAP2 to support HDF4.
+
+[[User:Jimg|Jimg]] 15:00, 5 September 2012 (PDT)  A further comment: I'm not sure why 'nested attributes' are an issue - they add considerable expressive power, are used by HSF4 and HDF5 as well as other formats and people like them. Representing HDF4 and HDF5 accurately is not possible without them or employing a 'convention'. And it seems the cost of implementation is fairly low.</text>
+      <sha1>h4scs8b2q46qxr6z5m2efbfyj7k9obl</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,120 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>ProgrammerGuide</title>
+    <ns>0</ns>
+    <id>186</id>
+    <revision>
+      <id>4585</id>
+      <parentid>1900</parentid>
+      <timestamp>2009-08-12T20:27:14Z</timestamp>
+      <contributor>
+        <username>TomSgouros</username>
+        <id>39</id>
+      </contributor>
+      <minor/>
+      <comment>removed old cruft and broken links</comment>
+      <origin>4585</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2844" sha1="0d35m2w9sfwbpv1k6j1lt4jec86clbr" xml:space="preserve">=Preface=
+
+
+
+This document describes how to use the OPeNDAP toolkit software to build
+OPeNDAP data servers, clients and client-libraries. Using the objects and
+functions contained in the toolkit, you can create programs which serve data
+over the internet as well as programs that can request data from any
+OPeNDAP server.
+
+This document covers release 3.4 and later of the DODS
+software.
+
+
+==Who is this Guide for?==
+
+This guide is for people who wish to use the OPeNDAP software to write a
+new OPeNDAP data server, a new client, or a new client library. Typically,
+this will only be those people who wish to serve data in a format that is not
+currently supported by the DODS team, or who have an existing application
+that uses an idiosyncratic or unusual API for data access. Most people will
+be able to use one of the already written servers or client libraries.
+
+This documentation assumes that the readers are C++ programmers, are
+familiar with networked applications, and the POSIX programming environment.
+The DODS/OPeNDAP project also provides a native Java class library (API)
+that parallels the C++ spftware described here.[[ProgrammerGuideFootnotes |(1)]]
+
+Because the type of information presented in a document like this depends to
+a large extent on the needs of its readers we welcome your feedback and
+comments. In particular, if you have any questions about individual sections,
+email those questions and we'll send back an answer as well as including that
+information in the next version of this document. Send queries to:
+[mailto:support@opendap.org support@opendap.org].
+
+==Organization of this Document==
+
+This Guide is divided into five chapters.
+
+&lt;blockquote&gt;
+
+; [[ProgrammerGuideChapter1 | Chapter 1]] : 
+provides background information on the organization of the toolkit software.
+
+; [[ProgrammerGuideChapter2 | Chapter 2]] : 
+ describes how to use the Network I/O classes to manage virtual connections.
+
+; [[ProgrammerGuideChapter3 | Chapter 3]] : 
+ discusses how to sub-class the toolkit \Cpp classes so that they are specialized for your specific use.
+
+; [[ProgrammerGuideChapter4 | Chapter 4]] : 
+ describes in detail how to write certain sections of both the data server and the client-library for a new API.
+
+; [[ProgrammerGuideChapter5 | Chapter 5]] :
+ linking your program
+
+; [[ProgrammerGuideChapter6 | Chapter 6]] : 
+ a overview of the OPeNDAP server Architecture
+
+
+; [[ProgrammerGuideChapter7 | Chapter 7]] :  
+ describes how to link user programs with the new client-library implementation of an API.
+
+; [[ProgrammerGuideFootnotes | Footnotes]] : 
+ Footnotes
+ 
+&lt;/blockquote&gt;
+
+Note that this is "not" a reference volume. See
+[http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;]ref for a concise listing of the member functions in each
+of the toolkit's classes.</text>
+      <sha1>0d35m2w9sfwbpv1k6j1lt4jec86clbr</sha1>
+    </revision>
+  </page>
+</mediawiki>

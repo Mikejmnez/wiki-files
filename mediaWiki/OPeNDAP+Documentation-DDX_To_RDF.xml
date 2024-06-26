@@ -1,0 +1,3102 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DDX To RDF</title>
+    <ns>0</ns>
+    <id>429</id>
+    <revision>
+      <id>4910</id>
+      <parentid>4906</parentid>
+      <timestamp>2009-10-06T16:58:02Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* XSLT v2 */</comment>
+      <origin>4910</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="166016" sha1="qzvuzdqm5a9o4w7g6df28esv8f2wt1r" xml:space="preserve">On this page we look at transforming the OtherXML dap:Attribute type to RDF.
+
+==SourceXML==
+
+    &lt;Attribute name="xmlTest" type="OtherXML" relationship="is-a"&gt;
+        &lt;t:level0 xmlns:t="http://namespace.t" t:foo1="namespacedattribute" foo2="nonamespaceAttribute"&gt;
+            &lt;t:level1&gt;simpleContent&lt;/t:level1&gt;
+            &lt;t:level1&gt;
+                &lt;t:level2&gt;
+                    &lt;t:level3&gt;simpleContent&lt;/t:level3&gt;
+                &lt;/t:level2&gt;
+            &lt;/t:level1&gt;
+            TextContent of Complex Type
+        &lt;/t:level0&gt;
+    &lt;/Attribute&gt;
+
+==RDF==
+
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ &lt;rdf:RDF xmlns:dap="http://xml.opendap.org/ns/DAP/3.3#"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:cf="http://iridl.ldeo.columbia.edu/ontologies/cf-att.owl#"
+         xmlns:dapObj="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xml:base="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx"&gt;
+   &lt;owl:Ontology rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"&gt;
+      &lt;owl:imports rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl"/&gt;
+      &lt;owl:imports rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/NetcdfConventionRegistry.owl"/&gt;
+   &lt;/owl:Ontology&gt;
+   &lt;dapObj:Dataset rdf:about=""&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+      &lt;dapObj:dataset_id rdf:datatype="http://www.w3.org/2001/XMLSchema#string"/&gt;
+      &lt;rdf:type&gt;
+         &lt;t:level0 xmlns:t="http://namespace.t" xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                   xmlns="http://xml.opendap.org/ns/DAP/3.3#"
+                   t:foo1="namespacedattribute"&gt;
+            &lt;dapObj:xmlAttribute dapObj:name="foo2" rdf:value="nonamespaceAttribute"/&gt;
+            &lt;dapObj:xmlText&gt;
+            TextContent of Complex Type
+        &lt;/dapObj:xmlText&gt;
+            &lt;t:level1&gt;simpleContent&lt;/t:level1&gt;
+            &lt;dapObj:xmlContains&gt;
+               &lt;t:level1&gt;
+                  &lt;dapObj:xmlContains&gt;
+                     &lt;t:level2&gt;
+                        &lt;t:level3&gt;simpleContent&lt;/t:level3&gt;
+                     &lt;/t:level2&gt;
+                  &lt;/dapObj:xmlContains&gt;
+               &lt;/t:level1&gt;
+            &lt;/dapObj:xmlContains&gt;
+         &lt;/t:level0&gt;
+      &lt;/rdf:type &gt;
+   &lt;/dapObj:Dataset&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#xmlTest"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+ &lt;/rdf:RDF&gt;
+
+== Hacked HFRadar Example ==
+
+=== Example 1 ===
+
+In which an entire coverage description is inserted into a DDX as OtherXML
+
+==== Source XML ====
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Dataset name="200803061600_HFRadar_USEGC_6km_rtv_SIO.nc"
+         xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+         grddl:transformation="http://xml.opendap.org/transforms/ddxToRdfTriples.xsl"
+         xmlns="http://xml.opendap.org/ns/DAP/3.3#"
+         xmlns:dap="http://xml.opendap.org/ns/DAP/3.3#"
+         dap_version="3.2"
+         xmlns:xml="http://www.w3.org/XML/1998/namespace"
+         xml:base="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx" &gt;
+
+    &lt;Attribute name="wcsStuff" type="OtherXML" relationship="is-a" &gt;
+            &lt;CoverageDescription xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                                 xmlns:owcs="http://www.opengis.net/wcs/1.1/ows" xmlns:gml="http://www.opengis.net/gml/3.2"
+                                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                 xmlns:schemaLocation="http://www.opengis.net/wcs/1.1  http://schemas.opengis.net/wcs/1.1.0/wcsDescribeCoverage.xsd  http://www.opengis.net/ows/1.1  http://schemas.opengis.net/ows/1.1.0/owsAll.xsd  http://www.opengis.net/wcs/1.1/ows http://schemas.opengis.net/wcs/1.1.0/owsDataIdentification.xsd http://www.opengis.net/gml/3.2  http://schemas.opengis.net/gml/3.2.1/gml.xsd"&gt;
+                &lt;ows:Title&gt;Near-Real Time Surface Ocean Velocity&lt;/ows:Title&gt;
+                &lt;ows:Abstract&gt;CoverageDescription generated by OPeNDAP WCS UseCase 2.0&lt;/ows:Abstract&gt;
+                &lt;Identifier&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/Identifier&gt;
+                &lt;Domain&gt;
+                    &lt;SpatialDomain&gt;
+                        &lt;ows:BoundingBox crs="urn:ogc:def:crs:EPSG::4326"&gt;
+                            &lt;ows:LowerCorner&gt;-97.8839 21.736&lt;/ows:LowerCorner&gt;
+                            &lt;ows:UpperCorner&gt;-57.2312 46.4944&lt;/ows:UpperCorner&gt;
+                        &lt;/ows:BoundingBox&gt;
+                    &lt;/SpatialDomain&gt;
+                    &lt;TemporalDomain&gt;
+                        &lt;gml:timePosition&gt;2008-03-27T16:00:00.000Z&lt;/gml:timePosition&gt;
+                    &lt;/TemporalDomain&gt;
+                &lt;/Domain&gt;
+                &lt;Range&gt;
+                    &lt;Field&gt;
+                        &lt;ows:Title&gt;surface_eastward_sea_water_velocity&lt;/ows:Title&gt;
+                        &lt;ows:Abstract&gt;Eastward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+                        &lt;Identifier&gt;u&lt;/Identifier&gt;
+                        &lt;Definition&gt;
+                            &lt;ows:AnyValue/&gt;
+                        &lt;/Definition&gt;
+                        &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                        &lt;owcs:InterpolationMethods&gt;
+                            &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                        &lt;/owcs:InterpolationMethods&gt;
+                    &lt;/Field&gt;
+                    &lt;Field&gt;
+                        &lt;ows:Title&gt;surface_northward_sea_water_velocity&lt;/ows:Title&gt;
+                        &lt;ows:Abstract&gt;Northward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+                        &lt;Identifier&gt;v&lt;/Identifier&gt;
+                        &lt;Definition&gt;
+                            &lt;ows:AnyValue/&gt;
+                        &lt;/Definition&gt;
+                        &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                        &lt;owcs:InterpolationMethods&gt;
+                            &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                        &lt;/owcs:InterpolationMethods&gt;
+                    &lt;/Field&gt;
+                    &lt;Field&gt;
+                        &lt;ows:Title&gt;longitudinal dilution of precision&lt;/ows:Title&gt;
+                        &lt;ows:Abstract&gt;The longitudinal dilution of precision (DOPx) represents the\\012contribution of the
+                            radars&amp;apos; configuration geometry to\\012uncertainty in the eastward velocity estimate (u). DOPx
+                            is a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the
+                            eastward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used
+                            to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful
+                            metric for filtering\\012errant velocities due to poor geometry.
+                        &lt;/ows:Abstract&gt;
+                        &lt;Identifier&gt;DOPx&lt;/Identifier&gt;
+                        &lt;Definition&gt;
+                            &lt;ows:AnyValue/&gt;
+                        &lt;/Definition&gt;
+                        &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                        &lt;owcs:InterpolationMethods&gt;
+                            &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                        &lt;/owcs:InterpolationMethods&gt;
+                    &lt;/Field&gt;
+                    &lt;Field&gt;
+                        &lt;ows:Title&gt;latitudinal dilution of precision&lt;/ows:Title&gt;
+                        &lt;ows:Abstract&gt;The latitudinal dilution of precision (DOPy) represents the\\012contribution of the radars&amp;apos;
+                            configuration geometry to\\012uncertainty in the northward velocity estimate (v). DOPy is
+                            a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the
+                            northward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used
+                            to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful
+                            metric for filtering\\012errant velocities due to poor geometry.
+                        &lt;/ows:Abstract&gt;
+                        &lt;Identifier&gt;DOPy&lt;/Identifier&gt;
+                        &lt;Definition&gt;
+                            &lt;ows:AnyValue/&gt;
+                        &lt;/Definition&gt;
+                        &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                        &lt;owcs:InterpolationMethods&gt;
+                            &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                        &lt;/owcs:InterpolationMethods&gt;
+                    &lt;/Field&gt;
+                &lt;/Range&gt;
+                &lt;SupportedCRS&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt;
+                &lt;SupportedFormat&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+                &lt;SupportedFormat&gt;dap2.0&lt;/SupportedFormat&gt;
+            &lt;/CoverageDescription&gt;
+    &lt;/Attribute&gt;
+
+
+
+    
+    &lt;Attribute name="site_code" type="Container"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;Contributing radar site code&lt;/value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Attribute&gt;
+    &lt;Attribute name="site_netCode" type="Container"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;Contributing radar site network affiliation code&lt;/value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Attribute&gt;
+    &lt;Attribute name="NC_GLOBAL" type="Container"&gt;
+        &lt;Attribute name="netcdf_library_version" type="String"&gt;
+            &lt;value&gt;netcdf library version 3.6.1 of Feb 3 2008 23:15:25 $&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="format_version" type="String"&gt;
+            &lt;value&gt;HFRNet_1.0.0b2&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="product_version" type="String"&gt;
+            &lt;value&gt;HFRNet_1.1.01&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="Conventions" type="String"&gt;
+            &lt;value&gt;CF-1.1&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="title" type="String"&gt;
+            &lt;value&gt;Near-Real Time Surface Ocean Velocity&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="institution" type="String"&gt;
+            &lt;value&gt;Scripps Institution of Oceanography&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="source" type="String"&gt;
+            &lt;value&gt;Surface Ocean HF-Radar&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="history" type="String"&gt;
+            &lt;value&gt;12-Mar-2008 22:26:19: NetCDF file created&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="references" type="String"&gt;
+            &lt;value&gt;Terrill, E. et al., 2006. Data Management and Real-time\\012Distribution in the HF-Radar National
+                Network. Proceedings\\012of the MTS/IEEE Oceans 2006 Conference, Boston MA,\\012September 2006.
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="creator_name" type="String"&gt;
+            &lt;value&gt;Mark Otero&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="creator_email" type="String"&gt;
+            &lt;value&gt;motero@mpl.ucsd.edu&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="creator_url" type="String"&gt;
+            &lt;value&gt;http://cordc.ucsd.edu/projects/mapping/&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="summary" type="String"&gt;
+            &lt;value&gt;Surface ocean velocities estimated from HF-Radar are\\012representitive of the upper 0.3 - 2.5 meters
+                of the\\012ocean. The main objective of near-real time\\012processing is to produce the best product
+                from\\012available data at the time of processing. Radial\\012velocity measurements are obtained from
+                individual\\012radar sites through the HF-Radar Network and\\012processed to create near-real time
+                velocities\\012(RTVs)
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lat_min" type="Float32"&gt;
+            &lt;value&gt;21.73596001&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lat_max" type="Float32"&gt;
+            &lt;value&gt;46.49441910&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lon_min" type="Float32"&gt;
+            &lt;value&gt;-97.88385010&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lon_max" type="Float32"&gt;
+            &lt;value&gt;-57.23120880&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="grid_resolution" type="String"&gt;
+            &lt;value&gt;6km&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="grid_projection" type="String"&gt;
+            &lt;value&gt;equidistant cylindrical&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="regional_description" type="String"&gt;
+            &lt;value&gt;Unites States, East and Gulf Coast&lt;/value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Attribute&gt;
+    &lt;Attribute name="DODS_EXTRA" type="Container"&gt;
+        &lt;Attribute name="Unlimited_Dimension" type="String"&gt;
+            &lt;value&gt;time&lt;/value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Attribute&gt;
+
+    &lt;Array name="time"&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;time&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;seconds since 1970-01-01&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="calendar" type="String"&gt;
+            &lt;value&gt;gregorian&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Int32/&gt;
+        &lt;dimension name="time" size="1"/&gt;
+    &lt;/Array&gt;
+    &lt;Array name="lat"&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;latitude&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;degrees_north&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="lat" size="460"/&gt;
+    &lt;/Array&gt;
+    &lt;Array name="lon"&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;longitude&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;degrees_east&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="lon" size="701"/&gt;
+    &lt;/Array&gt;
+    &lt;Grid name="u"&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;surface_eastward_sea_water_velocity&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;m s-1&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="_FillValue" type="Int16"&gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="scale_factor" type="Float32"&gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="ancillary_variables" type="String"&gt;
+            &lt;value&gt;DOPx&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Array name="u"&gt;
+            &lt;Int16/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Array&gt;
+        &lt;Map name="time"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lat"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lon"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+    &lt;Grid name="v"&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;surface_northward_sea_water_velocity&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;m s-1&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="_FillValue" type="Int16"&gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="scale_factor" type="Float32"&gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="ancillary_variables" type="String"&gt;
+            &lt;value&gt;DOPy&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Array name="v"&gt;
+            &lt;Int16/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Array&gt;
+        &lt;Map name="time"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lat"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lon"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+    &lt;Grid name="DOPx"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;longitudinal dilution of precision&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="comment" type="String"&gt;
+            &lt;value&gt;The longitudinal dilution of precision (DOPx) represents the\\012contribution of the radars&amp;apos;
+                configuration geometry to\\012uncertainty in the eastward velocity estimate (u). DOPx is a\\012direct
+                multiplier of the standard error in obtaining the\\012standard deviation for the eastward velocity
+                estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the
+                geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for
+                filtering\\012errant velocities due to poor geometry.
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="_FillValue" type="Int16"&gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="scale_factor" type="Float32"&gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Array name="DOPx"&gt;
+            &lt;Int16/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Array&gt;
+        &lt;Map name="time"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lat"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lon"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+    &lt;Grid name="DOPy"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;latitudinal dilution of precision&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="comment" type="String"&gt;
+            &lt;value&gt;The latitudinal dilution of precision (DOPy) represents the\\012contribution of the radars&amp;apos;
+                configuration geometry to\\012uncertainty in the northward velocity estimate (v). DOPy is a\\012direct
+                multiplier of the standard error in obtaining the\\012standard deviation for the northward velocity
+                estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the
+                geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for
+                filtering\\012errant velocities due to poor geometry.
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="_FillValue" type="Int16"&gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="scale_factor" type="Float32"&gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Array name="DOPy"&gt;
+            &lt;Int16/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Array&gt;
+        &lt;Map name="time"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lat"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lon"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+    &lt;Array name="site_lat"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;Contributing radar site latitudes&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;latitude&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;degrees_north&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="nSites" size="27"/&gt;
+    &lt;/Array&gt;
+    &lt;Array name="site_lon"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;Contributing radar site longitudes&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;longitude&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;degrees_east&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="nSites" size="27"/&gt;
+    &lt;/Array&gt;
+    &lt;Array name="procParams"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;RTV processing parameters&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="comment" type="String"&gt;
+            &lt;value&gt;\\01201) Maximum GDOP threshold\\01202) Maximum speed threshold (cm s-1)\\01203) Minimum number of
+                sites required\\01204) Minimum number of radials required\\01205) Maximum angular gap to interpolate
+                radial\\012 data over (degrees, 0 = no interpolation)\\01206) Maximum gap in range to interpolate
+                radial\\012 data over (range-resolution, 0 = no interpolation)\\01207) Spatial search radius for radial
+                solutions (km)
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="nProcParam" size="7"/&gt;
+    &lt;/Array&gt;
+
+&lt;/Dataset&gt;
+&lt;/pre&gt;
+
+==== XSLT ====
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;!--
+/////////////////////////////////////////////////////////////////////////////
+// This file is part of the "OPeNDAP 4 Data Server (aka Hyrax)" project.
+//
+//
+// Copyright (c) 2008 OPeNDAP, Inc.
+// Author: Nathan David Potter  &lt;ndp@opendap.org&gt;
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact OPeNDAP, Inc. at PO Box 112, Saunderstown, RI. 02874-0112.
+/////////////////////////////////////////////////////////////////////////////
+--&gt;
+&lt;!DOCTYPE xsl:stylesheet [
+        &lt;!ENTITY DAPOBJ  "http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#" &gt;
+        &lt;!ENTITY DAP     "http://xml.opendap.org/ns/DAP/3.3#" &gt;
+        &lt;!ENTITY XSD     "http://www.w3.org/2001/XMLSchema#" &gt;
+        ]&gt;
+&lt;xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:cf="http://iridl.ldeo.columbia.edu/ontologies/cf-att.owl#"
+                xmlns:dapObj="&amp;DAPOBJ;"
+                xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                xmlns:owl="http://www.w3.org/2002/07/owl#"
+                xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+                xmlns:dap="&amp;DAP;"
+                xmlns:xml="http://www.w3.org/XML/1998/namespace"
+
+        &gt;
+    &lt;xsl:output method='xml' version='1.0' encoding='UTF-8' indent='yes'/&gt;
+    &lt;xsl:key name="AttributeNames" match="dap:Attribute" use="@name"/&gt;
+
+    &lt;xsl:variable name="XML_BASE"&gt;&lt;xsl:value-of select="/dap:Dataset/@xml:base"/&gt;&lt;/xsl:variable&gt;
+    &lt;xsl:variable name="LocalOntology"&gt;&lt;xsl:value-of select="$XML_BASE"/&gt;.rdf&lt;/xsl:variable&gt;
+    &lt;xsl:variable name="LocalAttributeNS"&gt;&lt;xsl:value-of select="$XML_BASE"/&gt;/att#&lt;/xsl:variable&gt;
+
+
+    &lt;xsl:strip-space elements="*"/&gt;
+
+    &lt;!-- ###################################################################
+      -
+      -   Converts a Dataset DDX into an RDF Document.
+      -
+    --&gt;
+    &lt;xsl:template match="/dap:Dataset"&gt;
+
+        &lt;rdf:RDF&gt;
+            &lt;xsl:attribute name="base" namespace="http://www.w3.org/XML/1998/namespace"&gt;
+                &lt;xsl:value-of select="$XML_BASE"/&gt;
+            &lt;/xsl:attribute&gt;
+
+            &lt;owl:Ontology
+                    rdf:about="{$LocalOntology}"&gt;
+                &lt;owl:imports
+                        rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl"/&gt;
+                &lt;owl:imports
+                        rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/NetcdfConventionRegistry.owl"/&gt;
+            &lt;/owl:Ontology&gt;
+
+            &lt;!-- The empty rdf:about defaults to the value of @xml:base --&gt;
+            &lt;dapObj:Dataset rdf:about=""&gt;
+
+                &lt;rdfs:isDefinedBy rdf:resource="{$LocalOntology}"/&gt;
+
+                &lt;dapObj:dataset_id rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;
+                    &lt;xsl:value-of select="@dataset_id"/&gt;
+                &lt;/dapObj:dataset_id&gt;
+
+                &lt;xsl:apply-templates select="*" mode="body"/&gt;
+            &lt;/dapObj:Dataset&gt;
+
+            &lt;xsl:call-template name="AttPropDef"/&gt;
+
+        &lt;/rdf:RDF&gt;
+    &lt;/xsl:template&gt;
+    &lt;!-- ################################################################### --&gt;
+
+
+    &lt;!-- ###################################################################
+     -
+     -
+     -    Body of content. ( mode="body" )
+     -
+     -
+    --&gt;
+    &lt;xsl:template match="dap:Attribute" mode="body"&gt;
+
+
+        &lt;xsl:choose&gt;
+
+            &lt;xsl:when test="@type='Container'"&gt;
+                &lt;xsl:element name="att:{@name}" namespace="{$LocalAttributeNS}"&gt;
+                    &lt;xsl:attribute name="rdf:parseType"&gt;Resource&lt;/xsl:attribute&gt;
+                    &lt;xsl:apply-templates select="./*" mode="body"/&gt;
+                &lt;/xsl:element&gt;
+            &lt;/xsl:when&gt;
+
+            &lt;xsl:when test="@type='OtherXML'"&gt;
+                &lt;xsl:apply-templates select="*" mode="OtherXML"&gt;
+                    &lt;xsl:with-param name="relationship" select="@relationship"/&gt;
+                &lt;/xsl:apply-templates&gt;
+            &lt;/xsl:when&gt;
+
+            &lt;xsl:otherwise&gt;
+
+                &lt;xsl:element name="att:{@name}" namespace="{$LocalAttributeNS}"&gt;
+
+                    &lt;xsl:if test="dap:value[last()=1]"&gt;
+                        &lt;xsl:call-template name="attributeType"&gt;
+                            &lt;xsl:with-param name="thisAttribute" select="."/&gt;
+                        &lt;/xsl:call-template&gt;
+                        &lt;!-- &lt;xsl:comment&gt; Single Value &lt;/xsl:comment&gt; --&gt;
+
+                        &lt;xsl:value-of select="."/&gt;
+
+                    &lt;/xsl:if&gt;
+
+                    &lt;xsl:if test="dap:value[last()&gt;1]"&gt;
+                        &lt;xsl:attribute name="rdf:parseType"&gt;Resource&lt;/xsl:attribute&gt;
+                        &lt;!-- &lt;xsl:comment&gt; Multi Value &lt;/xsl:comment&gt; --&gt;
+
+                        &lt;xsl:call-template name="attributeValues"&gt;
+                            &lt;xsl:with-param name="values" select="dap:value"/&gt;
+                        &lt;/xsl:call-template&gt;
+
+                    &lt;/xsl:if&gt;
+
+                &lt;/xsl:element&gt;
+
+            &lt;/xsl:otherwise&gt;
+
+        &lt;/xsl:choose&gt;
+
+
+    &lt;/xsl:template&gt;
+
+    &lt;!--
+     - This helper template uses recursion to process the dap:value elements of a dap:Attribute
+     - into an ordered list of RDF literals, which given the current state of RDF
+     - isn't a very pretty thing.
+    --&gt;
+
+    &lt;xsl:template name="attributeValues"&gt;
+
+
+        &lt;xsl:param name="values"/&gt;
+
+        &lt;!--
+                &lt;xsl:comment&gt;############################################&lt;/xsl:comment&gt;
+                &lt;xsl:comment&gt;                                            &lt;/xsl:comment&gt;
+                &lt;xsl:comment&gt; values                                  &lt;/xsl:comment&gt;
+                &lt;xsl:copy-of select="$values" /&gt;
+                &lt;xsl:comment&gt;                                            &lt;/xsl:comment&gt;
+                &lt;xsl:comment&gt;############################################&lt;/xsl:comment&gt;
+
+        --&gt;
+        &lt;rdf:first&gt;
+            &lt;xsl:call-template name="attributeType"&gt;
+                &lt;xsl:with-param name="thisAttribute" select="$values[1]/.."/&gt;
+            &lt;/xsl:call-template&gt;
+            &lt;xsl:value-of select="$values[1]"/&gt;
+        &lt;/rdf:first&gt;
+        &lt;rdf:rest&gt;
+
+            &lt;xsl:if test="boolean($values[position()&gt;1])"&gt;
+                &lt;xsl:attribute name="rdf:parseType"&gt;Resource&lt;/xsl:attribute&gt;
+                &lt;xsl:call-template name="attributeValues"&gt;
+                    &lt;xsl:with-param name="values" select="$values[position()&gt;1]"/&gt;
+                &lt;/xsl:call-template&gt;
+            &lt;/xsl:if&gt;
+
+            &lt;xsl:if test="not(boolean($values[position()&gt;1]))"&gt;
+                &lt;xsl:attribute name="rdf:resource"&gt;http://www.w3.org/1999/02/22-rdf-syntax-ns#nil&lt;/xsl:attribute&gt;
+            &lt;/xsl:if&gt;
+
+
+        &lt;/rdf:rest&gt;
+
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template name="attributeType"&gt;
+
+        &lt;xsl:param name="thisAttribute"/&gt;
+        &lt;xsl:attribute name="rdf:datatype"&gt;
+            &lt;xsl:if test="$thisAttribute/@type='Byte'"&gt;&amp;XSD;byte&lt;/xsl:if&gt;
+            &lt;xsl:if test="$thisAttribute/@type='Int16'"&gt;&amp;XSD;short&lt;/xsl:if&gt;
+            &lt;xsl:if test="$thisAttribute/@type='UInt16'"&gt;&amp;XSD;unsignedShort&lt;/xsl:if&gt;
+            &lt;xsl:if test="$thisAttribute/@type='Int32'"&gt;&amp;XSD;long&lt;/xsl:if&gt;
+            &lt;xsl:if test="$thisAttribute/@type='UInt32'"&gt;&amp;XSD;unsignedLong&lt;/xsl:if&gt;
+            &lt;xsl:if test="$thisAttribute/@type='Float32'"&gt;&amp;XSD;float&lt;/xsl:if&gt;
+            &lt;xsl:if test="$thisAttribute/@type='Float64'"&gt;&amp;XSD;double&lt;/xsl:if&gt;
+            &lt;xsl:if test="$thisAttribute/@type='String'"&gt;&amp;XSD;string&lt;/xsl:if&gt;
+            &lt;xsl:if test="$thisAttribute/@type='Url'"&gt;&amp;XSD;anyURI&lt;/xsl:if&gt;
+        &lt;/xsl:attribute&gt;
+
+    &lt;/xsl:template&gt;
+
+
+    &lt;!--
+     -  mode="anyXMLToRDF"
+     -
+     - Maps the OtherXML dap:Attribute type to RDF while expressing the appropriate relationship
+     - of the XML to the parent DAP object.
+     -
+     -
+     -
+    --&gt;
+    &lt;xsl:template name="OtherXML" match="*" mode="OtherXML"&gt;
+        &lt;xsl:param name="relationship"/&gt;
+
+        &lt;xsl:choose&gt;
+
+            &lt;xsl:when test="boolean($relationship) and $relationship='is-a'"&gt;
+                &lt;xsl:apply-templates select="." mode="anyXMLToRDF"/&gt;
+            &lt;/xsl:when&gt;
+            &lt;xsl:when test="boolean($relationship) and $relationship='has-a'"&gt;
+                &lt;xsl:copy-of select="."/&gt;
+            &lt;/xsl:when&gt;
+            &lt;xsl:otherwise&gt;
+                &lt;xsl:copy-of select="."/&gt;
+            &lt;/xsl:otherwise&gt;
+        &lt;/xsl:choose&gt;
+
+    &lt;/xsl:template&gt;
+
+
+    &lt;!--
+     -  mode="anyXMLToRDF"
+     -
+     -  Map arbitrary XML (OtherXML) into RDF.
+     -
+     -
+     -
+     -
+    --&gt;
+
+
+    &lt;xsl:template name="textAndattributes"&gt;
+        &lt;xsl:copy-of select="text()|@*"/&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="@*|text()" mode="anyXMLToRDF"/&gt;
+    &lt;xsl:template match="*" mode="anyXMLToRDF"&gt;
+
+        &lt;dapObj:type&gt;
+            &lt;xsl:apply-templates select="." mode="anyXMLToRDFWorker"/&gt;
+        &lt;/dapObj:type&gt;
+
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="@*|text()" mode="anyXMLToRDFWorker"/&gt;
+    &lt;xsl:template match="*" mode="anyXMLToRDFWorker"&gt;
+        &lt;xsl:choose&gt;
+            &lt;xsl:when test="*"&gt;
+                &lt;xsl:copy&gt;
+
+                    &lt;!-- XML Attributes with namespaces--&gt;
+                    &lt;xsl:for-each select="@*[namespace-uri()!='']"&gt;
+                        &lt;xsl:attribute name="{local-name()}" namespace="{namespace-uri()}"&gt;
+                            &lt;xsl:value-of select="."/&gt;
+                        &lt;/xsl:attribute&gt;
+                    &lt;/xsl:for-each&gt;
+
+                    &lt;!-- XML Attributes without namespaces--&gt;
+                    &lt;xsl:for-each select="@*[namespace-uri()='']"&gt;
+                        &lt;xsl:apply-templates select="." mode="xmlAttributeNode"/&gt;
+                    &lt;/xsl:for-each&gt;
+
+                    &lt;!-- XML Text --&gt;
+                    &lt;xsl:apply-templates select="text()" mode="xmlTextNode"/&gt;
+
+
+                    &lt;!-- XML Child Elements --&gt;
+                    &lt;xsl:for-each select="*"&gt;
+                        &lt;xsl:choose&gt;
+                            &lt;!-- Child Elements with children elements --&gt;
+                            &lt;xsl:when test="*"&gt;
+                                &lt;dapObj:xmlContains&gt;
+                                    &lt;xsl:apply-templates select="." mode="anyXMLToRDFWorker"/&gt;
+                                &lt;/dapObj:xmlContains&gt;
+                            &lt;/xsl:when&gt;
+
+                            &lt;!-- Simple Children --&gt;
+                            &lt;xsl:otherwise&gt;
+                                &lt;xsl:apply-templates select="." mode="anyXMLToRDFWorker"/&gt;
+                            &lt;/xsl:otherwise&gt;
+                        &lt;/xsl:choose&gt;
+                    &lt;/xsl:for-each&gt;
+
+                &lt;/xsl:copy&gt;
+
+            &lt;/xsl:when&gt;
+            &lt;xsl:otherwise&gt;
+                &lt;xsl:copy-of select="."/&gt;
+            &lt;/xsl:otherwise&gt;
+        &lt;/xsl:choose&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="@*" mode="xmlTextNode"/&gt;
+
+    &lt;xsl:template match="text()" mode="xmlTextNode"&gt;
+        &lt;dapObj:xmlText&gt;
+            &lt;xsl:value-of select="."/&gt;
+        &lt;/dapObj:xmlText&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="text()" mode="xmlAttributeNode"/&gt;
+
+    &lt;xsl:template match="@*" mode="xmlAttributeNode"&gt;
+        &lt;dapObj:xmlAttribute dapObj:name="{local-name()}" rdf:value="{.}"/&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;!--
+        &lt;xsl:template match="dap:dataBLOB" mode="body"&gt;
+            &lt;dapObj:hasdataBLOB&gt;
+                &lt;dap:dataBLOB rdf:about="{@href}"/&gt;
+            &lt;/dapObj:hasdataBLOB&gt;
+        &lt;/xsl:template&gt;
+    --&gt;
+
+    &lt;xsl:template match="dap:Grid" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:Grid&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+
+                &lt;xsl:apply-templates select="dap:Array" mode="body"/&gt;
+                &lt;xsl:apply-templates select="dap:Map" mode="body"/&gt;
+
+                &lt;xsl:call-template name="localId"/&gt;
+
+            &lt;/dap:Grid&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="dap:Structure" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:Structure&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+
+                &lt;xsl:apply-templates mode="body"/&gt;
+
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:Structure&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="dap:Sequence" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:Sequence&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+
+                &lt;xsl:apply-templates mode="body"/&gt;
+
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:Sequence&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="dap:Array" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;xsl:apply-templates mode="array"/&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Map" mode="body"&gt;
+        &lt;dapObj:hasMap&gt;
+            &lt;xsl:apply-templates mode="array"/&gt;
+        &lt;/dapObj:hasMap&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="dap:Byte" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:Byte&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:Byte&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Int16" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:Int16&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:Int16&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:UInt16" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:UInt16&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:UInt16&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Int32" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:Int32&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:Int32&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:UInt32" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:UInt32&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:UInt32&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Float32" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:Float32&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:Float32&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Float64" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:Float64&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:Float64&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:String" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:String&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:String&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Url" mode="body"&gt;
+        &lt;dapObj:isContainerOf&gt;
+            &lt;dap:Url&gt;
+                &lt;xsl:attribute name="rdf:ID"&gt;
+                    &lt;xsl:call-template name="localIdWorker"/&gt;
+                &lt;/xsl:attribute&gt;
+                &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+                &lt;xsl:call-template name="localId"/&gt;
+            &lt;/dap:Url&gt;
+        &lt;/dapObj:isContainerOf&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;!-- ################################################################### --&gt;
+
+
+    &lt;!-- ###################################################################
+     -
+     -    dapObj:localId
+     -
+     -
+    --&gt;
+    &lt;xsl:template name="localId"&gt;
+        &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;&lt;xsl:call-template name="localIdWorker"/&gt;&lt;/dapObj:localId&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="*" name="localIdWorker" mode="localId"&gt;
+        &lt;xsl:if test="generate-id(.)!=generate-id(/dap:Dataset)"&gt;
+            &lt;xsl:apply-templates select=".." mode="localId"/&gt;
+            &lt;xsl:if test="generate-id(..)!=generate-id(/dap:Dataset) and
+                          not(parent::dap:Array) and
+                          not(parent::dap:Map)"&gt;.&lt;/xsl:if&gt;&lt;xsl:value-of select="@name"/&gt;&lt;/xsl:if&gt;
+    &lt;/xsl:template&gt;
+    &lt;!-- ################################################################### --&gt;
+
+
+    &lt;!-- ###################################################################
+     -
+     -
+     -    Array Mode. ( mode="array" )
+     -
+     -
+    --&gt;
+    &lt;xsl:template match="*" mode="array"/&gt;
+
+    &lt;xsl:template name="arrayDimension"&gt;
+        &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+            &lt;xsl:for-each select="../dap:dimension"&gt;
+                &lt;dap:dimension&gt;
+                    &lt;dapObj:size&gt;
+                        &lt;xsl:value-of select="@size"/&gt;
+                    &lt;/dapObj:size&gt;
+                    &lt;xsl:if test="@name"&gt;
+                        &lt;dapObj:name&gt;
+                            &lt;xsl:value-of select="@name"/&gt;
+                        &lt;/dapObj:name&gt;
+                    &lt;/xsl:if&gt;
+                &lt;/dap:dimension&gt;
+            &lt;/xsl:for-each&gt;
+        &lt;/dapObj:hasDimensions&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;!-- - - - - - - - - - - - - - - - - - -
+    -
+    - Template:    basicArrayTypeContents
+    -
+    - All Arrays have this set of stuff
+    -
+    -
+    --&gt;
+    &lt;xsl:template name="basicArrayTypeContents"&gt;
+        &lt;xsl:attribute name="rdf:ID"&gt;
+            &lt;xsl:call-template name="localIdWorker"/&gt;
+        &lt;/xsl:attribute&gt;
+
+        &lt;!-- Since at this point the current node is the Array template,
+       we need to look to the parent node (the Array) to get our Attribute
+       elements. --&gt;
+        &lt;xsl:apply-templates select="../dap:Attribute" mode="body"/&gt;
+
+        &lt;!-- The template object should not have Attributes. We
+    check for those anyway.... --&gt;
+        &lt;xsl:apply-templates select="dap:Attribute" mode="body"/&gt;
+
+        &lt;xsl:call-template name="arrayDimension"/&gt;
+        &lt;xsl:call-template name="localId"/&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="dap:Array" mode="array"&gt;
+        &lt;ERROR&gt;Arrays of Arrays ar not permitted in the DAP. Since this XSL
+            should be processing a legitimate DDX, this error should never occur.
+            (rofl)
+        &lt;/ERROR&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template match="dap:Grid" mode="array"&gt;
+        &lt;dap:Grid&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+            &lt;xsl:apply-templates select="dap:Array" mode="body"/&gt;
+            &lt;xsl:apply-templates select="dap:Map" mode="body"/&gt;
+        &lt;/dap:Grid&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Sequence" mode="array"&gt;
+        &lt;dap:Sequence&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+            &lt;xsl:apply-templates mode="body"/&gt;
+        &lt;/dap:Sequence&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Structure" mode="array"&gt;
+        &lt;dap:Structure&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+            &lt;xsl:apply-templates mode="body"/&gt;
+        &lt;/dap:Structure&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:String" mode="array"&gt;
+        &lt;dap:String&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+        &lt;/dap:String&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Url" mode="array"&gt;
+        &lt;dap:Url&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+        &lt;/dap:Url&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Byte" mode="array"&gt;
+        &lt;dap:Byte&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+        &lt;/dap:Byte&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Int16" mode="array"&gt;
+        &lt;dap:Int16&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+        &lt;/dap:Int16&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:UInt16" mode="array"&gt;
+        &lt;dap:UInt16&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+        &lt;/dap:UInt16&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Int32" mode="array"&gt;
+        &lt;dap:Int32&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+        &lt;/dap:Int32&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:UInt32" mode="array"&gt;
+        &lt;dap:UInt32&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+        &lt;/dap:UInt32&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Float32" mode="array"&gt;
+        &lt;dap:Float32&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+        &lt;/dap:Float32&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;xsl:template match="dap:Float64" mode="array"&gt;
+        &lt;dap:Float64&gt;
+            &lt;xsl:call-template name="basicArrayTypeContents"/&gt;
+        &lt;/dap:Float64&gt;
+    &lt;/xsl:template&gt;
+
+    &lt;!-- ################################################################### --&gt;
+
+
+    &lt;!-- ###################################################################
+      -
+      -   Summary of Content
+      -
+    --&gt;
+    &lt;xsl:template mode="summary"
+                  match="dap:Attribute"/&gt;
+
+    &lt;xsl:template mode="OFF"
+                  match="dap:Attribute"&gt;
+
+
+        &lt;xsl:element name="{@name}"&gt;
+
+            &lt;xsl:if test="@type='Container'"&gt;
+                &lt;xsl:apply-templates mode="summary" select="dap:Attribute"/&gt;
+            &lt;/xsl:if&gt;
+
+            &lt;xsl:if test="not(./Attribute)"&gt;
+                &lt;xsl:value-of select="dap:value"/&gt;
+            &lt;/xsl:if&gt;
+        &lt;/xsl:element&gt;
+    &lt;/xsl:template&gt;
+
+
+    &lt;xsl:template mode="summary"
+                  match="child::dap:value"/&gt;
+
+
+    &lt;xsl:template mode="summary"
+                  match="*[not(self::dap:Attribute)  and
+                         not(parent::dap:Attribute)  and
+                         not(self::dap:dataBLOB)]"
+            &gt;
+        &lt;!-- Applying mode Summary template to &lt;xsl:copy /&gt; --&gt;
+        &lt;dapObj:isContainerOf rdf:resource="#{@name}"/&gt;
+
+    &lt;/xsl:template&gt;
+
+    &lt;!-- ################################################################### --&gt;
+
+
+    &lt;!-- ###################################################################
+     -
+     -
+     -    Convert each Attribute to an RDF property. ( mode="AttPropDef" )
+     -
+     -
+    --&gt;
+    &lt;xsl:template name="AttPropDef"&gt;
+
+
+        &lt;xsl:for-each
+                select="//dap:Attribute[generate-id() = generate-id(key('AttributeNames', @name))]"&gt;
+            &lt;owl:DatatypeProperty rdf:about="{$LocalAttributeNS}{@name}"&gt;
+                &lt;rdfs:domain
+                        rdf:resource="&amp;DAPOBJ;Container"/&gt;
+                &lt;rdfs:isDefinedBy rdf:resource="{$LocalOntology}"/&gt;
+            &lt;/owl:DatatypeProperty&gt;
+        &lt;/xsl:for-each&gt;
+    &lt;/xsl:template&gt;
+
+
+&lt;/xsl:stylesheet&gt;
+&lt;/pre&gt;
+
+==== RDF Result ====
+
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ &lt;rdf:RDF xmlns:dap="http://xml.opendap.org/ns/DAP/3.3#"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:cf="http://iridl.ldeo.columbia.edu/ontologies/cf-att.owl#"
+         xmlns:dapObj="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xml:base="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx"&gt;
+   &lt;owl:Ontology rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"&gt;
+      &lt;owl:imports rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl"/&gt;
+      &lt;owl:imports rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/NetcdfConventionRegistry.owl"/&gt;
+   &lt;/owl:Ontology&gt;
+   &lt;dapObj:Dataset rdf:about=""&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+      &lt;dapObj:dataset_id rdf:datatype="http://www.w3.org/2001/XMLSchema#string"/&gt;
+      &lt;rdf:type&gt;
+         &lt;CoverageDescription xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                              xmlns:owcs="http://www.opengis.net/wcs/1.1/ows"
+                              xmlns:gml="http://www.opengis.net/gml/3.2"
+                              xmlns:xlink="http://www.w3.org/1999/xlink"
+                              xmlns:schemaLocation="http://www.opengis.net/wcs/1.1  http://schemas.opengis.net/wcs/1.1.0/wcsDescribeCoverage.xsd  http://www.opengis.net/ows/1.1  http://schemas.opengis.net/ows/1.1.0/owsAll.xsd  http://www.opengis.net/wcs/1.1/ows http://schemas.opengis.net/wcs/1.1.0/owsDataIdentification.xsd http://www.opengis.net/gml/3.2  http://schemas.opengis.net/gml/3.2.1/gml.xsd"
+                              xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;
+            &lt;ows:Title&gt;Near-Real Time Surface Ocean Velocity&lt;/ows:Title&gt;
+            &lt;ows:Abstract&gt;CoverageDescription generated by OPeNDAP WCS UseCase 2.0&lt;/ows:Abstract&gt;
+            &lt;Identifier&gt;coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc&lt;/Identifier&gt;
+            &lt;dapObj:xmlContains&gt;
+               &lt;Domain&gt;
+                  &lt;dapObj:xmlContains&gt;
+                     &lt;SpatialDomain&gt;
+                        &lt;dapObj:xmlContains&gt;
+                           &lt;ows:BoundingBox&gt;
+                              &lt;dapObj:xmlAttribute dapObj:name="crs" rdf:value="urn:ogc:def:crs:EPSG::4326"/&gt;
+                              &lt;ows:LowerCorner&gt;-97.8839 21.736&lt;/ows:LowerCorner&gt;
+                              &lt;ows:UpperCorner&gt;-57.2312 46.4944&lt;/ows:UpperCorner&gt;
+                           &lt;/ows:BoundingBox&gt;
+                        &lt;/dapObj:xmlContains&gt;
+                     &lt;/SpatialDomain&gt;
+                  &lt;/dapObj:xmlContains&gt;
+                  &lt;dapObj:xmlContains&gt;
+                     &lt;TemporalDomain&gt;
+                        &lt;gml:timePosition&gt;2008-03-27T16:00:00.000Z&lt;/gml:timePosition&gt;
+                     &lt;/TemporalDomain&gt;
+                  &lt;/dapObj:xmlContains&gt;
+               &lt;/Domain&gt;
+            &lt;/dapObj:xmlContains&gt;
+            &lt;dapObj:xmlContains&gt;
+               &lt;Range&gt;
+                  &lt;dapObj:xmlContains&gt;
+                     &lt;Field&gt;
+                        &lt;ows:Title&gt;surface_eastward_sea_water_velocity&lt;/ows:Title&gt;
+                        &lt;ows:Abstract&gt;Eastward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+                        &lt;Identifier&gt;u&lt;/Identifier&gt;
+                        &lt;dapObj:xmlContains&gt;
+                           &lt;Definition&gt;
+                              &lt;ows:AnyValue/&gt;
+                           &lt;/Definition&gt;
+                        &lt;/dapObj:xmlContains&gt;
+                        &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                        &lt;dapObj:xmlContains&gt;
+                           &lt;owcs:InterpolationMethods&gt;
+                              &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                           &lt;/owcs:InterpolationMethods&gt;
+                        &lt;/dapObj:xmlContains&gt;
+                     &lt;/Field&gt;
+                  &lt;/dapObj:xmlContains&gt;
+                  &lt;dapObj:xmlContains&gt;
+                     &lt;Field&gt;
+                        &lt;ows:Title&gt;surface_northward_sea_water_velocity&lt;/ows:Title&gt;
+                        &lt;ows:Abstract&gt;Northward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+                        &lt;Identifier&gt;v&lt;/Identifier&gt;
+                        &lt;dapObj:xmlContains&gt;
+                           &lt;Definition&gt;
+                              &lt;ows:AnyValue/&gt;
+                           &lt;/Definition&gt;
+                        &lt;/dapObj:xmlContains&gt;
+                        &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                        &lt;dapObj:xmlContains&gt;
+                           &lt;owcs:InterpolationMethods&gt;
+                              &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                           &lt;/owcs:InterpolationMethods&gt;
+                        &lt;/dapObj:xmlContains&gt;
+                     &lt;/Field&gt;
+                  &lt;/dapObj:xmlContains&gt;
+                  &lt;dapObj:xmlContains&gt;
+                     &lt;Field&gt;
+                        &lt;ows:Title&gt;longitudinal dilution of precision&lt;/ows:Title&gt;
+                        &lt;ows:Abstract&gt;The longitudinal dilution of precision (DOPx) represents the\\012contribution of the
+                            radars' configuration geometry to\\012uncertainty in the eastward velocity estimate (u). DOPx
+                            is a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the
+                            eastward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used
+                            to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful
+                            metric for filtering\\012errant velocities due to poor geometry.
+                        &lt;/ows:Abstract&gt;
+                        &lt;Identifier&gt;DOPx&lt;/Identifier&gt;
+                        &lt;dapObj:xmlContains&gt;
+                           &lt;Definition&gt;
+                              &lt;ows:AnyValue/&gt;
+                           &lt;/Definition&gt;
+                        &lt;/dapObj:xmlContains&gt;
+                        &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                        &lt;dapObj:xmlContains&gt;
+                           &lt;owcs:InterpolationMethods&gt;
+                              &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                           &lt;/owcs:InterpolationMethods&gt;
+                        &lt;/dapObj:xmlContains&gt;
+                     &lt;/Field&gt;
+                  &lt;/dapObj:xmlContains&gt;
+                  &lt;dapObj:xmlContains&gt;
+                     &lt;Field&gt;
+                        &lt;ows:Title&gt;latitudinal dilution of precision&lt;/ows:Title&gt;
+                        &lt;ows:Abstract&gt;The latitudinal dilution of precision (DOPy) represents the\\012contribution of the radars'
+                            configuration geometry to\\012uncertainty in the northward velocity estimate (v). DOPy is
+                            a\\012direct multiplier of the standard error in obtaining the\\012standard deviation for the
+                            northward velocity estimate from the\\012least squares best fit. DOPx and DOPy are commonly used
+                            to\\012obtain the geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful
+                            metric for filtering\\012errant velocities due to poor geometry.
+                        &lt;/ows:Abstract&gt;
+                        &lt;Identifier&gt;DOPy&lt;/Identifier&gt;
+                        &lt;dapObj:xmlContains&gt;
+                           &lt;Definition&gt;
+                              &lt;ows:AnyValue/&gt;
+                           &lt;/Definition&gt;
+                        &lt;/dapObj:xmlContains&gt;
+                        &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+                        &lt;dapObj:xmlContains&gt;
+                           &lt;owcs:InterpolationMethods&gt;
+                              &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+                           &lt;/owcs:InterpolationMethods&gt;
+                        &lt;/dapObj:xmlContains&gt;
+                     &lt;/Field&gt;
+                  &lt;/dapObj:xmlContains&gt;
+               &lt;/Range&gt;
+            &lt;/dapObj:xmlContains&gt;
+            &lt;SupportedCRS&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt;
+            &lt;SupportedFormat&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+            &lt;SupportedFormat&gt;dap2.0&lt;/SupportedFormat&gt;
+         &lt;/CoverageDescription&gt;
+      &lt;/rdf:type &gt;
+      &lt;att:site_code xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                     rdf:parseType="Resource"&gt;
+         &lt;att:long_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Contributing radar site code&lt;/att:long_name&gt;
+      &lt;/att:site_code&gt;
+      &lt;att:site_netCode xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                        rdf:parseType="Resource"&gt;
+         &lt;att:long_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Contributing radar site network affiliation code&lt;/att:long_name&gt;
+      &lt;/att:site_netCode&gt;
+      &lt;att:NC_GLOBAL xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                     rdf:parseType="Resource"&gt;
+         &lt;att:netcdf_library_version rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;netcdf library version 3.6.1 of Feb 3 2008 23:15:25 $&lt;/att:netcdf_library_version&gt;
+         &lt;att:format_version rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;HFRNet_1.0.0b2&lt;/att:format_version&gt;
+         &lt;att:product_version rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;HFRNet_1.1.01&lt;/att:product_version&gt;
+         &lt;att:Conventions rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;CF-1.1&lt;/att:Conventions&gt;
+         &lt;att:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Near-Real Time Surface Ocean Velocity&lt;/att:title&gt;
+         &lt;att:institution rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Scripps Institution of Oceanography&lt;/att:institution&gt;
+         &lt;att:source rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Surface Ocean HF-Radar&lt;/att:source&gt;
+         &lt;att:history rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;12-Mar-2008 22:26:19: NetCDF file created&lt;/att:history&gt;
+         &lt;att:references rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Terrill, E. et al., 2006. Data Management and Real-time\\012Distribution in the HF-Radar National
+                Network. Proceedings\\012of the MTS/IEEE Oceans 2006 Conference, Boston MA,\\012September 2006.
+            &lt;/att:references&gt;
+         &lt;att:creator_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Mark Otero&lt;/att:creator_name&gt;
+         &lt;att:creator_email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;motero@mpl.ucsd.edu&lt;/att:creator_email&gt;
+         &lt;att:creator_url rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;http://cordc.ucsd.edu/projects/mapping/&lt;/att:creator_url&gt;
+         &lt;att:summary rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Surface ocean velocities estimated from HF-Radar are\\012representitive of the upper 0.3 - 2.5 meters
+                of the\\012ocean. The main objective of near-real time\\012processing is to produce the best product
+                from\\012available data at the time of processing. Radial\\012velocity measurements are obtained from
+                individual\\012radar sites through the HF-Radar Network and\\012processed to create near-real time
+                velocities\\012(RTVs)
+            &lt;/att:summary&gt;
+         &lt;att:geospatial_lat_min rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;21.73596001&lt;/att:geospatial_lat_min&gt;
+         &lt;att:geospatial_lat_max rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;46.49441910&lt;/att:geospatial_lat_max&gt;
+         &lt;att:geospatial_lon_min rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;-97.88385010&lt;/att:geospatial_lon_min&gt;
+         &lt;att:geospatial_lon_max rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;-57.23120880&lt;/att:geospatial_lon_max&gt;
+         &lt;att:grid_resolution rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;6km&lt;/att:grid_resolution&gt;
+         &lt;att:grid_projection rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;equidistant cylindrical&lt;/att:grid_projection&gt;
+         &lt;att:regional_description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Unites States, East and Gulf Coast&lt;/att:regional_description&gt;
+      &lt;/att:NC_GLOBAL&gt;
+      &lt;att:DODS_EXTRA xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                      rdf:parseType="Resource"&gt;
+         &lt;att:Unlimited_Dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;time&lt;/att:Unlimited_Dimension&gt;
+      &lt;/att:DODS_EXTRA&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Int32 rdf:ID="time"&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;time&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;seconds since 1970-01-01&lt;/att:units&gt;
+            &lt;att:calendar xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                          rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;gregorian&lt;/att:calendar&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;time&lt;/dapObj:localId&gt;
+         &lt;/dap:Int32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="lat"&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;latitude&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;degrees_north&lt;/att:units&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;lat&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="lon"&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;longitude&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;degrees_east&lt;/att:units&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;lon&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Grid rdf:ID="u"&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;surface_eastward_sea_water_velocity&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;m s-1&lt;/att:units&gt;
+            &lt;att:_FillValue xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                            rdf:datatype="http://www.w3.org/2001/XMLSchema#short"&gt;-32768&lt;/att:_FillValue&gt;
+            &lt;att:scale_factor xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                              rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;0.009999999776&lt;/att:scale_factor&gt;
+            &lt;att:ancillary_variables xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                                     rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx&lt;/att:ancillary_variables&gt;
+            &lt;dapObj:isContainerOf&gt;
+               &lt;dap:Int16 rdf:ID="u.u"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u.u&lt;/dapObj:localId&gt;
+               &lt;/dap:Int16&gt;
+            &lt;/dapObj:isContainerOf&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Int32 rdf:ID="u.time"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u.time&lt;/dapObj:localId&gt;
+               &lt;/dap:Int32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="u.lat"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u.lat&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="u.lon"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u.lon&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u&lt;/dapObj:localId&gt;
+         &lt;/dap:Grid&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Grid rdf:ID="v"&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;surface_northward_sea_water_velocity&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;m s-1&lt;/att:units&gt;
+            &lt;att:_FillValue xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                            rdf:datatype="http://www.w3.org/2001/XMLSchema#short"&gt;-32768&lt;/att:_FillValue&gt;
+            &lt;att:scale_factor xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                              rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;0.009999999776&lt;/att:scale_factor&gt;
+            &lt;att:ancillary_variables xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                                     rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy&lt;/att:ancillary_variables&gt;
+            &lt;dapObj:isContainerOf&gt;
+               &lt;dap:Int16 rdf:ID="v.v"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v.v&lt;/dapObj:localId&gt;
+               &lt;/dap:Int16&gt;
+            &lt;/dapObj:isContainerOf&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Int32 rdf:ID="v.time"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v.time&lt;/dapObj:localId&gt;
+               &lt;/dap:Int32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="v.lat"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v.lat&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="v.lon"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v.lon&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v&lt;/dapObj:localId&gt;
+         &lt;/dap:Grid&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Grid rdf:ID="DOPx"&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;longitudinal dilution of precision&lt;/att:long_name&gt;
+            &lt;att:comment xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                         rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;The longitudinal dilution of precision (DOPx) represents the\\012contribution of the radars'
+                configuration geometry to\\012uncertainty in the eastward velocity estimate (u). DOPx is a\\012direct
+                multiplier of the standard error in obtaining the\\012standard deviation for the eastward velocity
+                estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the
+                geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for
+                filtering\\012errant velocities due to poor geometry.
+            &lt;/att:comment&gt;
+            &lt;att:_FillValue xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                            rdf:datatype="http://www.w3.org/2001/XMLSchema#short"&gt;-32768&lt;/att:_FillValue&gt;
+            &lt;att:scale_factor xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                              rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;0.009999999776&lt;/att:scale_factor&gt;
+            &lt;dapObj:isContainerOf&gt;
+               &lt;dap:Int16 rdf:ID="DOPx.DOPx"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx.DOPx&lt;/dapObj:localId&gt;
+               &lt;/dap:Int16&gt;
+            &lt;/dapObj:isContainerOf&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Int32 rdf:ID="DOPx.time"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx.time&lt;/dapObj:localId&gt;
+               &lt;/dap:Int32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="DOPx.lat"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx.lat&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="DOPx.lon"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx.lon&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx&lt;/dapObj:localId&gt;
+         &lt;/dap:Grid&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Grid rdf:ID="DOPy"&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;latitudinal dilution of precision&lt;/att:long_name&gt;
+            &lt;att:comment xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                         rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;The latitudinal dilution of precision (DOPy) represents the\\012contribution of the radars'
+                configuration geometry to\\012uncertainty in the northward velocity estimate (v). DOPy is a\\012direct
+                multiplier of the standard error in obtaining the\\012standard deviation for the northward velocity
+                estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the
+                geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for
+                filtering\\012errant velocities due to poor geometry.
+            &lt;/att:comment&gt;
+            &lt;att:_FillValue xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                            rdf:datatype="http://www.w3.org/2001/XMLSchema#short"&gt;-32768&lt;/att:_FillValue&gt;
+            &lt;att:scale_factor xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                              rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;0.009999999776&lt;/att:scale_factor&gt;
+            &lt;dapObj:isContainerOf&gt;
+               &lt;dap:Int16 rdf:ID="DOPy.DOPy"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy.DOPy&lt;/dapObj:localId&gt;
+               &lt;/dap:Int16&gt;
+            &lt;/dapObj:isContainerOf&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Int32 rdf:ID="DOPy.time"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy.time&lt;/dapObj:localId&gt;
+               &lt;/dap:Int32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="DOPy.lat"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy.lat&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="DOPy.lon"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy.lon&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy&lt;/dapObj:localId&gt;
+         &lt;/dap:Grid&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="site_lat"&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Contributing radar site latitudes&lt;/att:long_name&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;latitude&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;degrees_north&lt;/att:units&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;27&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;nSites&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;site_lat&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="site_lon"&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Contributing radar site longitudes&lt;/att:long_name&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;longitude&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;degrees_east&lt;/att:units&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;27&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;nSites&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;site_lon&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="procParams"&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;RTV processing parameters&lt;/att:long_name&gt;
+            &lt;att:comment xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                         rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;\\01201) Maximum GDOP threshold\\01202) Maximum speed threshold (cm s-1)\\01203) Minimum number of
+                sites required\\01204) Minimum number of radials required\\01205) Maximum angular gap to interpolate
+                radial\\012 data over (degrees, 0 = no interpolation)\\01206) Maximum gap in range to interpolate
+                radial\\012 data over (range-resolution, 0 = no interpolation)\\01207) Spatial search radius for radial
+                solutions (km)
+            &lt;/att:comment&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;7&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;nProcParam&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;procParams&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+   &lt;/dapObj:Dataset&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#wcsStuff"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#site_code"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#long_name"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#site_netCode"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#NC_GLOBAL"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#netcdf_library_version"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#format_version"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#product_version"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#Conventions"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#title"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#institution"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#source"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#history"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#references"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#creator_name"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#creator_email"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#creator_url"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#summary"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#geospatial_lat_min"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#geospatial_lat_max"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#geospatial_lon_min"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#geospatial_lon_max"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#grid_resolution"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#grid_projection"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#regional_description"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#DODS_EXTRA"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#Unlimited_Dimension"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#standard_name"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#units"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#calendar"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#_FillValue"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#scale_factor"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#ancillary_variables"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#comment"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+ &lt;/rdf:RDF&gt;
+
+=== Example 2 ===
+
+In which missing components for WCS are added throughout the DDX as other XML.
+
+====Source XML for example 2 ====
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Dataset name="200803061600_HFRadar_USEGC_6km_rtv_SIO.nc"
+         xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+         grddl:transformation="http://xml.opendap.org/transforms/ddxToRdfTriples.xsl"
+         xmlns="http://xml.opendap.org/ns/DAP/3.3#"
+         xmlns:dap="http://xml.opendap.org/ns/DAP/3.3#"
+         dap_version="3.2"
+         xmlns:xml="http://www.w3.org/XML/1998/namespace"
+         xml:base="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx" &gt;
+
+    &lt;Attribute name="nameNotUsed01" type="OtherXML" relationship="has-a" &gt;
+        &lt;Domain xmlns="http://www.opengis.net/wcs/1.1" 
+                xmlns:ows="http://www.opengis.net/ows/1.1"
+                xmlns:gml="http://www.opengis.net/gml/3.2"
+                &gt;
+            
+            &lt;SpatialDomain&gt;
+                &lt;ows:BoundingBox crs="urn:ogc:def:crs:EPSG::4326"&gt;
+                    &lt;ows:LowerCorner&gt;-97.8839 21.736&lt;/ows:LowerCorner&gt;
+                    &lt;ows:UpperCorner&gt;-57.2312 46.4944&lt;/ows:UpperCorner&gt;
+                &lt;/ows:BoundingBox&gt;
+            &lt;/SpatialDomain&gt;
+            &lt;TemporalDomain&gt;
+                &lt;gml:timePosition&gt;2008-03-27T16:00:00.000Z&lt;/gml:timePosition&gt;
+            &lt;/TemporalDomain&gt;
+        &lt;/Domain&gt;
+        
+        &lt;SupportedCRS xmlns="http://www.opengis.net/wcs/1.1"&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt;
+        &lt;SupportedFormat xmlns="http://www.opengis.net/wcs/1.1"&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+        &lt;SupportedFormat xmlns="http://www.opengis.net/wcs/1.1"&gt;dap2.0&lt;/SupportedFormat&gt;
+    &lt;/Attribute&gt;
+
+
+    
+    &lt;Attribute name="site_code" type="Container"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;Contributing radar site code&lt;/value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Attribute&gt;
+    &lt;Attribute name="site_netCode" type="Container"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;Contributing radar site network affiliation code&lt;/value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Attribute&gt;
+    &lt;Attribute name="NC_GLOBAL" type="Container"&gt;
+        &lt;Attribute name="netcdf_library_version" type="String"&gt;
+            &lt;value&gt;netcdf library version 3.6.1 of Feb 3 2008 23:15:25 $&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="format_version" type="String"&gt;
+            &lt;value&gt;HFRNet_1.0.0b2&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="product_version" type="String"&gt;
+            &lt;value&gt;HFRNet_1.1.01&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="Conventions" type="String"&gt;
+            &lt;value&gt;CF-1.1&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="title" type="String"&gt;
+            &lt;value&gt;Near-Real Time Surface Ocean Velocity&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="institution" type="String"&gt;
+            &lt;value&gt;Scripps Institution of Oceanography&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="source" type="String"&gt;
+            &lt;value&gt;Surface Ocean HF-Radar&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="history" type="String"&gt;
+            &lt;value&gt;12-Mar-2008 22:26:19: NetCDF file created&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="references" type="String"&gt;
+            &lt;value&gt;Terrill, E. et al., 2006. Data Management and Real-time\\012Distribution in the HF-Radar National
+                Network. Proceedings\\012of the MTS/IEEE Oceans 2006 Conference, Boston MA,\\012September 2006.
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="creator_name" type="String"&gt;
+            &lt;value&gt;Mark Otero&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="creator_email" type="String"&gt;
+            &lt;value&gt;motero@mpl.ucsd.edu&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="creator_url" type="String"&gt;
+            &lt;value&gt;http://cordc.ucsd.edu/projects/mapping/&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="summary" type="String"&gt;
+            &lt;value&gt;Surface ocean velocities estimated from HF-Radar are\\012representitive of the upper 0.3 - 2.5 meters
+                of the\\012ocean. The main objective of near-real time\\012processing is to produce the best product
+                from\\012available data at the time of processing. Radial\\012velocity measurements are obtained from
+                individual\\012radar sites through the HF-Radar Network and\\012processed to create near-real time
+                velocities\\012(RTVs)
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lat_min" type="Float32"&gt;
+            &lt;value&gt;21.73596001&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lat_max" type="Float32"&gt;
+            &lt;value&gt;46.49441910&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lon_min" type="Float32"&gt;
+            &lt;value&gt;-97.88385010&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lon_max" type="Float32"&gt;
+            &lt;value&gt;-57.23120880&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="grid_resolution" type="String"&gt;
+            &lt;value&gt;6km&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="grid_projection" type="String"&gt;
+            &lt;value&gt;equidistant cylindrical&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="regional_description" type="String"&gt;
+            &lt;value&gt;Unites States, East and Gulf Coast&lt;/value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Attribute&gt;
+    &lt;Attribute name="DODS_EXTRA" type="Container"&gt;
+        &lt;Attribute name="Unlimited_Dimension" type="String"&gt;
+            &lt;value&gt;time&lt;/value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Attribute&gt;
+
+    &lt;Array name="time"&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;time&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;seconds since 1970-01-01&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="calendar" type="String"&gt;
+            &lt;value&gt;gregorian&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Int32/&gt;
+        &lt;dimension name="time" size="1"/&gt;
+    &lt;/Array&gt;
+    &lt;Array name="lat"&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;latitude&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;degrees_north&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="lat" size="460"/&gt;
+    &lt;/Array&gt;
+    &lt;Array name="lon"&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;longitude&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;degrees_east&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="lon" size="701"/&gt;
+    &lt;/Array&gt;
+
+    &lt;Grid name="u"&gt;
+        &lt;Attribute name="nameNotUsed" type="OtherXML"&gt;
+            &lt;ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1"&gt;Eastward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+            &lt;Definition xmlns="http://www.opengis.net/wcs/1.1" 
+                    xmlns:ows="http://www.opengis.net/ows/1.1"
+                    &gt;
+                &lt;ows:AnyValue/&gt;
+            &lt;/Definition&gt;
+            &lt;owcs:InterpolationMethods xmlns:owcs="http://www.opengis.net/wcs/1.1/ows" &gt;
+                &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+            &lt;/owcs:InterpolationMethods&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;surface_eastward_sea_water_velocity&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;m s-1&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="_FillValue" type="Int16"&gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="scale_factor" type="Float32"&gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="ancillary_variables" type="String"&gt;
+            &lt;value&gt;DOPx&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Array name="u"&gt;
+            &lt;Int16/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Array&gt;
+        &lt;Map name="time"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lat"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lon"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+    &lt;Grid name="v"&gt;
+        &lt;Attribute name="nameNotUsed" type="OtherXML"&gt;
+            &lt;ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1"&gt;Northward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+            &lt;Definition xmlns="http://www.opengis.net/wcs/1.1" 
+                    xmlns:ows="http://www.opengis.net/ows/1.1"
+                    &gt;
+                &lt;ows:AnyValue/&gt;
+            &lt;/Definition&gt;
+            &lt;owcs:InterpolationMethods xmlns:owcs="http://www.opengis.net/wcs/1.1/ows" &gt;
+                &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+            &lt;/owcs:InterpolationMethods&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;surface_northward_sea_water_velocity&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;m s-1&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="_FillValue" type="Int16"&gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="scale_factor" type="Float32"&gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="ancillary_variables" type="String"&gt;
+            &lt;value&gt;DOPy&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Array name="v"&gt;
+            &lt;Int16/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Array&gt;
+        &lt;Map name="time"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lat"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lon"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+    &lt;Grid name="DOPx"&gt;
+        &lt;Attribute name="nameNotUsed" type="OtherXML"&gt;
+            &lt;Definition xmlns="http://www.opengis.net/wcs/1.1" 
+                    xmlns:ows="http://www.opengis.net/ows/1.1"
+                    &gt;
+                &lt;ows:AnyValue/&gt;
+            &lt;/Definition&gt;
+            &lt;owcs:InterpolationMethods xmlns:owcs="http://www.opengis.net/wcs/1.1/ows" &gt;
+                &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+            &lt;/owcs:InterpolationMethods&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;longitudinal dilution of precision&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="comment" type="String"&gt;
+            &lt;value&gt;The longitudinal dilution of precision (DOPx) represents the\\012contribution of the radars&amp;apos;
+                configuration geometry to\\012uncertainty in the eastward velocity estimate (u). DOPx is a\\012direct
+                multiplier of the standard error in obtaining the\\012standard deviation for the eastward velocity
+                estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the
+                geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for
+                filtering\\012errant velocities due to poor geometry.
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="_FillValue" type="Int16"&gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="scale_factor" type="Float32"&gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Array name="DOPx"&gt;
+            &lt;Int16/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Array&gt;
+        &lt;Map name="time"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lat"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lon"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+    &lt;Grid name="DOPy"&gt;
+        &lt;Attribute name="nameNotUsed" type="OtherXML"&gt;
+            &lt;Definition xmlns="http://www.opengis.net/wcs/1.1" 
+                    xmlns:ows="http://www.opengis.net/ows/1.1"
+                    &gt;
+                &lt;ows:AnyValue/&gt;
+            &lt;/Definition&gt;
+            &lt;owcs:InterpolationMethods xmlns:owcs="http://www.opengis.net/wcs/1.1/ows" &gt;
+                &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+            &lt;/owcs:InterpolationMethods&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;latitudinal dilution of precision&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="comment" type="String"&gt;
+            &lt;value&gt;The latitudinal dilution of precision (DOPy) represents the\\012contribution of the radars&amp;apos;
+                configuration geometry to\\012uncertainty in the northward velocity estimate (v). DOPy is a\\012direct
+                multiplier of the standard error in obtaining the\\012standard deviation for the northward velocity
+                estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the
+                geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for
+                filtering\\012errant velocities due to poor geometry.
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="_FillValue" type="Int16"&gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="scale_factor" type="Float32"&gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Array name="DOPy"&gt;
+            &lt;Int16/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Array&gt;
+        &lt;Map name="time"&gt;
+            &lt;Int32/&gt;
+            &lt;dimension name="time" size="1"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lat"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lat" size="460"/&gt;
+        &lt;/Map&gt;
+        &lt;Map name="lon"&gt;
+            &lt;Float32/&gt;
+            &lt;dimension name="lon" size="701"/&gt;
+        &lt;/Map&gt;
+    &lt;/Grid&gt;
+    &lt;Array name="site_lat"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;Contributing radar site latitudes&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;latitude&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;degrees_north&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="nSites" size="27"/&gt;
+    &lt;/Array&gt;
+    &lt;Array name="site_lon"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;Contributing radar site longitudes&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;longitude&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;degrees_east&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="nSites" size="27"/&gt;
+    &lt;/Array&gt;
+    &lt;Array name="procParams"&gt;
+        &lt;Attribute name="long_name" type="String"&gt;
+            &lt;value&gt;RTV processing parameters&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="comment" type="String"&gt;
+            &lt;value&gt;\\01201) Maximum GDOP threshold\\01202) Maximum speed threshold (cm s-1)\\01203) Minimum number of
+                sites required\\01204) Minimum number of radials required\\01205) Maximum angular gap to interpolate
+                radial\\012 data over (degrees, 0 = no interpolation)\\01206) Maximum gap in range to interpolate
+                radial\\012 data over (range-resolution, 0 = no interpolation)\\01207) Spatial search radius for radial
+                solutions (km)
+            &lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Float32/&gt;
+        &lt;dimension name="nProcParam" size="7"/&gt;
+    &lt;/Array&gt;
+
+&lt;/Dataset&gt;
+
+&lt;/pre&gt;
+
+==== XSLT v2 ====
+
+
+Same As Previous.
+
+The algorithm for converting the contents of the otherXML element from XML to RDF/XML is as follows, more or less.
+This makes them consistent with the transform of XMLschema in ontologies.
+
+* elements that are pure content are unchanged
+* attributes are changed to children
+* elements with children have a rdf:parseType="Resource" attribute added
+* mixed elements, i.e both content and children (which at this point means both child elements and xml attributes, since the attributes are changed to children), have the content moved to a child element rdf:value
+* empty elements have a rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil" attribute added
+* namespaces that have an implicit '#' between the namespace and the Qname (i.e. XML Schema style) are changed to explicitly end in '#'
+* local elements and attributes are changed to a particular namespace,
+
+ http://iridl.ldeo.columbia.edu/ontologies/xsd2owl/nonamespace#
+
+
+and it would be very nice to have
+
+* a  &lt;rdfs:seeAlso rdf:resource="schemaLocation" /&gt; tag added for each Schema referenced
+
+At least that would be one way to know that that particular schema is needed to understand the contents of the current system.
+
+==== RDF for example 2 ====
+
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt; 
+ &lt;rdf:RDF xmlns:dap="http://xml.opendap.org/ns/DAP/3.3#"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:cf="http://iridl.ldeo.columbia.edu/ontologies/cf-att.owl#"
+         xmlns:dapObj="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xml:base="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx"&gt;
+   &lt;owl:Ontology rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"&gt;
+      &lt;owl:imports rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl"/&gt;
+      &lt;owl:imports rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/NetcdfConventionRegistry.owl"/&gt;
+   &lt;/owl:Ontology&gt;
+   &lt;dapObj:Dataset rdf:about=""&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+      &lt;dapObj:dataset_id rdf:datatype="http://www.w3.org/2001/XMLSchema#string"/&gt;
+      &lt;Domain xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+              xmlns:gml="http://www.opengis.net/gml/3.2"
+              xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;
+         &lt;SpatialDomain&gt;
+            &lt;ows:BoundingBox crs="urn:ogc:def:crs:EPSG::4326"&gt;
+               &lt;ows:LowerCorner&gt;-97.8839 21.736&lt;/ows:LowerCorner&gt;
+               &lt;ows:UpperCorner&gt;-57.2312 46.4944&lt;/ows:UpperCorner&gt;
+            &lt;/ows:BoundingBox&gt;
+         &lt;/SpatialDomain&gt;
+         &lt;TemporalDomain&gt;
+            &lt;gml:timePosition&gt;2008-03-27T16:00:00.000Z&lt;/gml:timePosition&gt;
+         &lt;/TemporalDomain&gt;
+      &lt;/Domain&gt;
+      &lt;SupportedCRS xmlns="http://www.opengis.net/wcs/1.1"
+                    xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt;
+      &lt;SupportedFormat xmlns="http://www.opengis.net/wcs/1.1"
+                       xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+      &lt;SupportedFormat xmlns="http://www.opengis.net/wcs/1.1"
+                       xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;dap2.0&lt;/SupportedFormat&gt;
+
+
+----
+
+Benno Thinks it should look like this:
+
+
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt; 
+ &lt;rdf:RDF xmlns:dap="http://xml.opendap.org/ns/DAP/3.3#"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:cf="http://iridl.ldeo.columbia.edu/ontologies/cf-att.owl#"
+         xmlns:dapObj="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:nons="http://iridl.ldeo.columbia.edu/ontologies/xsd2owl/nonamespace#"
+         xml:base="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx"&gt;
+   &lt;owl:Ontology rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"&gt;
+      &lt;owl:imports rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl"/&gt;
+      &lt;owl:imports rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/NetcdfConventionRegistry.owl"/&gt;
+   &lt;/owl:Ontology&gt;
+   &lt;dapObj:Dataset rdf:about=""&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+      &lt;dapObj:dataset_id rdf:datatype="http://www.w3.org/2001/XMLSchema#string"/&gt;
+      &lt;Domain xmlns="http://www.opengis.net/wcs/1.1#" xmlns:ows="http://www.opengis.net/ows/1.1#"
+              xmlns:gml="http://www.opengis.net/gml/3.2#"
+              xmlns:grddl="http://www.w3.org/2003/g/data-view#" rdf:parseType="Resource"&gt;
+         &lt;SpatialDomain rdf:parseType="Resource"&gt;
+            &lt;ows:BoundingBox rdf:parseType="Resource"&gt;
+               &lt;nons:crs&gt;urn:ogc:def:crs:EPSG::4326&lt;/nons:crs&gt;
+               &lt;ows:LowerCorner&gt;-97.8839 21.736&lt;/ows:LowerCorner&gt;
+               &lt;ows:UpperCorner&gt;-57.2312 46.4944&lt;/ows:UpperCorner&gt;
+            &lt;/ows:BoundingBox&gt;
+         &lt;/SpatialDomain&gt;
+         &lt;TemporalDomain rdf:parseType="Resource"&gt;
+            &lt;gml:timePosition&gt;2008-03-27T16:00:00.000Z&lt;/gml:timePosition&gt;
+         &lt;/TemporalDomain&gt;
+      &lt;/Domain&gt;
+      &lt;SupportedCRS xmlns="http://www.opengis.net/wcs/1.1#"
+                    xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt;
+      &lt;SupportedFormat xmlns="http://www.opengis.net/wcs/1.1#"
+                       xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;netcdf-cf1.0&lt;/SupportedFormat&gt;
+      &lt;SupportedFormat xmlns="http://www.opengis.net/wcs/1.1#"
+                       xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;dap2.0&lt;/SupportedFormat&gt;
+
+
+
+
+----
+
+
+
+      &lt;att:site_code xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                     rdf:parseType="Resource"&gt;
+         &lt;att:long_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Contributing radar site code&lt;/att:long_name&gt;
+      &lt;/att:site_code&gt;
+      &lt;att:site_netCode xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                        rdf:parseType="Resource"&gt;
+         &lt;att:long_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Contributing radar site network affiliation code&lt;/att:long_name&gt;
+      &lt;/att:site_netCode&gt;
+      &lt;att:NC_GLOBAL xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                     rdf:parseType="Resource"&gt;
+         &lt;att:netcdf_library_version rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;netcdf library version 3.6.1 of Feb 3 2008 23:15:25 $&lt;/att:netcdf_library_version&gt;
+         &lt;att:format_version rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;HFRNet_1.0.0b2&lt;/att:format_version&gt;
+         &lt;att:product_version rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;HFRNet_1.1.01&lt;/att:product_version&gt;
+         &lt;att:Conventions rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;CF-1.1&lt;/att:Conventions&gt;
+         &lt;att:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Near-Real Time Surface Ocean Velocity&lt;/att:title&gt;
+         &lt;att:institution rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Scripps Institution of Oceanography&lt;/att:institution&gt;
+         &lt;att:source rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Surface Ocean HF-Radar&lt;/att:source&gt;
+         &lt;att:history rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;12-Mar-2008 22:26:19: NetCDF file created&lt;/att:history&gt;
+         &lt;att:references rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Terrill, E. et al., 2006. Data Management and Real-time\\012Distribution in the HF-Radar National
+                Network. Proceedings\\012of the MTS/IEEE Oceans 2006 Conference, Boston MA,\\012September 2006.
+            &lt;/att:references&gt;
+         &lt;att:creator_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Mark Otero&lt;/att:creator_name&gt;
+         &lt;att:creator_email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;motero@mpl.ucsd.edu&lt;/att:creator_email&gt;
+         &lt;att:creator_url rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;http://cordc.ucsd.edu/projects/mapping/&lt;/att:creator_url&gt;
+         &lt;att:summary rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Surface ocean velocities estimated from HF-Radar are\\012representitive of the upper 0.3 - 2.5 meters
+                of the\\012ocean. The main objective of near-real time\\012processing is to produce the best product
+                from\\012available data at the time of processing. Radial\\012velocity measurements are obtained from
+                individual\\012radar sites through the HF-Radar Network and\\012processed to create near-real time
+                velocities\\012(RTVs)
+            &lt;/att:summary&gt;
+         &lt;att:geospatial_lat_min rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;21.73596001&lt;/att:geospatial_lat_min&gt;
+         &lt;att:geospatial_lat_max rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;46.49441910&lt;/att:geospatial_lat_max&gt;
+         &lt;att:geospatial_lon_min rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;-97.88385010&lt;/att:geospatial_lon_min&gt;
+         &lt;att:geospatial_lon_max rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;-57.23120880&lt;/att:geospatial_lon_max&gt;
+         &lt;att:grid_resolution rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;6km&lt;/att:grid_resolution&gt;
+         &lt;att:grid_projection rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;equidistant cylindrical&lt;/att:grid_projection&gt;
+         &lt;att:regional_description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Unites States, East and Gulf Coast&lt;/att:regional_description&gt;
+      &lt;/att:NC_GLOBAL&gt;
+      &lt;att:DODS_EXTRA xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                      rdf:parseType="Resource"&gt;
+         &lt;att:Unlimited_Dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;time&lt;/att:Unlimited_Dimension&gt;
+      &lt;/att:DODS_EXTRA&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Int32 rdf:ID="time"&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;time&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;seconds since 1970-01-01&lt;/att:units&gt;
+            &lt;att:calendar xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                          rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;gregorian&lt;/att:calendar&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;time&lt;/dapObj:localId&gt;
+         &lt;/dap:Int32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="lat"&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;latitude&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;degrees_north&lt;/att:units&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;lat&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="lon"&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;longitude&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;degrees_east&lt;/att:units&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;lon&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Grid rdf:ID="u"&gt;
+            &lt;ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1"
+                          xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                          xmlns="http://xml.opendap.org/ns/DAP/3.3#"&gt;Eastward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+            &lt;Definition xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                        xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;
+               &lt;ows:AnyValue/&gt;
+            &lt;/Definition&gt;
+            &lt;owcs:InterpolationMethods xmlns:owcs="http://www.opengis.net/wcs/1.1/ows"
+                                       xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                                       xmlns="http://xml.opendap.org/ns/DAP/3.3#"&gt;
+               &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+            &lt;/owcs:InterpolationMethods&gt;
+
+
+----
+Benno Thinks it should look like this:
+
+    &lt;dap:Grid rdf:ID="u"&gt;
+           &lt;ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1#"
+                          xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                          xmlns="http://xml.opendap.org/ns/DAP/3.3#"&gt;Eastward component of a 2D sea surface      velocity vector.&lt;/ows:Abstract&gt;
+            &lt;Definition xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1#"
+                        xmlns:grddl="http://www.w3.org/2003/g/data-view#" rdf:parseType="Resource" &gt;
+               &lt;ows:AnyValue rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil" /&gt;
+            &lt;/Definition&gt;
+            &lt;owcs:InterpolationMethods xmlns:owcs="http://www.opengis.net/wcs/1.1/ows#"
+                                       xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                                       xmlns="http://xml.opendap.org/ns/DAP/3.3#"  rdf:parseType="Resource"&gt;
+               &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+            &lt;/owcs:InterpolationMethods&gt;
+
+
+----
+
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;surface_eastward_sea_water_velocity&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;m s-1&lt;/att:units&gt;
+            &lt;att:_FillValue xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                            rdf:datatype="http://www.w3.org/2001/XMLSchema#short"&gt;-32768&lt;/att:_FillValue&gt;
+            &lt;att:scale_factor xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                              rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;0.009999999776&lt;/att:scale_factor&gt;
+            &lt;att:ancillary_variables xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                                     rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx&lt;/att:ancillary_variables&gt;
+            &lt;dapObj:isContainerOf&gt;
+               &lt;dap:Int16 rdf:ID="u.u"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u.u&lt;/dapObj:localId&gt;
+               &lt;/dap:Int16&gt;
+            &lt;/dapObj:isContainerOf&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Int32 rdf:ID="u.time"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u.time&lt;/dapObj:localId&gt;
+               &lt;/dap:Int32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="u.lat"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u.lat&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="u.lon"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u.lon&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;u&lt;/dapObj:localId&gt;
+         &lt;/dap:Grid&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Grid rdf:ID="v"&gt;
+            &lt;ows:Abstract xmlns:ows="http://www.opengis.net/ows/1.1"
+                          xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                          xmlns="http://xml.opendap.org/ns/DAP/3.3#"&gt;Northward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+            &lt;Definition xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                        xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;
+               &lt;ows:AnyValue/&gt;
+            &lt;/Definition&gt;
+            &lt;owcs:InterpolationMethods xmlns:owcs="http://www.opengis.net/wcs/1.1/ows"
+                                       xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                                       xmlns="http://xml.opendap.org/ns/DAP/3.3#"&gt;
+               &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+            &lt;/owcs:InterpolationMethods&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;surface_northward_sea_water_velocity&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;m s-1&lt;/att:units&gt;
+            &lt;att:_FillValue xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                            rdf:datatype="http://www.w3.org/2001/XMLSchema#short"&gt;-32768&lt;/att:_FillValue&gt;
+            &lt;att:scale_factor xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                              rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;0.009999999776&lt;/att:scale_factor&gt;
+            &lt;att:ancillary_variables xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                                     rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy&lt;/att:ancillary_variables&gt;
+            &lt;dapObj:isContainerOf&gt;
+               &lt;dap:Int16 rdf:ID="v.v"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v.v&lt;/dapObj:localId&gt;
+               &lt;/dap:Int16&gt;
+            &lt;/dapObj:isContainerOf&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Int32 rdf:ID="v.time"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v.time&lt;/dapObj:localId&gt;
+               &lt;/dap:Int32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="v.lat"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v.lat&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="v.lon"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v.lon&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;v&lt;/dapObj:localId&gt;
+         &lt;/dap:Grid&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Grid rdf:ID="DOPx"&gt;
+            &lt;Definition xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                        xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;
+               &lt;ows:AnyValue/&gt;
+            &lt;/Definition&gt;
+            &lt;owcs:InterpolationMethods xmlns:owcs="http://www.opengis.net/wcs/1.1/ows"
+                                       xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                                       xmlns="http://xml.opendap.org/ns/DAP/3.3#"&gt;
+               &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+            &lt;/owcs:InterpolationMethods&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;longitudinal dilution of precision&lt;/att:long_name&gt;
+            &lt;att:comment xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                         rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;The longitudinal dilution of precision (DOPx) represents the\\012contribution of the radars'
+                configuration geometry to\\012uncertainty in the eastward velocity estimate (u). DOPx is a\\012direct
+                multiplier of the standard error in obtaining the\\012standard deviation for the eastward velocity
+                estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the
+                geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for
+                filtering\\012errant velocities due to poor geometry.
+            &lt;/att:comment&gt;
+            &lt;att:_FillValue xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                            rdf:datatype="http://www.w3.org/2001/XMLSchema#short"&gt;-32768&lt;/att:_FillValue&gt;
+            &lt;att:scale_factor xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                              rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;0.009999999776&lt;/att:scale_factor&gt;
+            &lt;dapObj:isContainerOf&gt;
+               &lt;dap:Int16 rdf:ID="DOPx.DOPx"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx.DOPx&lt;/dapObj:localId&gt;
+               &lt;/dap:Int16&gt;
+            &lt;/dapObj:isContainerOf&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Int32 rdf:ID="DOPx.time"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx.time&lt;/dapObj:localId&gt;
+               &lt;/dap:Int32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="DOPx.lat"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx.lat&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="DOPx.lon"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx.lon&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPx&lt;/dapObj:localId&gt;
+         &lt;/dap:Grid&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Grid rdf:ID="DOPy"&gt;
+            &lt;Definition xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1"
+                        xmlns:grddl="http://www.w3.org/2003/g/data-view#"&gt;
+               &lt;ows:AnyValue/&gt;
+            &lt;/Definition&gt;
+            &lt;owcs:InterpolationMethods xmlns:owcs="http://www.opengis.net/wcs/1.1/ows"
+                                       xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                                       xmlns="http://xml.opendap.org/ns/DAP/3.3#"&gt;
+               &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+            &lt;/owcs:InterpolationMethods&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;latitudinal dilution of precision&lt;/att:long_name&gt;
+            &lt;att:comment xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                         rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;The latitudinal dilution of precision (DOPy) represents the\\012contribution of the radars'
+                configuration geometry to\\012uncertainty in the northward velocity estimate (v). DOPy is a\\012direct
+                multiplier of the standard error in obtaining the\\012standard deviation for the northward velocity
+                estimate from the\\012least squares best fit. DOPx and DOPy are commonly used to\\012obtain the
+                geometric dilution of precision\\012(GDOP = sqrt(DOPx^2 + DOPy^2)), a useful metric for
+                filtering\\012errant velocities due to poor geometry.
+            &lt;/att:comment&gt;
+            &lt;att:_FillValue xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                            rdf:datatype="http://www.w3.org/2001/XMLSchema#short"&gt;-32768&lt;/att:_FillValue&gt;
+            &lt;att:scale_factor xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                              rdf:datatype="http://www.w3.org/2001/XMLSchema#float"&gt;0.009999999776&lt;/att:scale_factor&gt;
+            &lt;dapObj:isContainerOf&gt;
+               &lt;dap:Int16 rdf:ID="DOPy.DOPy"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy.DOPy&lt;/dapObj:localId&gt;
+               &lt;/dap:Int16&gt;
+            &lt;/dapObj:isContainerOf&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Int32 rdf:ID="DOPy.time"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;1&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;time&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy.time&lt;/dapObj:localId&gt;
+               &lt;/dap:Int32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="DOPy.lat"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;460&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lat&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy.lat&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:hasMap&gt;
+               &lt;dap:Float32 rdf:ID="DOPy.lon"&gt;
+                  &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+                     &lt;dap:dimension&gt;
+                        &lt;dapObj:size&gt;701&lt;/dapObj:size&gt;
+                        &lt;dapObj:name&gt;lon&lt;/dapObj:name&gt;
+                     &lt;/dap:dimension&gt;
+                  &lt;/dapObj:hasDimensions&gt;
+                  &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy.lon&lt;/dapObj:localId&gt;
+               &lt;/dap:Float32&gt;
+            &lt;/dapObj:hasMap&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;DOPy&lt;/dapObj:localId&gt;
+         &lt;/dap:Grid&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="site_lat"&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Contributing radar site latitudes&lt;/att:long_name&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;latitude&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;degrees_north&lt;/att:units&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;27&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;nSites&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;site_lat&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="site_lon"&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;Contributing radar site longitudes&lt;/att:long_name&gt;
+            &lt;att:standard_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                               rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;longitude&lt;/att:standard_name&gt;
+            &lt;att:units xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                       rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;degrees_east&lt;/att:units&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;27&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;nSites&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;site_lon&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+      &lt;dapObj:isContainerOf&gt;
+         &lt;dap:Float32 rdf:ID="procParams"&gt;
+            &lt;att:long_name xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                           rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;RTV processing parameters&lt;/att:long_name&gt;
+            &lt;att:comment xmlns:att="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#"
+                         rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;\\01201) Maximum GDOP threshold\\01202) Maximum speed threshold (cm s-1)\\01203) Minimum number of
+                sites required\\01204) Minimum number of radials required\\01205) Maximum angular gap to interpolate
+                radial\\012 data over (degrees, 0 = no interpolation)\\01206) Maximum gap in range to interpolate
+                radial\\012 data over (range-resolution, 0 = no interpolation)\\01207) Spatial search radius for radial
+                solutions (km)
+            &lt;/att:comment&gt;
+            &lt;dapObj:hasDimensions rdf:parseType="Collection"&gt;
+               &lt;dap:dimension&gt;
+                  &lt;dapObj:size&gt;7&lt;/dapObj:size&gt;
+                  &lt;dapObj:name&gt;nProcParam&lt;/dapObj:name&gt;
+               &lt;/dap:dimension&gt;
+            &lt;/dapObj:hasDimensions&gt;
+            &lt;dapObj:localId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"&gt;procParams&lt;/dapObj:localId&gt;
+         &lt;/dap:Float32&gt;
+      &lt;/dapObj:isContainerOf&gt;
+   &lt;/dapObj:Dataset&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#nameNotUsed01"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#site_code"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#long_name"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#site_netCode"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#NC_GLOBAL"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#netcdf_library_version"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#format_version"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#product_version"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#Conventions"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#title"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#institution"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#source"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#history"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#references"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#creator_name"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#creator_email"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#creator_url"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#summary"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#geospatial_lat_min"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#geospatial_lat_max"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#geospatial_lon_min"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#geospatial_lon_max"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#grid_resolution"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#grid_projection"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#regional_description"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#DODS_EXTRA"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#Unlimited_Dimension"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#standard_name"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#units"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#calendar"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#nameNotUsed"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#_FillValue"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#scale_factor"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#ancillary_variables"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+   &lt;owl:DatatypeProperty rdf:about="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx/att#comment"&gt;
+      &lt;rdfs:domain rdf:resource="http://iridl.ldeo.columbia.edu/ontologies/opendap.owl#Container"/&gt;
+      &lt;rdfs:isDefinedBy rdf:resource="http://localhost:8080/opendap/coverage/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx.rdf"/&gt;
+   &lt;/owl:DatatypeProperty&gt;
+ &lt;/rdf:RDF&gt;
+
+[[Category:Development|DAP3/4]] [[Category:DAP4|DAP3/4]] [[Category:WCS]]</text>
+      <sha1>qzvuzdqm5a9o4w7g6df28esv8f2wt1r</sha1>
+    </revision>
+  </page>
+</mediawiki>

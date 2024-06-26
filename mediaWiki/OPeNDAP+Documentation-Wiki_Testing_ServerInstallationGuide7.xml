@@ -1,0 +1,145 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/ServerInstallationGuide7</title>
+    <ns>0</ns>
+    <id>205</id>
+    <revision>
+      <id>1629</id>
+      <parentid>1628</parentid>
+      <timestamp>2008-01-04T13:42:40Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Special Instructions for the OPeNDAP/JGOFS Handler */</comment>
+      <origin>1629</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4981" sha1="pzqpgk17p5idm9yxihtvdwmjhhhlweg" xml:space="preserve">=Documenting Your Data=
+
+
+
+OPeNDAP's version 3.5 server contains provisions for supplying documentation to users about a
+server, and also about the data that server provides. When a server
+receives an information request (through the &lt;font color='green'&gt;info&lt;/font&gt; service that
+invokes the &lt;font color='green'&gt;dap_usage&lt;/font&gt; program), it returns to the client an HTML
+document created from the DAS and DDS of the referenced data. It may
+also return information about the server, and more detail about the
+dataset.  
+
+Users access this information by appending &lt;font color='green'&gt;.info&lt;/font&gt; to a DAP URL.
+For example to get the HTML info page for an netCDF file, you might
+type something like this:
+
+&lt;pre&gt;
+http://test.opendap.org/opendap/nph-dods/data/nc/fnoc1.nc.info
+&lt;/pre&gt;
+
+The Info service will return important information about your dataset
+even if you do not write custom HTML files for it. If you do write
+those files they will be concatenated with the default information
+returned by the usage server.
+
+
+If you would like to provide more information about a dataset than is
+contained in the DAS and DDS, simply create an HTML document (without
+the &lt;font color='green'&gt;html&lt;/font&gt; and &lt;font color='green'&gt;body&lt;/font&gt; tags, which are supplied by the
+&lt;font color='green'&gt;info&lt;/font&gt; service), and store it in the same directory as the
+dataset, with a name corresponding to the dataset filename.  For
+example, the dataset &lt;font color='green'&gt;fnoc1.nc&lt;/font&gt; might be documented with a file called &lt;font color='green'&gt;fnoc1.html&lt;/font&gt;.
+
+
+
+You can also provide documentation for a class of files that may have
+a common root in their names.  For example, a file that would be used
+for data files called &lt;font color='green'&gt;S00443.nc&lt;/font&gt;, &lt;font color='green'&gt;S00444.nc&lt;/font&gt; and
+&lt;font color='green'&gt;S00445.nc&lt;/font&gt; could be called &lt;font color='green'&gt;S.html&lt;/font&gt; (or &lt;font color='green'&gt;S00.html&lt;/font&gt; in this case). This file should be located in the directory where the
+data is located.
+
+
+If you'd like to append information to the &lt;font color='green'&gt;info&lt;/font&gt; message for all
+the files on a server, you can write a file called
+servername &lt;font color='green'&gt;.html&lt;/font&gt;, where servername is one of
+&lt;font color='green'&gt;nc&lt;/font&gt;, &lt;font color='green'&gt;ff&lt;/font&gt;, &lt;font color='green'&gt;hdf&lt;/font&gt;, &lt;font color='green'&gt;jg&lt;/font&gt;, and so on.
+
+
+You may prefer to override this method of creating documentation and
+simply provide a single, complete HTML document that contains general
+information for a dataset.  If you call your documentation file
+&lt;font color='green'&gt;fnoc2.ovr&lt;/font&gt;, the client will see only the contents of that file,
+and will not get the text generated by the dataset DAS and DDS, or the
+servername&lt;font color='green'&gt;.html&lt;/font&gt; file.
+
+
+More information about providing user information, including sample
+HTML files, and a complete description of the search procedure for
+finding the dataset documentation, may be found in [http://docs.opendap.org/index.php/ProgrammerGuide&lt;cite&gt; The OPeNDAP Programmer's Guide&lt;/cite&gt;] .
+
+
+==Special Instructions for the OPeNDAP/JGOFS Handler==
+
+
+The JGOFS handler provides usage data in almost the same way as the
+other servers, but the &lt;font color='green'&gt;dap_usage&lt;/font&gt; helper program is called
+&lt;font color='green'&gt;usage-jg&lt;/font&gt;, and it functions slightly differently. For the general
+JGOFS handler and for each data object it serves, you can write a HTML
+document which the usage server will return when requested by users.
+You can write a HTML document that describes any special features of your particular JGOFS
+handler and save that document in a file named &lt;font color='green'&gt;jg.html&lt;/font&gt; in the
+cgi-bin directory that holds the server programs.
+
+
+&lt;blockquote&gt;[Tip:]The &lt;font color='green'&gt;jg.html&lt;/font&gt; file could be used to provide descriptive information, including the names, for all the data objects served at your site.&lt;/blockquote&gt;
+
+
+The only special thing about this file is that you should include only
+those HTML tags that would fall between the &lt;font color='green'&gt;body&lt;/font&gt; and
+&lt;font color='green'&gt;body&lt;/font&gt; tags.  Thus it should not contain the &lt;font color='green'&gt;html&lt;/font&gt;,
+&lt;font color='green'&gt;head&lt;/font&gt;, &lt;font color='green'&gt;body&lt;/font&gt; or their matching counterparts.
+
+To provide HTML for each JGOFS data object you serve, create a file
+whose name is based on the names of the data object you want to
+describe.  For example, a file that would be used for all the
+&lt;font color='green'&gt;s87_xbt&lt;/font&gt; data object used in the previous section's example would
+be &lt;font color='green'&gt;s87_xbt.html&lt;/font&gt;. This file must be located in the directory
+where the top-level datafile is located, as defined in the data
+objects dictionary.
+
+Users access this information by appending &lt;font color='green'&gt;.info&lt;/font&gt; to a DAP URL.
+For example to get the HTML page for the URL used in the previous
+section, you'd type:
+
+&lt;pre&gt;
+http://dods.gso.uri.edu/cgi-bin/nph-dods/s87_xbt.info
+&lt;/pre&gt;</text>
+      <sha1>pzqpgk17p5idm9yxihtvdwmjhhhlweg</sha1>
+    </revision>
+  </page>
+</mediawiki>

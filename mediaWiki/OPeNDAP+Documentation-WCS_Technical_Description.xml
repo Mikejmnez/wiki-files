@@ -1,0 +1,116 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>WCS Technical Description</title>
+    <ns>0</ns>
+    <id>712</id>
+    <revision>
+      <id>6939</id>
+      <parentid>6938</parentid>
+      <timestamp>2011-12-22T20:49:48Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>6939</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4701" sha1="3jjh8m3ausr2iabvbumq4v21tr93mhc" xml:space="preserve">== How the WCS service works ==
+[[Image:WCS packages high level.png|400px|right|Components of the WCS Service]]
+
+Just enough information to be dangerous ...
+
+=== WCS ===
+The WCS 1.1.2 software implements a WCS service that is close to generic. It can work using a simple XML catalog that lists WCS coverages ('coverages' hereafter), at lest in theory. This software using the ''semantic.wcs'' package to perform actions like access coverages and rebuild the catalog of served coverages.
+
+=== semantics.wcs ===
+The software in ''semantic.wcs'' is the interface to the 'semantic engine' that the ''IRISail'' software implements. It doesn't know anything about inferencing per se, but it implements an interface to the high-level operations provided by the inferencing software. All of the code is contained in one class called ''StaticRdfCatalog'' that has a number of public methods that return coverages and other useful information about coverages. It also contains an ''update()'' method used to (re)build the contents of the semantic repository and then the coverages that can be derived from the information in that repository. The end result of running the update() method is that an XML file listing the known coverage descriptions is written into the ''content/WCS/StaticRdfCatalog/coverageXMLfromRDF.xml'' file. This file is then used to build an in-memory representation of WCS coverages that the other methods of the StaticRdfCatalog class use.
+
+=== IRISail ===
+This is the semantic engine. It uses information about WCS and other metadata standards to build coverages for  WCS using whatever metadata is available. It leverages ontologies that describe the different metadata standards &amp; conventions in general terms. 
+
+The entry point for the inferencing software is the class ''RespoitoryOps''.
+
+The inferencing software uses the ''sesame'' software for both inferencing and as a tripple store for information, both initial conditions and derived information.
+
+=== Important classes ===
+These are all ''.java'' classes and can be found in the olfs/src/opendap/{semantics,wcs} directories.
+
+==== StaticRdfCatalog ====
+The interface used to access coverages and to build coverages using the semantic engine.
+&lt;blockquote&gt;
+This class is used to retrieve coverage descriptions of a data set. A Sesame-OWLIM RDF
+store is initialized and populated and an xml document of coverages of the served data sets
+is generated. This xml document is used to answer request posted by a client.
+The RDF store is updated periodically to make sure the information served is up to date.
+Care is taken to make sure the RDF store can be used by multiple users at the same time.
+&lt;br&gt;
+The RDF store is populated by importing and ingesting semantic inference rules and owl/xml
+schema files and rdf files describing data sets.
+The &lt;code&gt;doNotImportTheseUrls&lt;/code&gt; is a string vector that holds
+URL of bad files that should not be imported.
+The &lt;code&gt;catalogCacheDirectory&lt;/code&gt; holds the OWLIM persistent directory
+&lt;code&gt;owlim_storage_folder&lt;/code&gt;, the coverage description document and the dump of the
+whole repository files in triple graph format.
+&lt;/blockquote&gt;
+
+==== RepositoryOps ====
+The interface to the semantic engine.
+&lt;blockquote&gt;
+This class is the major class that manipulates and maintains the repository up to date.
+Using this class StartingPoint statements are introduced in the repository; documents
+or data sets no longer to be served anymore is deleted from the repository.
+ &lt;br&gt;
+The repository consists of StartingPoint RDF document and RDF documents needed by those
+StartingPoints. When introducing a StartingPoint into the repository, two things need to
+be added. One is the StartingPoint statement and the other is the content of the
+StartingPoint RDF document. e.g. "x rdf:type rdfcache:StartingPoint" is a StartingPoint
+statement. "x" is the URL of the RDF document of a StartingPoint.
+The startingpoint statement is added using this class then the actual content is
+added later using class &lt;code&gt;RdfImporter&lt;/code&gt;.
+&lt;br&gt;
+rdfcache = &lt;http://iridl.ldeo.columbia.edu/ontologies/rdfcache.owl#&gt;
+&lt;/blockquote&gt;
+
+==== CoverageDescription ====
+The interface to the collection of coverages.
+&lt;blockquote&gt;
+An implementation of a wcs:CoverageDescription object. This implementation includes methods that assist in the
+creation of DAP constraint expressions to retrieve coverage data as NetCDF.
+&lt;/blockquote&gt;
+
+==== ConstructRuleEvaluator ====
+This class is used to run external inference rules on an Sesame-OWLIM repository.
+The inference rules are written in SeRQL.
+The inferred statements are added into the repository. The inference rules are run
+repeatedly until no rules generate any new statements.</text>
+      <sha1>3jjh8m3ausr2iabvbumq4v21tr93mhc</sha1>
+    </revision>
+  </page>
+</mediawiki>

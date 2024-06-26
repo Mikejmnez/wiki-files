@@ -1,0 +1,184 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: DAP4 Checksum Changes</title>
+    <ns>0</ns>
+    <id>852</id>
+    <revision>
+      <id>9578</id>
+      <parentid>9565</parentid>
+      <timestamp>2013-03-19T22:25:15Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <origin>9578</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7564" sha1="o4itegakpyh7552trerq9itkvjb0fpa" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+[Updated: 3/5/2013 to reflect conversation with Ethan. See discussion section.]
+
+==Background==
+Currently, the specification says that checksums
+are computed on the contents of the top-level variables
+in the serialized response. I propose that we change
+when and where the checksum is computed so that it is
+computed at the grain of the data chunks instead of at
+the grain of variable.
+
+==Problem Addressed==
+Checksumming currently requires knowledge of the
+DMR (and potentially any constraints) so that
+the contents of "top-level" variables can be identified
+in the data serialization. Further, checksum errors are
+not detected until the whole variable has been read.
+
+==Proposed Solution==
+
+===General Format===
+Each chunk, including the DMR meta-data chunk,
+has a 16 byte MD5 checksum preceding the contents of the chunk,
+but following the length count for the chunk.
+Thus, the general form of a chunk would be as follows:
+&lt;pre&gt;
+--------------------------
+| length + tags [4bytes] |
+--------------------------
+| checksum [16 bytes]    |
+--------------------------
+| data [length-16 bytes] |
+--------------------------
+&lt;/pre&gt;
+The checksum is computed over the contents of the chunk, where the
+content is treated as uninterpreted bytes. This would also apply to
+the DMR chunk. The length field for each chunk includes the checksum
+as part of its length.
+
+===DMR Format===
+In keeping with our current format for the DMR chunk,
+all parts of this chunk are encoded as UTF-8 characters
+So the general DMR chunk format would be as follows
+&lt;pre&gt;
+------------------------------------------
+| 0xHHHHHHHH CRLF                         |
+------------------------------------------
+| 0xHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH CRLF |
+------------------------------------------
+| DMR in XML format CRLF                  |
+------------------------------------------
+&lt;/pre&gt;
+Each 'H' stands for a hex digit.
+As in the general case, the length includes the checksum
+and the chunk content (i.e. the DMR).
+
+==Discussion==
+Computing the checksum at the chunk level
+simplifies processing because no knowledge
+of the DMR is required. The computation can be
+carried out completely
+in the chunk reading and writing code.
+
+Additionally, computing the checksum at the
+chunk level can potentially detect errors more
+quickly than at the variable level. To see this,
+suppose that a variable crosses, say, three chunks,
+and there is an error in the first chunk.
+If variable level grain is used, three chunks will be
+read an processed before the checksum error is detected.
+If chunk grain is used, then the error will be detected
+as soon as the first chunk is read; the following two chunks
+need not be processed.
+
+This proposal also introduces no new error processing complexity
+because a checksum error at the chunk level will generate an
+IOException error to the layers above. These layers must already
+be prepared to receive IOException errors such as when, for example, the
+client-server link is unexpectedly closed.
+
+[[User:dmh|Dennis]]
+
+&lt;blockquote&gt;
+It was my understanding that checksums were introduced into the specification not as a mechanism for insuring error free data transmittal (although that is a side benefit) but as a mechanism through which clients can detect changes (or the lack thereof)  in data content. For example a data provider might reprocess their data holdings because more refined algorithms have become available, but not all variables in the dataset may be affected (thus the last-modified time of the holding is not necessarily the best indicator, at the variable level, of what's going on). If my understanding is accurate I'm thinking that this proposal fails to meet the requirements regarding change tracking at the variable level. If I am wrong, and checksums are all about error free transport, then at first read I think that this is a reasonable change.&lt;br&gt;
+[[User:Ndp|ndp]] 15:44, 1 March 2013 (PST)
+&lt;/blockquote&gt;
+
+Update: 5/3/2013 [[User:dmh|Dennis]]&lt;br&gt;
+Nathan, you are correct. Ethan made a similar comment.
+However, in order to make this usable, we need to provide
+a standard mechanism by which the client can access the checksum.
+I propose that we add a specially named attribute in the DMR
+that holds the checksum value for a variable. I propose that
+the attribute be named "_&lt;checksum algorithm&gt;". So if we are using
+MD5, the attribute is called "_MD5" [see next update].
+
+The question now becomes: do we need to add any kind of error checking
+checksumming or do rely on network reliability. Note that using
+a checksum only for change detection does not require the client to actually
+recompute the checksum; it only needs to display it to the user's code
+(via e.g. an attribute).
+
+Update: 5/3/2013 [[User:dmh|Dennis]]&lt;br&gt;
+It is not obvious why we should be defaulting to MD5
+as the checksum algorithm. If we were doing this to
+avoid man-in-the-middle spoofing, we should be using SHA1.
+If our goal is change detection (or even error detection),
+then we can get by with, say, CRC32, which is both smaller
+and faster than MD5. The corresponding attribute (see previous update)
+would be "_CRC32".
+
+[[User:Jimg|Jimg]] 11:51, 6 March 2013 (PST)&lt;br&gt;
+The original use case was ''change detection'' and I think that should remain the primary focus. If we can get additional functionality out of the checksum without additional cost, that would be great. Thus using CRC32 would be the best choice (I used MD5 because it was the first hash algorithm that came to mind, and it was easy to use from a library that's on both Linux and OS/X). Faster is better! And I like very much the idea of adding an attribute for the information, because it is important that the information be available to clients/users. So lets make these changes to the specification. 
+
+NB: In our discussions added ''error detection,'' but I'm not sure that's a high priority, and if the CRC code is present as an attribute, then clients can use it for error detection if their developers want to code that.
+
+--[[User:EthanDavis|EthanDavis]] 15:27, 6 March 2013 (PST)
+
+What is the granularity of change detection we want to support?
+
+Given the cross-server aspect of the [[DAP4:_Checksum#Use_cases|original use case]], I understand the use of checksums in the [[DAP4:_Checksum#Requirements|requirements list]]. But why is per variable checksums included? I'm not seeing variable level change detection mentioned in the use case.
+
+Sure, it would be cool if those who want could figure out exactly which variable had changed. But is that really something that will be widely used?
+
+Perhaps we should restrict this discussion to dataset level change detection. And postpone it for DAP4 objects below the dataset level.
+
+--[[User:EthanDavis|EthanDavis]] 15:38, 6 March 2013 (PST) &lt;br&gt;
+By the way, what bytes are we going to use to compute a checksum? The files on disk, the bytes of an array in memory, the DAP4 encoded objects? Or should we leave that up to each server and server site configuration to decide?
+
+[[User:dmh|Dennis]]&lt;br&gt;
+To answer Ethan's questions, 
+The spec will say this:
+&lt;blockquote&gt;
+Checksums will be computed over the serialized data for each of the variables at the top-level of each Group in the response. The checksum value will follow the data of the variable in the serialization. The checksum algorithm defaults to CRC32. Checksum values will be written as 32-bit values using the endian representation specified for the serialized form.
+&lt;/blockquote&gt;</text>
+      <sha1>o4itegakpyh7552trerq9itkvjb0fpa</sha1>
+    </revision>
+  </page>
+</mediawiki>

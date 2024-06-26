@@ -1,0 +1,122 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>HAI Use Case: Limit response size for non-authenticated users</title>
+    <ns>0</ns>
+    <id>616</id>
+    <revision>
+      <id>6055</id>
+      <parentid>6054</parentid>
+      <timestamp>2010-11-16T21:17:31Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Basic Flow */</comment>
+      <origin>6055</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3481" sha1="fmit43854xjg1cz23s0an28bydwpe6x" xml:space="preserve">[[Category:HAI]]
+'''Point Of Contact:''' ''[[User:ndp | Nathan Potter]]''
+
+== Description ==
+Limit data response sizes.
+
+== Goal ==
+Reduce server loading by limiting response sizes for non-authenticated users. This limitation may be extended to authenticated users in certain roles in the future.
+
+== Summary == 
+When a user makes a data request the server checks to see if they are authenticated. If they are not then the server determines the size of the requested data object, and if it is larger than a configurable threshold then the server will return a response object with an error and instructions on how to limit the response size.
+
+== Actors ==
+* User
+* Hyrax
+
+== Preconditions ==
+A user wants to access data held at a running Hyrax sever.
+
+== Triggers ==
+A user attempts to access data held at a running Hyrax server.
+
+
+== Basic Flow ==
+# The user makes a large data request of a Hyrax server.
+# The server receives the request.
+# The server checks to see if the user is authenticated and determines that the user is not authenticated.
+# The server determines the size of the requested data object.
+# The server compares the size of the requested data object to a threshold value, and finds the data request to be larger
+# The server returns an error object that either contains or references instructions on how to reduce the size of the requested data object.
+
+== Alternate Flow ==
+
+=== Non-authenticated user makes successful request ===
+
+# The user makes a large data request of a Hyrax server.
+# The server receives the request.
+# The server checks to see if the user is authenticated and determines that the user is not authenticated.
+# The server determines the size of the requested data object.
+# The server compares the size of the requested data object to a threshold value, and finds the data request to be smaller
+# The server returns the regular data object for the request..
+
+=== Authenticated user makes request ===
+# The user makes a large data request of a Hyrax server.
+# The server receives the request.
+# The server checks to see if the user is authenticated and determines that the user is authenticated.
+# The server returns the regular data object for the request..
+
+== Post Conditions ==
+&lt;font size="-2" color="green"&gt;''Here we give any conditions that will be true of the state of the system after the use case has been completed.''&lt;/font&gt;
+
+== Activity Diagram ==
+&lt;font size="-2" color="green"&gt;''Here a diagram is given to show the flow of events that surrounds the use case.''&lt;/font&gt;
+
+== Notes ==
+&lt;font size="-2" color="green"&gt;''There is always some piece of information that is required that has no other place to go. This is the place for that information.''&lt;/font&gt;
+
+== Resources ==
+&lt;font size="-2" color="green"&gt;''In order to support the capabilities described in this Use Case, a set of resources must be available and/or configured.  These resources include data and services, and the systems that offer them.  This section will call out examples of these resources.''&lt;/font&gt;
+
+
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|&lt;font size="-2" color="green"&gt;''name''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Organization that owns/ manages resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Short description of the resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''How often the resource is available''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Name of system which provides resource''&lt;/font&gt;
+|}</text>
+      <sha1>fmit43854xjg1cz23s0an28bydwpe6x</sha1>
+    </revision>
+  </page>
+</mediawiki>

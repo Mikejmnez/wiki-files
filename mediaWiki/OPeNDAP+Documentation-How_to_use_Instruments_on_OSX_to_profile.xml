@@ -1,0 +1,68 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>How to use ''Instruments'' on OS/X to profile</title>
+    <ns>0</ns>
+    <id>994</id>
+    <revision>
+      <id>12534</id>
+      <parentid>12533</parentid>
+      <timestamp>2018-08-17T20:06:24Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Running instruments */</comment>
+      <origin>12534</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1214" sha1="90ru9cf0pr42worvh5u2l2bjhu09zot" xml:space="preserve">The ''instruments'' profiles can be run from the command line, but it doesn't seem to pick up the symbols for the executables when run that way with Xcode 9. Here's how to fix that.
+
+== Building symbols ==
+Even though executables are built using '''-g3 -O0''', OS/X clang/gcc dies not include those symbols in binary images built by the linker. To make that info available to ''instruments,'' use the program '''dsymutil''' on the ''executable,'' ''.dylib'' and/or ''.so''. This may be an iterative process; see the next section.
+
+== Running ''instruments'' ==
+Once the ''&lt;name&gt;.dSYM'' directories are built, run the instruments GUI and:
+# Click the menu to ''Choose Target...'' [[File:Choose Target.png|500px]]
+# Navigate to the program to run - yes, it's tedious. [[File:ChooseProgram.png|500px]]
+## Choose the program (note that the dSYM dir is there too)
+## provide the arguments to the program
+## and, below that, the full path to the working directory.
+
+=== The red dot ===
+Now click the 'Run' button (the red dot) [[File:TheRedDot.png|500px]]
+
+Here's the result [[File:ItRuns.png|500px]]
+
+Click to expand (and click the arrow in the circle to examine a sub-hierarchy of calls) [[File:ExpandCalls.png|500px]]</text>
+      <sha1>90ru9cf0pr42worvh5u2l2bjhu09zot</sha1>
+    </revision>
+  </page>
+</mediawiki>

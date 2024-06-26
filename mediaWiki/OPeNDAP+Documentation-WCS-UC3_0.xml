@@ -1,0 +1,181 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>WCS-UC3.0</title>
+    <ns>0</ns>
+    <id>371</id>
+    <revision>
+      <id>2701</id>
+      <parentid>2666</parentid>
+      <timestamp>2009-01-08T23:27:25Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Activity Diagram */</comment>
+      <origin>2701</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4508" sha1="bljbnjvbskxbrromc2rmjnw0l33sbpy" xml:space="preserve">'''Point Of Contact:''' Nathan Potter
+
+== Description ==
+WCS GetCapabilities request with pre-built response.
+
+== Goal ==
+The goal of this use case is to provide an end-to-end request/response to a GetCapabilities request. It is intended to get the OLFS and BES involved in the WCS system, with the BES providing the response to this request.
+
+== Summary == 
+The primary actor, a person sitting at a computer, enters a pre-defined URL into their browser for a GetCapabilities request and receives a  pre-built Capabilities document.
+
+We are attempting to coordinate communication between the OLFS and the BES in this WCS system, with a request coming in to the OLFS from the users browser, the OLFS formulating the request to the BES, and the BES responding to that request with the Capabilities document.
+
+The request and the response will be pre-defined. In other words, the user won’t be browsing around the catalogues or making DescribeCoverage or GetCoverage calls and the BES will have a pre-built response, which is a Capabilities document stored in a file.
+
+== Actors ==
+# Primary actor – user sitting at browser
+# Secondary actor – OLFS – receives the request from the browser
+# Secondary actor – BES – receives request from the OLFS and responds to the request
+# Secondary actor – pre-built Capabilities document saved as a file.
+
+== Preconditions ==
+# Using the WCS 1.1.2 specification
+# The request URL is a known request, provided for this use case
+# The request parameters are in KVP format
+# The values of the request parameters ''version'' and ''type'' are already known
+# The response from Hyrax will be a Capabilities document containing a CoverageSummary of the Coverage developed in [[WCS-UC1.0|Use Case 1.0]].
+
+== Triggers ==
+The user enters the provided URL representing the GetCapabilities request into the browser
+
+== Basic Flow ==
+# OLFS receives the request
+# OLFS parses the KVP parameters from the request URL including the version and request type.
+# OLFS sends the request to the BES as an XML document
+# The BES parses the XML document representing the GetCapabilities request
+# The BES returns a pre-built Capabilities document containing a CoverageSummary of the Coverage developed in [[WCS-UC1.0|Use Case 1.0]].
+# The OLFS returns the Capabilities document to the user
+
+== Alternate Flow ==
+=== Error Flow (OLFS) ===
+# OLFS receives the request
+# OLFS attempts to parse the KVP parameters from the request.
+# The parsing encounters a bad request (based on the 1.1.2 specification), or …
+# The OLFS fails to connect to, or the connection drops to, the BES in Basic Flow step 3, or …
+# The OLFS fails to connect to, or the connection drops to, the BES in Basic Flow step 5 …
+# OLFS builds a WcsException and returns it to the user.
+
+=== Error Flow (BES) ===
+# See Basic Flow steps 1-3
+# The BES fails to access the pre-built Capabilities response document.
+# The BES builds a WcsException element and returns it to the user via the OLFS.
+
+== Post Conditions ==
+None
+
+== Activity Diagram ==
+[[Image:WCS-Uc3.0.png|600px]]
+
+== Notes ==
+''There is always some piece of information that is required that has no other place to go. This is the place for that information.''
+
+== Resources ==
+=== Data ===
+{| cellspacing="0" border="1"
+|Data
+|Type
+|Characteristics
+|Description
+|Owner
+|Source System
+|-
+|HF Radar Data
+|Remote netCDF-CF
+|One Time Slice
+|Contains one time slice.
+|Dan Holloway
+|dev1.opendap.org
+|}
+
+=== Application Services ===
+{| cellspacing="0" border="1"
+|Application
+|Owner
+|Description
+|Source System
+|-
+|OLFS
+|OPeNDAP
+|OPeNDAP Hyrax front end service – receives request from the user’s browser
+|dev1.opendap.org
+|-
+|BES
+|OPeNDAP
+|OPeNDAP Hyrax back-end server – receives request from OLFS and responds with link to target NetCDF-CF file
+|dev1.opendap.org
+|}
+
+=== Other Resources ===
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|''(sensor name)''
+|''Organization that owns/ manages resource''
+|''Short description of the resource''
+|''How often the resource is available''
+|''Name of system which provides resource''
+|}
+
+== Butte Meeting Notes ==
+Use Case 3 - GetCapabilities
+
+Preconditions
+* Static XML
+* Input to server is kvp
+* set version number
+* only one coverage available
+
+Trigger
+* Request comes into Hyrax
+
+Sequence of Events
+* New WCS Servlet/Handler (modify OLFS)
+* Parse KVP
+* Identify request type and version
+* static doc resides in ...
+* Returns XML doc
+----
+[[Category:WCS]]</text>
+      <sha1>bljbnjvbskxbrromc2rmjnw0l33sbpy</sha1>
+    </revision>
+  </page>
+</mediawiki>

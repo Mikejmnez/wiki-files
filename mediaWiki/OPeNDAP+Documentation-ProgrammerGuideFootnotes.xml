@@ -1,0 +1,59 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>ProgrammerGuideFootnotes</title>
+    <ns>0</ns>
+    <id>292</id>
+    <revision>
+      <id>1901</id>
+      <timestamp>2008-01-26T14:17:31Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>New page: #    While this manual describes the C++ toolkit in detail, all of the concepts and much of the structure can be directly translated to the Java toolkit.  #    Whatever it is. The DODS cli...</comment>
+      <origin>1901</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2411" sha1="cr5uxaxhuwmdqbvqzpt0343imr5fgc1" xml:space="preserve">#    While this manual describes the C++ toolkit in detail, all of the concepts and much of the structure can be directly translated to the Java toolkit. 
+#    Whatever it is. The DODS client can be another server, a user application linked with a DODS-compliant API, or a standalone program using the DODS data access protocl API. In any case, the use of the class libraries described in this document is identical. 
+#    Actually, there is no reason that type, etc. cannot be stored as an attribute; however, it must be in the DDS regardless 
+#    A Pix is a "pseudoindex" object. See the libstdc++ documentation for more information. 
+#   For example, the subclasses JGConnect and NCConnect exist for JGOFS and NetCDF, respectively. 
+#    A single entry in a sequence, modelled as a row in a relational table, is sometimes called an instance of the sequence. This is useful terminology, but is occasionally confusing when we are also talking about instances of objects. 
+#    The NetCDF client library has been rewritten a couple of times since these examples were taken from it. Most of the changes involve additional functionality not necessary for the illustrations here. We have also removed some error-checking to make the intention clearer. Therefore the actual code in the NetCDFsoftware may not match these examples. However, these examples will work. 
+#    The nph- is a relic, dating from the misty dawn of the World Wide Web and the first http standards. It stands for "Non-Parsing Header" (See the CGI 1.1 Standard for more information.), and is the only way to pass data through many httpd servers unparsed. 
+#    You can use this even if you want to access files outside that subtree. Simply use a symbolic link and make sure that your server is set to follow symbolic links. 
+#    The "Data:" keyword is not in the scope of the text DDS so it is possible to have the text Data: in the DDS. 
+#    Remember that the "how" is to be answered very specifically, and on the user's level (i.e. "Do such-and-such, spelled like this, to make the array returned be nx5 instead of 5xn."), and not on the programmer's level (i.e. "You use the invert method to return an array of 5xn instead of nx5.") 
+#    For the Sequence data type, the DDS contains only the current instance of the data. Repeated calls to the Sequence's deserialize function are required to return successive instances of the sequence.</text>
+      <sha1>cr5uxaxhuwmdqbvqzpt0343imr5fgc1</sha1>
+    </revision>
+  </page>
+</mediawiki>

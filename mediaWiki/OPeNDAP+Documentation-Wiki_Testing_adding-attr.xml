@@ -1,0 +1,281 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/adding-attr</title>
+    <ns>0</ns>
+    <id>226</id>
+    <revision>
+      <id>2077</id>
+      <parentid>2076</parentid>
+      <timestamp>2008-02-07T12:44:23Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* A Worked Example */</comment>
+      <origin>2077</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6362" sha1="7nqf8l0dgcwz2bgf62apwsqj3ffywlc" xml:space="preserve">=Adding Data Attributes=
+
+
+One of the original design goals of DODS was to permit data providers
+to use DODS with as little work as possible.  A corollary to this
+requirement is that if ancillary information about a dataset is
+required, it must be very easy to provide.  The DODS architecture
+allows a data provider to add attribute information to a dataset
+without modifying the data files at all.  All that is required is a
+separate file, stored in the same directory as the data.
+
+This chapter shows how you can easily add attribute information to an
+existing dataset to comply with the DODS data standard.  We start by
+creating a small dataset and serving it with DODS FreeForm .  A similar
+example is presented in [http://docs.opendap.org/index.php/Wiki_Testing/dpref&lt;cite&gt;FreeForm Guide&lt;/cite&gt;] , highlighting different aspects.
+
+All the files used in this chapter are available on the [http://www.opendap.org/examples/ffsimple.dat&lt;cite&gt;DODS examples&lt;/cite&gt;] .
+
+==A Worked Example==
+
+Consider the following table of numbers:
+
+&lt;pre&gt;
+-47.303545 -176.161101  1.17125
+-25.928001   -0.777265  2.07288
+-28.286662   35.591879  2.36377
+
+12.588231  149.408117 -100.000
+-63.223548   55.319598  0.04503
+
+54.118314 -136.940570  1.04085
+-38.818812   91.411330  1.39978
+-34.577065   30.172129  2.09096
+
+27.331551 -155.233735  2.30917
+
+11.624981 -113.660611  2.75036
+&lt;/pre&gt;
+
+This table represents a series of temperature measurements at ten
+different geographical locations.  The latitudes and longitudes are
+given in decimal degrees, and the temperatures are given in units of
+ten degrees.  That is, the temperature as recorded, times ten, equals
+the temperature in Celsius.  There is one temperature measurement
+missing, and its place is marked with a value of &lt;font color='green'&gt;-100.0&lt;/font&gt;.
+
+(This dataset, and the ancillary files discussed in this chapter, are
+in the DODS examples directory, and is available at the DODS examples ,
+under &lt;font color='green'&gt;dasex.*&lt;/font&gt;.)
+
+The dataset shown here can be served as is, with the FreeForm NDs , using
+the following format file (&lt;font color='green'&gt;dasex.fmt&lt;/font&gt;):
+
+&lt;pre&gt;
+ASCII_data "lat/lon"
+latitude 1 10 double 6
+longitude 12 22 double 6
+t 24 31 double 4
+&lt;/pre&gt;
+
+Put both of these files in your &lt;font color='green'&gt;htdocs&lt;/font&gt; directory (refer to the
+documentation for your web server to locate this directory).  After
+installing the FreeForm ND , you can issue data requests on this
+dataset.  Use a web browser like netscape, and enter the following
+URL (Use your own server's name instead of &lt;font color='green'&gt;machine.edu&lt;/font&gt;.):
+
+&lt;pre&gt;
+http://machine.edu/cgi-bin/nph-ff/dasex.dat.dds
+&lt;/pre&gt;
+
+You should see something like this:
+
+&lt;pre&gt;
+Dataset {
+
+Sequence {
+
+Float64 latitude;
+
+Float64 longitude;
+
+Float64 t;
+
+} lat/lon;
+} dasex;
+&lt;/pre&gt;
+
+The is the DDS (Data Description Structure) of the dasex dataset.  (See
+[http://docs.opendap.org/index.php/Wiki_Testing/OpeNDAP_User%27s_Guide&lt;cite&gt;DODS User Guide&lt;/cite&gt;] for more information about the DDS and what it means, as
+well as a description of what a Sequence is.)  Instead of &lt;font color='green'&gt;.dds&lt;/font&gt; at
+the end of the URL, you can use &lt;font color='green'&gt;.asc&lt;/font&gt; to see the data itself.
+Try that.
+
+To see data attributes, try the same URL, ending with &lt;font color='green'&gt;.das&lt;/font&gt;:
+
+&lt;pre&gt;
+http://machine.edu/cgi-bin/nph-ff/dasex.dat.das
+&lt;/pre&gt;
+
+You should see something like this:
+
+
+&lt;pre&gt;
+Attributes {
+
+FF_GLOBAL {
+
+String Server "DODS FFND release 4.2.3";
+
+String Native_file " ...";
+
+}
+}
+&lt;/pre&gt;
+
+The DAS is a list of the dataset's attributes.  This dataset has two,
+and they are global ones.  That is, they describe the entire dataset,
+and don't correspond to any of the data variables listed in the DDS.
+They are also in a container called &lt;font color='green'&gt;FF_GLOBAL&lt;/font&gt;, which is another
+hint that they are global attributes.  The &lt;font color='green'&gt;Server&lt;/font&gt; string
+describes the actual DODS server that sent the data, and the
+&lt;font color='green'&gt;Native_file&lt;/font&gt; string is a long one, containing information about
+the original file, and what it contained.
+
+This is all very well, but what if someone wanted to know what units
+the &lt;font color='green'&gt;t&lt;/font&gt; variable was in, or where the data came from, or what that
+value of -100 is supposed to imply, or even whether the variable
+represents temperature or time.  The data themselves are silent on
+those issues, so either we have to provide additional documentation,
+or we have to introduce attributes for the data variables, to make the
+dataset self-documenting.  We do that with an ancillary file of data
+attributes.  Call this file &lt;font color='green'&gt;dasex.das&lt;/font&gt;:
+
+&lt;pre&gt;
+Attributes {
+
+t {
+
+String short_name "Temperature";
+
+String units "DegreesC";
+
+Float64 missing_data -100.0;
+
+Float64 scale_factor 10.0;
+
+}
+
+latitude {
+
+String short_name "Latitude";
+
+String units "degree_north";
+
+}
+
+longitude {
+
+String short_name "Longitude";
+
+String units "degree_east";
+
+}
+}
+&lt;/pre&gt;
+
+Now the DAS that is returned from the dataset looks like this:
+
+&lt;pre&gt;
+Attributes {
+
+FF_GLOBAL {
+
+String Server "DODS FFND release 4.2.3";
+
+String Native_file "...";
+
+}
+
+temp {
+
+String short_name "Temperature";
+
+String units "DegreesC";
+
+Float64 missing_data -100.0;
+
+Float64 scale_factor 10.0;
+
+}
+
+latitude {
+
+String short_name "Latitude";
+
+String units "degree_north";
+
+}
+
+longitude {
+
+String short_name "Longitude";
+
+String units "degree_east";
+
+}
+}
+&lt;/pre&gt;
+
+Now you can see that &lt;font color='green'&gt;t&lt;/font&gt; stands for "Temperature" and that the
+&lt;font color='green'&gt;-100&lt;/font&gt; is missing data, and that all the measurements have to
+multiplied by 10 before they are in degrees Celsius.
+
+Now that the data have these additional attributes, the dataset is
+compliant with level 1 of the DODS data standard.  This can also be
+noted in the DAS, with the addition of another global attribute
+container called &lt;font color='green'&gt;DODS&lt;/font&gt;.  A file called &lt;font color='green'&gt;dasex2.das&lt;/font&gt; contains
+the following:
+
+&lt;pre&gt;
+DODS {
+
+String Conventions "DODS";
+
+String Acknowledge "Example dataset from the DODS documentation.";
+
+String history "Created for DODS standards book.";
+}
+&lt;/pre&gt;
+
+Add this information to the bottom of the &lt;font color='green'&gt;dasex.das&lt;/font&gt; file
+(''before''  the last closing bracket), and now the dataset is
+compliant with level 2 of the DODS data standard.</text>
+      <sha1>7nqf8l0dgcwz2bgf62apwsqj3ffywlc</sha1>
+    </revision>
+  </page>
+</mediawiki>

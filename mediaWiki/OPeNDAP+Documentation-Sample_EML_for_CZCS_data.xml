@@ -1,0 +1,210 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Sample EML for CZCS data</title>
+    <ns>0</ns>
+    <id>473</id>
+    <revision>
+      <id>3857</id>
+      <timestamp>2009-04-27T19:36:31Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>New page: &lt;pre&gt; &lt;?xml version="1.0"?&gt;  &lt;!-- For the packageId attribute I took the URL to the described resource       and appended .eml --&gt; &lt;!--  --&gt; &lt;!-- xsi:schemaLocation="eml://ecoinformatics.o...</comment>
+      <origin>3857</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7334" sha1="fhbvrbymmx4jd1an80iutv9w39ociwe" xml:space="preserve">&lt;pre&gt;
+&lt;?xml version="1.0"?&gt;
+
+&lt;!-- For the packageId attribute I took the URL to the described resource 
+     and appended .eml --&gt;
+&lt;!--  --&gt;
+&lt;!-- xsi:schemaLocation="eml://ecoinformatics.org/eml-2.0.1/eml.xsd eml/eml.xsd" --&gt;
+&lt;eml:eml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="eml://ecoinformatics.org/eml-2.0.1 file:/home/jimg/REAP_cataloging/eml-2.0.1/eml.xsd"
+     xmlns:eml="eml://ecoinformatics.org/eml-2.0.1"
+     xmlns:res="eml://ecoinformatics.org/resource-2.0.1"
+     xmlns:doc="eml://ecoinformatics.org/documentation-2.0.1"
+     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+     xmlns:cit="eml://ecoinformatics.org/literature-2.0.1"
+     xmlns:prot="eml://ecoinformatics.org/protocol-2.0.1"
+     xmlns:stmml="http://www.xml-cml.org/schema/stmml"
+     xmlns:sw="eml://ecoinformatics.org/software-2.0.1"
+     xmlns:ds="eml://ecoinformatics.org/dataset-2.0.1"
+     packageId="http://www.marine.csiro.au/dods/nph-dods/dods-data/ocean_colour/czcs/global/8_day/netcdf/czcs_1978_8D_chlor.nc.eml"
+     system="DAP2.0"&gt;
+
+     &lt;!-- This is an EML document describing a DAP data source used for the
+     REAP SST use-case. The data source URL is:
+ 
+     http://www.marine.csiro.au/dods/nph-dods/dods-data/ocean_colour/czcs/
+         global/8_day/netcdf/ --&gt;
+
+     &lt;!-- required. Here's a picture of what goes in this element:
+     http://knb.ecoinformatics.org/software/eml/eml-2.0.1/eml-dataset.png --&gt;
+
+     &lt;dataset&gt;
+
+          &lt;!-- required. From the DAP Global attribute 'Title' --&gt;
+          &lt;title&gt;CZCS global 8 day mean Chlorophyll a concentration&lt;/title&gt;
+
+          &lt;!-- optional. Searched by Kepler if present --&gt;
+          &lt;!-- abstract&gt;
+               &lt;para&gt;&lt;/para&gt;
+          &lt;/abstract --&gt;
+
+          &lt;!-- required --&gt;
+          &lt;creator&gt;
+               &lt;organizationName&gt;Australian Commonwealth Scientific and Research Organization
+                    (CSIRO)&lt;/organizationName&gt;
+          &lt;/creator&gt;
+
+          &lt;!-- optional but important for search functionality --&gt;
+          &lt;keywordSet&gt;
+               &lt;!-- required; one of an ORed set of elements --&gt;
+               &lt;keyword&gt;remote sensing&lt;/keyword&gt;
+               &lt;keyword&gt;imagery&lt;/keyword&gt;
+               &lt;keyword&gt;spatial raster&lt;/keyword&gt;
+               &lt;keyword&gt;earth observation&lt;/keyword&gt;
+               &lt;keyword&gt;satellite data&lt;/keyword&gt;
+
+               &lt;keyword&gt;CZCS&lt;/keyword&gt;
+               &lt;keyword&gt;Chlorophyll&lt;/keyword&gt;
+          &lt;/keywordSet&gt;
+
+          &lt;!-- required --&gt;
+          &lt;contact&gt;
+               &lt;organizationName&gt;Australian Commonwealth Scientific and Research Organization
+                    (CSIRO)&lt;/organizationName&gt;
+          &lt;/contact&gt;
+
+          &lt;spatialRaster&gt;
+               &lt;!-- I made this the pathname of the file on the server --&gt;
+               &lt;entityName&gt;/ocean_colour/czcs/global/8_day/netcdf/czcs_1978_8D_chlor.nc&lt;/entityName&gt;
+
+               &lt;physical&gt;
+                    &lt;!-- Change this to teh DAP variable to access??? --&gt;
+                    &lt;objectName&gt;chlor&lt;/objectName&gt;
+                    &lt;dataFormat&gt;
+                         &lt;externallyDefinedFormat&gt;
+                              &lt;formatName&gt;DAP&lt;/formatName&gt;
+                         &lt;/externallyDefinedFormat&gt;
+                    &lt;/dataFormat&gt;
+                    &lt;distribution&gt;
+                         &lt;online&gt;
+                              &lt;url&gt;http://www.marine.csiro.au/dods/nph-dods/dods-data/ocean_colour/czcs/global/8_day/netcdf/czcs_1978_8D_chlor.nc&lt;/url&gt;
+                         &lt;/online&gt;
+                    &lt;/distribution&gt;
+               &lt;/physical&gt;
+
+               &lt;!-- It would seem like this is needed, or at least it did at
+                    one point while I was writing this, but it's not according
+                    to the schema. jhrg 1/6/09 --&gt;
+               &lt;coverage&gt;
+                    &lt;geographicCoverage&gt;
+                         &lt;geographicDescription/&gt;
+                         &lt;boundingCoordinates&gt;
+                              &lt;westBoundingCoordinate&gt;-179.95833333333334&lt;/westBoundingCoordinate&gt;
+                              &lt;eastBoundingCoordinate&gt;179.95833333333331&lt;/eastBoundingCoordinate&gt;
+                              &lt;northBoundingCoordinate&gt;89.958333333333329&lt;/northBoundingCoordinate&gt;
+                              &lt;southBoundingCoordinate&gt;-89.958333333333329&lt;/southBoundingCoordinate&gt;
+                         &lt;/boundingCoordinates&gt;
+                    &lt;/geographicCoverage&gt;
+                    &lt;temporalCoverage&gt;
+                         &lt;singleDateTime&gt;
+                              &lt;calendarDate&gt;2001-05-21&lt;/calendarDate&gt;
+                         &lt;/singleDateTime&gt;
+                    &lt;/temporalCoverage&gt;
+               &lt;/coverage&gt;
+
+               &lt;attributeList&gt;
+                    &lt;!-- I think an attribute in EML is roughly a variable in
+                         DAP --&gt;
+                    &lt;attribute&gt;
+                         &lt;attributeName&gt;chlor&lt;/attributeName&gt;
+                         &lt;attributeDefinition&gt;chlor is level of chlorophyll a in mg m^-3 as measured
+                              by the satellite-borne CZCS sensor&lt;/attributeDefinition&gt;
+                         &lt;measurementScale&gt;
+                              &lt;ratio&gt;
+                                   &lt;unit&gt;
+                                        &lt;standardUnit&gt;milligramsPerCubicMeter&lt;/standardUnit&gt;
+                                   &lt;/unit&gt;
+                                   &lt;numericDomain&gt;
+                                        &lt;numberType&gt;real&lt;/numberType&gt;
+                                   &lt;/numericDomain&gt;
+                              &lt;/ratio&gt;
+                         &lt;/measurementScale&gt;
+                    &lt;/attribute&gt;
+               &lt;/attributeList&gt;
+
+               &lt;spatialReference&gt;
+                    &lt;horizCoordSysDef name="Sphere_Equidistant_Cylindrical"&gt;
+                         &lt;geogCoordSys&gt;
+                              &lt;datum/&gt;
+                              &lt;spheroid/&gt;
+                              &lt;primeMeridian longitude="0"/&gt;
+                              &lt;unit name="degree"/&gt;
+                         &lt;/geogCoordSys&gt;
+                    &lt;/horizCoordSysDef&gt;
+                    &lt;!-- horizCoordSysName&gt;Sphere_Equidistant_Cylindrical&lt;/horizCoordSysName --&gt;
+               &lt;/spatialReference&gt;
+
+               &lt;horizontalAccuracy&gt;
+                    &lt;accuracyReport&gt;These data have very little variation in the horzontal
+                         dimensionality between pixels.&lt;/accuracyReport&gt;
+               &lt;/horizontalAccuracy&gt;
+               &lt;verticalAccuracy&gt;
+                    &lt;accuracyReport&gt;These data have very little variation in the vertical
+                         dimensionality between pixels.&lt;/accuracyReport&gt;
+               &lt;/verticalAccuracy&gt;
+               &lt;!-- I used the name of a know coordinate system so the units
+	           come from that and are Meters --&gt;
+
+               &lt;cellSizeXDirection&gt;0.083333333333333329&lt;/cellSizeXDirection&gt;
+               &lt;cellSizeYDirection&gt;0.083333333333333329&lt;/cellSizeYDirection&gt;
+
+               &lt;numberOfBands&gt;1&lt;/numberOfBands&gt;
+               &lt;rasterOrigin&gt;Upper Left&lt;/rasterOrigin&gt;
+               &lt;rows&gt;2160&lt;/rows&gt;
+               &lt;columns&gt;4320&lt;/columns&gt;
+               &lt;verticals&gt;1&lt;/verticals&gt;
+               &lt;cellGeometry&gt;pixel&lt;/cellGeometry&gt;
+
+          &lt;/spatialRaster&gt;
+
+     &lt;/dataset&gt;
+
+&lt;/eml:eml&gt;
+&lt;/pre&gt;</text>
+      <sha1>fhbvrbymmx4jd1an80iutv9w39ociwe</sha1>
+    </revision>
+  </page>
+</mediawiki>

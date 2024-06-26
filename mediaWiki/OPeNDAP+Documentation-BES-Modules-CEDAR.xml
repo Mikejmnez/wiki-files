@@ -1,0 +1,179 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>BES - Modules - CEDAR</title>
+    <ns>0</ns>
+    <id>593</id>
+    <revision>
+      <id>5674</id>
+      <parentid>5673</parentid>
+      <timestamp>2010-05-09T20:34:26Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <origin>5674</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5781" sha1="gnx93hxoxw8t4e1i7rg68ropq2ez018" xml:space="preserve">==Description==
+The CEDAR data handler module was written for the [http://cedarweb.hao.ucar.edu/ Coupling, Energetics and Dynamics of Atmospheric Regions (CEDAR)] community to be able to read in CEDAR data files (cbf) and return data products known within the OPeNDAP community, as well as provide data products that the CEDAR community uses (FLAT, TAB, and INFO return types)
+
+CEDAR data access is provided via the [http://www.vsto.org Virtual Solar Terrestrial Observatory data portal].
+
+==Status==
+Stable release 2.3.0 in production
+
+==Author==
+* [http://tw.rpi.edu/wiki/Patrick_West Patrick West]
+
+==Services Handled==
+* dap
+** DAS
+** DDS
+** DDX
+** Data
+** Data return as netcdf
+** ascii
+** html_form
+** info_page
+
+==Services Provided==
+* cedar
+** FLAT
+** TAB
+** INFO (different from info_page)
+
+==Download==
+The latest release of this module is cedar_handler 2.3.0 and can be retrieved from the [http://scm.opendap.org/svn/tags/cedar/cedar_3.1.0/cedar_handler-2.3.0/ OPeNDAP Subversion repository]
+
+==How to use the module==
+Once installed, the cedar.conf file is added to the etc/bes/modules directory to be loaded by the BES. The configuration file must first be edited to be able to access the CEDAR Catalog (MySQL relational database), the CEDAR reporting database (MySQL relational database), and the CEDAR user database (for authentication and authorization purposes).
+
+&lt;pre&gt;
+#-----------------------------------------------------------------------#
+# OPeNDAP Cedar Data Handler BES Module Configuration file              #
+#-----------------------------------------------------------------------#
+
+#-----------------------------------------------------------------------#
+# modules to load, includes data modules and command modules            #
+#-----------------------------------------------------------------------#
+
+BES.modules+=cedar
+BES.module.cedar=/Users/westp/opendap/opendap/lib/bes/libcedar_module.so
+
+#-----------------------------------------------------------------------#
+# Setting the data information
+#-----------------------------------------------------------------------#
+
+# Cedar Handler specific parameters"
+# Cedar.LogName - file to store cedar access information
+# Cedar.BaseDir - base directory where the cedar data resides
+# Cedar.LoginScreen.XML - file that contains the html page to
+#   display if login is needed
+# Cedar.Help.TXT - location of the text version of cedar help
+# Cedar.Help.HTML - location of the html version of cedar help
+# Cedar.Help.XML - location of the xml version of cedar help
+# Cedar.Authenticate.Mode=on|off - should the server authenticate
+# Cedar.DB.Authenticate.Type=mysql - type of database for authentication database
+# Cedar.DB.Authenticate.Server= - MySQL server (i.e. localhost)
+# Cedar.DB.Authenticate.User= - MySQL user name to connect to db
+# Cedar.DB.Authenticate.Password= - MySQL password for user to connect
+# Cedar.DB.Authenticate.Database= - MySQL database with session table
+# Cedar.DB.Authenticate.Socket= - MySQL unix socket used to connect
+# Cedar.DB.Authenticate.Port= - MySQL TCP Port used to connect, socket typically used
+# Cedar.DB.Catalog.Type=mysql - type of database for CEDARCATALOG
+# Cedar.DB.Catalog.Server= - MySQL server (i.e. localhost)
+# Cedar.DB.Catalog.User= - MySQL user name to connect to db
+# Cedar.DB.Catalog.Password= - MySQL password for user to connect
+# Cedar.DB.Catalog.Database= - MySQL database with catalog tables
+# Cedar.DB.Catalog.Socket= - MySQL unix socket used to connect
+# Cedar.DB.Catalog.Port= - MySQL TCP Port used to connect, socket typically used
+# Cedar.DB.Reporter.Type=mysql - type of database to use for CEDARREPORTER
+# Cedar.DB.Reporter.Server= - MySQL server (i.e. localhost)
+# Cedar.DB.Reporter.User= - MySQL user name to connect to db
+# Cedar.DB.Reporter.Password= - MySQL password for user to connect
+# Cedar.DB.Reporter.Database= - MySQL database with reporter table
+# Cedar.DB.Reporter.Socket= - MySQL unix socket used to connect
+# Cedar.DB.Reporter.Port= - MySQL TCP Port used to connect, socket typically used
+
+Cedar.LogName=./cedar.log
+Cedar.BaseDir=/path/to/cedar/data
+Cedar.LoginScreen.XML=./screen.xml
+
+Cedar.Help.TXT=/Users/westp/opendap/opendap/share/cedar_handler/cedar_help.txt
+Cedar.Help.HTML=/Users/westp/opendap/opendap/share/cedar_handler/cedar_help.html
+Cedar.Help.XML=/Users/westp/opendap/opendap/share/cedar_handler/cedar_help.txt
+
+Cedar.Authenticate.Mode=on
+Cedar.DB.Authenticate.Type=mysql
+Cedar.DB.Authenticate.Server=localhost
+Cedar.DB.Authenticate.User=root
+Cedar.DB.Authenticate.Password=
+Cedar.DB.Authenticate.Database=
+Cedar.DB.Authenticate.Socket=/tmp/mysql.sock
+Cedar.DB.Authenticate.Port=
+
+Cedar.DB.Catalog.Type=mysql
+Cedar.DB.Catalog.Server=localhost
+Cedar.DB.Catalog.User=root
+Cedar.DB.Catalog.Password=
+Cedar.DB.Catalog.Database=
+Cedar.DB.Catalog.Socket=/tmp/mysql.sock
+Cedar.DB.Catalog.Port=
+
+Cedar.DB.Reporter.Type=mysql
+Cedar.DB.Reporter.Server=localhost
+Cedar.DB.Reporter.User=root
+Cedar.DB.Reporter.Password=
+Cedar.DB.Reporter.Database=
+Cedar.DB.Reporter.Socket=/tmp/mysql.sock
+Cedar.DB.Reporter.Port=
+&lt;/pre&gt;
+
+The Password parameters are encoded in the configuration file, not plain text.
+
+The CEDAR module includes its own container storage, so containers do not need to be created within the BES. The base name of the actual dataset can be used as the container name, as the example below shows using mfp9205040a.
+
+If not using the OLFS to serve your data, for example if using the bescmdln, you would run a command file that would look something like this:
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;request reqID="some_unique_value" &gt;
+    &lt;define name="d"&gt;
+	&lt;container name="mfp920504a" /&gt;
+    &lt;/define&gt;
+    &lt;get type="dods" definition="d"/&gt;
+&lt;/request&gt;
+&lt;/pre&gt;
+
+[[Category:BES Modules|CEDAR Handler]]</text>
+      <sha1>gnx93hxoxw8t4e1i7rg68ropq2ez018</sha1>
+    </revision>
+  </page>
+</mediawiki>

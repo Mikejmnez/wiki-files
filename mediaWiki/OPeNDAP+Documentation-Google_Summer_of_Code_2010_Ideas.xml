@@ -1,0 +1,79 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Google Summer of Code 2010 Ideas</title>
+    <ns>0</ns>
+    <id>570</id>
+    <revision>
+      <id>5495</id>
+      <parentid>5482</parentid>
+      <timestamp>2010-04-05T02:19:46Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Ideas */</comment>
+      <origin>5495</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2707" sha1="p2pxnwqeg1dwr5auk2bj5f88fk0evbl" xml:space="preserve">=OPeNDAP Google Summer of Code 2010=
+
+[[Image:GSoC 2010 300x267px.jpg|right]]
+OPeNDAP would like to welcome all the SoC students for the 2010 iteration of the SoC program! On this page you'll find information about project ideas we have along with information to help you apply to work on our software. The projects range from web site implementation to complex problems in data systems. Several of the projects listed are focused on adding new features to our data server. However, we also have a set of client tools and GUI-based applications that would provide an ample basis for summer projects. If you don't see anything below in the [[#Ideas]] section don't let that stop you from starting a conversation with one of the mentors listed below ([[#Mentors]]) because you may have an idea, talent or skill that is the spark of a great project. Don't hesitate to email us! 
+
+We would like to stress that while the ideas included here can be the basis of your project, you can also propose something completely different - maybe you've used our software and wish it included a particular feature.
+
+Before submitting an application to GSoC with OPeNDAP as your mentoring organization, make sure you read our [[Google Summer of Code FAQ|GSoC FAQ]], which provides some pointers on how to write a successful application.
+
+Once you are ready to submit an application, remember that you must do so '''before April 9th''' through the [http://socghop.appspot.com/ GSoC webapp]. A more complete [http://socghop.appspot.com/document/show/gsoc_program/google/gsoc2010/timeline timeline] is available for the whole project period.
+
+= Ideas =
+
+* [[Development of improved Hyrax User Interfaces]]: Browsers, JavaScript
+* [[Extending support for Matlab]]: C; Matlab a plus
+* [[Relational Database Handler | SQL Handler for Hyrax]]: C++, ODBC, SQL, DAP Constraints
+* [[KML responses for Hyrax]]: C++
+* [[GeoTIFF responses for Hyrax]]: C++
+* [[New Features for Hyrax]]: C++
+* [[Web Site Design]]: Drupal, mediawiki, ...
+* [[Investigation of Patterns in Large Collections of Data]]: Python, HTTP, Web structure and organization, pattern recognition, research
+
+= Mentors =
+
+* James Gallagher (jgallagher at opendap.org): The Hyrax data server, Matlab and IDL clients, C, C++, Java
+* Patrick West (westp at rpi.edu): The Hyrax data server, C, C++, Java, Apache Modules, Semantic Web, OWL (Web Ontology Language), RDFS, some Java
+* Nathan Potter (ndp at opendap.org): The Hyrax data server, OLFS, Java-OPeNDAP,  Java
+* Rikki McQueary (rmcqueary at opendap.org): The IDL client, OC library, C
+* Michael Johnson (m.johnson at opendap.org): The Hyrax data server, NcML Module for Hyrax, C++, C
+
+[[Category:Google Summer of Code]]</text>
+      <sha1>p2pxnwqeg1dwr5auk2bj5f88fk0evbl</sha1>
+    </revision>
+  </page>
+</mediawiki>

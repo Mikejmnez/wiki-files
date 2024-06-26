@@ -1,0 +1,285 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Source Release for BES</title>
+    <ns>0</ns>
+    <id>753</id>
+    <revision>
+      <id>13524</id>
+      <parentid>13519</parentid>
+      <timestamp>2024-01-24T19:15:23Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Get the BES DOI from Zenodo */</comment>
+      <origin>13524</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="13495" sha1="nks3vigzroc2uul5qjedbq9eg2r58p1" xml:space="preserve">
+This pages covers the steps required to release the BES software for Hyrax. 
+
+We now depend on the CI/CD process to build binary packages and to test the source builds.
+
+:'''Tip''': If, while working on the release, you find you need to make changes to the code and you know the CI build will fail, do so on a ''release branch'' that you can merge and discard later. Do not make a release branch if you don't '''need''' it, since it complicates making tags.
+
+==  Verify the code base ==
+# We release using the ''master'' branch. The code on ''master'' must have passed the CI builds. '''This includes the hyrax-docker builds since that CI build runs the full server regression tests!'''
+# Make sure that the source code you're using for the following steps is up-to-date. (''git pull'')
+
+== Update the Version Numbers ==
+
+=== Version for Humans ===
+# Determine the human version number. This appears to be a somewhat subjective process.
+# Edit each of the ''Affected Files'' and update the human version number.
+
+:; Affected Files
+:* '''''configure.ac''''' - Look for:
+::: &lt;tt&gt;AC_INIT(bes, ###.###.###, opendap-tech@opendap.org)&lt;/tt&gt;
+:* ''''' debian/changelog''''' (see [https://www.debian.org/doc/manuals/maint-guide/dreq.en.html#changelog Debian ChangeLog])
+::: '''Take Note!''' ''The &lt;tt&gt;debian/changelog&lt;/tt&gt; is the "single source of truth" for the libdap4 version in the debian packaging. If this does not agree with the version being packaged the package build will fail.''
+:* '''''ChangeLog'''''
+:* '''''NEWS'''''
+:* '''''README.md'''''
+:* '''''INSTALL'''''
+
+=== Update the internal library (API/ABI) version numbers. ===
+The BES is '''''not''''' a shared library, it is a set of c++ applications that are typically built as statically linked binaries. Because of this the usual CURRENT:REVISION:AGE tuples used to express the binary compatibility state of a c++ shared object library have little meaning for the BES code. So, what we choose to do is simply bump the REVISION numbers by one value for each release.
+
+* In the '''configure.ac''' file locate each of:
+** LIB_DIS_REVISION
+** LIB_PPT_REVISION
+** LIB_XML_CMD_REVISION
+* Increase the value of each by one (1).
+* Save the file.
+* Update the text documentation files and version numbers in the configuration files:
+
+Example of the relevant section from configure.ac: 
+&lt;source lang-="bash"&gt;
+LIB_DIS_CURRENT=18
+LIB_DIS_AGE=3
+LIB_DIS_REVISION=3
+AC_SUBST(LIB_DIS_CURRENT)
+AC_SUBST(LIB_DIS_AGE)
+AC_SUBST(LIB_DIS_REVISION)
+LIBDISPATCH_VERSION="$LIB_DIS_CURRENT:$LIB_DIS_REVISION:$LIB_DIS_AGE"
+AC_SUBST(LIBDISPATCH_VERSION)
+
+LIB_PPT_CURRENT=5
+LIB_PPT_AGE=1
+LIB_PPT_REVISION=2
+AC_SUBST(LIB_PPT_CURRENT)
+AC_SUBST(LIB_PPT_AGE)
+AC_SUBST(LIB_PPT_REVISION)
+LIBPPT_VERSION="$LIB_PPT_CURRENT:$LIB_PPT_REVISION:$LIB_PPT_AGE"
+AC_SUBST(LIBPPT_VERSION)
+
+LIB_XML_CMD_CURRENT=5
+LIB_XML_CMD_AGE=4
+LIB_XML_CMD_REVISION=2
+AC_SUBST(LIB_XML_CMD_CURRENT)
+AC_SUBST(LIB_XML_CMD_AGE)
+AC_SUBST(LIB_XML_CMD_REVISION)
+LIBXMLCOMMAND_VERSION="$LIB_XML_CMD_CURRENT:$LIB_XML_CMD_REVISION:$LIB_XML_CMD_AGE"
+AC_SUBST(LIBXMLCOMMAND_VERSION)
+&lt;/source&gt;
+
+== Update the '''ChangeLog''' file. ==
+Use the script &lt;tt&gt;gitlog-to-changelog&lt;/tt&gt; (which can be found with Google) to update the '''ChangeLog''' file by running it using the &lt;tt&gt;--since="&lt;date&gt;"&lt;/tt&gt; option with a date one day later in time than the newest entry in the current ChangeLog. 
+: &lt;tt style="font-size: 1.1em; font-weight: bold;"&gt;gitlog-to-changelog --since="1970-01-01"&lt;/tt&gt;
+:: (''Specify a date one day later than the one at the top of the existing ChangeLog file.'')
+Save the result to a temp file and combine the two files: &lt;br/&gt;
+: &lt;tt style="font-size: 1.1em; font-weight: bold;"&gt;cat tmp ChangeLog &gt; ChangeLog.tmp; mv ChangeLog.tmp ChangeLog&lt;/tt&gt;
+If you're making the first ChangeLog entries, then you'll need to create the ChangeLog file first. &lt;br/&gt;
+'''Tip''': ''When you're making the commit log entries, use line breaks so ChangeLog will be readable. That is, use lines &lt; 80 characters long.''
+
+== Update the '''NEWS''' file ==
+To update the NEWS file, just read over the new ChangeLog entries and summarize. 
+
+The new entries to the NEWS file will be used later when making the GitHub release and when writing the server's release page on www.opendap.org.
+
+We might replace this:
+* It's also helpful to have, in the '''NEWS''' file and the Web site and the release notes, a list of the Jira tickets that have been closed since the last release. The best way to do this is to goto ''Jira's Issues'' page and look at the ''Tickets closed recently'' item. From there, click on ''Advanced'' and edit the time range so it matches the time range since the past release to now, then ''Export'' that info as an excel spreadsheet (the icon with a hat and a down arrow). YMMV regarding how easy this is and Jira's UI changes often.)
+
+With instructions about making an associated release in JIRA using version tagging.
+
+== Update the Version Numbers for Humans ==
+;Affected Files: 
+: configure.ac
+: debian/changelog (see [https://www.debian.org/doc/manuals/maint-guide/dreq.en.html#changelog] Debian ChangeLog)
+: NEWS
+: README.md
+: INSTALL
+
+# Determine the human version number. This appears to be a somewhat subjective process.
+# Edit each of the ''Affected Files'' and update the human version number.
+# In the '''README.md''' file be sure to update the description of how to locate the DOI for the release with the new version number.
+
+== Update the libdap version ==
+Determine the libdap version associated with this release by checking the contents of the file &lt;tt&gt;libdap4-snapshot&lt;/tt&gt; The &lt;tt&gt;libdap4-snapshot&lt;/tt&gt; file should contain a single line like this example:
+&lt;pre&gt;
+libdap4-3.20.9-0 2021-12-28T19:23:45+0000
+&lt;/pre&gt;
+
+The libdap version for the above example is: &lt;tt&gt;libdap-3.20.9&lt;/tt&gt; (The version is NOT &lt;tt&gt;libdap4-3.20.9&lt;/tt&gt;)
+
+=== Update the libdap version in the .travis.yml file ===
+;Affected Files
+: .travis.yml
+
+In the .travis.yml file update the value of  ''LIBDAP_RPM_VERSION'' in the ''env: global:'' section so that it contains the complete numerical value of the libdap version you located in the previous step. Using the previous example the value would be:
+&lt;pre&gt;
+    - LIBDAP_RPM_VERSION=3.20.9-0
+&lt;/pre&gt;
+
+=== Update the libdap version in the RPM spec files ===
+;Affected Files
+: ''bes.spec*.in''
+Update the &lt;tt&gt;bes.spec*.in&lt;/tt&gt; files by changing the &lt;tt&gt;Requires&lt;/tt&gt; and &lt;tt&gt;BuildRequires&lt;/tt&gt; entries for libdap. Based on our example the result would be: 
+
+&lt;pre&gt;
+Requires:       libdap &gt;= 3.20.9
+BuildRequires:  libdap-devel &gt;= 3.20.9
+&lt;/pre&gt;
+
+(''These lines may not be adjacent to each other in the spec files'')
+
+=== Update the libdap version in the README.md file ===
+;Affected Files
+: README.md
+# [https://zenodo.org Get the DOI markdown from Zenodo] by using the search bar and searching for the libdap version string that you determined at the beginning of this section. 
+# Update the '''README.md''' file with libdap version and the associated DOI link (using the markdown you got from Zenodo).
+
+; Note
+: You will also need this DOI markdown when making the GitHub release page for the BES. 
+
+See the section on this page titled "''Get the BES DOI from Zenodo''"  for more details about getting the DOI markdown.
+
+== Update the RPM dependencies ==
+;Affected Files: 
+:''bes.spec*.in''
+
+In the RPM ''.spec'' file, update the dependencies as needed. 
+* The libdap version dependency was covered in a previous step.
+* Be attentive to changes that have been made to the hyrax-dependencies since the last release.
+
+== Update the module version numbers for humans ==
+In bes/modules/common, check that the file all-modules.txt is complete and update as needed. Then run:
+
+* Remove the sentinel files that prevent the version updater from being run multiple times in succession without specific intervention:
+:: '''&lt;tt&gt;rm -v ../*/version_updated&lt;/tt&gt;'''
+* Now run the version updater:
+:: '''&lt;tt&gt;./version_update_modules.sh -v &lt;/tt&gt;'''
+
+This will update the patch number (x.y.patch) for each of the named modules. 
+
+If a particular module has significant fixes, hand edit the number, in the Makefile.am. 
+
+See below for special info about the HDF4/5 modules (which also applies to any modules not in the BES GitHub repo).
+
+== &lt;del&gt;For the BES HDF4/5 modules (BES only) &lt;/del&gt;==
+# &lt;del&gt;''Make sure that you are working on the master branch of each module!!''&lt;/del&gt;
+# &lt;del&gt; Goto those directories and update the ChangeLog, NEWS, README, and INSTALL files (even though INSTALL is not used by many).&lt;/del&gt;
+# &lt;del&gt; Update the module version numbers in their respective Makefile.am files.&lt;/del&gt;
+# &lt;del&gt; Commit and Push these changes.&lt;/del&gt;
+
+== Update the Build Offset ==
+''Setting the build offset correctly will set the build number for the new release to "0".''
+
+In the file &lt;tt&gt;travis/travis_bes_build_offset.sh&lt;/tt&gt; set the value of &lt;tt&gt;BES_TRAVIS_BUILD_OFFSET&lt;/tt&gt; to the number of the last TravisCI build plus one. The previous commit and push will have triggered a TravisCI build. Find the build number for the previous commit in [https://app.travis-ci.com/github/OPENDAP/bes the TravisCI page for the BES] and use that build number plus 1.
+
+== Commit Changes ==
+''Be sure that you have completed all of the changes to the various ChangeLog, NEWS, INSTALL, configure.ac,  &lt;tt&gt;travis/travis_bes_build_offset.sh&lt;/tt&gt;, and other files before proceeding!''
+
+# Commit and push the BES code. Wait for the CI/CD builds to complete. You must be working on the ''master'' branch to get the CD package builds to work.
+
+== Tag the BES code ==
+
+The build process automatically tags builds of the master branch. The Hyrax-version tag is a placeholder for us so we can sort out what code goes with various Hyrax source releases.
+
+# If this is part of a Hyrax Release, then tag this point in the master branch with the Hyrax release number
+#* &lt;tt style="font-size: 1.1em; font-weight: bold;"&gt;git tag -m "hyrax-&lt;number&gt;" -a hyrax-&lt;numbers&gt;&lt;/tt&gt;
+#* &lt;tt style="font-size: 1.1em; font-weight: bold;"&gt;git push origin hyrax-&lt;numbers&gt;&lt;/tt&gt;
+#: '''NB:''' ''Instead of tagging the HDF4/5 modules, use the saved commit hashes that git tracks for submodules. This cuts down on the bookkeeping for releases and removes one source of error.''
+
+== Create the BES release on Github ==
+# [https://github.com/OPENDAP/bes Goto the BES project page in GitHub]
+# Choose the '''releases''' tab.
+# On the [https://github.com/OPENDAP/bes/releases Releases page] click the 'Tags' tab. 
+# On the [https://github.com/OPENDAP/bes/tags Tags page], locate the tag (created above) associated with this new release.
+# Click the ellipses (...) located on the far right side of the ''version-x.y.z'' tag 'frame' for this release and and choose ''Create release''.
+#* Enter a ''title'' for the release
+#* Copy the most recent text from the NEWS file into the ''describe'' field
+#* Click '''Publish release''' or  '''Save draft'''. 
+#** If you have previously edited the release page you can click '''Update this release'''
+
+== Publish and Sign ==
+
+When the release is made on GitHub the source tar bundle is made automatically. However, this bundle is '''not''' the one we wish to publish because it requires people to have ''autoconf'' installed. Rather we want to use the result of "&lt;tt&gt;make dist&lt;/tt&gt;" which will have the &lt;tt&gt;configure&lt;/tt&gt; script pre-generated.
+
+All you need do is build the tar file using &lt;tt&gt;make list&lt;/tt&gt;, sign it, and push (or pull) these files onto www.opendap.org/pub/source. 
+
+# Go to the '''bes''' project on your local machine and run ''&lt;tt&gt;make dist&lt;/tt&gt;'' which will make a bes-x.y.z,tar.gz file at the top level of the '''bes''' project.
+# Use '''gpg''' to sign the tar bundle:
+#: &lt;tt&gt;gpg --detach-sign --local-user security@opendap.org bes-x.y.z.tgz&lt;/tt&gt;
+# Use '''sftp''' to push the signature file and the tar bundle to the /httpdocs/pub/source directory on www.opendap.org
+#: ''(Assuming your current working directory is the top of the '''bes''' project)''
+#: &lt;tt&gt;sftp opendap@www.opendap.org&lt;/tt&gt;
+#: &lt;tt&gt;cd httpdocs/pub/source&lt;/tt&gt;
+#: &lt;tt&gt;put bes-x.y.z.tgz.sig&lt;/tt&gt;
+#: &lt;tt&gt;put bes-x.y.z.tgz&lt;/tt&gt;
+#: &lt;tt&gt;quit&lt;/tt&gt;
+# Check your work!
+## Download the source tar bundle and signature from www.opendap.org.
+## Verify the signature:
+##: &lt;tt&gt; gpg --verify bes-x.y.z.tgz.sig bes-x.y.z.tgz&lt;/tt&gt;
+
+== Get the BES DOI from Zenodo ==
+Get the Zenodo DOI for the newly created BES release and add it to the associated GitHub BES release page.
+
+# [https://zenodo.org Goto Zenodo] 
+# Look at the 'upload' page. If there is nothing there (perhaps because you are not ''jhrg'' or whoever set up the connection between the BES project and Zenodo) you can use the search bar to search for '''bes'''. 
+#: Since the libdap, BES and OLFS repositories are linked to Zenodo, the newly-tagged code is uploaded to Zenodo automatically and a DOI is minted for us.
+# Click on the new version, then click on the DOI tag in the pane on the right of the page for the given release.
+# Copy the DOI as markdown from the window that pops up.
+# Edit the GitHub release page for the BES release you just created and paste the DOI markdown into the top of the  description.
+
+'''Tip:''' ''If you are trying to locate the '''libdap''' releases in Zenodo you have to search for the string:'' &lt;tt style="font-size: 1.1em; font-weight: bold;"&gt;libdap4&lt;/tt&gt;
+
+=== Images ===
+[[File:Screenshot 2018-12-06 11.06.44.png|none|thumb|400px|border|left|Zenodo upload page]]
+
+== Update the online reference documentation ==
+
+# ''make gh-docs''</text>
+      <sha1>nks3vigzroc2uul5qjedbq9eg2r58p1</sha1>
+    </revision>
+  </page>
+</mediawiki>

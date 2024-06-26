@@ -1,0 +1,64 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/ServerInstallationGuideFootnotes</title>
+    <ns>0</ns>
+    <id>262</id>
+    <revision>
+      <id>1499</id>
+      <parentid>1496</parentid>
+      <timestamp>2008-01-03T11:15:42Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* References */</comment>
+      <origin>1499</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1851" sha1="gef7g9uz0ytxhgqadrd827jj3jozsw8" xml:space="preserve">= Citations =
+
+&lt;references/&gt;
+
+= References =
+
+*&lt;cite id=ref1&gt;http://spg.gsfc.nasa.gov/rfc/004  &lt;/cite&gt;
+*&lt;cite id=ref2&gt; The actual directory name, or whether the CGI programs are kept in a particular directory (or named with a particular convention) is another detail of the specific web server and configuration used. The web server might refer to the directory as the ScriptAlias directory, as it does with Apache. &lt;/cite&gt;
+*&lt;cite id=ref3&gt; When you fill out some HTML form, you are usually sending data in a "POST" request. When you type a URL into your web browser, this is a "GET" request. HTTP servers can respond to both kinds of request.&lt;/cite&gt; 
+*&lt;cite id=ref4&gt; This is not shown in this illustration, but it would follow a question mark in the URL, like this: http://test.opendap.org/opendap/nph-dods/temp.nc.asc?temp[0:180][0:45]. For more information about constraint expressions, see The DODS Quick Start Guide or The OPeNDAP User Guide. &lt;/cite&gt;
+*&lt;cite id=ref5&gt; A user has contributed examples for this. Go to http://seawater.tamu.edu/noppdodsgom and click on "Resources." &lt;/cite&gt;
+*&lt;cite id=ref6&gt;The user is yet another configurable feature. For the Apache server, you can look for a line in the configuration file specifying the user, using the keyword User. On my machine, where httpd runs as nobody, it looks like this: User nobody. &lt;/cite&gt;
+*&lt;cite id=ref7&gt;...also tested on Apache 2.0.40, 07/25/03 jhrg &lt;/cite&gt;
+*&lt;cite id=ref8&gt;Brock Murch &lt;bmurch@marine.usf.edu&gt; worked out some thorny configuration details for securing the Apache/DODS/OPeNDAP combination. &lt;/cite&gt;
+*&lt;cite id=ref9&gt;`$prefix' is `/usr/local/' unless you built the server from source code and specified a different root directory for its installation. &lt;/cite&gt;
+*&lt;cite id=ref10&gt; We have reports that our Java DAP libraries work with versions as old as 1.2. jhrg 10/13/05.&lt;/cite&gt;</text>
+      <sha1>gef7g9uz0ytxhgqadrd827jj3jozsw8</sha1>
+    </revision>
+  </page>
+</mediawiki>

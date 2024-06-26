@@ -1,0 +1,111 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/FreeFormGuide</title>
+    <ns>0</ns>
+    <id>209</id>
+    <revision>
+      <id>1273</id>
+      <parentid>1246</parentid>
+      <timestamp>2007-10-05T00:32:34Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* FreeForm ND Data Access System */</comment>
+      <origin>1273</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1495" sha1="p96ar9grwii081btfe8c53uwphd3rdq" xml:space="preserve">= FreeForm ND Data Access System =
+
+Tom Sgouros and James Gallagher 
+
+
+
+User's Guide Using the OPeNDAP Server with Unusual Formats
+
+To the developers of FreeForm and FreeForm ND: Tom Carey, S.D Davis,
+Liping Di, Rich Fozzard, Kevin Frender, Ted Habermann, Mark A.
+Ohrenshall, John Rex, Mark Van Gorp, and others. Special thanks to
+Mark A. Ohrenshall for his meticulous documentation of the design and
+development of FreeForm ND and for writing portions of this document.
+
+This document has been updated to include information on \ffnd
+and the \ffs by Emma Gibson and Tom Sgouros.
+
+Additional updates for the OPeNDAP, Inc/, distributions of the
+software by James Gallagher, Winter 2006.
+
+All brand and product names are trademarks of their respective
+companies. Mention of a commercial company or product does not imply
+endorsement. Using information from this publication concerning
+proprietary products for publicity or advertising purposes is not
+authorized.
+
+
+; [[Wiki_Testing/dpref | Chapter 1]] : 
+ 
+
+; [[Wiki_Testing/dintro | Chapter 2]] : 
+ 
+
+
+; [[Wiki_Testing/dquick | Chapter 1]] : 
+ 
+
+
+; [[Wiki_Testing/tblfmt | Chapter 1]] : 
+
+
+; [[Wiki_Testing/arrayfmt | Chapter 1]] : 
+
+
+; [[Wiki_Testing/hdrfmts | Chapter 1]] : 
+ 
+
+; [[Wiki_Testing/ff-server | Chapter 1]] : 
+
+
+; [[Wiki_Testing/fileserv | Chapter 1]] : 
+ 
+
+; [[Wiki_Testing/convs | Chapter 1]] : 
+ 
+
+; [[Wiki_Testing/fmtconv | Chapter 1]] : 
+ 
+
+; [[Wiki_Testing/datachk | Chapter 1]] : 
+ 
+
+; [[Wiki_Testing/hdfutils | Chapter 1]] :</text>
+      <sha1>p96ar9grwii081btfe8c53uwphd3rdq</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,66 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: DAP4 Projection Syntax</title>
+    <ns>0</ns>
+    <id>848</id>
+    <revision>
+      <id>9498</id>
+      <timestamp>2013-02-08T20:44:50Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <comment>Created page with "[[Category:Development|Development]][[Category:DAP4|DAP4]] [[OPULS_Development| &lt;&lt; Back to OPULS Development]]  ==Background== Currently, the syntax for "projection" constraints ..."</comment>
+      <origin>9498</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="933" sha1="oty4hexhoxektjjny0kc2syjusbuzh9" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+==Background==
+Currently, the syntax for "projection" constraints in the spec
+looks roughly like this:
+: /group1/.../groupn/struct1[a1:b1].field2[a2:b2].struct3[a3:b3].field4[a4:b4]
+
+In looking how John handled this in CDM, I noticed that he used a different but equivalent notation that strikes me a superior.
+
+==Proposal==
+Basically, the proposal is to push all of the indexing to the end of the expression. So we now would have (using the above example):
+: /group1/.../groupn/struct1.field2.struct3.field4[a1:b1][a2:b2][a3:b3][a4:b4]
+
+==Rationale==
+Assuming one has the rank info for the intermediate structs and fields, the two
+forms are equivalent. The advantage of this format is that it has a simpler syntax and is easier to parse. It is basically an FQN followed by a sequence of slice specs.
+
+[[User:dmh|Dennis]]</text>
+      <sha1>oty4hexhoxektjjny0kc2syjusbuzh9</sha1>
+    </revision>
+  </page>
+</mediawiki>

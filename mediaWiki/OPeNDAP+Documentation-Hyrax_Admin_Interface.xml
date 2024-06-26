@@ -1,0 +1,157 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax Admin Interface</title>
+    <ns>0</ns>
+    <id>444</id>
+    <revision>
+      <id>6754</id>
+      <parentid>6753</parentid>
+      <timestamp>2011-10-07T22:06:34Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Use Cases */</comment>
+      <origin>6754</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7225" sha1="10qxrwoiyto7twa2m9pimoci27wvhs3" xml:space="preserve">[[Category:HAI]]
+This is a place to start discussing peoples desires/needs for a Hyrax Administrators Interface (HAI).
+
+
+== Background ==
+Members of the Hyrax users community are developing robust, highly available data services in operational settings, and have asked for an administrators interface that will allow them to monitor, control, reconfigure, and debug the Hyrax frontend and backend servers from a single console. 
+
+Additionally, to support external services integration with the Hyrax data catalog and service, Hyrax needs to provide an administration interface for service configuration and data catalog changes (e.g. adding new data sets to a catalog).  Example of an external service integration with Hyrax is an organisation's digital library service for registering and maintaining access to data products.  Once the user registers a new data set including data location and data access rights, the user may select an access service and protocol such as Hyrax OPeNDAP or WMS.  This external service will connect to a Hyrax service using the Hyrax Administrators Interface to add a new data set to the catalog.
+
+This page is the starting point for organizing the design work for the Hyrax Administrators Interface (HAI).
+
+== Definitions ==
+
+; ''Administrator''
+: The ''administrator'' is the human that operates the HAI.
+
+; ''User''
+: The ''user'' is a human that uses client software such as Kepler, Matlab OPeNDAP Ocean Toolbox, a web browser, and others to make requests (HTTP, SOAP, etc.) of the Hyrax server.
+
+; ''Operator Console''
+: The 24x7 operator's console to monitor and control the data services as well as the user data requests, and receive service notifications.
+
+; ''Administrator Console''
+: The system administrator's console to monitor, control, reconfigure, and debug the Hyrax frontend and backend servers, and receive service notifications.
+
+== Logging and Control Features ==
+
+=== Secure log-in for administration - Implementation ===
+Provide an secure login services for Hyrax that allow an administrator to login to (and eventually control) the server.
+==== Use Cases ====
+===== [[HAI Use Case:  Administrator Logs into the Hyrax Admin Interface|Administrator Logs into the Hyrax Admin Interface]] =====
+:: First draft checked into SVN. In order to do this it simply required a carefully defined set of security constraints in the web.xml for Hyrax in addition to configuring and enabling tomcat to use SSL.--[[User:Ndp|ndp]] 13:53, 28 April 2011 (PDT)
+=== Control the server (starting, stopping, reconfiguration) - Implementation ===
+
+&lt;font color="green"&gt;Done.&lt;/font&gt;
+
+Provide a secure user interface that allows an authorized user to start, stop, and reconfigure the server.
+==== Use Cases ====
+=====[[HAI Use Case:  Stop and Start a BES| Stop and Start a BES]] =====
+:  [[HAI Design:  Stop and Start a BES | BES Control Design Page]] 
+&lt;font color="green"&gt;Prototype complete&lt;/font&gt;
+&lt;!-- We removed this because it seems impractical. jhrg  
+===== [[HAI Use Case: Terminate specific BES processes/connections|Terminate specific BES processes]] =====
+--&gt;
+===== [[HAI Use Case:  Examine BES processes/connections|Examine BES processes]] ===== 
+&lt;font color="green"&gt;Prototype complete&lt;/font&gt;
+
+=== Access to the running logging information - Implementation ===
+Provide a secure user interface that allows an authorized to view (and eventually control the granularity of) the servers logging output.
+==== Use Cases ====
+===== [[HAI Use Case: View OLFS and BES logs|View OLFS and BES logs]] =====
+:: First draft of the OLFS log viewer checked into svn. Log monitoring can be stopped and started via a web based gui. The gui needs to support modifying what is getting logged (which packages/classes) and at what log level (debug,info,warn,error,all). --[[User:Ndp|ndp]] 13:53, 28 April 2011 (PDT)
+&lt;font color="green"&gt;Prototype complete&lt;/font&gt;
+
+===== [[HAI Use Case: Turn on/off OLFS debugging and view/save/stream the output|Control OLFS debugging]] =====
+&lt;font color="green"&gt;Prototype complete&lt;/font&gt;
+===== [[HAI Use Case: Turn on/off BES debugging and view/save/stream the output|Control BES debugging]] =====
+&lt;font color="green"&gt;Done.&lt;/font&gt;
+:[[Design: Control BES Debugging]]
+
+=== Add new datasets to the server - Design &amp; prototype implementation ===
+
+==== Use Cases ====
+This topic is a bit of red herring since users cannot add datasets to Hyrax and adding datasets to a server can be accomplished by storing the data files anywhere a BES can read them (including using symbolic links). However, what BOM wants is maybe better characterized as 'authorization'. This is covered in our design for the authentication and authorization services (link below).
+
+===== [[HAI Use Case: Add a new dataset to the Hyrax catalog|Add a new dataset to the Hyrax catalog]] =====
+
+== User Management Features ==
+
+&lt;font color="green"&gt;Response size limits done; Design for authentication done&lt;/font&gt;
+
+=== Limit response sizes for non-authenticated users - Implementation ===
+Provide a mechanism that allows the administrator to configure hyrax so that users that are not authenticated will only be allowed to receive data responses that are smaller than an adjustable threshold size. 
+==== Use Cases ====
+
+=== Secure user sessions - Design ===
+Secure user sessions involves two basic activities: Authentication (Ac) and Authorization (Az). Authentication is the process in which the server identifies a particular user. Authorization is the process that determines what a user can do or see on the server.
+
+[[DAP: Authentication Discussion]]
+==== Use Cases ====
+=====  [[HAI Use Case: User securely authenticates and gets an open session | User gets an authenticated session.]] =====
+===== [[HAI Use Case: User securely authenticates and gets a secure session| User gets a secure session.]] =====
+===== [[HAI Use Case: Authentication mechanism compatibility with OC and Java DAP libraries|Authentication mechanism compatibility with OC and Java DAP libraries]] (This is a high priority case) =====
+
+=== Create administration interface to control users' capabilities - Design ===
+
+Description here...
+==== Use Cases ====
+
+===== [[HAI Use Case: View/set user-roles and their mapping to URLs|Manage user access rules.]] =====
+===== [[HAI Use Case: Limit response size for non-authenticated users|Limit response sizes.]] =====
+:[[Design: Limit Response Sizes]]
+&lt;font color="green"&gt;Prototype partly complete&lt;/font&gt;
+
+== NetCDF File Support ==
+
+=== Features ===
+# Support for linking the handler with the new API (Adds chunking and compression) - Implementation &lt;font color="green"&gt;Complete&lt;/font&gt;
+# Support for the new API features that are compatible with DAP2 - Implementation
+
+== Deliverables ==
+
+
+== Period of use ==
+
+The API features are to be permanent features in the Hyrax data service for use in building administrator and operator console applications to support an operational data service. The operational Hyrax data service is to support various service level access (SLA) requirements and provide timely, reliable data delivery with transaction logging.
+
+
+== [[Other Hyrax Admin Interface Features That Would Be Nice But Need  Funding | Additional Desired Hyrax Admin Interface Features]] ==</text>
+      <sha1>10qxrwoiyto7twa2m9pimoci27wvhs3</sha1>
+    </revision>
+  </page>
+</mediawiki>

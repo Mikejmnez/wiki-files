@@ -1,0 +1,76 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Libdap refactor</title>
+    <ns>0</ns>
+    <id>520</id>
+    <revision>
+      <id>4985</id>
+      <parentid>4812</parentid>
+      <timestamp>2009-12-02T17:35:47Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* libdap code/features to remove */</comment>
+      <origin>4985</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3630" sha1="i1gb5kf7z5nlsm6l74q7oergxm6h353" xml:space="preserve">== libdap code/features to remove ==
+
+* In DODSFilter
+** &lt;del&gt;Remove 'COMPRESSION_FOR_SERVER3' code&lt;/del&gt; Done.
+** &lt;del&gt;Remove the FILE* methods - this will break some of the older 'cgi handlers' but those should be removed anyway.&lt;/del&gt; Done
+** &lt;del&gt;CGI processing code in general - how much of this is being used at all?&lt;/del&gt; Done
+** &lt;del&gt;read_ancillary_das() methods - replace with direct calls to Ancillary?&lt;/del&gt; Done
+** &lt;del&gt;Look at the DODSFilter unit tests to make sure that some of the CGI code is not used there.&lt;/del&gt; Done
+* cgi-util.cc
+** &lt;del&gt;Remove the FILE* functions and/or replace with ostream ones if those are not already there.&lt;/del&gt; Mostly done - there are some FILE* functions that we need. Renamed to mimeUtil.cc/h and change the cgiUtil.h file to include mimeUtil.h
+* &lt;del&gt;AIS - remove completely&lt;/del&gt; &lt;font color="red"&gt;Done&lt;/font&gt;
+* &lt;del&gt;XDRFileMarshaller - We can remove this &lt;/del&gt; It's still in the library, but aside from tests it is not used.
+* XDRFileUnMarshaller - We can remove this once we have an XDRStreamUnMarshaller and...
+* Look at Response, HTTPResponse, and see how they use FILE*. Can this be changed to an ostream easily? More of a refactor... &lt;font color="red"&gt;Well, no, not easily. The problem is that the flex-based scanners all use FILE*s to read data and those buffer their reads. This complicates things a bit. Instead of a single thing to change, look below at the ''libcurl'' section&lt;/font&gt;
+
+== libdap code/features to refactor ==
+
+* We need a XDRStreamUnMarshaller - this will let me remove lots of the FILE* code. &lt;font color="green"&gt;Update: I wrote this as a class that takes an istream and then wrote a streambuf that supports underflow - what you need to support an istream - and that takes file descriptor to be used an an input source. the new streambuf classes work, but when used with my XDRStreamUnMarshaller that class does not work. The XDRStreamUnMarshaller ''does'' seem to work with ifstream instances.&lt;/font&gt; The importance of this is that if we're going to have a data payload that is chunked, and we have to do that to implement reliable error responses, then we need control over the stream and we don't get that with the FILE* XDR interface. &lt;font color="red"&gt;We could build a FILE* XDR interface that processes chunked data, however.&lt;/font&gt;
+* To completely replace FILE* with C++ streams, we will need to:
+** Replace FILE* in the flex scanners and in the DDX parser although the latter will not be hard.
+** change how we use libcurl so that we get back a file descriptor 
+** Complete the XDRStreamUnMarshaller code
+
+* Change HTTPConnect so that it works with data in memory when possible. That is, stop writing the data from libcurl to a file and instead pass libcurl a pipe for it to dump the data into. I think for this to work we need to fork() or use threads. In the later case, will the code run on separate cores?
+* Modify the XDRStreamMarshaller so that it works with data using smaller buffers. The vector code first allocates a buffer to hold the whole vector, copies the binary data to that buffer, then encodes that, sends it and then frees the buffer. The upshot is that for a large variable, the entire thing to send is in memory twice. We could use a smaller buffer and encode sections.
+* We can adopt a multithreaded reader for the client side (I have my doubts about the utility of this since most clients are now using Java or C).
+[[Image:Connect synchronous processing.png|300px|The current processing is synchronous|left]]
+[[Image:Connect proposed asynchronous processing.png|300px|Asynchronous processing might be an improvement|right]]</text>
+      <sha1>i1gb5kf7z5nlsm6l74q7oergxm6h353</sha1>
+    </revision>
+  </page>
+</mediawiki>

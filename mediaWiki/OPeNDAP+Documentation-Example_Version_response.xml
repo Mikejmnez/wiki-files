@@ -1,0 +1,104 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Example Version response</title>
+    <ns>0</ns>
+    <id>333</id>
+    <revision>
+      <id>2377</id>
+      <timestamp>2008-07-29T22:29:51Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>New page: &lt;pre&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt; &lt;OPeNDAP-Version&gt;   &lt;BES-Version&gt;     &lt;BES&gt;       &lt;prefix&gt;/&lt;/prefix&gt;       &lt;lib&gt;         &lt;name&gt;bes&lt;/name&gt;         &lt;version&gt;3.6.2&lt;/version&gt;     ...</comment>
+      <origin>2377</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1154" sha1="8ldmh3gb8zunbprffjbd4ip0i2onkqx" xml:space="preserve">&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;OPeNDAP-Version&gt;
+  &lt;BES-Version&gt;
+    &lt;BES&gt;
+      &lt;prefix&gt;/&lt;/prefix&gt;
+      &lt;lib&gt;
+        &lt;name&gt;bes&lt;/name&gt;
+        &lt;version&gt;3.6.2&lt;/version&gt;
+      &lt;/lib&gt;
+    &lt;/BES&gt;
+    &lt;Handlers&gt;
+      &lt;lib&gt;
+        &lt;name&gt;dap-server/ascii&lt;/name&gt;
+        &lt;version&gt;3.8.5&lt;/version&gt;
+      &lt;/lib&gt;
+      &lt;DAP&gt;
+        &lt;version&gt;2.0&lt;/version&gt;
+        &lt;version&gt;3.0&lt;/version&gt;
+        &lt;version&gt;3.1&lt;/version&gt;
+      &lt;/DAP&gt;
+      &lt;lib&gt;
+        &lt;name&gt;hdf4_handler&lt;/name&gt;
+        &lt;version&gt;3.7.8&lt;/version&gt;
+      &lt;/lib&gt;
+      &lt;lib&gt;
+        &lt;name&gt;netcdf_handler&lt;/name&gt;
+        &lt;version&gt;3.7.9&lt;/version&gt;
+      &lt;/lib&gt;
+      &lt;lib&gt;
+        &lt;name&gt;dap-server/usage&lt;/name&gt;
+        &lt;version&gt;3.8.5&lt;/version&gt;
+      &lt;/lib&gt;
+      &lt;lib&gt;
+        &lt;name&gt;wcs_module&lt;/name&gt;
+        &lt;version&gt;1.0.0&lt;/version&gt;
+      &lt;/lib&gt;
+      &lt;lib&gt;
+        &lt;name&gt;dap-server/www&lt;/name&gt;
+        &lt;version&gt;3.8.5&lt;/version&gt;
+      &lt;/lib&gt;
+    &lt;/Handlers&gt;
+  &lt;/BES-Version&gt;
+  &lt;OLFS&gt;
+    &lt;lib&gt;
+      &lt;name&gt;olfs&lt;/name&gt;
+      &lt;version&gt;1.4.0&lt;/version&gt;
+    &lt;/lib&gt;
+  &lt;/OLFS&gt;
+  &lt;Hyrax&gt;
+    &lt;lib&gt;
+      &lt;name&gt;Hyrax&lt;/name&gt;
+      &lt;version&gt;1.4.0&lt;/version&gt;
+    &lt;/lib&gt;
+  &lt;/Hyrax&gt;
+&lt;/OPeNDAP-Version&gt;
+&lt;/pre&gt;</text>
+      <sha1>8ldmh3gb8zunbprffjbd4ip0i2onkqx</sha1>
+    </revision>
+  </page>
+</mediawiki>

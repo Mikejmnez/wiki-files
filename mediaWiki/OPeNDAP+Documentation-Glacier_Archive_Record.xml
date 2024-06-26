@@ -1,0 +1,331 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Glacier Archive Record</title>
+    <ns>0</ns>
+    <id>861</id>
+    <revision>
+      <id>9676</id>
+      <timestamp>2013-07-24T00:59:24Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>Created page with "&lt;font size="2"&gt; &lt;source lang="xml"&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt; &lt;gar:GlacierArchiveRecord          xmlns:gar="http://xml.opendap.org/ns/aws/glacier/ArchiveRecord/01#" ..."</comment>
+      <origin>9676</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="16910" sha1="ig8pb35xtrz35009av1shr3wxovuzqz" xml:space="preserve">&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;gar:GlacierArchiveRecord 
+        xmlns:gar="http://xml.opendap.org/ns/aws/glacier/ArchiveRecord/01#" 
+        resourceId="/data/nc/coads_climatology.nc" 
+        vault="opendap-test" 
+        archiveId="XIfGXl0qWkfDVbKL3Ibb6XQ8OBC44YwOBGl9ds-yA18HN8zDOBi1A2ZugWprFHgwL-8LRQLSfz8BqoJLaMdaflPgM-J-_D0gHQwS_CDHXp5R0vHUADuZKd49oP4eir2qw508EJ57kQ"&gt;
+
+    &lt;Dataset 
+        name="coads_climatology.nc" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns:grddl="http://www.w3.org/2003/g/data-view#" 
+        grddl:transformation="http://xml.opendap.org/transforms/ddxToRdfTriples.xsl" 
+        xmlns="http://xml.opendap.org/ns/DAP/3.2#" 
+        xmlns:dap="http://xml.opendap.org/ns/DAP/3.2#" 
+        dapVersion="3.2" 
+        xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+        xml:base="http://localhost:8080/opendap/hyrax/data/nc/coads_climatology.nc"&gt;
+        &lt;Attribute name="NC_GLOBAL" type="Container"&gt;
+            &lt;Attribute name="history" type="String"&gt;
+                &lt;value&gt;FERRET V4.30 (debug/no GUI) 15-Aug-96&lt;/value&gt;
+            &lt;/Attribute&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="DODS_EXTRA" type="Container"&gt;
+            &lt;Attribute name="Unlimited_Dimension" type="String"&gt;
+                &lt;value&gt;TIME&lt;/value&gt;
+            &lt;/Attribute&gt;
+        &lt;/Attribute&gt;
+        &lt;Array name="TIME"&gt;
+            &lt;Float64 name="TIME"/&gt;
+            &lt;dimension name="TIME" size="12"/&gt;
+            &lt;value&gt;366&lt;/value&gt; &lt;value&gt;1096.485&lt;/value&gt; &lt;value&gt;1826.97&lt;/value&gt; &lt;value&gt;2557.455&lt;/value&gt; &lt;value&gt;3287.94&lt;/value&gt; &lt;value&gt;4018.425&lt;/value&gt; &lt;value&gt;4748.91&lt;/value&gt; &lt;value&gt;5479.395&lt;/value&gt; &lt;value&gt;6209.88&lt;/value&gt; &lt;value&gt;6940.365&lt;/value&gt; &lt;value&gt;7670.85&lt;/value&gt; &lt;value&gt;8401.335&lt;/value&gt;
+        &lt;/Array&gt;
+        &lt;Array name="COADSY"&gt;
+            &lt;Float64 name="COADSY"/&gt;
+            &lt;dimension name="COADSY" size="90"/&gt;
+            &lt;value&gt;-89&lt;/value&gt; &lt;value&gt;-87&lt;/value&gt; &lt;value&gt;-85&lt;/value&gt; &lt;value&gt;-83&lt;/value&gt; &lt;value&gt;-81&lt;/value&gt; &lt;value&gt;-79&lt;/value&gt; &lt;value&gt;-77&lt;/value&gt; &lt;value&gt;-75&lt;/value&gt; &lt;value&gt;-73&lt;/value&gt; &lt;value&gt;-71&lt;/value&gt; &lt;value&gt;-69&lt;/value&gt; &lt;value&gt;-67&lt;/value&gt; &lt;value&gt;-65&lt;/value&gt; &lt;value&gt;-63&lt;/value&gt; &lt;value&gt;-61&lt;/value&gt; &lt;value&gt;-59&lt;/value&gt; &lt;value&gt;-57&lt;/value&gt; &lt;value&gt;-55&lt;/value&gt; &lt;value&gt;-53&lt;/value&gt; &lt;value&gt;-51&lt;/value&gt; &lt;value&gt;-49&lt;/value&gt; &lt;value&gt;-47&lt;/value&gt; &lt;value&gt;-45&lt;/value&gt; &lt;value&gt;-43&lt;/value&gt; &lt;value&gt;-41&lt;/value&gt; &lt;value&gt;-39&lt;/value&gt; &lt;value&gt;-37&lt;/value&gt; &lt;value&gt;-35&lt;/value&gt; &lt;value&gt;-33&lt;/value&gt; &lt;value&gt;-31&lt;/value&gt; &lt;value&gt;-29&lt;/value&gt; &lt;value&gt;-27&lt;/value&gt; &lt;value&gt;-25&lt;/value&gt; &lt;value&gt;-23&lt;/value&gt; &lt;value&gt;-21&lt;/value&gt; &lt;value&gt;-19&lt;/value&gt; &lt;value&gt;-17&lt;/value&gt; &lt;value&gt;-15&lt;/value&gt; &lt;value&gt;-13&lt;/value&gt; &lt;value&gt;-11&lt;/value&gt; &lt;value&gt;-9&lt;/value&gt; &lt;value&gt;-7&lt;/value&gt; &lt;value&gt;-5&lt;/value&gt; &lt;value&gt;-3&lt;/value&gt; &lt;value&gt;-1&lt;/value&gt; &lt;value&gt;1&lt;/value&gt; &lt;value&gt;3&lt;/value&gt; &lt;value&gt;5&lt;/value&gt; &lt;value&gt;7&lt;/value&gt; &lt;value&gt;9&lt;/value&gt; &lt;value&gt;11&lt;/value&gt; &lt;value&gt;13&lt;/value&gt; &lt;value&gt;15&lt;/value&gt; &lt;value&gt;17&lt;/value&gt; &lt;value&gt;19&lt;/value&gt; &lt;value&gt;21&lt;/value&gt; &lt;value&gt;23&lt;/value&gt; &lt;value&gt;25&lt;/value&gt; &lt;value&gt;27&lt;/value&gt; &lt;value&gt;29&lt;/value&gt; &lt;value&gt;31&lt;/value&gt; &lt;value&gt;33&lt;/value&gt; &lt;value&gt;35&lt;/value&gt; &lt;value&gt;37&lt;/value&gt; &lt;value&gt;39&lt;/value&gt; &lt;value&gt;41&lt;/value&gt; &lt;value&gt;43&lt;/value&gt; &lt;value&gt;45&lt;/value&gt; &lt;value&gt;47&lt;/value&gt; &lt;value&gt;49&lt;/value&gt; &lt;value&gt;51&lt;/value&gt; &lt;value&gt;53&lt;/value&gt; &lt;value&gt;55&lt;/value&gt; &lt;value&gt;57&lt;/value&gt; &lt;value&gt;59&lt;/value&gt; &lt;value&gt;61&lt;/value&gt; &lt;value&gt;63&lt;/value&gt; &lt;value&gt;65&lt;/value&gt; &lt;value&gt;67&lt;/value&gt; &lt;value&gt;69&lt;/value&gt; &lt;value&gt;71&lt;/value&gt; &lt;value&gt;73&lt;/value&gt; &lt;value&gt;75&lt;/value&gt; &lt;value&gt;77&lt;/value&gt; &lt;value&gt;79&lt;/value&gt; &lt;value&gt;81&lt;/value&gt; &lt;value&gt;83&lt;/value&gt; &lt;value&gt;85&lt;/value&gt; &lt;value&gt;87&lt;/value&gt; &lt;value&gt;89&lt;/value&gt;
+        &lt;/Array&gt;
+        &lt;Array name="COADSX"&gt;
+            &lt;Float64 name="COADSX"/&gt;
+            &lt;dimension name="COADSX" size="180"/&gt;
+            &lt;value&gt;21&lt;/value&gt; &lt;value&gt;23&lt;/value&gt; &lt;value&gt;25&lt;/value&gt; &lt;value&gt;27&lt;/value&gt; &lt;value&gt;29&lt;/value&gt; &lt;value&gt;31&lt;/value&gt; &lt;value&gt;33&lt;/value&gt; &lt;value&gt;35&lt;/value&gt; &lt;value&gt;37&lt;/value&gt; &lt;value&gt;39&lt;/value&gt; &lt;value&gt;41&lt;/value&gt; &lt;value&gt;43&lt;/value&gt; &lt;value&gt;45&lt;/value&gt; &lt;value&gt;47&lt;/value&gt; &lt;value&gt;49&lt;/value&gt; &lt;value&gt;51&lt;/value&gt; &lt;value&gt;53&lt;/value&gt; &lt;value&gt;55&lt;/value&gt; &lt;value&gt;57&lt;/value&gt; &lt;value&gt;59&lt;/value&gt; &lt;value&gt;61&lt;/value&gt; &lt;value&gt;63&lt;/value&gt; &lt;value&gt;65&lt;/value&gt; &lt;value&gt;67&lt;/value&gt; &lt;value&gt;69&lt;/value&gt; &lt;value&gt;71&lt;/value&gt; &lt;value&gt;73&lt;/value&gt; &lt;value&gt;75&lt;/value&gt; &lt;value&gt;77&lt;/value&gt; &lt;value&gt;79&lt;/value&gt; &lt;value&gt;81&lt;/value&gt; &lt;value&gt;83&lt;/value&gt; &lt;value&gt;85&lt;/value&gt; &lt;value&gt;87&lt;/value&gt; &lt;value&gt;89&lt;/value&gt; &lt;value&gt;91&lt;/value&gt; &lt;value&gt;93&lt;/value&gt; &lt;value&gt;95&lt;/value&gt; &lt;value&gt;97&lt;/value&gt; &lt;value&gt;99&lt;/value&gt; &lt;value&gt;101&lt;/value&gt; &lt;value&gt;103&lt;/value&gt; &lt;value&gt;105&lt;/value&gt; &lt;value&gt;107&lt;/value&gt; &lt;value&gt;109&lt;/value&gt; &lt;value&gt;111&lt;/value&gt; &lt;value&gt;113&lt;/value&gt; &lt;value&gt;115&lt;/value&gt; &lt;value&gt;117&lt;/value&gt; &lt;value&gt;119&lt;/value&gt; &lt;value&gt;121&lt;/value&gt; &lt;value&gt;123&lt;/value&gt; &lt;value&gt;125&lt;/value&gt; &lt;value&gt;127&lt;/value&gt; &lt;value&gt;129&lt;/value&gt; &lt;value&gt;131&lt;/value&gt; &lt;value&gt;133&lt;/value&gt; &lt;value&gt;135&lt;/value&gt; &lt;value&gt;137&lt;/value&gt; &lt;value&gt;139&lt;/value&gt; &lt;value&gt;141&lt;/value&gt; &lt;value&gt;143&lt;/value&gt; &lt;value&gt;145&lt;/value&gt; &lt;value&gt;147&lt;/value&gt; &lt;value&gt;149&lt;/value&gt; &lt;value&gt;151&lt;/value&gt; &lt;value&gt;153&lt;/value&gt; &lt;value&gt;155&lt;/value&gt; &lt;value&gt;157&lt;/value&gt; &lt;value&gt;159&lt;/value&gt; &lt;value&gt;161&lt;/value&gt; &lt;value&gt;163&lt;/value&gt; &lt;value&gt;165&lt;/value&gt; &lt;value&gt;167&lt;/value&gt; &lt;value&gt;169&lt;/value&gt; &lt;value&gt;171&lt;/value&gt; &lt;value&gt;173&lt;/value&gt; &lt;value&gt;175&lt;/value&gt; &lt;value&gt;177&lt;/value&gt; &lt;value&gt;179&lt;/value&gt; &lt;value&gt;181&lt;/value&gt; &lt;value&gt;183&lt;/value&gt; &lt;value&gt;185&lt;/value&gt; &lt;value&gt;187&lt;/value&gt; &lt;value&gt;189&lt;/value&gt; &lt;value&gt;191&lt;/value&gt; &lt;value&gt;193&lt;/value&gt; &lt;value&gt;195&lt;/value&gt; &lt;value&gt;197&lt;/value&gt; &lt;value&gt;199&lt;/value&gt; &lt;value&gt;201&lt;/value&gt; &lt;value&gt;203&lt;/value&gt; &lt;value&gt;205&lt;/value&gt; &lt;value&gt;207&lt;/value&gt; &lt;value&gt;209&lt;/value&gt; &lt;value&gt;211&lt;/value&gt; &lt;value&gt;213&lt;/value&gt; &lt;value&gt;215&lt;/value&gt; &lt;value&gt;217&lt;/value&gt; &lt;value&gt;219&lt;/value&gt; &lt;value&gt;221&lt;/value&gt; &lt;value&gt;223&lt;/value&gt; &lt;value&gt;225&lt;/value&gt; &lt;value&gt;227&lt;/value&gt; &lt;value&gt;229&lt;/value&gt; &lt;value&gt;231&lt;/value&gt; &lt;value&gt;233&lt;/value&gt; &lt;value&gt;235&lt;/value&gt; &lt;value&gt;237&lt;/value&gt; &lt;value&gt;239&lt;/value&gt; &lt;value&gt;241&lt;/value&gt; &lt;value&gt;243&lt;/value&gt; &lt;value&gt;245&lt;/value&gt; &lt;value&gt;247&lt;/value&gt; &lt;value&gt;249&lt;/value&gt; &lt;value&gt;251&lt;/value&gt; &lt;value&gt;253&lt;/value&gt; &lt;value&gt;255&lt;/value&gt; &lt;value&gt;257&lt;/value&gt; &lt;value&gt;259&lt;/value&gt; &lt;value&gt;261&lt;/value&gt; &lt;value&gt;263&lt;/value&gt; &lt;value&gt;265&lt;/value&gt; &lt;value&gt;267&lt;/value&gt; &lt;value&gt;269&lt;/value&gt; &lt;value&gt;271&lt;/value&gt; &lt;value&gt;273&lt;/value&gt; &lt;value&gt;275&lt;/value&gt; &lt;value&gt;277&lt;/value&gt; &lt;value&gt;279&lt;/value&gt; &lt;value&gt;281&lt;/value&gt; &lt;value&gt;283&lt;/value&gt; &lt;value&gt;285&lt;/value&gt; &lt;value&gt;287&lt;/value&gt; &lt;value&gt;289&lt;/value&gt; &lt;value&gt;291&lt;/value&gt; &lt;value&gt;293&lt;/value&gt; &lt;value&gt;295&lt;/value&gt; &lt;value&gt;297&lt;/value&gt; &lt;value&gt;299&lt;/value&gt; &lt;value&gt;301&lt;/value&gt; &lt;value&gt;303&lt;/value&gt; &lt;value&gt;305&lt;/value&gt; &lt;value&gt;307&lt;/value&gt; &lt;value&gt;309&lt;/value&gt; &lt;value&gt;311&lt;/value&gt; &lt;value&gt;313&lt;/value&gt; &lt;value&gt;315&lt;/value&gt; &lt;value&gt;317&lt;/value&gt; &lt;value&gt;319&lt;/value&gt; &lt;value&gt;321&lt;/value&gt; &lt;value&gt;323&lt;/value&gt; &lt;value&gt;325&lt;/value&gt; &lt;value&gt;327&lt;/value&gt; &lt;value&gt;329&lt;/value&gt; &lt;value&gt;331&lt;/value&gt; &lt;value&gt;333&lt;/value&gt; &lt;value&gt;335&lt;/value&gt; &lt;value&gt;337&lt;/value&gt; &lt;value&gt;339&lt;/value&gt; &lt;value&gt;341&lt;/value&gt; &lt;value&gt;343&lt;/value&gt; &lt;value&gt;345&lt;/value&gt; &lt;value&gt;347&lt;/value&gt; &lt;value&gt;349&lt;/value&gt; &lt;value&gt;351&lt;/value&gt; &lt;value&gt;353&lt;/value&gt; &lt;value&gt;355&lt;/value&gt; &lt;value&gt;357&lt;/value&gt; &lt;value&gt;359&lt;/value&gt; &lt;value&gt;361&lt;/value&gt; &lt;value&gt;363&lt;/value&gt; &lt;value&gt;365&lt;/value&gt; &lt;value&gt;367&lt;/value&gt; &lt;value&gt;369&lt;/value&gt; &lt;value&gt;371&lt;/value&gt; &lt;value&gt;373&lt;/value&gt; &lt;value&gt;375&lt;/value&gt; &lt;value&gt;377&lt;/value&gt; &lt;value&gt;379&lt;/value&gt;
+        &lt;/Array&gt;
+        &lt;Grid name="SST"&gt;
+            &lt;Array name="SST"&gt;
+                &lt;Attribute name="missing_value" type="Float32"&gt;
+                    &lt;value&gt;-9.99999979e+33&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="_FillValue" type="Float32"&gt;
+                    &lt;value&gt;-9.99999979e+33&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="long_name" type="String"&gt;
+                    &lt;value&gt;SEA SURFACE TEMPERATURE&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="history" type="String"&gt;
+                    &lt;value&gt;From coads_climatology&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;Deg C&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float32/&gt;
+                &lt;dimension name="TIME" size="12"/&gt;
+                &lt;dimension name="COADSY" size="90"/&gt;
+                &lt;dimension name="COADSX" size="180"/&gt;
+            &lt;/Array&gt;
+            &lt;Map name="TIME"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;hour since 0000-01-01 00:00:00&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="time_origin" type="String"&gt;
+                    &lt;value&gt;1-JAN-0000 00:00:00&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="modulo" type="String"&gt;
+                    &lt;value&gt; &lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="TIME" size="12"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="COADSY"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degrees_north&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="point_spacing" type="String"&gt;
+                    &lt;value&gt;even&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="COADSY" size="90"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="COADSX"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degrees_east&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="modulo" type="String"&gt;
+                    &lt;value&gt; &lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="point_spacing" type="String"&gt;
+                    &lt;value&gt;even&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="COADSX" size="180"/&gt;
+            &lt;/Map&gt;
+        &lt;/Grid&gt;
+        &lt;Grid name="AIRT"&gt;
+            &lt;Array name="AIRT"&gt;
+                &lt;Attribute name="missing_value" type="Float32"&gt;
+                    &lt;value&gt;-9.99999979e+33&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="_FillValue" type="Float32"&gt;
+                    &lt;value&gt;-9.99999979e+33&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="long_name" type="String"&gt;
+                    &lt;value&gt;AIR TEMPERATURE&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="history" type="String"&gt;
+                    &lt;value&gt;From coads_climatology&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;DEG C&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float32/&gt;
+                &lt;dimension name="TIME" size="12"/&gt;
+                &lt;dimension name="COADSY" size="90"/&gt;
+                &lt;dimension name="COADSX" size="180"/&gt;
+            &lt;/Array&gt;
+            &lt;Map name="TIME"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;hour since 0000-01-01 00:00:00&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="time_origin" type="String"&gt;
+                    &lt;value&gt;1-JAN-0000 00:00:00&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="modulo" type="String"&gt;
+                    &lt;value&gt; &lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="TIME" size="12"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="COADSY"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degrees_north&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="point_spacing" type="String"&gt;
+                    &lt;value&gt;even&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="COADSY" size="90"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="COADSX"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degrees_east&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="modulo" type="String"&gt;
+                    &lt;value&gt; &lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="point_spacing" type="String"&gt;
+                    &lt;value&gt;even&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="COADSX" size="180"/&gt;
+            &lt;/Map&gt;
+        &lt;/Grid&gt;
+        &lt;Grid name="UWND"&gt;
+            &lt;Array name="UWND"&gt;
+                &lt;Attribute name="missing_value" type="Float32"&gt;
+                    &lt;value&gt;-9.99999979e+33&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="_FillValue" type="Float32"&gt;
+                    &lt;value&gt;-9.99999979e+33&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="long_name" type="String"&gt;
+                    &lt;value&gt;ZONAL WIND&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="history" type="String"&gt;
+                    &lt;value&gt;From coads_climatology&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;M/S&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float32/&gt;
+                &lt;dimension name="TIME" size="12"/&gt;
+                &lt;dimension name="COADSY" size="90"/&gt;
+                &lt;dimension name="COADSX" size="180"/&gt;
+            &lt;/Array&gt;
+            &lt;Map name="TIME"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;hour since 0000-01-01 00:00:00&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="time_origin" type="String"&gt;
+                    &lt;value&gt;1-JAN-0000 00:00:00&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="modulo" type="String"&gt;
+                    &lt;value&gt; &lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="TIME" size="12"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="COADSY"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degrees_north&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="point_spacing" type="String"&gt;
+                    &lt;value&gt;even&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="COADSY" size="90"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="COADSX"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degrees_east&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="modulo" type="String"&gt;
+                    &lt;value&gt; &lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="point_spacing" type="String"&gt;
+                    &lt;value&gt;even&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="COADSX" size="180"/&gt;
+            &lt;/Map&gt;
+        &lt;/Grid&gt;
+        &lt;Grid name="VWND"&gt;
+            &lt;Array name="VWND"&gt;
+                &lt;Attribute name="missing_value" type="Float32"&gt;
+                    &lt;value&gt;-9.99999979e+33&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="_FillValue" type="Float32"&gt;
+                    &lt;value&gt;-9.99999979e+33&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="long_name" type="String"&gt;
+                    &lt;value&gt;MERIDIONAL WIND&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="history" type="String"&gt;
+                    &lt;value&gt;From coads_climatology&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;M/S&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float32/&gt;
+                &lt;dimension name="TIME" size="12"/&gt;
+                &lt;dimension name="COADSY" size="90"/&gt;
+                &lt;dimension name="COADSX" size="180"/&gt;
+            &lt;/Array&gt;
+            &lt;Map name="TIME"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;hour since 0000-01-01 00:00:00&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="time_origin" type="String"&gt;
+                    &lt;value&gt;1-JAN-0000 00:00:00&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="modulo" type="String"&gt;
+                    &lt;value&gt; &lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="TIME" size="12"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="COADSY"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degrees_north&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="point_spacing" type="String"&gt;
+                    &lt;value&gt;even&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="COADSY" size="90"/&gt;
+            &lt;/Map&gt;
+            &lt;Map name="COADSX"&gt;
+                &lt;Attribute name="units" type="String"&gt;
+                    &lt;value&gt;degrees_east&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="modulo" type="String"&gt;
+                    &lt;value&gt; &lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Attribute name="point_spacing" type="String"&gt;
+                    &lt;value&gt;even&lt;/value&gt;
+                &lt;/Attribute&gt;
+                &lt;Float64/&gt;
+                &lt;dimension name="COADSX" size="180"/&gt;
+            &lt;/Map&gt;
+        &lt;/Grid&gt;
+    &lt;/Dataset&gt;
+&lt;/gar:GlacierArchiveRecord&gt;
+&lt;/source&gt;
+&lt;/font&gt;</text>
+      <sha1>ig8pb35xtrz35009av1shr3wxovuzqz</sha1>
+    </revision>
+  </page>
+</mediawiki>

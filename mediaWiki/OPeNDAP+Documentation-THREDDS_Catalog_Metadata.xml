@@ -1,0 +1,258 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>THREDDS Catalog Metadata</title>
+    <ns>0</ns>
+    <id>560</id>
+    <revision>
+      <id>5474</id>
+      <parentid>5473</parentid>
+      <timestamp>2010-03-30T19:26:14Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Possible Designs */</comment>
+      <origin>5474</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="12217" sha1="d2obyo5n3rzku76tx3v9dd88in44c3l" xml:space="preserve">== Overview ==
+
+;Goal
+:Improved THREDDS catalog responses from dynamically generated (BES) catalogs.
+
+
+THREDDS catalogs typically contain metadata beyond the minimum required to simply list the catalogs holdings. This additional metadata is often comprised of  ''[http://www.unidata.ucar.edu/projects/THREDDS/tech/catalog/InvCatalogSpec.html#dlElements Digital Library Metadata Elements]''. The Hyrax server is not currently able to produce THREDDS catalogs with this kind of metadata. Since these metadata elements provide crucial catalog content for dataset discovery, Hyrax needs to add this functionality.
+
+=== The Problem ===
+ 
+In a section of this THREDDS catalog: http://blackburn.whoi.edu:8081/thredds/bathy_catalog.xml  We can see the Digital Library Metadata Elements:
+    &lt;dataset name="USGS Vineyard Sound Relief Model (1 arc sec)" ID="bathy/vs_1sec_20070725.nc"
+             urlPath="bathy/vs_1sec_20070725.nc"&gt;
+        &lt;serviceName&gt;Compound&lt;/serviceName&gt;
+ &lt;b&gt;
+        &lt;authority&gt;gov.usgs.er.whsc&lt;/authority&gt;
+        &lt;dataType&gt;GRID&lt;/dataType&gt;
+        &lt;dataFormat&gt;NetCDF&lt;/dataFormat&gt;
+        &lt;documentation xlink:href="http://stellwagen.er.usgs.gov/models/grids/CGSherwo.doc"
+                       xlink:title="USGS Vineyard Sound Coastal Relief Model (1 arc second)"/&gt;
+        &lt;creator&gt;
+            &lt;name vocabulary="DIF"&gt;WHSC/USGS&lt;/name&gt;
+            &lt;contact url="http://www.usgs.gov/" email="rsignell@usgs.gov"/&gt;
+        &lt;/creator&gt;
+        &lt;publisher&gt;
+            &lt;name vocabulary="DIF"&gt;WHSC/USGS&lt;/name&gt;
+            &lt;contact url="http://www.usgs.gov/" email="rsignell@usgs.gov"/&gt;
+        &lt;/publisher&gt;
+        &lt;geospatialCoverage&gt;
+            &lt;northsouth&gt;
+                &lt;start&gt;41.0&lt;/start&gt;
+                &lt;size&gt;1.4&lt;/size&gt;
+                &lt;units&gt;degrees_north&lt;/units&gt;
+            &lt;/northsouth&gt;
+            &lt;eastwest&gt;
+                &lt;start&gt;-71.2&lt;/start&gt;
+                &lt;size&gt;0.5&lt;/size&gt;
+                &lt;units&gt;degrees_east&lt;/units&gt;
+            &lt;/eastwest&gt;
+            &lt;updown&gt;
+                &lt;start&gt;-277.25&lt;/start&gt;
+                &lt;size&gt;459.6&lt;/size&gt;
+                &lt;units&gt;meters&lt;/units&gt;
+            &lt;/updown&gt;
+        &lt;/geospatialCoverage&gt;
+ &lt;/b&gt;
+    &lt;/dataset&gt;
+
+
+A dataset element in a THREDDS catalog from Hyrax, generated from a BES showCatalog request, contains none of the Digital Library Metadata Elements:
+
+    &lt;dataset name="200803061600_HFRadar_USEGC_6km_rtv_SIO.ncml" ID="netcdf/examples/200803061600_HFRadar_USEGC_6km_rtv_SIO.ncml"&gt;
+      &lt;dataSize units="bytes"&gt;1162&lt;/dataSize&gt;
+      &lt;date type="modified"&gt;2010-02-22T23:19:51&lt;/date&gt;
+      &lt;access serviceName="dap" urlPath="netcdf/examples/200803061600_HFRadar_USEGC_6km_rtv_SIO.ncml" /&gt;
+    &lt;/dataset&gt;
+
+
+However, the [http://test.opendap.org:8080/opendap/netcdf/examples/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx DDX] for the dataset in question  contains a significant amount of metadata. This includes DAP attributes (associated with the Unidata Dataset Discovery convention) that relate to geospatial extents:
+
+        &lt;Attribute name="geospatial_lat_min" type="Float32"&gt;
+            &lt;value&gt;21.73596001&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lat_max" type="Float32"&gt;
+            &lt;value&gt;46.49441910&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lon_min" type="Float32"&gt;
+            &lt;value&gt;-97.88385010&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="geospatial_lon_max" type="Float32"&gt;
+            &lt;value&gt;-57.23120880&lt;/value&gt;
+        &lt;/Attribute&gt;
+
+== THREDDS Background Information ==
+
+=== Existing THREDDS/NCML Implementations ===
+
+
+* [http://www.unidata.ucar.edu/projects/THREDDS/tech/TDS.html THREDDS Data Server (TDS)]
+* [http://www.opendap.org/download/hyrax.html OPeNDAP Hyrax server]
+* [http://www.iges.org/grads/gds/ GrADS Data Server (GDS)]
+* [http://ferret.pmel.noaa.gov/LAS/documentation/the-ferret-thredds-data-server-f-tds/ Ferret-TDS]
+
+=== How are people using THREDDS? ===
+
+:''More Examples needed.''
+
+[https://portal.leadproject.org/gridsphere/gridsphere Linked Environments for Atmospheric Discovery (LEAD)]
+* [http://www.extreme.indiana.edu/rescat/  LEAD Resource Catalog] ().
+
+SURA Coastal Ocean Observing and Prediction (SCOOP) Program
+* http://scoop.sura.org/index.html
+* https://littlefoot.tamu.edu/
+* http://scoop.tamu.edu/thredds.html
+* http://scoop.tamu.edu/metadata.html
+
+eScience
+* http://ieeexplore.ieee.org/Xplore/login.jsp?url=http%3A%2F%2Fieeexplore.ieee.org%2Fiel5%2F4426856%2F4426857%2F04426867.pdf%3Farnumber%3D4426867&amp;authDecision=-203
+* http://research.microsoft.com/en-us/um/people/yoges/talks/swf08-e2escientificdatamanagement.pdf
+
+More...
+* http://www.alexandria.ucsb.edu/~gjanee/archive/2007/opendap-devcon.ppt
+* [http://csse.usc.edu/~mattmann/pubs/WWW2009.pdf A Virtual Oceanographic Data Center]
+* http://data.aims.gov.au/extpubs/attachmentDownload?docID=3137
+* http://www.wmo.int/pages/prog/www/WDM/Workshop_metadata/thredds.ppt
+
+=== How does the TDS use THREDDS and NcML? ===
+
+
+The TDS uses THREDDS catalog files (''configuration catalogs'') stored on the local disk as a source of both catalog content and configuration information. 
+
+From the [http://www.unidata.ucar.edu/projects/THREDDS/tech/tutorial/ TDS tutorial]:
+&lt;blockquote&gt;
+TDS ''configuration catalogs'' are THREDDS catalogs with a few extensions. They contain information detailing the datasets the TDS will serve and what services will be available for each dataset:
+*The '''datasetRoot''' and '''datasetScan''' elements are extensions that:
+**provide mappings between incoming URL requests and directories on disk; and
+**are used in the detailing of the datasets the TDS will serve.
+*Available services are indicated in the normal THREDDS catalog manner with service name references.
+&lt;br/&gt;
+The TDS configuration catalogs represent the top-level catalogs served by the TDS:
+*The configuration information is only needed by the server.
+*The client view of the catalogs does not contain any configuration information.
+&lt;/blockquote&gt;
+
+==== Content ====
+
+The content served by a particular instance of a TDS is defined via [http://www.unidata.ucar.edu/projects/THREDDS/tech/tutorial/ConfigCatalogs.html ''configuration catalogs'']. The ''default root catalog'' is the root of this content. It may reference other ''configuration catalogs'' using the catalogRef element. These catalogs can also contain catalogRef elements, etc. These catalogs may define dataset content, including metadata and access elements that are passed directly (as in unchanged) to a requesting client. A dataset declaration may also contain NcML that makes it a virtual dataset (see below), and thredds:metadata content (containing Digital Library Metadata Elements) which will appear in catalog response as part of  the dataset declaration. Data sets can also be defined using a '''datasetScan''' element which may also include inheritable thredds:metadata content.
+
+==== Configuration ====
+
+
+===== thredds:datasetRoot =====
+Each '''datasetRoot''' element defines a single mapping between a URL base path and a directory. It is used in conjunction with '''dataset''' elements in the same catalog file to proved dataset access.
+
+===== thredds:datasetScan =====
+Each '''datasetScan''' element also defines a single mapping between a URL base path and a directory. Unlike the  '''datasetRoot''' element which works with dataset elements to define the datasets served, the '''datasetScan''' element will automatically serve some or all of the datasets found in the mapped directory. The '''datasetScan''' element may also contain a thredds:metadata block whose contents (Digital Library Metadata Elements) may be inherited by all of the data sets located by the datasetScan. NcML may also be used to add metadat attributes to the data set content. This is different from the thredds:metadata block. The thredds:metadata block only affects the content of the catalogs. The NcML block can add moth metadata (attributes) and data directly to the data set(s).
+
+===== Embedded NcML =====
+[http://www.unidata.ucar.edu/projects/THREDDS/tech/tutorial/NcML.htm The  TDS can use embedded NcML elements] to add new, modify existing, or aggregate collections of data sets.
+
+Within a TDS ''configuration catalog'', NcML content embedded in a TDS '''dataset''' element creates a ''self-contained NcML dataset''. The TDS dataset does not refer to a data root, because the NcML contains its own location. The TDS dataset must have a unique URL path (this is true for all TDS datasets), but unlike a regular dataset, does not have to match a data root.
+
+
+In this excerpt from a THREDDS catalog XML file that is read by the TDS there is an ncml:netcdf element:
+
+    &lt;dataset name="1-day" ID="satellite/PH/ssta/1day" urlPath="satellite/PH/ssta/1day"&gt;
+      &lt;serviceName&gt;all&lt;/serviceName&gt;
+      &lt;b&gt;&lt;netcdf xmlns="http://www.unidata.ucar.edu/namespaces/netcdf/ncml-2.2"&gt; 
+        &lt;aggregation dimName="time" type="joinExisting" recheckEvery="720 min"&gt; 
+          &lt;variableAgg name="PHssta" /&gt; 
+          &lt;scan location="/u00/satellite/PH/ssta/1day/" suffix=".nc" /&gt; 
+        &lt;/aggregation&gt;
+      &lt;/netcdf&gt;&lt;/b&gt;
+    &lt;/dataset&gt;
+
+The ncml:netcdf element instructs the TDS that this is a logical dataset built from an aggregation, and contains the information need by the TDS to create the logical dataset from files stored on disk.
+
+NcML can also be used in a '''datasetScan''' element. If an NcML element is added to a '''datasetScan''', it will modify all of the datasets contained within the DatasetScan. It is not self-contained, however, since it gets its location from the datasets that are dynamically scanned.
+
+== Possible Designs ==
+
+=== Questions? ===
+
+# How can we add the Digital Library Metadata Elements content to Hyrax THREDDS catalogs?
+# Can we capitalize on existing metadata to build Digital Library Metadata Element content?
+# How do we propagate (some subset of) dataset metadata "up" into our THREDDS catalogs? People are requesting this.
+# Can we use NcML to push new metadata down into collections vis-a-vis the inherited metadata section of a dataset scan? I mean add metadata terms to the thredds catalogs using NcML. OtherXML? Attributes? Both?
+# How do we add new services (say for example WCS) to the services listed in our THREDDS catalogs along with the appropriate data access links for the appropriate datasets? Is this even realistic given the architecture of our WCS?
+# This is requested functionality for National Catalog Viewer in development by IOOS. And is needed by June 2010. Can we pull that off?
+
+
+
+=== Caching ===
+
+It may be that because of the cost of acquiring and processing the site metadata that we will need to cache the "enriched" catalogs. There are a number of ways to accomplish this. One that comes to mind immediately is to write down the catalog in a "mirror" of the site graph and use the existing thredds d=static catalog handler to read it. That would allow the catalog generation to be an asynchronous process taht could be scheduled, like a cron job.
+
+
+=== Technologies ===
+
+==== Explicit Injection and XSLT ====
+
+pre-conditions:
+* Write NcML for each dataset to place the desired Digital Library Metadata Elements XML directly into the DDX.
+
+RunTime:
+* Use XSLT transforms to extract the THREDDS namespace metadata from the DDX and add it to the THREDDS catalog response.
+* Cache all DDX's along with the time of caching. Update only as required.
+* Use cached DDX's to formulate subsequent responses.
+
+==== XSLT semantic mappings====
+
+RunTime:
+* Use XSLT transforms to transform metadata in different conventions (like  CF-1.1 and UDDv1) in the DDX into THREDDS namespace metadata and add it to the THREDDS catalog response.
+* Cache all DDX's along with the time of caching. Update only as required.
+* Use cached DDX's to formulate subsequent responses.
+
+==== Semantic Inferencing ====
+
+pre-conditions:
+* Write inferencing rules that map metadata conventions (CF-1.1 and UDDv1 to begin) to the THREDDS Digital Library Metadata Elements.
+
+Operational Startup:
+* Ingest all of the DDXs in Hyrax into a semantic repository.
+* Run the repository rules to completion.
+* Trigger asynchronous updates.
+
+
+RunTime:
+* Query repository for catalog node contents.
+* return catalog.</text>
+      <sha1>d2obyo5n3rzku76tx3v9dd88in44c3l</sha1>
+    </revision>
+  </page>
+</mediawiki>

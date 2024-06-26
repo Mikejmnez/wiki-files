@@ -1,0 +1,58 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Web Site Design</title>
+    <ns>0</ns>
+    <id>573</id>
+    <revision>
+      <id>9626</id>
+      <parentid>5423</parentid>
+      <timestamp>2013-04-29T17:46:04Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>9626</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1254" sha1="72ej8mgqpkqgkbdgkd1k9vz6m1ynx4s" xml:space="preserve">Our web (www.opendap.org) page is the cumulative result of many people's work over nearly fifteen years. It shows! Pages are out of date, some important things are documented in several places (often with slight differences) and the overall organization is very organic being spread over three different actual sites. We need for a person with an interest in web site design to work with us to transform the current collection of pages into an informative web site. At the same time, the resulting site must be one that we can maintain moving forward so that adding new documentation about new software packages, making new software releases available and updating existing documentation are all painless.
+
+Candidate technologies are Drupal, MediaWiki, ...
+
+Technical details of our current site(s):
+
+* www.opendap.org uses CSS, HTML and server-side includes. Static pages are served using Apache; he pages are stored in our subversion repository so anyone can edit them, but someone must login to the server host to actually update the pages.
+* http://docs.opendap.org is a mediawiki site where we are slowly migrating our documentation. 
+* https://scm.opendap.org is a TRAC site that has some developer documentation
+
+[[Category:Google Summer of Code]]</text>
+      <sha1>72ej8mgqpkqgkbdgkd1k9vz6m1ynx4s</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,92 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Single Constraint per Definition</title>
+    <ns>0</ns>
+    <id>567</id>
+    <revision>
+      <id>5407</id>
+      <parentid>5398</parentid>
+      <timestamp>2010-03-21T17:53:51Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <origin>5407</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2127" sha1="nklrthcvssqpdnxxbjocci160ilzt24" xml:space="preserve">Current, a constraint expression is provided per container specified in a definition. For example (cedar constraint):
+
+This is available in Hyrax 1.7
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;request reqID="some_unique_value" &gt;
+    &lt;define name="d"&gt;
+	&lt;container name="mfp920504a"&gt;
+            &lt;constraint&gt;date(2002,110,0,0,2002,120,2359,5999)&lt;/constraint&gt;
+        &lt;/container&gt;
+	&lt;container name="mfp920504b"&gt;
+            &lt;constraint&gt;date(2002,110,0,0,2002,120,2359,5999)&lt;/constraint&gt;
+        &lt;/container&gt;
+	&lt;container name="mfp920504c"&gt;
+            &lt;constraint&gt;date(2002,110,0,0,2002,120,2359,5999)&lt;/constraint&gt;
+        &lt;/container&gt;
+    &lt;/define&gt;
+    &lt;get type="tab" definition="d" /&gt;
+&lt;/request&gt;
+&lt;/pre&gt;
+
+Notice that the constraints are the same for each container. In an xml document, this isn't too much of a problem. But with the current apache module for the CEDAR project that constraint is repeated for each container in the string request. This string request eventually gets translated into an xml request document. For simplicity sake, we would like to have the following:
+
+&lt;pre&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;request reqID="some_unique_value" &gt;
+    &lt;define name="d"&gt;
+        &lt;constraint&gt;date(2002,110,0,0,2002,120,2359,5999)&lt;/constraint&gt;
+	&lt;container name="mfp920504a" /&gt;
+	&lt;container name="mfp920504b" /&gt;
+        &lt;container name="mfp920504c" /&gt;
+    &lt;/define&gt;
+    &lt;get type="tab" definition="d" /&gt;
+&lt;/request&gt;
+&lt;/pre&gt;
+
+In this example, there is a single constraint for all of the containers.
+
+here's the rules:
+# If there is a single constraint defined in the definition, as in the example above, then the constraint gets applied to each of the containers.
+# If there is a constraint defined within the container element, then that constraint is used for that container, overriding the constraint for the definition if it exists.
+# If there is an empty constraint for a container, where there is a constraint for the definition, this means that there is no constraint for that container.
+
+[[Category:Development|Single Constraint per Definition]][[Category:Hyrax Development|Single Constraint per Definition]]</text>
+      <sha1>nklrthcvssqpdnxxbjocci160ilzt24</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,209 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Union Aggregation -- Explicit Netcdf</title>
+    <ns>0</ns>
+    <id>521</id>
+    <revision>
+      <id>4724</id>
+      <parentid>4723</parentid>
+      <timestamp>2009-08-25T20:39:58Z</timestamp>
+      <contributor>
+        <username>Mjohnson</username>
+        <id>42</id>
+      </contributor>
+      <comment>/* New Components */</comment>
+      <origin>4724</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7867" sha1="0pllqa5k8kdix8qzt5fz795butlw5fi" xml:space="preserve">= Union Aggregation -- Explicit Netcdf Elements =
+
+Parent Design Page:  [[BES_Aggregation_using_NcML]]
+
+This page describes the design for the "union" type of aggregation for the case where the &lt;netcdf&gt; elements are listed explicitly (as opposed to with a &lt;scan&gt; element).
+
+== Example Test Cases ==
+
+We need examples of proper union that we know the answer to, as well as examples that we require to fail.
+
+=== Basic Acceptance Example ===
+
+This example file is clearly contrived but will demonstrate the basic required functionality for this portion of the design:
+
+&lt;pre&gt;
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- An example of a union aggregation fully specified in this file --&gt;
+&lt;netcdf&gt;
+  
+  &lt;!-- Can specify attributes outside of aggregation --&gt;
+  &lt;attribute name="Dataset_Description" type="string" value="Virtual union aggregation example"/&gt;
+  
+  &lt;!-- Can specify variables at this level still, outside aggregation --&gt;
+  &lt;variable name="SelfReferentialVariable" type="string"&gt;
+    &lt;values&gt;My name is "SelfReferentialVariable"&lt;/values&gt;
+  &lt;/variable&gt;
+  
+  &lt;aggregation type="union"&gt;
+    
+    &lt;!-- Dataset One --&gt;
+    &lt;netcdf&gt;
+      &lt;!-- This one should "win" since it comes first... --&gt;
+      &lt;attribute name="Description" type="string" value="Dataset One"/&gt;
+      &lt;variable name="Foo" type="string"&gt;
+	&lt;values&gt;Foo&lt;/values&gt;
+      &lt;/variable&gt;
+    &lt;/netcdf&gt;
+
+    &lt;!-- Dataset Two --&gt;
+    &lt;netcdf&gt;
+      &lt;!-- This one should "lose" since it comes later... --&gt;
+      &lt;attribute name="Description" type="string" value="Dataset Two"/&gt;
+      
+      &lt;!-- This one should "lose" since it comes later... --&gt;
+      &lt;variable name="Foo" type="string"&gt;
+	&lt;values&gt;Foo2&lt;/values&gt;
+      &lt;/variable&gt;
+    
+      &lt;!-- But this one will be added --&gt;
+      &lt;variable name="Bar" type="string"&gt;
+	&lt;values&gt;Bar&lt;/values&gt;
+      &lt;/variable&gt;
+   &lt;/netcdf&gt;
+    
+    &lt;!-- Dataset Three --&gt;
+    &lt;netcdf&gt;
+      &lt;!-- This one should "lose" since it comes later... --&gt;
+      &lt;attribute name="Description" type="string" value="Dataset Three"/&gt;
+      
+     &lt;!-- But this one will be added --&gt;
+      &lt;variable name="Baz" type="string"&gt;
+	&lt;values&gt;Baz&lt;/values&gt;
+      &lt;/variable&gt;
+    &lt;/netcdf&gt;
+    
+  &lt;/aggregation&gt;
+
+  &lt;!-- TODO Theoretically we should be able to apply NcML transformations to elements in the aggregation above, according to the tutorial.  
+       I'd like to see an example of this... Since we disallow changing variable values but only attributes, presumably an author
+       could change an attribute known to be in the aggregation?  --&gt;
+
+&lt;/netcdf&gt;
+
+&lt;/pre&gt;
+
+===Rejection Examples ===
+
+''TODO'' We also need to create several examples of REJECTION cases in order to elicit the parse exceptions listed below.
+
+=== Nested Examples ===
+
+In order to validate the changes listed below, we also need an example of a properly nested union, which contains an aggregation containing a netcdf element (or more) that themselves contain nested aggregations.  We need to make sure these work properly.
+
+
+== New Components ==
+
+The parser design needs to change somewhat to handle aggregation.  These changes are:
+
+* We need a new class AggregationElement : public NCMLElement with:
+** Parent pointer to containing NetCDFElement (which will also contain an owning ptr to this AggregationElement)
+** vector&lt;NetCdfElement*&gt; to contain the ordered list of datasets which we need to process the union on.
+*** Should ref() contained NetcdfElement's as they are added to the vector.
+*** Should deref() and clear out the vector of NetcdfElement in dtor which should, in correct ref counts, destruct the netcdf.
+
+* It will need to be added to the NCMLElement::Factory
+
+On handleBegin() it will:
+
+# Make sure there is no other aggregation element set in the current NetcdfElement scope (There can be only one!)
+# Validate that its type=="union" or exception
+# Make sure dimName is unspecified or exception (invalid for union agg). 
+# Add itself to the current scope NetcdfElement, making sure it gets ref() counted.  
+
+On handleContent() it will:
+
+# Exception UNLESS the entire content is only whitespace since it's invalid to specify content for an aggregation.
+
+On handleEnd() it will:
+
+# Process the union by forward iterating down the vector&lt;NetcdfElement*&gt; and for each NetcdfElement*
+## For each attribute in the dataset (DDS) attribute table:
+### If it doesn't exist in the AggregationElement-&gt;getParent() dataset attribute table, add it to this table, else skip.
+## For each variable in the DDS of the NetcdfElement:
+### If a variable doesn't exist in the AggregationElement-&gt;getParent() DDS, then add it, else skip.
+
+If we expect that the AggregationElement was NOT ref()'d by the netcdf, then NCMLParser will deref() it after handleEnd() which will cause it's dtor to be invoked, dereffing all the elements of the dataset vector and clearing it out.
+
+
+
+=== Exceptions ===
+
+AggregationElement '''must''' throw a BESSyntaxUserError (Parse error):
+
+* if any unhandled attributes are specified so the user knows we cannot handle them yet
+* if the aggregation type is anything other than "union"
+* if a &lt;scan&gt; element is specified within the aggregation
+* if a second aggregation element is specified in the currently parsed DDS
+
+== Changes to Existing Components ==
+
+=== NetcdfElement ===
+
+* Must now contain its DDS rather than having a single DDS (actually, a BEPDapResponse containing either a DDS or DataDDS) in the NCMLParser
+* Will contain a single ptr (possibly NULL) to its contained AggregationElement.  NULL implies no aggregation at current point in parse.
+* Will need to know if we are doing a data parse or just ddx (das and dds are subsets of this).  
+
+=== NCMLParser ===
+
+* Can no longer contain a direct pointer to its BESDapResponse and contained DDS (or DataDDS)
+* Instead will contain a single owning pointer to the top level &lt;netcdf&gt; element, with its newly contained BESDapRessponse being the "top-level" response of the parse call.
+* Can no longer delete NCMLElement's as it pops them off the ElementStack after calling handleEnd().  Instead, it will need to:
+** ref() some reference counting mechanism on NCMLElement when it pushes it onto the ElementStack.
+** deref() some reference counting mechanism when it pops them off the ElementStack after handleEnd() is called
+* Needs to parse &lt;netcdf&gt; elements correctly for nested cases:  essentially its current scope BECOMES the nested &lt;netcdf&gt; element when it's encountered, BUT THE ROOT NETCDF ELEMENT IS NOT TOUCHED.  We need a way to keep these notions separate.
+* Need a way to get at the "current aggregation element" which would be the AggregationElement member of the CURRENTLY BEING PARSED NETCDF.  This needs to work on nesting as well.
+
+Since we will want to destroy the root NetcdfElement after the parse call, but return it's BESDapResponse without its dtor killing it, we need to make sure we use an auto_ptr or soemthing for the BESDapResponse so if we return it it's null'ed and not deleted, but if we exception or if it's not released() it gets destroyed (which will be the case for the NetcdfElement's that live inside the AggregationElement vector). 
+
+
+=== NCMLElement ===
+
+As shown above, we need to add some reference counting or equivalent smart pointer system on NCMLElement in order to allow for the two cases:
+
+* Some elements are meant to be destroyed immediately when they are closed and popped off the NCMLParser ElementStack.
+* Some elements are contained within other elements, in particular NetcdfElement's are contained in AggregationElement, and need to remain until the aggregation operation has been completed.
+
+We need to decide between :
+
+* Using some sort of template smart pointer wrapper for NCMLElement that adds strong ref counting and smart deletion when the strong reference count hits 0.
+* Incorporating the ref counting into NCMLElement or a superclass of it, like OpenInventor used to do.</text>
+      <sha1>0pllqa5k8kdix8qzt5fz795butlw5fi</sha1>
+    </revision>
+  </page>
+</mediawiki>

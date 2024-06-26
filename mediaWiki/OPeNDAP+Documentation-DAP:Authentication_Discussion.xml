@@ -1,0 +1,222 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP: Authentication Discussion</title>
+    <ns>0</ns>
+    <id>695</id>
+    <revision>
+      <id>9548</id>
+      <parentid>9547</parentid>
+      <timestamp>2013-02-26T21:26:15Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* HTTPS */</comment>
+      <origin>9548</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="18604" sha1="293o4tcnqsj90ndo669dufpodxmc1t4" xml:space="preserve">== Overview ==
+Here we discuss the various candidate technologies for authenticating and authorizing DAP client access to data held in Hyrax or other DAP servers.
+
+
+
+=== HTTPS  ===
+
+[http://en.wikipedia.org/wiki/Transport_Layer_Security Transport Layer Security (TLS)] and its predecessor, Secure Sockets Layer (SSL), are cryptographic protocols that provide communication security for network transmissions. [http://tools.ietf.org/html/rfc2818 HTTPS] is [http://tools.ietf.org/html/rfc2616 HTTP] over [http://tools.ietf.org/html/rfc2246 TLS]. The technology is mature, proven secure, and is in widespread use through the internet. For the purposes of this DAP discussion we are interested solely in versions TLS 1.2 (SSL 3.3) and higher. 
+
+This protocol uses an initial handshaking scheme in which the client and the server negotiate a secure connection "in the clear" using public/private key paris. At the end of this handshake both sides of the communication have the information required to compute a "master secret" which is then used to establish a secure communication pathway utilizing a block-cipher. This is a crucial point, as the use of public/private key encryption can very computationally expensive while the block cipher approach is much less so. [http://upload.wikimedia.org/wikipedia/commons/a/ae/SSL_handshake_with_two_way_authentication_with_certificates.svg Here is a sequence diagram describing the TLS handshaking process]
+
+
+When TLS is used with client certificates the server can easily ascertain the identity of the certificate holder. Thus in a DAP access model if the data service provider issues a client certificate to each user that requires authenticated access the server software can quickly discover who is requesting a particular data holding and pass that information to an authorization service to determine if the requested access is permitted. This authorization service may be as simple as configuring the server to demand authentication (via a known client certificate) to allow access to to some large segment of it's holdings, or it could be a more complex service that details which data granules a particular user may access.
+
+[[File:CertAuth.png|600px|DAP client access over SSL/TLS using client certificates.]]
+
+ 
+One of the very attractive features of TLS is that it can easily be used for automated programmatic access to data. Once the client certificate has been issued to a user the client program can pass that client certificate to multiple web browsers and different DAP client software implementations. The certificate can be used until it expires, or until the data service provider revokes it.
+
+=== [http://en.wikipedia.org/wiki/Openid OpenID] ===
+
+OpenID is an open standard that describes how users can be authenticated in a decentralized manner. Using OpenID allows web/data services to unambiguously identify users without having to directly  process their login credentials. The user always provides their login credentials to an OpenID authentication service. This keeps sensitive login information from "leaking" to various web services, yet allows these web services to identify their users. There are many OpenID authentication providers (Google, Yahoo, Verisign, MySpace, WordPress, etc.).
+
+OpenID was developed for the web, and really, for web browsers. In the end every OpenID authentication is designed to happen in a browser with the human user filling out a form and pressing the "submit" button. Even an application with no particular GUI is pretty much required to pass the authentication step to a browser ([http://stackoverflow.com/questions/838765/openid-authentication-from-an-installed-application example 1], [http://blog.wachob.com/2007/03/openid_for_desk.html example 2]).  This is possible because OpenID uses (a bunch of) redirect responses to route the application/browser from one place to another in order to authenticate and return session cookies to the initiating application.
+
+[[File:OpenIDSequenceDiagram.png|600px|link=http://blogs.oracle.com/bblfish/entry/the_openid_sequence_diagram|Image courtesy of http://blogs.oracle.com/bblfish/entry/the_openid_sequence_diagram ]]
+
+=== [http://en.wikipedia.org/wiki/OAuth OAuth2] ===
+OAuth2 (Open Authorization) is an open standard for authorization. It allows users to share their private resources (e.g. photos, videos, contact lists) stored on one site with another site without having to hand out their credentials, typically username and password.
+
+OAuth2 uses tokens instead of credentials to permit access to data hosted by a given service provider. Each token grants access to a specific site (e.g. a video editing site) for specific resources (e.g. just videos from a specific album) and for a defined duration (e.g. the next 2 hours). This allows a user to grant a third party site access to their information stored with another service provider, without sharing their access permissions or the full extent of their data. This is a very important aspect of OAuth, because it places the OAuth service in the position of mediating the authorization to access data in addition to the authentication step.
+
+
+OAuth2 is designed to allow native applications (like ncopen) to access restricted resources. For example Google has recently published [http://code.google.com/apis/accounts/docs/OAuth2.html this article] about how to use their OAuth2 service from a native application.
+
+The following sequence diagram is based on Google's description of their OAuth2 interface. It is very much abbreviated - the OAuth2 protocol involves many more redirects and intermediate tokens than shown here:
+
+[[File:OAuth2.png|600px|OAuth2 sequence diagram]]
+
+As of this writing OAuth2 is still in draft form. Draft 10 seems to be the most recent that people are providing implementations of,  and draft 21 (dated 09-04-2011)  seems to be in the works at IETF: http://tools.ietf.org/wg/oauth/ 
+
+== Discussion ==
+
+All three of these technologies (at least claim to) provide secure authentication for service access. TLS/SSL is the oldest and most mature and is in many ways the simplest.
+
+TLS/SSL relies on the "[http://en.wikipedia.org/wiki/Web_of_trust web of trust]" concept wherein a Certificate Authority (CA) issues a signed certificate to a web service provider (in our case someone running Hyrax) and with this certificate the service provider can produce and sign client certificates. Recent events have shown that [http://www.msnbc.msn.com/id/44430823/ns/technology_and_science-security/#.TnES1Rzd-vk even this can be compromised]. OpenID and OAuth both rely on TLS during the authentication step where the user POSTs their credentials to the authentication service. So in the end all three of these technologies suffers from this same weakness. (and surely others as yet undetected.)
+
+
+=== Why not OpenID for everything?? ===
+
+There are two fundamental problems with requiring OpenID authentication for all DAP access:
+# A browser is required for all authentication. This may not be an entirely true statement as the OpenID protocol does not specify how the user needs to authenticate. It's possible that one could write an implementation of OpenID in which steps 6 and 7 in the OpenID sequence diagram could be replaced with a simple POST (via https) of the username and password. But this would rule out  using existing OpenID authentication services such as Yahoo and Google. The browser requirement is a real problem for things like libdap, OC, and the netcdf client library. These software are compiled and used on many different operating systems. Requiring them to be integrated with a browser would impose a large and unsupportable development burden.
+# Returns session cookies. While on the surface this may not seem important remember that in general browsers don't easily allow you to copy and paste cookie content into other applications. Thus if the client application that requires access is not integrated with a browser this provides an additional barrier to functionality.  This is not to say that it couldn't be done: A user could authenticate via OpenID with a browser, use the browsers interface to locate  the returned session cookie, and copy and paste this cookie into their DAP client. I feel this does not represent an acceptable workflow for DAP usage, especially if the user is trying to establish a batch mode process for DAP data access.
+
+=== TLS vs OAuth2 ===
+
+Both the TLS and OAuth2 workflows rely on the user having a thing (cert or token) that is retrieved from either a human or a web site.
+
+# User goes and gets an access thingy (cert or code)
+# User installs said thingy into their client (ncopen, loaddap, ODC, browser, etc)
+# Client is now identified.
+# Client can make access attempts using this identity.
+
+TLS makes no effort to provide authorization services, they are simply not part of the specification. OAuth2 on the other hand has embedded in the protocol itself the concept that users are asking for access to specific collections of resources as specified by "scopes". This means that the OAuth2 service will need to have a way of holding the rules for authorization. In general we believe that authorization needs to be held close to the data. Delegating authorization services to a third-party service such as OAuth2 may not be practical for data sites that contain tens of millions of granules. One possible way to envision using OAuth would be to simply have OAuth provide domain level authorization, then the data service would access it's own authorization service once the user/client makes a request using it's OAuth access tokens, since from these tokens the service can ascertain the identity of the user making the request.
+
+=== Data Security ===
+
+When using TLS the data get sent over a secure channel. While this may be the case with OpenID and OAuth it is not the rule. Which I think raises the question: If the data are worth restricting access to, then are they not worth protecting in transit? I suppose that in the end this is simply a configuration issue and should be left to the data service provider to decide the transport.
+
+----
+
+=== Summary Table ===
+
+{| border="1" cellspacing="0" cellpadding="2"
+|-
+!scope="col"| Feature\Technolgy
+!scope="col"| TLS/SSL
+!scope="col"| OpenID
+!scope="col"| OAuth2
+|-
+!scope="row"| Mature
+| &lt;center&gt;true&lt;/center&gt;
+| &lt;center&gt;true&lt;/center&gt;
+| &lt;center&gt;false&lt;/center&gt;
+|-
+!scope="row"| Revocable Access
+| &lt;center&gt;true&lt;/center&gt;
+| &lt;center&gt;???&lt;/center&gt;
+| &lt;center&gt;true&lt;/center&gt;
+|-
+!scope="row"| Credential Protection
+| &lt;center&gt;true&lt;/center&gt;
+| &lt;center&gt;true&lt;/center&gt;
+| &lt;center&gt;true&lt;/center&gt;
+|-
+!scope="row"| Single Sign On
+| &lt;center&gt;false&lt;/center&gt;
+| &lt;center&gt;true&lt;/center&gt;
+| &lt;center&gt;true&lt;/center&gt;
+|-
+!scope="row"| Authorization
+| &lt;center&gt;false&lt;/center&gt;
+| &lt;center&gt;false&lt;/center&gt;
+| &lt;center&gt;true&lt;/center&gt;
+|}
+
+== Conclusions ==
+
+None of these authentication technologies provide a single solution for DAP. Many users of DAP make data requests through a web browser. For these users an authentication flow that requires them to interact with web sites to exchange user and password credentials for session cookies is a reasonable solution. For more automated clients (such as loaddap, ncopen, and others) that provide programmatic access to DAP data holdings, this user centric interaction is problematic because these "batch" mode clients need a more streamlined mechanism such as that offered by SSL with client certificates.
+
+The Earth System Grid Foundation has proposed a hybrid approach to authentication that would serve to address this issue quite well. In it a client that has a certificate can easily connect to the server and access a protected resource, assuming that the resource is one that the certificate owner is allowed to access. In the absence of a client certificate the authentication can be redirected to any number of authentication schemes. This works because the authentication step is a "black box" where the user agent exchanges something (client certificate, username and password, etc) for a session cookie that ties the session to their user ID.
+
+== Proposed Dap Authentication Scheme ==
+
+Central to the proposed authentication scheme for the DAP is that, in many respects, client authentication can be thought of as a black box in which credentials are traded for session cookies.
+
+In the interactive authentication scheme the user is operating a piece of software that can render HTML, follow redirects, save cookies, and in general either be a browser or act like a browser. The user is driving the interactions and can thus answer questions and interact with the authentication process. When the authentication process is complete, the user's software receives a session cookie which allows it to have access to the requested data. 
+
+In the client certificate authentication scheme the user launches a piece of software that operates as a "batch" process. This software runs autonomously, without user intervention or assistance and it may access hundreds (if not thousands) of DAP datasets at some number of data service providers (equal to or less than in number than the total number DAP datasets being accessed). The users batch processing software relies on a closely held collection client certificates that is has associated with the various data services. The client certificate is recognized by the data service and exchanged for a session cookie. 
+
+The crucial point is that once the session cookie has been issued, '''everything''' else in the two flows is identical.
+
+=== Interactive Authentication ===
+
+[[File:DAPAuthInteractive.png|border|850px|http://docs.opendap.org/images/5/5f/DAPAuthInteractive.png]]
+
+# The user points their browser enabled software at a restrict DAP URL. The Authentication Redirector recognizes that they are not authenticated and redirects them to the Authentication service.
+# The browser goes to the Authentication Service. 
+# The Authentication Service may be locally implemented (for example a simple Tomcat authentication scheme) or may be delegated, through redirects and other software to more sophisticated or possibly centralized authentication mechanism such as LDAP or even OpenID. Once the user has successfully authenticated their browser is passed a session cookie and redirected back to the original DAP URL.
+# The users browser returns to the original URL and offers the session cookie. The session cookie is accepted and passed, along with the associated user ID to the Authorization Service.
+# The Authorization Service reviews it's policies regarding the requested resource and if  the user is allowed access the request is passed on the DAP service.
+# The DAP service returns the requested data.
+
+==== Client Requirements ====
+In order for interactive authentication to work, the user's client must be able to do the following things:
+* Execute HTTP GET
+* Execute HTTP POST
+* Follow redirects
+* Use HTTPS for authentication if not for data.
+* Save cookies
+* Sessions
+* Render HTML
+
+=== Client Certificate Authentication ===
+
+[[File:DAPAuthClientCerts.png|border|850px|link=http://docs.opendap.org/images/1/10/DAPAuthClientCerts.png]]
+# The user points their software at a restrict DAP URL. The Authentication Redirector recognizes that they are not authenticated and redirects them to the Authentication service.
+# The software goes to the Authentication Service and offers the appropriate client certificate. The Authentication Service checks the certificate and verifies that is valid and returns a session cookie for the user to which the certificate was issued, along with a redirect to the original DAP URL..
+# The users software returns to the original DAP URL and offers the session cookie. The session cookie is accepted and passed, along with the associated user ID to the Authorization Service.
+# The Authorization Service reviews it's policies regarding the requested resource and if  the user is allowed access the request is passed on the DAP service.
+# The DAP service returns the requested data.
+
+
+==== Client Requirements ====
+* HTTP GET
+* Follow redirects
+* HTTPS for authentication if not for data.
+* save cookies
+* sessions
+
+=== Authorization Service ===
+
+The Authorization Service must basically have some way of encoding rules for access in which different DAP resources are associated with different users and rules for each user's access. Although not explicitly shown in the previous sequence diagrams this is essentially a database (very possibly a NoSQL database) that will need to have an administrator interface for creating, modifying, and removing these rules. This is not an insignificant undertaking but is extremely important to the whole concept of providing controlled access to DAP resources. Even if we were going to use OAuth to mediate data access we would still need to construct this service to feed the OAuth engine. Because of the size of many of the data repositories that DAP may be tasked with servicing it is crucial that the Authorization Service database be fast and scalable.
+
+
+=== Certificate Management ===
+
+The server will also need a mechanism for managing client certificates. It is not simply enough to issue client certificates that identify the user and have an expiration date. Consider this example:
+
+The user Jane is issued a client certificate for access to a DAP service that contains restricted resources. She installs this client certificate into here DAP software (say loaddap or ncopen) on her laptop and her desktop at home. Because the chore of getting a new certificate every day is both a burden for Jane and for her system administrator Jane is issued a client certificate that expires in 8 weeks. The next day, Jane hops on a plane to Amsterdam for 3 days of relaxation prior to attending an important meeting in London. Unfortunately for Jane she falls prey to a nefarious plot and her laptop is stolen. The thief is a smart one, and is much more interested in what is on Jane's laptop than in the laptop hardware. The thief now has unrestricted access to the sensitive data held in the DAP services for which Jane has client certificates. Jane being a smart and responsible person reports the theft to her supervisor immediately. 
+
+But what should happen next? It would be trivial for the system administrator to suspend Jane's account, but that breaks all of Jane's access. If however the server tracks client certificates the admin can simply revoke the stolen certificate and issue Jane another one. This locks out our black hat thief and keeps Jane in business for her important London meeting.
+
+'nuff said?</text>
+      <sha1>293o4tcnqsj90ndo669dufpodxmc1t4</sha1>
+    </revision>
+  </page>
+</mediawiki>

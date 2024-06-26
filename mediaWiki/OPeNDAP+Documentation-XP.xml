@@ -1,0 +1,75 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>XP</title>
+    <ns>0</ns>
+    <id>758</id>
+    <revision>
+      <id>9619</id>
+      <parentid>7444</parentid>
+      <timestamp>2013-04-29T17:36:49Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>9619</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3991" sha1="l4envd45anim1d8r92ebqr30nfd45ne" xml:space="preserve">[[HowTo_guides|&lt;&lt; back to HowTo Guides]]
+
+== Making Windows XP Distributions ==
+
+Our software builds under Windows XP using the 'Express Edition' (aka free) versions of Microsoft's compilers. As of this writing, the builds have been completed using Visual Studio 9 Express (April 2008). Two other things need to be recognized: We run our builds using the ''nmake'' command line tool, and that means various environment variables need to be set before the Makefiles work, and Most of our code uses libdap and that, in turn, uses a variety of third-party software that must be installed. It might seem complicated, however, the entire process can be completed pretty quickly by following the directions.
+
+Suggestion: Set up a virtual machine to run XP and do the builds on that. I used this approach and found that a VM with 16GB of disk space was adequate for the build tools plus Matlab and some other stuff.
+
+For each package that has been ported to XP there is a subdirectory within that project named 'VCPP' which holds a Makefile and other maybe other files. Do the build in this directory. Also note that there is a ''project'' named 'VCPP' which has more detailed directions for building most of our client-side software. 
+
+Note: You may have to fiddle with XP's environment variables to get the builds to work. To set environment variables in WinXP, right click on 'My Computer' in the Start menu, select 'Properties', choose 'Advanced' from the tabs and finally click on the button labeled 'Environment Variables.' They don't really want most users to change these, I guess. ;-)
+ 
+General outline of Windows XP builds:
+
+# First get and install [https://www.microsoft.com/express/download/#webInstall Visual Studio 9.0 Express] (which is also Visual Studio 2008 Express).
+# Get and install [http://subversion.tigris.org SVN].
+# Check out the [https://scm.opendap.org/svn/trunk/VCPP VCPP project] - this includes directions for all of the builds plus the 'opendap-tools' zip file.
+# Get the [http://www.opendap.org/pub/binary/libdap/win32/OPeNDAP_Tools_1.1.exe OPeNDAP Tools 1.1] installer. This will install the libraries, tools and headers that you will need to build libdap. You ''can'' look at the directions in !HowToBuild.txt found in the VCPP project and use the opendap-tools zip file instead, but it requires setting a bunch of environment variables and the installer does that for you. If you use the OPeNDAP Tools 1.1 installer you should skip the next step.
+# ''If you don't use the OPeNDAP Tools installer  described in the previous step...'' Install the opendap-tools software.
+#* Unzip the tools &amp; set the paths. There are a few steps here, look at the !HowToBuild.txt file to see how the environment variables are set. 
+#* Set the paths for both the Visual Studio compiler and the tools. I used an environment variable to name the location of the compiler and SDK and then used that env var in the PATH, include and lib env vars (this will be clearer once you read the instructions in VCPP).
+# Check out the projects you want to build (generally this means libdap plus some other stuff). Check them out into the '''\opendaproot''' directory that is discussed in the VCPP project's documentation. Some of the builds - and the Inno Setup control files - expect a certain directory organization so don't stray far from the documentation's instructions with regard to path names.
+# For each project (e.g., libdap), cd to the VCPP subdirectory of that project and look for any directions there. 
+#* Update version numbers in config.h
+#* copy over any headers that would be generated by configure
+#* Run nmake all, install and package
+# Get and install [http://www.jrsoftware.org/isdl.php Inno Setup] if you want to make installer-style distributions 
+# The [https://scm.opendap.org/svn/trunk/ocean_toolbox_xp ocean_toolbox_xp] project contains information about making a Inno Setup installer. It should be easy to adapt this to other projects besides the Ocean Data Toolbox.</text>
+      <sha1>l4envd45anim1d8r92ebqr30nfd45ne</sha1>
+    </revision>
+  </page>
+</mediawiki>

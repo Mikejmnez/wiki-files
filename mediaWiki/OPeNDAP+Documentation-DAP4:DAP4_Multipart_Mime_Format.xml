@@ -1,0 +1,113 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: DAP4 Multipart Mime Format</title>
+    <ns>0</ns>
+    <id>820</id>
+    <revision>
+      <id>9041</id>
+      <parentid>9040</parentid>
+      <timestamp>2012-08-20T20:36:52Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Organization of the multipart MIME document */</comment>
+      <origin>9041</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4516" sha1="3tga4br9pdqa1vxn98lggnxscqozse5" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+Note: This document is a revision of material from
+[http://docs.opendap.org/index.php/DAP_4.0_Design DAP4 Design].
+
+== Introduction == 
+A DataDDX response is the way DAP4 returns data to a client. Each DataDDX response is returned over the wire as a multipart MIME document where the first part contains the DDX describing the data requested and the second and later parts contains a binary encoding of the requested data or error information. 
+
+See the [[DAP4: DDX Grammar | DAP4 DDX Grammar]] document and the
+[[DAP4: DDX Lexical Elements | DAP4 Lexical Elements]] document
+for the DDX syntax and lexical structure respectively. See the [[DAP4: DAP4 On the Wire Format | on-the-wire format]] document for the format of transmitted data.
+
+For references to the Multipart MIME specification, see
+[http://www.ietf.org/rfc/rfc2387.txt The MIME Multipart/Related Content-type (rfc 2387)] and [http://www.ietf.or/rfc/rfc1521.txt MIME part one].
+
+==== Organization of the multipart MIME document ====
+
+Here's what the shell of the document looks like:
+
+&lt;source lang="xml"&gt;
+Content-Type: multipart/related; type="text/xml"; start="&lt;&lt;start id&gt;&gt;";  boundary="&lt;&lt;boundary&gt;&gt;"
+ 
+--&lt;&lt;boundary&gt;&gt;
+Content-Type: text/xml; charset=UTF-8
+Content-Transfer-Encoding: binary
+Content-Description: ddx
+Content-Id: &lt;&lt;start-id&gt;&gt;
+    &lt;&lt;DDX here&gt;&gt;
+--&lt;&lt;boundary&gt;&gt;
+Content-Type: application/x-dap-little-endian
+Content-Transfer-Encoding: binary
+Content-Description: data
+Content-Id: &lt;&lt;unique id for this piece of binary data&gt;&gt;
+Content-Length: &lt;&lt;-1 or the size in bytes of the binary data&gt;&gt;
+    &lt;&lt;XDR encoded binary data, part 1&gt;&gt;
+--&lt;&lt;boundary&gt;&gt;
+Content-Type: application/x-dap-little-endian
+Content-Transfer-Encoding: binary
+Content-Description: data
+Content-Id: &lt;&lt;unique id for this piece of binary data&gt;&gt;
+Content-Length: &lt;&lt;-1 or the size in bytes of the binary data&gt;&gt;
+   &lt;&lt;XDR encoded binary data, part 2&gt;&gt;
+...
+--&lt;&lt;boundary&gt;&gt;
+Content-Type: application/x-dap-little-endian
+Content-Transfer-Encoding: binary
+Content-Description: data
+Content-Id: &lt;&lt;unique id for this piece of binary data&gt;&gt;
+Content-Length: &lt;&lt;-1 or the size in bytes of the binary data&gt;&gt;
+    &lt;&lt;XDR encoded binary data, part n&gt;&gt;
+--&lt;&lt;boundary&gt;&gt;
+&lt;/source&gt;
+
+The example shows multiple sets of MIME headers separated by ''--&lt;&lt;boundary&gt;&gt;'' lines; The final boundary line terminates the document. The first group of headers (in a real response, there would be other headers here like Date, XDAP, and others) provide information need to recognize the boundary separators. The payload of that first data part contains references to the related parts using the values of their Content-Id headers (See [[DAP4: DAP4 On the Wire Format|here]]).
+
+==== Choosing values for the DataDDX Content-Ids and Boundaries ====
+
+We would like the software that builds these DataDDX responses to be compatible with as many different transport protocols as possible, so long as the cost to the implementation for which we know we must support is low. One thing that some transport protocols may do is combine several DataDDX responses into a single document and, while the specifics of that will vary between protocols, one choice we can make now that will facilitate that is to ensure that the values of the Content-Ids and &lt;&lt;boundary&gt;&gt;s are unique within and across systems. This will free software that combines DataDDX responses from having to process the DDX and Content-Id header to  ensure that no name collisions are present. While using UUIDs, for example, makes the result values 'ugly', it adds virtually nothing to the time needed to build or process the responses. Other schemes, that combine a URI with some system-generated token could also be employed. The important point is to ensure that these symbols are unique not only within a system, but across systems.
+
+[[User:Ndp|ndp]] 12:42, 30 March 2010 (PDT)
+[[User:dmh|Dennis Heimbigner]] Modified 5/7/2012.
+
+===== Regarding Content-Type =====
+For the data-part of the response, the value of the Content-Type header will be x-dap-&lt;big|little&gt;-endian. This will make it easy to determine the byte-order of the data BLOB that follows without actually reading any of that BLOB. Note that the BLOB will have the byte-order encoded in in as well, making one or the other redundant, but that will add essentially no cost to the server's and simplify clients (because they will be able to use either to determine the response byte-order).</text>
+      <sha1>3tga4br9pdqa1vxn98lggnxscqozse5</sha1>
+    </revision>
+  </page>
+</mediawiki>

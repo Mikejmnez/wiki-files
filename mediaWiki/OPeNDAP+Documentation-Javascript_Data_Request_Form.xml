@@ -1,0 +1,122 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Javascript Data Request Form</title>
+    <ns>0</ns>
+    <id>580</id>
+    <revision>
+      <id>12147</id>
+      <parentid>5546</parentid>
+      <timestamp>2016-02-12T18:45:04Z</timestamp>
+      <contributor>
+        <username>EvanKroske</username>
+        <id>43</id>
+      </contributor>
+      <origin>12147</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2588" sha1="hoa99wslqi6xxvrens9473owdgwy264" xml:space="preserve">My goal is to create a Javascript API for accessing OpenDAP metadata and an intuitive, Javascript-based data-request construction form.
+
+'''Please note:''' This is a proposal for a Google Summer of Code project. It was not implemented.
+
+== Plan of action ==
+
+# Create API for accessing geographical and time data with Javascript by modifying existing BES module or adding a new one
+# Create Javascript library for easily accessing OpenDAP metadata 
+## Write asynchronous metadata retrieval interface
+## Write metadata parser
+## Write JSON emitter
+# Create data request form constructor using metadata bridge
+## Write basic form constructor to build simple but clear HTML forms
+## Add more advanced form controls (maps, timelines, etc.) for more capable browsers
+
+== Execution path ==
+
+# User requests data-request form
+# Server sends simple HTML page with form-generation Javascript
+# Javascript requests DDS and DAS for selected data
+# Javascript parses DDS and DAS to generate HTML form
+# User requests data through form
+# Server returns user-selected data
+
+== Application structure ==
+
+=== Form generator ===
+==== Public interface ====
+The public interface gives developers a dead-simple interface to create data-specific request forms.
+
+&lt;code&gt;&lt;pre&gt;
+createDataRequestForm({"url" : "http://test.com/data.gz", "containerID" : "requestform"});
+&lt;/pre&gt;&lt;/code&gt;
+
+==== Generator ====
+The heart of the form generator transforms the JSON-encoded DAS and DDS into an interactive HTML form.
+
+&lt;code&gt;&lt;pre&gt;
+var generator = createFormGenerator();
+var form = generator.generateForm(dasData, ddsData);
+document.appendChild(form);
+&lt;/pre&gt;&lt;/code&gt;
+
+=== DAS/DDS Javascript API ===
+
+==== Public interface ====
+The public interface allows developers to easily fetch JSON-encoded DAS and DDS data from a data source.
+
+&lt;code&gt;&lt;pre&gt;
+var dasData = fetchDAS("http://test.com/data.gz");
+var ddsData = fetchDDS("http://test.com/data.gz");
+&lt;/pre&gt;&lt;/code&gt;
+
+==== HTTP request generator ====
+This critical piece will handle fetching the raw DAS or DDS data from the server.
+
+&lt;code&gt;&lt;pre&gt;
+var rawDASData = fetch({"url" : "http://test.com/data.gz.das", "callback" : onDataReceived});
+&lt;/pre&gt;&lt;/code&gt;
+
+==== DAS parser ====
+The DAS parser will convert the raw DAS data into a Javascript-accessible JSON object.
+
+&lt;code&gt;&lt;pre&gt;
+var dasParser = createDASParser();
+var dasData = dasParser.parse(rawDASData);
+&lt;/pre&gt;&lt;/code&gt;
+
+==== DDS parser ====
+Like the DAS parser, the DDS parser will translate a raw DDS string into a JSON object.
+
+&lt;code&gt;&lt;pre&gt;
+var ddsParser = createDDSParser();
+var ddsData = ddsParser.parse(rawDDSData);
+&lt;/pre&gt;&lt;/code&gt;</text>
+      <sha1>hoa99wslqi6xxvrens9473owdgwy264</sha1>
+    </revision>
+  </page>
+</mediawiki>

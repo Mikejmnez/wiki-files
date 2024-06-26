@@ -1,0 +1,531 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>BES XML Commands</title>
+    <ns>0</ns>
+    <id>340</id>
+    <revision>
+      <id>12383</id>
+      <parentid>8000</parentid>
+      <timestamp>2017-05-16T20:25:08Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Request Example */</comment>
+      <origin>12383</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="15808" sha1="bsu933qltqzjhmqhup93hld9gy7ylh4" xml:space="preserve">[[Category:Development|BES XML Commands]][[Category:Hyrax Development|BES XML Commands]]
+== BES XML Command syntax. ==
+
+The BES will accept commands encoded in XML documents (BES XML Commands), and provide responses in kind. Some requests specifically indicate a non XML response (such as a DAP2 binary response) in which case the response will be as requested. 
+
+=== Requests ===
+All elements mentioned in the following are in the http://xml.opendap.org/ns/bes/1.0# namespace unless otherwise noted.
+
+# Each request document '''must''' have a &lt;request&gt; root element.
+# Each &lt;request&gt; '''must''' contain one or more BesCommand elements. 
+# A &lt;request&gt; '''may''' contain multiple BesCommands as long as zero more of those commands returns a response.&lt;br&gt;Examples (expand with abbreviated xml):
+#*  we can do a set context, set container, define and a get das in the same request document as only the get das request command returns a response.
+#*  There can not be two show commands within the request document, or a show and a get, or multiple gets. 
+#. Each request element '''must''' have an attribute ''reqID'' the value of which will be used in the response document. There is no guarantee that the value of ''reqID'' be unique within the operational domain of the BES. (It might be unique within the software of the requesting client, but that's of no concern to the BES).
+&lt;!--  jhrg 4/20/12 
+Question: Do we may want to allow reqID to be an optional attribute for each individual command. If present it would (''can it?'')  be preserved in the response (or error) object as appropriate.
+
+When we (eventually) develop a schema for this we can use it to "enforce" these restrictions. --&gt;
+
+=== Responses ===
+
+Need a description and such here.
+
+== BES Error Response ==
+
+ &lt;BES&gt;
+     &lt;response reqID="####"&gt;
+         &lt;BESError&gt;
+             &lt;Type&gt;3&lt;/Type&gt;
+             &lt;Message&gt;Unable to find command for showVersions&lt;/Message&gt;
+             &lt;Administrator&gt;ndp@opendap.org&lt;/Administrator&gt;
+         &lt;/BESError&gt;
+     &lt;/response&gt;
+ &lt;/BES&gt;
+
+Where Type is one of the following:
+* 1. Internal Error - the error is internal to the BES Server
+* 2. Internal Fatal Error - error is fatal, can not continue
+* 3. Syntax User Error - the requester has a syntax error in request or config
+* 4. Forbidden Error - the requester is forbidden to see the resource
+* 5. Not Found Error - the resource can not be found
+
+If debugging is enabled during build then the Error object will include the file name and line number where the exception was thrown.
+
+== BES Command Set ==
+
+=== setContext ===
+
+Example: 
+ &lt;setContext  name="contextName&gt;Value&lt;/setContext&gt;
+
+Changes the state of the BES for the current client connection. This allows the client to ask the BES to utilize various response formats.
+
+====''name'' attribute====
+Identifies which context value is being set.
+
+'''dap_format''' context
+: Value:
+:* ''Major.Minor''  where both ''Major'' and ''Minor'' are integer values.
+
+'''errors''' context
+: Current Values:
+:* ''xml'' -
+:* ''dap2'' - When error context is set to ''dap2'' then all errors will returned as DAP2 error objects (definitely '''not''' XML).
+
+: Proposed Values:
+:* ''dap'' - When error context is set to ''dap'' then all errors will returned as DAP error objects. The version of the DAP that error must conform to is controlled by the dap_format context. It is possible (likely) that in the future DAP errors will be XML documents.
+:* ''bes'' - Returns a BES Error response XML Document:
+
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+        &lt;setContext name="errors"&gt;dap2&lt;/setContext&gt;
+    &lt;/request&gt;
+
+===== Response Example =====
+
+Normally no response. May return a [[BES_XML_Commands#BES_Error_Response|BESError]].
+
+
+
+----
+
+=== setContainer ===
+
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+        &lt;setContainer name="c" space="catalog"&gt;data/nc/fnoc1.nc&lt;/setContainer&gt;
+    &lt;/request&gt;
+
+===== Response Example =====
+
+Normally no response. May return a [[BES_XML_Commands#BES_Error_Response|BESError]].
+
+
+----
+
+=== define ===
+
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;define name="d" space="default"&gt;
+             &lt;constraint&gt;a valid default ce&lt;/constraint&gt;
+             &lt;container name="c1"&gt;
+                 &lt;constraint&gt;a valid ce&lt;/constraint&gt;
+                &lt;attributes&gt;list of attributes&lt;/attributes&gt;
+             &lt;/container&gt;
+             &lt;container name="c2"&gt;
+                 &lt;constraint&gt;a valid ce&lt;/constraint&gt;
+                &lt;attributes&gt;list of attributes&lt;/attributes&gt;
+             &lt;/container&gt;
+             &lt;aggregate handler="someHandler" cmd="someCommand" /&gt;
+         &lt;/define&gt; 
+    &lt;/request&gt;
+
+Note that for DAP2 the value of the ''constraint'' element is the value of the complete DAP2 constraint expression. For DAP4, the constraint expression is broken into two parts, the ''dap4function'' and ''dap4constraint''.
+
+See [[Hyrax - BES Client commands]] for complete examples.
+
+===== Response Example =====
+
+Normally no response. May return a [[BES_XML_Commands#BES_Error_Response|BESError]].
+
+
+
+----
+
+=== get ===
+
+'''This needs to be expanded to illuminate the missing details from the previoius command set:'''
+* get 'type'  for 'definition' using 'URL';
+
+Type:
+* '''dds''' -
+* '''das''' -
+* '''dods''' - 
+* '''stream''' -
+* '''ascii''' -
+* '''html_form''' -
+* '''info_page''' -
+
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;get type="data_product" definition="def_name" returnAs="name" url="url" /&gt;
+    &lt;/request&gt;
+
+===== Response Example =====
+
+Explain about DAP2 responses etc...
+
+===Multiple command example ===
+Multiple command transaction resulting in a DDS (non XML DAP2) response:
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+        &lt;setContext name="error"&gt;dap2&lt;/setContext&gt;
+        &lt;setContainer name="c" space="catalog"&gt;data/nc/fnoc1.nc&lt;/setContainer&gt;
+         &lt;define name="d" space="default"&gt;
+             &lt;container name="c"&gt;
+                 &lt;constraint&gt;a valid ce&lt;/constraint&gt;
+                &lt;attributes&gt;list of attributes&lt;/attributes&gt;
+             &lt;/container&gt;
+             &lt;aggregate handler="someHandler" cmd="someCommand" /&gt;
+         &lt;/define&gt; 
+         &lt;get  type="dds" definition="d" returnAs="name" /&gt;
+    &lt;/request&gt;
+
+
+
+----
+
+=== Show version ===
+
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;showVersion /&gt;
+    &lt;/request&gt;
+
+===== Response =====
+
+Current:
+    &lt;showVersion&gt;
+        &lt;response&gt;
+            &lt;DAP&gt;
+                &lt;version&gt;2.0&lt;/version&gt;
+                &lt;version&gt;3.0&lt;/version&gt;
+                &lt;version&gt;3.2&lt;/version&gt;
+            &lt;/DAP&gt;
+            &lt;BES&gt;
+                &lt;lib&gt;
+                    &lt;name&gt;libdap&lt;/name&gt;
+                    &lt;version&gt;3.5.3&lt;/version&gt;
+                &lt;/lib&gt;
+                &lt;lib&gt;
+                    &lt;name&gt;bes&lt;/name&gt;
+                    &lt;version&gt;3.1.0&lt;/version&gt;
+                &lt;/lib&gt;
+            &lt;/BES&gt;
+            &lt;Handlers&gt;
+                &lt;lib&gt;
+                    &lt;name&gt;libnc-dods&lt;/name&gt;
+                    &lt;version&gt;0.9&lt;/version&gt;
+                &lt;/lib&gt;
+            &lt;/Handlers&gt;
+         &lt;/response&gt;
+    &lt;/showVersion&gt;
+
+
+Proposed:
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response reqID="####"&gt;
+        &lt;showVersion&gt;
+            &lt;service name="dap"&gt;
+                &lt;version&gt;2.0&lt;/version&gt;
+                &lt;version&gt;3.0&lt;/version&gt;
+                &lt;version&gt;3.2&lt;/version&gt;
+            &lt;/service&gt;
+            &lt;library name="bes"&gt;3.5.3&lt;/library&gt;
+            &lt;library name="libdap"&gt;3.10.0&lt;/library&gt;
+            &lt;module name="netcdf_handler"&gt;3.7.9&lt;/module&gt;
+            &lt;module name="freeform_handler"&gt;3.7.9&lt;/module&gt;
+        &lt;/showVersion&gt;
+    &lt;/response&gt;
+
+----
+
+=== Show help ===
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;showHelp /&gt;
+    &lt;/request&gt;
+
+===== Response Example =====
+   &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response  reqID="####"&gt;
+        &lt;showHelp&gt;
+            &lt;module name="bes" version="3.6.2"&gt;&lt;html xmlns= http://www.w3.org/1999/xhtml &gt;Help Information&lt;/html&gt;&lt;/module&gt;
+            &lt;module name="dap" version="3.10.1"&gt;Help Information&lt;/module&gt;
+            &lt;module name="netcdf_handler" version="3.7.9"&gt;Help Information including supported responses&lt;/module&gt;
+        &lt;/showHelp&gt;
+    &lt;/response&gt;
+
+----
+
+=== showProcess ===
+
+This is available only if the BES is compiled in developer mode. A 'production' BES does not support this command. 
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;showProcess /&gt;
+    &lt;/request&gt;
+
+===== Response Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response reqID="####"&gt;
+        &lt;showProcess&gt;
+            &lt;process pid="10831" /&gt;
+        &lt;/showProcess&gt;
+    &lt;/response&gt;
+
+----
+
+=== showConfig ===
+This is available only if the BES is compiled in developer mode. A 'production' BES does not support this command.
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;showConfig /&gt;
+    &lt;/request&gt;
+
+===== Response Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response reqID="####"&gt;
+        &lt;showConfig&gt;
+            &lt;file&gt;/Users/pwest/opendap/chunking/etc/bes/bes.conf&lt;/file&gt;
+            &lt;key name="BES.CacheDir"&gt;/tmp&lt;/key&gt;
+            ....
+        &lt;/showConfig&gt;
+    &lt;/response&gt;
+----
+
+=== showStatus ===
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;showStatus /&gt;
+    &lt;/request&gt;
+===== Response Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response reqID="####"&gt;
+        &lt;showStatus&gt;
+            &lt;status&gt;MST Thu Dec 18 11:51:36 2008&lt;/status&gt;
+        &lt;/showStatus&gt;
+    &lt;/response&gt;
+
+----
+
+=== showContainers ===
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;showContainers /&gt;
+    &lt;/request&gt;
+===== Response Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response  reqID="####"&gt;
+        &lt;showContainers&gt;
+            &lt;store name="volatile"&gt;
+                &lt;container name="c" type="nc"&gt;data/nc/fnoc1.nc&lt;/container&gt;
+            &lt;/store&gt;
+        &lt;/showContainers&gt;
+    &lt;/response&gt;
+
+----
+
+=== deleteContainer(s), deleteDefinition(s) ===
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;deleteContainers store="storeName" /&gt;
+         &lt;deleteContainer name="containerName" store="storeName" /&gt;
+         &lt;deleteDefinitions store="storeName" /&gt;
+         &lt;deleteDefinition name="defName" store="storeName" /&gt;
+    &lt;/request&gt;
+===== Response Example =====
+
+Normally no response. May return a [[BES_XML_Commands#BES_Error_Response|BESError]].
+
+
+
+----
+
+=== showDefinitions ===
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;showDefinitions /&gt;
+    &lt;/request&gt;
+===== Response Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response  reqID="####"&gt;
+        &lt;showDefinitions&gt;
+            &lt;store name="volatile"&gt;
+                &lt;definition name="d"&gt;
+                    &lt;container name="c" type="nc" constraint=""&gt;data/nc/fnoc1.nc&lt;/container&gt;
+                    &lt;aggregation handler="agg"&gt;aggregation_command&lt;/aggregation&gt;
+                &lt;/definition&gt;
+            &lt;/store&gt;
+        &lt;/showDefinitions&gt;
+    &lt;/response&gt;
+
+----
+
+=== showContext ===
+===== Request Example =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID ="####" &gt;
+         &lt;showContext /&gt;
+    &lt;/request&gt;
+===== Response Example =====
+   &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+   &lt;response reqID ="####" &gt;
+        &lt;showContext&gt;
+             &lt;context name="name1"&gt;value1&lt;/context&gt;
+             &lt;context name="name2"&gt;value2&lt;/context&gt;
+              ...
+             &lt;context name="namen"&gt;valuen&lt;/context&gt;
+        &lt;showContext&gt;
+   &lt;/response&gt;
+
+----
+
+=== showCatalog ===
+===== Request =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID="####" &gt;
+         &lt;showCatalog node="[catalog:]nodeName" /&gt;
+    &lt;/request&gt;
+
+The catalog name is optional, defaulting to the default catalog specified in the BES configuration file. So if you had a catalog named rdh you could specify node="rdh:/" and it would give you the root node for the rdh catalog.
+
+===== Response =====
+   &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response reqID="####" &gt;
+        &lt;showCatalog&gt;
+            &lt;dataset name="nc/test" size="408" lastModified="2006-01-04T19:48:24" catalog="catalog" node="true" count="5"&gt;
+                &lt;dataset name="test.nc" size="12148" lastModified="2005-09-29T16:31:28" node="false"&gt;
+                    &lt;service&gt;DAP&lt;/service&gt;
+                &lt;/dataset&gt;
+                &lt;dataset name="testfile.nc" size="43392" lastModified="2005-09-29T16:31:28" catalog="catalog" node="false"&gt;
+                    &lt;service&gt;DAP&lt;/service&gt;
+                &lt;/dataset&gt;
+                &lt;dataset name="TestPat.nc" size="262452" lastModified="2005-09-29T16:31:27" catalog="catalog" node="false"&gt;
+                    &lt;service&gt;DAP&lt;/service&gt;
+                &lt;/dataset&gt;
+                &lt;dataset name="TestPatDbl.nc" size="2097464" lastModified="2005-09-29T16:31:28" catalog="catalog" node="false"&gt;
+                    &lt;service&gt;DAP&lt;/service&gt;
+                &lt;/dataset&gt;
+                &lt;dataset name="TestPatFlt.nc" size="1048884" lastModified="2005-09-29T16:31:27" catalog="catalog" node="false"&gt;
+                    &lt;service&gt;DAP&lt;/service&gt;
+                &lt;/dataset&gt;
+            &lt;/dataset&gt;
+        &lt;/showCatalog&gt;
+    &lt;/response&gt;
+
+----
+
+=== showInfo ===
+
+===== Request =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID="####" &gt;
+         &lt;showInfo node="nodeName /&gt;
+    &lt;/request&gt;
+
+===== Current Response =====
+
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response reqID="####"&gt;
+        &lt;showInfo&gt;
+            &lt;dataset thredds_container="true"&gt;
+                &lt;name&gt;nc/test&lt;/name&gt;
+                &lt;size&gt;408&lt;/size&gt;
+                &lt;lastmodified&gt;
+                    &lt;date&gt;2006-01-04&lt;/date&gt;
+                    &lt;time&gt;19:48:24&lt;/time&gt;
+                &lt;/lastmodified&gt;
+                &lt;count&gt;5&lt;/count&gt;
+            &lt;/dataset&gt;
+        &lt;/showInfo&gt;
+    &lt;/response&gt;
+
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response reqID="####"&gt;
+        &lt;showInfo&gt;
+            &lt;dataset thredds_container="false"&gt;
+                &lt;name&gt;nc/test/TestPatFlt.nc&lt;/name&gt;
+                &lt;size&gt;1048884&lt;/size&gt;
+                &lt;lastmodified&gt;
+                    &lt;date&gt;2005-09-29&lt;/date&gt;
+                    &lt;time&gt;16:31:27&lt;/time&gt;
+                &lt;/lastmodified&gt;
+            &lt;/dataset&gt;
+        &lt;/showInfo&gt;
+    &lt;/response&gt;
+
+===== Proposed Response =====
+    &lt;dataset name="testfile.nc" size="43392" lastModified="YYYY-MM-DDThh:mm:ss" catalog="catalog" 
+                     node="true|false" count="#ofChildDatSets"&gt;
+        &lt;service&gt;DAP&lt;/service&gt;
+    &lt;/dataset&gt;
+
+=== showServices ===
+
+===== Request =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;request reqID="####" &gt;
+         &lt;showServiceDescriptions /&gt;
+    &lt;/request&gt;
+
+===== Response =====
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;response reqID="####"&gt;
+        &lt;showServices&gt;
+            &lt;service name="DAP"&gt;
+                &lt;command name="ddx"&gt;
+                    &lt;description&gt;Words For Humans&lt;/description&gt;
+                    &lt;format name="dap2"/&gt;
+                &lt;/command&gt;
+                &lt;command name="dds"&gt;
+                    &lt;description&gt;Words For Humans&lt;/description&gt;
+                    &lt;format name="dap2"/&gt;
+                &lt;/command&gt;
+            &lt;/service&gt;
+        &lt;/showServices&gt;
+    &lt;/response&gt;</text>
+      <sha1>bsu933qltqzjhmqhup93hld9gy7ylh4</sha1>
+    </revision>
+  </page>
+</mediawiki>

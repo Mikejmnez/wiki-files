@@ -1,0 +1,69 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Requests</title>
+    <ns>0</ns>
+    <id>726</id>
+    <revision>
+      <id>9276</id>
+      <parentid>7695</parentid>
+      <timestamp>2012-08-31T19:14:41Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>9276</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1054" sha1="oce754524picilcl6sdox2w4bd72nb8" xml:space="preserve">[[Category:Development|Development]] [[Category:DAP4|DAP4]]
+&lt;font size="+1" color="red"&gt;This is an old document that captures the starting point of the OPULS design work. It's out of date and should be referenced only as a baseline for the work.&lt;/font&gt;
+
+[[OPULS_Development | &lt;-- back to OPULS Development]]
+
+Author: NDP
+
+Note that while it's increasingly common for DAP servers to provide different ways that a dataset's metadata may be extended, and often those provide multiple ways of accessing the same underlying data, albeit with different metadata. Those extensions are all accessed by dereferencing a URL and we consider each URL to refer to a unique dataset. This can be confusing because the word 'dataset' is often synonymous with 'file' although there's nothing in DAP2 or DAP4 that makes that association required or calls it out as a case with special treatment
+
+
+== Dataset Request ==
+
+[[DAP4:_Data_Model#Constraint_Expressions]]
+
+== Data Request ==
+
+[[DAP4:_Data_Model#Constraint_Expressions]]
+
+
+== Other Services ==
+
+=== RDF Request ===</text>
+      <sha1>oce754524picilcl6sdox2w4bd72nb8</sha1>
+    </revision>
+  </page>
+</mediawiki>

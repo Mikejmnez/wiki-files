@@ -1,0 +1,106 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>HAI Use Case: Authentication mechanism compatibility with OC and Java DAP libraries</title>
+    <ns>0</ns>
+    <id>614</id>
+    <revision>
+      <id>6031</id>
+      <parentid>6025</parentid>
+      <timestamp>2010-11-09T19:05:19Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>6031</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2776" sha1="6ugq5qlbs9zg5ozt8h4r4lrx2di0cmq" xml:space="preserve">[[Category:HAI]]
+'''Point Of Contact:''' ''[[User:ndp | Nathan Potter]]''
+
+== Description ==
+Authentication mechanism compatibility
+
+== Goal ==
+To ensure that whatever develops in the line of user authentication and access control for Hyrax is kept compatible with clients.
+
+== Summary == 
+Efforts to implement changes to user authentication and access control activities for Hyrax can easily end up focusing on browser based activities because this is the manner of interacting with a DAP server that most humans experience. However the real power of the DAP server is that it machine crawlable and accessible and can be utilized by a collection of existing automation clients. It is important that we do nothing to break these clients. It may be that core changes that can break existing client need to be tied to newer versions of the DAP.
+
+== Actors ==
+* Existing DAP client software: OC library, Java-DAP
+* Hyrax
+* Developers
+
+== Preconditions ==
+The desire to keep the overall data system working.
+
+== Triggers ==
+Changes to authentication mechanisms for Hyrax
+
+== Basic Flow ==
+Evaluate potential authentication mechanism changes on existing DAP client libraries. 
+Mitigate changes by one or of:
+* rollback
+* update client
+* hide change from older clients through protocol version
+
+== Alternate Flow ==
+&lt;font size="-2" color="green"&gt;''Here we give any alternate flows that might occur. May include flows that involve error conditions. Or flows that fall outside of the basic flow.''&lt;/font&gt;
+
+== Post Conditions ==
+&lt;font size="-2" color="green"&gt;''Here we give any conditions that will be true of the state of the system after the use case has been completed.''&lt;/font&gt;
+
+== Activity Diagram ==
+&lt;font size="-2" color="green"&gt;''Here a diagram is given to show the flow of events that surrounds the use case.''&lt;/font&gt;
+
+== Notes ==
+&lt;font size="-2" color="green"&gt;''There is always some piece of information that is required that has no other place to go. This is the place for that information.''&lt;/font&gt;
+
+== Resources ==
+&lt;font size="-2" color="green"&gt;''In order to support the capabilities described in this Use Case, a set of resources must be available and/or configured.  These resources include data and services, and the systems that offer them.  This section will call out examples of these resources.''&lt;/font&gt;
+
+
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|&lt;font size="-2" color="green"&gt;''name''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Organization that owns/ manages resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Short description of the resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''How often the resource is available''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Name of system which provides resource''&lt;/font&gt;
+|}</text>
+      <sha1>6ugq5qlbs9zg5ozt8h4r4lrx2di0cmq</sha1>
+    </revision>
+  </page>
+</mediawiki>

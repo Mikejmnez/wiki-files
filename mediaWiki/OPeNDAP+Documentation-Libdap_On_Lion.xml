@@ -1,0 +1,149 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Libdap On Lion</title>
+    <ns>0</ns>
+    <id>828</id>
+    <revision>
+      <id>8359</id>
+      <parentid>8354</parentid>
+      <timestamp>2012-06-07T23:28:01Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* MacBook Pro */</comment>
+      <origin>8359</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3411" sha1="ox4svs0pwu51i6k7q21kriqxbj9z9hl" xml:space="preserve">==MacBook Pro==
+
+June 6th, 2012
+
+Installed Lion (OS X 10.7.4) on a newly formatted disk. 
+
+System: MacBook Pro,  2.4 GHz Core 2 Duo, 2GB RAM. 
+ 
+Install command line gcc compiler.
+# Install XCode
+# Open XCode.
+# Goto XCode-&gt;Preferences-&gt;Downloads-&gt;Components
+# Install the Command Line Tools component.
+# Quit XCode after install completes.
+# Verify: In a shell type the command ''gcc --version''. It should work, as in not fail.
+
+
+Installed:
+* libtool: /usr/local/bin/libtool
+::version: ltmain.sh (GNU libtool) 2.4.2 from source
+
+* m4: /usr/local/bin/m4
+:: version: m4 (GNU M4) 1.4.13 from source
+
+* autoconf: /usr/local/bin/autoconf
+:: version: autoconf (GNU Autoconf) 2.65 from source
+
+* automake: /usr/local/bin/automake
+:: version: automake (GNU automake) 1.11 from source
+
+* dejagnu: /usr/local/bin/runtest (and others)
+:: version: dejagnu-1.4.4 from source
+
+* cppunit: /usr/local
+:: version: cppunit-1.12.1 from source
+
+* Checked the shrew project out from subversion (I am currently working on the ''xmlrequest'' branch: http://scm.opendap.org/svn/branch/shrew/hyrax_1.8_release).
+
+In the top level I ran:
+
+: &lt;tt&gt;source spath.sh&lt;/tt&gt;
+: &lt;tt&gt;autoreconf -fi &lt;/tt&gt;
+: &lt;tt&gt;./configure --prefix=$prefix&lt;/tt&gt;
+: &lt;tt&gt;make&lt;/tt&gt;
+: &lt;tt&gt;make check&lt;/tt&gt;
+
+And it failed one test:
+ 
+ 
+ !!!FAILURES!!!
+ Test Results:
+ Run:  5   Failures: 1   Errors: 0
+ 
+ 
+ 1) test: DODSFilterTest::get_das_last_modified_time_test (F) line: 195 DODSFilterTest.cc 
+ assertion failed
+ - Expression: df3-&gt;get_das_last_modified_time() == st.st_mtime
+ 
+ 
+ FAIL: DODSFilterTest
+
+:installed it anyway...
+
+* szip: /usr/local
+:: version: szip-2.1 from source (./configure --prefix=/usr/local)
+* zlib: /usr/local
+:: version: zlib-1.2.3 from source
+* jpeg lib: /usr/local
+:: version: jpeg-6b from source (ftp://ftp.uu.net/graphics/jpeg/jpegsrc.v6b.tar.gz) 
+::: [note: jpeg-7 is now shipping, but hdf as of hdf4.2r4 won't pass tests with it!  If you need 7, best to install it in it's own dir and NOT /usr/local ... (mjohnson 1 oct 2009)]
+:: Notes: 
+:: - Doing a ''make install'' will only install the executable files. To install the libraries do the following:
+:::  &lt;tt&gt;cp libjpeg.a /usr/local/lib&lt;/tt&gt;
+:::  &lt;tt&gt;cp *.h /usr/local/include&lt;/tt&gt;
+:: - You must install the jpeg library and includes in /usr/local or the ./configure script for the hdf4_handler won't find it.
+*netcdf: /usr/local
+:: version netcdf-3.6.3 from source (./configure --prefix=/usr/local)
+*HDF4: /usr/local
+:: version: HDF4.2r3 from source, (./configure --disable-fortran --with-jpeg=/usr/local --with-szlib=/usr/local --prefix=/usr/local)
+
+:: '''Updated'''
+
+::: Configure with: ''./configure --disable-fortran --with-szlib=/usr/local --disable-netcdf --enable-production --enable-shared'' 
+:: If you don't configure this correctly it's possible to install the HDF4 version of netcdf on top of the regular version and that will make all kinds of trouble.
+
+:: '''Notes on libjpeg and hdf4.2r4''' [mjohnson 1 oct 2009]: HDF4.2r4 won't pass tests with jpeg-7, the new dist.  If you have it installed, you need to remove it and install jpeg-6b.  Also, 4.2r4 fails to build with --enable-shared.
+
+
+
+
+*hdf5: /usr/local
+:: version hdf5-1.8.1 from source (./configure --prefix=/usr/local --with-szlib=/usr/local --enable-cxx)
+
+Continuing in the ''xmlrequest'' branch I checked out, built, and installed:
+
+*bes
+*dap-server
+*freeform_handler
+*hdf4_handler
+*hdf5_handler
+* netcdf_handler</text>
+      <sha1>ox4svs0pwu51i6k7q21kriqxbj9z9hl</sha1>
+    </revision>
+  </page>
+</mediawiki>

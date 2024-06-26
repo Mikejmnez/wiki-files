@@ -1,0 +1,62 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>UserSupport</title>
+    <ns>0</ns>
+    <id>769</id>
+    <revision>
+      <id>7562</id>
+      <timestamp>2012-03-08T01:41:43Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>Created page with "= How to Handle Email-list Support Questions =  * Quick responses are good. For this to work we will all need to keep our eyes trained on the list. * If you don't know how to add..."</comment>
+      <origin>7562</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2443" sha1="hlu1rh80xffhf769b03d25kbgo3nhmq" xml:space="preserve">= How to Handle Email-list Support Questions =
+
+* Quick responses are good. For this to work we will all need to keep our eyes trained on the list.
+* If you don't know how to address a problem and it's clearly not your area, don't respond but still keep it in mind. If you see something sitting there for a a day or more, call it to the attention of whomever seems most qualified to respond. If you're the most qualified, but you have no clue or no time, send off a quick response to that affect. Let the people know you've seen the message and are aware they are having a problem.
+* In many cases the issue can be dealt with quickly and people on the list might have seen it many times before. Use your judgment about posting the reply to the list or only to the person.
+* In general, always post to the list. The list is archived and people search those archives for help. (Google will index them, for example).
+* Some people will post to the list who are not members and if that's the case, make sure to reply both to the person and the list.
+* Always try to be gentle with posters and remind other to as well so that the list will continue to be friendly and inviting. Lists for support only work if people feel comfortable using them and asking questions in/to a public forum is itself a little intimidating.
+* When you see a question, especially first thing in the morning, read ahead to see if the question has been answered (or picked up) by someone else. In either case, if you have something else to add, by all means speak up, but reading ahead is sort of like reading all the instructions before you start in with the power tools...
+
+* If a question is really a bug report, then follow this recipe:
+*# Collect information from the post and enter in in Trac.
+*# Make the first poster a CC on the Trac ticket - you can always remove them later if they get sick of long, boring emails. I suppose there are cases when other people might be talking in a thread and they should be CC on the ticket, too; use your judgment about that situation.
+*# Assign the ticket to whichever milestone seems most important but make ''sure'' to add the '''support''' keyword so we can scan for any outstanding bugs from support. This way we get a nice database system to track our problems that really require significant work to fix.
+*# Now post a message to the list that the particular problem is a bug and it has number N and here's the URL for it.</text>
+      <sha1>hlu1rh80xffhf769b03d25kbgo3nhmq</sha1>
+    </revision>
+  </page>
+</mediawiki>

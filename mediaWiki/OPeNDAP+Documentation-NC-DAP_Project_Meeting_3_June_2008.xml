@@ -1,0 +1,87 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>NC-DAP Project Meeting 3 June 2008</title>
+    <ns>0</ns>
+    <id>388</id>
+    <revision>
+      <id>2689</id>
+      <timestamp>2009-01-08T22:04:40Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>New page: NC-DAP Project Meeting  June 3rd 2008  The purpose of this meeting is to update the milestones based on our work so far. Are they realistic? Was anything overlooked? This is  also a good t...</comment>
+      <origin>2689</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1910" sha1="d0xh1nds0rwd182z2n0ciqnzp9ip10j" xml:space="preserve">NC-DAP Project Meeting
+
+June 3rd 2008
+
+The purpose of this meeting is to update the milestones based on our work so far. Are they realistic? Was anything overlooked? This is  also a good time in the course of the project for everyone to meet each other and to take care of routine business.
+
+== Agenda ==
+# NSF Annual Report Due
+# NSF/NMI build and test system
+# Quick review of the milestones from the kickoff meeting
+# Translation:
+## short-term: simplistic but correct translation
+### what to do about grids.
+## long-term: preserving netcdf semantics across the DAP protocol
+### this probably requires a discussion about standardized annotations.
+# Support for translating to the classic model.
+## Should we maintain the existing nc-dap translation as an  option for back compatibility?
+# Removing the [...] URL prefix notation
+# Limited selection for non-sequence data
+## Currently, selections only apply to sequence type, but it should be possible to apply them to certain kinds of arrays as well.
+# extending DAP data model (e.g. enumerations?)
+# library proliferation
+## The current integration requires hdf5, dap, curl, xml2, and zlib/szlib.
+# '''Revisit the Milestones and modify as needed'''
+
+== Report ==
+
+The report: [http://docs.google.com/Doc?id=ddkdb64s_1gswnf7cz NC-DAP Project Meeting Report 3 June 2008].
+
+== Revised milestones ==
+# Deliverables:
+## libdap++/libnc-dap + netcdf 3 data model '''7/2008''' Release netcdf version 4.1 beta
+## Ocapi (supporting DAP2) + glue code + netcdf 3 data model '''12/2008''' Release netcdf version 4.1
+## Ocapi (supporting DAP3.3) + glue + netcdf 4 data model '''6/2009'''
+## Testing, beta release '''12/31/2009'''
+# Other deliverables: (these are later dates than in the meeting notes)
+## DAP3.3 ~~Specification~~ Design '''9/2008'''
+## libdap++ for DAP3.3 '''12/2008'''
+## Ocapi for DAP3.3 '''3/2009'''
+## netCDF 4.x server which uses DAP3.3 '''9/2009'''</text>
+      <sha1>d0xh1nds0rwd182z2n0ciqnzp9ip10j</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,63 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Coordinate Systems Element</title>
+    <ns>0</ns>
+    <id>797</id>
+    <revision>
+      <id>7866</id>
+      <timestamp>2012-04-10T17:10:15Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <comment>Created page with "=== Background === John has noted that in CDM, he introduced a notion of Coordinate System which is a set of maps defined independently of any variable. In xml, this would be som..."</comment>
+      <origin>7866</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="721" sha1="1d2jkld50qwoyzvry2v9y4k20e1whdz" xml:space="preserve">=== Background ===
+John has noted that in CDM, he introduced a notion of Coordinate System which is a set of maps defined independently of any variable. In xml, this would be something like this.
+&lt;pre&gt;&lt;CoordinateSystem name="..."&gt;
+&lt;map variable="var1"/&gt;
+...
+&lt;map variable="varn"/&gt;
+&lt;/CoordinateSystem&gt;
+&lt;/pre&gt;
+==Rationale==
+The argument for it is that sets of maps are often going to be used in identical form in a number of variables. Further, it allows one to add attributes to the coordinate system element to provide extra information.
+
+==Proposal==
+Do we add this element to the DDX?
+
+==Discussion==
+There seems no immediate hurry on this. It can be added rather transparently later on when a demonstrated need exists.</text>
+      <sha1>1d2jkld50qwoyzvry2v9y4k20e1whdz</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,139 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>BES - Debugging Using besstandalone</title>
+    <ns>0</ns>
+    <id>822</id>
+    <revision>
+      <id>12380</id>
+      <parentid>12379</parentid>
+      <timestamp>2017-05-16T19:48:21Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Some Tricks */</comment>
+      <origin>12380</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5451" sha1="5yuautnk2ktfjt2kfq194kun0sm97jo" xml:space="preserve">When you need to debug a handler, there are several ways to go about it. First, you can use a run-time debugger like the one included with Eclipse (really GNU's ''gdb''), fall back on the tried and true 'print statements' or some other combination of program instrumentation and run-time diagnosis. In all cases, being able to run your handler ''as part of a command line program'' and not a server, will speed up and simplify the process.
+
+We have designed a run-time debugging tool for just this purpose.
+
+= Review: Debugging using a client and the server =
+
+To test (and/or debug) your handler using the BES (server), you first build and install your new handler version. Then you modify the ''bes.conf'' file so that the handler will be loaded at run-time and start the server. Next you start up the ''bescmdln'' client and point it at the server using the hostname (likely ''localhost'') and port number (again, likely the default of ''10022''). You can issue commands directly to ''bescmdln'' or pass it the name of a file of commands to run in sequence. Either way bescmdln prints whatever it get back from the BES to standard output. 
+
+= What you would like =
+
+It would be far easier to be be able to run you handler as if it ''was'' the command line client and see the output directly. This is exactly what the command ''besstandalone'' does for you. Like the ''besctl start'' command, ''besstandalone'' reads an optional ''bes.config'' file and takes optional debugging switches. Unlike ''besctl'' it does not start a server but, after performing the server initialization routines, it switches to 'client mode' and reads commands, printing the response from the BES ''plus'' any debugging output that was generated.
+
+The command files used by ''bescmdln'' and ''besstandalone'' are identical, so files developed for one can be used with the other.
+
+= Examples =
+
+A sample command file that asks the BES for a DDS response (from $prefix/src/modules/hdf4_handler/bes-testsuite):
+&lt;source lang="xml"&gt;
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;request reqID="some_unique_value" &gt;
+    &lt;setContext name="dap_format"&gt;dap2&lt;/setContext&gt;
+    &lt;setContainer name="data" space="catalog"&gt;/data/1990-S1700101.HDF.gz&lt;/setContainer&gt;
+    &lt;define name="d"&gt;
+	&lt;container name="data" /&gt;
+    &lt;/define&gt;
+    &lt;get type="dds" definition="d" /&gt;
+&lt;/request&gt;
+&lt;/source&gt;
+
+Here's how to run these commands using the server and ''bescmdln'':
+&lt;source lang="bash"&gt;
+besctl start
+
+bescmdln -h localhost -p 10022 -i 1990-S1700101.HDF.dds.bescmd
+&lt;/source&gt;
+
+Here's the version using besstandalone:
+&lt;source lang="bash"&gt;
+besstandalone -c bes.conf -i 1990-S1700101.HDF.dds.bescmd
+&lt;/source&gt;
+
+Note that if you try this you will see that most of the regression tests use bes command files that reference local data and the paths are a bit different than when those same data sets are installed in a running server.
+
+= Some Tricks =
+
+== Using besstandalone and the BESDEBUG instrumentation macro ==
+
+The BES supports a flexible run-time instrumentation system that you can access using besstandalone (there are other ways too, see the [[Hyrax Admin Interface]]). Here's an example of instrumentation:
+&lt;source lang="Cpp"&gt;
+void
+HDF4Module::initialize(const string &amp; modname)
+{
+    BESDEBUG("h4", "Initializing HDF4 module " &lt;&lt; modname &lt;&lt; endl) ;
+
+    BESRequestHandler *handler = new HDF4RequestHandler(modname);
+    BESRequestHandlerList::TheList()-&gt;add_handler(modname, handler);
+    
+    ...
+&lt;/source&gt;
+
+The instrumentation macro is ''BESDEBUG''. To 'turn on' this and see the output, start ''besstandalone'' using the ''-d'' option. When you specify the debug option, you need to provide one argument which names the output sink for the debugging information and one or more 'selector names'. An example will make things clearer. To see the output from the above BESDEBUG call, you would pass this option to besstandalone: ''-d "cerr,h4"''. Here's how you would run it:
+&lt;source lang="bash"&gt;
+besstandalone -d "cerr,h4" -c bes.conf -i 1990-S1700101.HDF.dds.bescmd
+&lt;/source&gt;
+
+Of course, ''cerr'' is C++'s standard error output sink; you can use ''cout'' or the name of a file instead. Also, you can list a number of selectors, so your handler may have separate BESDEBUG calls for initialization, run-time status, some tricky parts of the code, ...
+
+== Filtering binary output using getdap ==
+
+One thing that's nice about DAP is that so many of the responses are ASCII or XML. That makes them easy (relatively) to debug when compared to binary outputs. But data is binary in most of these datasets and DAP transmits it that way for obvious efficiency reasons. The ''getdap'' command line client can be used to filter the binary data response object returned by the bes so that the data values are rendered as ASCII (but without using the server's ASCII output capability). Here's what that looks like.
+
+Given:
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;request reqID="some_unique_value" &gt;
+    &lt;setContext name="dap_format"&gt;dap2&lt;/setContext&gt;
+    &lt;setContainer name="data" space="catalog"&gt;/data/foo2.hdf.gz&lt;/setContainer&gt;
+    &lt;define name="d"&gt;
+	&lt;container name="data" /&gt;
+    &lt;/define&gt;
+    &lt;get type="dods" definition="d" /&gt;
+&lt;/request&gt;
+&lt;/source&gt;
+
+&lt;source lang="bash"&gt;
+besstandalone -d "cerr,h4" -c bes.conf -i foo2.hdf.data.bescmd | getdap -M -
+&lt;/source&gt;
+
+Where the option ''-M'' tells getdap to strip off any MIME headers in the response and the dash tells it to read from stdin.</text>
+      <sha1>5yuautnk2ktfjt2kfq194kun0sm97jo</sha1>
+    </revision>
+  </page>
+</mediawiki>

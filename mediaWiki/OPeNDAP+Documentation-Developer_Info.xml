@@ -1,0 +1,180 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Developer Info</title>
+    <ns>0</ns>
+    <id>749</id>
+    <revision>
+      <id>13526</id>
+      <parentid>13502</parentid>
+      <timestamp>2024-02-22T23:09:05Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* C++ Coding Information */</comment>
+      <origin>13526</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="12266" sha1="9hnne86uweoeds2y6qtsclhucavu9bf" xml:space="preserve">
+* [https://github.com/OPENDAP OPeNDAP's GitHub repositories]: OPeNDAP's software is available using GitHub in addition to the downloads from our website.
+** Before 2015 we hosted our own SVN repository. It's still online and available, but for read-only access, at [https://scm.opendap.org/svn https://scm.opendap.org/svn].
+* [https://travis-ci.org/OPENDAP Continuous Integration builds]: Software that is built whenever new changes are pushed to the master branch. These builds are done on the Travis-CI system.
+* [http://test.opendap.org/ test.opendap.org]: Test servers with data files.
+* We use the Coverity static system to look for common software defects, information on Hyrax is spread across three projects:
+** [https://scan.coverity.com/projects/opendap-bes?tab=overview The BES and the standard handlers we distribute]
+** [https://scan.coverity.com/projects/opendap-olfs?tab=overview The OLFS - the front end to the Hyrax data server]
+** [https://scan.coverity.com/projects/opendap-libdap4?tab=overview libdap - The implementation of DAP2 and DAP4]
+
+== OPeNDAP's FAQ ==
+The [http://www.opendap.org/faq-page OPeNDAP FAQ] has a pretty good section on developer's questions.
+
+== C++ Coding Information ==
+* [[Include files for libdap | Guidelines for including headers]]
+* [[Using lambdas with the STL]]
+* [[Better Unit tests for C++]]
+* [[Better Singleton classes C++]]
+* [[What is faster? stringstream string + String]]
+* [[More about strings - passing strings to functions]]
+
+== OPeNDAP Workshops ==
+* [http://www.opendap.org/about/workshops-and-presentations/2007-10-12 The APAC/BOM Workshops]: This workshop spanned several days and covered a number of topics, including information for SAs and Developers. Oct 2007.
+* [http://www.opendap.org/about/workshops-and-presentations/2008-07-15 ESIP Federation Server Workshop]: This half-day workshop focused on server installation and configuration. Summer 2008
+* [[A One-day Course on Hyrax Development | Server Functions]]: This one-day workshop is all about writing and debugging server-side functions. It also contains a wealth of information about Hyrax, the BES and debugging tricks for the server. Spring 2012. Updated Fall 2014 for presentation to Ocean Networks Canada.
+
+== libdap4 and BES Reference documentation ==
+* [https://opendap.github.io/bes/html/ BES Reference]
+* [https://opendap.github.io/libdap4/html/ libdap Reference]
+
+== BES Development Information ==
+* [[Hyrax - Logging Configuration|Logging Configuration]]
+
+* [[BES_-_How_to_Debug_the_BES| How to debug the BES]]
+* [[BES - Debugging Using besstandalone]]
+* [[Hyrax - Create BES Module | How to create your own BES Module]]
+* Hyrax Module Integration: How to configure your module so it's easy to add to Hyrax instances ([[:File:HyraxModuleIntegration-1.2.pdf|pdf]])
+* [[Hyrax - Starting and stopping the BES| Starting and stopping the BES]]
+* [[Hyrax - Running bescmdln | Running the BES command line client]]
+* [[Hyrax - BES Client commands| BES Client commands]]. The page [[BES_XML_Commands | BES XML Commands]] repeats this info for a bit more information on the return values. Most of the commands don't return anything unless they return an error and are expected to be used in a group where a ''get'' command closes out the request and obviously does return a response of some kind (maybe an error).
+* [[Hyrax:_BES_Administrative_Commands| BES Administrative Commands]]
+* [[Hyrax - Extending BES Module | Extending your BES Module]]
+* [[Hyrax - Example BES Modules | Example BES Modules]] - the Hello World example and the CSV data handler
+* [[Hyrax - BES PPT | BES communication protocol using PPT (point to point transport)]]
+
+* [[Australian BOM Software Developer's Agenda and Presentations|Software Developers Workshop]]
+
+== OPeNDAP Development process information  ==
+These pages contain information about how we'd like people working with us to use our various on-line tools.
+
+* [[Planning a Program Increment]] This is a checklist for the planning phase that precedes a Program Increment (PI) when using SAFe with the NASA ESDIS development group.
+* [[Hyrax GitHub Source Build]] This explains how to clone our software from GitHub and build our code using a shell like bash. It also explains how to build the BES and all of the Hyrax 'standard' handlers in one operation, as well as how to build just the parts you need without cloning the whole set of repos. Some experience with 'git submodule' will make this easier, although the page explains everything.
+* [[Bug Prioritization]]. How we prioritize bugs in our software.
+
+===[[How to Make a Release|Making A Release]] ===
+* [[How to Make a Release]] A general template for making a release. This references some of the pages below.
+
+== Software process issues: ==
+* [[How to download test logs from a Travis build]] All of our builds on Travis that run tests save those logs to an S3 bucket.
+* [[ConfigureCentos| How to configure a CentOS machine for production of RPM binaries]] - Updated 12/2014 to include information regarding git.
+* [[How to use CLion with our software]]
+* [[BES Timing| How to add timing instrumentation to your BES code.]]
+* [[UnitTests| How to write unit tests using CppUnit]] NB: See other information under the heading of C++ development
+* [[valgrind| How to use valgrind with unit tests]]
+* [[Debugging the distcheck target]] Yes, this gets its own page...
+* [[CopyRights| How to copyright software written for OPeNDAP]]
+* [[Managing public and private keys using gpg]]
+* [[SecureEmail |How to Setup Secure Email and Sign Software Distributions]]
+* [[UserSupport|How to Handle Email-list Support Questions]]
+* [[NetworkServerSecurity |Security Policy and Related Procedures]]
+* [http://semver.org/ Software version numbers]
+* [[GuideLines| Development Guidelines]]
+* [[Apple M1 Special Needs]]
+
+==== Older info of limited value: ====
+* [http://gcc.gnu.org/gcc-4.4/cxx0x_status.html C++-11 gcc/++-4.4 support] We now require compilers that support C++-14, so this is outdated (4/19/23).
+* [[How to use Eclipse with Hyrax Source Code]] I like Eclipse, but we now use CLion because it's better (4/19/23) . Assuming you have cloned our Hyrax code from GitHub, this explains how to setup eclipse so you can work fairly easily and switch back and forth between the shell, emacs and eclipse.
+
+==== AWS Tips ====
+* [[Growing a CentOS Root Partition on an AWS EC2 Instance]]
+* [[How Shutoff the CentOS firewall]]
+
+== General development information ==
+These pages contain general information relevant to anyone working with our software:
+
+* '''[[Git Hacks and Tricks]]''': Information about using git and/or GitHub that seems useful and maybe not all that obvious.
+* [[Git Secrets]]: securing repositories from AWS secret key leaks.
+* [https://wiki.wxwidgets.org/Valgrind_Suppression_File_Howto Valgrind Suppression File Howto] How to build a suppressions file for valgrind.
+* [[Using a debugger for C++ with Eclipse on OS/X]] Short version: use lldbmi2 **Add info**
+* [[Using ASAN]] Short version, look [https://github.com/google/sanitizers/wiki/AddressSanitizerAndDebugger at the Google/GitHub pages] for useful environment variables **add text** On Centos, use yum install llvm to get the 'symbolizer' and try ''ASAN_OPTIONS=symbolize=1 ASAN_SYMBOLIZER_PATH=$(shell which llvm-symbolizer)''
+* [[How to use ''Instruments'' on OS/X to profile]] Updated 7/2018
+* [https://wiki.wxwidgets.org/Valgrind_Suppression_File_Howto Valgrind - How to generate suppression files for valgrind] This will quiet valgrind, keeping it from telling you OS/X or Linux (or the BES) is leaking memory.
+* [[Migrating source code from SVN to git]]: How to move a large project from SVN to git and keep the history, commits, branches and tags.
+* [https://developer.mozilla.org/en-US/docs/Eclipse_CDT Eclipse - Detailed information about running Eclipse on OSX from the Mozzilla project]. Updated in 2017, this is really good but be aware that it's specific to Mozilla so some of the tips don't apply. Hyrax (i.e., libdap4 and BES) also use their own build system (autotools + make) so most of the configuration information here is very apropos. See also [[How to use Eclipse with Hyrax Source Code]] below.
+* [https://jfearn.fedorapeople.org/en-US/RPM/4/html/RPM_Guide/index.html RPM Guide] The best one I'm found so far...
+* [https://autotools.io/index.html Autotools Myth busters] The best info on autotools I've found yet (covers ''autoconf'', ''automake'', ''libtool'' and ''pkg-config'').
+* The [https://www.gnu.org/software/autoconf/autoconf.html autoconf] manual
+* The [https://www.gnu.org/software/automake/ automake] manual
+* The [https://www.gnu.org/software/libtool/ libtool] manual
+* A good [https://lldb.llvm.org/lldb-gdb.html gdb to lldb cheat sheet] for those of us who know ''gdb'' but not ''lldb''.
+
+= Old information =
+'''Note''': Old build information
+====The Release Process====
+# Make sure the &lt;tt&gt;hyrax-dependencies&lt;/tt&gt; project is up to date and tar balls on www.o.o. If there have been changes/updates:
+## Update version number for the &lt;tt&gt;hyrax-dependencies&lt;/tt&gt; in the &lt;tt&gt;Makefile&lt;/tt&gt;
+## Save, commit, (merge?), and push the changes to the &lt;tt&gt;master&lt;/tt&gt; branch.
+## Once the &lt;tt&gt;hyrax-dependencies&lt;/tt&gt; CI build is finished, trigger CI builds for both &lt;tt&gt;libdap4&lt;/tt&gt; and &lt;tt&gt;bes&lt;/tt&gt; by pushing change(s) to the master branch of each.
+# [[Source_Release_for_libdap | Making a source release of libdap]]
+# [[ReleaseGuide | Making a source release of the BES]]. 
+# [[OLFSReleaseGuide| Make the OLFS release WAR file]]. Follow these steps to create the three .jar files needed for the OLFS release. Includes information on how to build the OLFS and how to run the tests.
+# [[HyraxDockerReleaseGuide|Make the official Hyrax Docker image for the release]] When the RPMs and the WAR file(s) are built and pushed to their respective download locations, make the Docker image of the release.
+
+====Supplemental release guides====
+&lt;font color="red"&gt;Old - use the packages built using the Continuous Delivery process&lt;/font&gt;
+# [[RPM |Make the RPM Distributions]]. Follow these steps to create an RPM distribution of the software. '''Note:''' ''Now we use packages built using CI/CD, so this checklist is no longer needed.''
+
+'''Note''': ''The following is all about using Subversion and is out of date as of November 2014 when we switched to git. There are still good ideas here...''
+* [[MergingBranches |How to merge code]]
+* [[TrunkDevelBranchRel | Using the SVN trunk, branches and tags to manage releases]].
+* [[ShrewBranchGuide | Making a Branch of Shrew for a Server Release]]. Releases should be made from the trunk and moved to a branch once they are 'ready' so that development can continue on the trunk and so that we can easily go back to the software that mad up a release, fix bugs, and (re)release those fixes. In general, it's better to fix things like build issues, etc., discovered in the released software ''on the trunk'' and merge those down to the release branch to maintain consistency, re-release, etc. This also means that virtually all new feature development should take place on special ''feature'' branches, not the trunk.
+* [[Hyrax Package for OS-X]]. This describes how to make a new OS/X 'metapackage' for Hyrax.
+* [[XP| Making Windows XP distributions]]. Follow these directions to make Windows XP binaries.
+* [[ReleaseToolbox |Making a Matlab Ocean Toolbox Release]].  Follow these steps when a new Matlab GUI version is ready to be released.
+* [[Eclipse - How to Setup Eclipse in a Shrew Checkout]] This includes some build instructions
+* [[LinuxBuildHostConfig| How to configure a Linux machine to build Hyrax from SVN]]
+* [[ConfigureSUSE| How to configure a SUSE machine for production of RPM binaries]]
+* [[ConfigureAmazonLinuxAMI| How to configure an Amazon Linux AMI for EC2 Instance To Build Hyrax]]
+* [[TestOpendapOrg | Notes from setting up Hyrax on our new web host]]
+* [http://svnbook.red-bean.com/en/1.7/index.html Subversion 1.7 documentation] -- The official Subversion documentation; [http://svnbook.red-bean.com/en/1.1/svn-book.pdf PDF] and [http://svnbook.red-bean.com/en/1.1/index.html HTML].
+* [[OPeNDAP's Use of Trac]] -- How to use Trac's various features in the software development process.</text>
+      <sha1>9hnne86uweoeds2y6qtsclhucavu9bf</sha1>
+    </revision>
+  </page>
+</mediawiki>

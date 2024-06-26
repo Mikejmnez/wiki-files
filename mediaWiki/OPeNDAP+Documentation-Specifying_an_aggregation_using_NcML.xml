@@ -1,0 +1,191 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Specifying an aggregation using NcML</title>
+    <ns>0</ns>
+    <id>356</id>
+    <revision>
+      <id>3573</id>
+      <parentid>3560</parentid>
+      <timestamp>2009-04-09T23:54:21Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Description */</comment>
+      <origin>3573</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="7688" sha1="bq8wu7a8g70ykk73wcrbwz6o9kf1k73" xml:space="preserve">Back [[BES Aggregation using NcML]]
+
+'''Point Of Contact:''' ''James Gallagher''
+
+== Description ==
+&lt;font size="-2" color="green"&gt;''Give a short descriptive name for the use case to serve as a unique identifier.''&lt;/font&gt;
+
+Aggregation_00
+
+== Goal ==
+&lt;font size="-2" color="green"&gt;''The goal briefly describes what the user intends to achieve with this use case.''&lt;/font&gt;
+
+The data provider wants to group together a collection of DAP URLs so that they can also function as a single URL. This will enable data sets made up of many files to appear as a single entity, relieving downstream data processing elements (DPEs) of the need to understand the organization of the particular collection. By grouping the files/URLs using aggregation the organization of the data set's components is 'hidden' using the DAP data model.
+
+== Summary == 
+&lt;font size="-2" color="green"&gt;''Give a summary of the use case to capture the essence of the use case (no longer than a page). It provides a quick overview and includes the goal and principal actor.''&lt;/font&gt;
+
+When a data provider wants to form and aggregation (grouping) from a set of discreet files/URLs, they will need to write a short NcML document that describes that aggregation. The NcML file will name all the pieces in the aggregation and how they are to be assembled to form a single (logical) entity. The file will be saved on the data server's file system and the BES will be configured to 'serve' that file using the NcML Aggregation handler. 
+
+A variation on this scenario is that the 'data provider' might be more of a 'reseller' since the raw data might not be local but instead remote URLs.
+
+== Actors ==
+&lt;font size="-2" color="green"&gt;''List actors, people or things outside the system that either acts on the system (primary actors) or is acted on by the system (secondary actors). Primary actors are ones that invoke the use case and benefit from the result. Identify sensors, models, portals and relevant data resources. Identify the primary actor and briefly describe role.''&lt;/font&gt;
+
+# Primary actor: The data provider who writes the NcML file
+# The raw data that is to be aggregated
+# The BES with the NcML aggregation handler installed and configured
+
+== Preconditions ==
+&lt;font size="-2" color="green"&gt;''Here we state any assumptions about the state of the system that must be met for the trigger (below) to initiate the use case. Any assumptions about other systems can also be stated here, for example, weather conditions. List all preconditions.''&lt;/font&gt;
+
+# The data set to be aggregated must fit into one of the models supported by the handler. NcML support three logical models: JoinNew, JoinExisting and JoinUnion (New and existing refer to using a new or existing dimension). If the data cannot be aggregated using one of the supported models, then it won't work. The handler may not support all three models initially.
+# The BES has to be installed and the NcML Aggregation handler must be installed. The BES must be configured so that requests for data sources that match a certain pattern (".*\.ncml" seems like a likely candidate) are routed to the NcML handler.
+# There has to be raw data local to the BES or the NcML handler has to be capable of working with data specified using a URL.
+
+== Triggers ==
+&lt;font size="-2" color="green"&gt;''Here we describe in detail the event or events that brings about the execution of this use case. Triggers can be external, temporal, or internal. They can be single events or when a set of conditions are met, List all triggers and relationships.''&lt;/font&gt;
+
+There are several possible triggers for this use-case.
+* The data provider needs to satisfy the goals of either the REAP or IOOS project
+* The data provider wants to improve the ease of use of a particular data set in general
+* Unless aggregated, a particular data set cannot be used by a special client.
+
+== Basic Flow ==
+&lt;font size="-2" color="green"&gt;''Often referred to as the primary scenario or course of events. In the basic flow we describe the flow that would be followed if the use case where to follow its main plot from start to end. Error states or alternate states that might be highlighted are not included here. This gives any browser of the document a quick view of how the system will work. Here the flow can be documented as a list, a conversation or as a story.(as much as required)''&lt;/font&gt;
+
+# The data set is identified and an aggregation model is chosen
+# A NcML file is written that describes the aggregation
+## For aggregations of a small number of files/URLs, each can be listed separately in the ''*.ncml'' file
+## For aggregations of many files/URLs, the NcML &lt;scan ...&gt; element can be used
+# The file saved in a location that can be accessed by the BES (i.e., under its DocumentRoot directory)
+
+== Alternate Flow ==
+&lt;font size="-2" color="green"&gt;''Here we give any alternate flows that might occur. May include flows that involve error conditions. Or flows that fall outside of the basic flow.''&lt;/font&gt;
+
+# The data are not local and server does not already exist:
+## Install a remote server
+## Develop an aggregation for the remote data
+# The Data are not in a form that's possible to aggregate:
+## Develop a 'nested' aggregation
+## Reformat the data
+### Eliminate the need for aggregation
+### Facilitate aggregation is access to the raw elements is still important
+
+== Post Conditions ==
+&lt;font size="-2" color="green"&gt;''Here we give any conditions that will be true of the state of the system after the use case has been completed.''&lt;/font&gt;
+
+Both the raw data and the aggregate are available using the DAP.
+
+== Activity Diagram ==
+&lt;font size="-2" color="green"&gt;''Here a diagram is given to show the flow of events that surrounds the use case.''&lt;/font&gt;
+
+== Notes ==
+&lt;font size="-2" color="green"&gt;''There is always some piece of information that is required that has no other place to go. This is the place for that information.''&lt;/font&gt;
+
+This particular use case is very general. We will need to develop specific use cases for the data sets that the IOOS and REAP projects need to make sure that the required features are developed first and more general features are added as time allows.
+
+''I suspect that the REAP project will require mostly JoinNew aggregation to aggregate collections of SST images over time.''
+
+===REAP data sets===
+
+{| cellspacing="0" border="2"
+|&lt;font size="-1"&gt;''Data set''&lt;/font&gt;
+|&lt;font size="-1"&gt;''Server type''&lt;/font&gt;
+|&lt;font size="-1"&gt;''Base URL''&lt;/font&gt;
+|&lt;font size="-1"&gt;''Notes''&lt;/font&gt;
+|-
+|GHRSST
+|
+|
+|
+|-
+|Pathfinder (1 &amp; 4km)
+| 
+|
+|
+|-
+|Ocean Color
+|
+|
+|
+|-
+|GOES
+|
+|
+|
+|-
+| HyCOM
+| TDS
+|hycom.coaps.fsu.edu/thredds/dodsC/
+|It looks like these are already aggregated
+|}
+
+===IOOS data sets===
+
+{| cellspacing="0" border="2"
+|&lt;font size="-1"&gt;''Data set''&lt;/font&gt;
+|&lt;font size="-1"&gt;''Server type''&lt;/font&gt;
+|&lt;font size="-1"&gt;''Base URL''&lt;/font&gt;
+|&lt;font size="-1"&gt;''Notes''&lt;/font&gt;
+|-
+|GHRSST
+|
+|
+|
+|}
+
+== Resources ==
+&lt;font size="-2" color="green"&gt;''In order to support the capabilities described in this Use Case, a set of resources must be available and/or configured.  These resources include data and services, and the systems that offer them.  This section will call out examples of these resources.''&lt;/font&gt;
+
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|&lt;font size="-2" color="green"&gt;''name''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Organization that owns/ manages resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Short description of the resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''How often the resource is available''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Name of system which provides resource''&lt;/font&gt;
+|}</text>
+      <sha1>bq8wu7a8g70ykk73wcrbwz6o9kf1k73</sha1>
+    </revision>
+  </page>
+</mediawiki>

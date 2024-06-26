@@ -1,0 +1,103 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DDXXMLBase</title>
+    <ns>0</ns>
+    <id>349</id>
+    <revision>
+      <id>3291</id>
+      <parentid>3290</parentid>
+      <timestamp>2009-02-24T19:27:40Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Hyrax Implementation */</comment>
+      <origin>3291</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2453" sha1="p63pxj4x1b69dzs5evnijtjhw7gh9ci" xml:space="preserve">== Description ==
+
+'''Implemented in DAP 3.2'''
+
+Based on this recommendation:    http://www.w3.org/TR/xmlbase/#syntax
+
+Add the attribute ''xml:base'' to the ''dap:Dataset'' element.
+
+The namespace associated with the ''xml'' prefix is: ''http://www.w3.org/XML/1998/namespace'' and the prefix MUST be declared in the ''dap:Dataset'' element:
+
+ &lt;Dataset 
+    xmlns="http://xml.opendap.org/ns/DAP/3.2#"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xml.opendap.org/ns/DAP/3.2#  http://xml.opendap.org/dap/dap3.2.xsd"
+    name="200803061600_HFRadar_USEGC_6km_rtv_SIO.nc" 
+    xml:base="http://dev1.opendap.org:8080/opendap/netcdf/examples/200803061600_HFRadar_USEGC_6km_rtv_SIO.nc.ddx"
+ &gt;
+
+== Hyrax Implementation ==
+
+To cause the BES to pass the ''xml:base'' to libdap for inclusion in the DDX we need to Implement  a new context for '''setContext''':
+
+    &lt;setContext name="xml:base"&gt;''valueOf(xml:base)''&lt;/setContext&gt;
+
+Thus, when asking for a DDX the OLFS woudl send:
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt; 
+ &lt;request xmlns="http://xml.opendap.org/ns/bes/1.0#" reqID="###"&gt;
+     &lt;setContext name="xdap_accept"&gt;3.2&lt;/setContext&gt;
+     &lt;setContext name="dap_explicit_containers"&gt;no&lt;/setContext&gt;
+     &lt;setContext name="errors"&gt;dap2&lt;/setContext&gt;
+     '''&lt;setContext name="xml:base"&gt;http://localhost:8080/opendap/bears.nc.ddx&lt;/setContext&gt;'''
+     &lt;setContainer name="catalogContainer" space="catalog"&gt;/bears.nc&lt;/setContainer&gt;
+     &lt;define name="d1" space="default"&gt;
+         &lt;container name="catalogContainer" /&gt;
+     &lt;/define&gt;
+     &lt;get type="ddx" definition="d1" /&gt;
+ &lt;/request&gt;
+
+And although the html_form response also needs a request URL, it wants the request URL sans request suffix.
+So an html_form request remains unchanged:
+
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ &lt;request xmlns="http://xml.opendap.org/ns/bes/1.0#" reqID="###"&gt;
+     &lt;setContext name="xdap_accept"&gt;2.0&lt;/setContext&gt;
+     &lt;setContext name="dap_explicit_containers"&gt;no&lt;/setContext&gt;
+     &lt;setContext name="errors"&gt;xml&lt;/setContext&gt;
+     &lt;setContainer name="catalogContainer" space="catalog"&gt;/bears.nc&lt;/setContainer&gt;
+     &lt;define name="d1" space="default"&gt;
+         &lt;container name="catalogContainer" /&gt;
+     &lt;/define&gt;
+     &lt;get type="html_form" definition="d1" '''url="http://localhost:8080/opendap/bears.nc"''' /&gt;
+ &lt;/request&gt;
+
+[[Category:Development|DDXXMLBase]][[Category:DAP4|DDXXMLBase]]</text>
+      <sha1>p63pxj4x1b69dzs5evnijtjhw7gh9ci</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,157 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Current Implementations</title>
+    <ns>0</ns>
+    <id>187</id>
+    <revision>
+      <id>1243</id>
+      <parentid>1223</parentid>
+      <timestamp>2007-10-04T19:59:13Z</timestamp>
+      <contributor>
+        <username>BennoBlumenthal</username>
+        <id>25</id>
+      </contributor>
+      <comment>/* Documentation */</comment>
+      <origin>1243</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5782" sha1="h7uro1146o3gwdsy7ifo6qls15ay62f" xml:space="preserve">== The GrADS Data Server (GDS) ==
+
+==== Institution ====
+The [http://www.iges.org/cola.html Center for Ocean-Land-Atmosphere Studies] of the [http://www.iges.org/aboutiges.html Institute for Global Environment and Society]
+
+==== Documentation ====
+[http://www.iges.org/grads/gds/index.html Overview] and details about [http://www.iges.org/grads/gds/doc/user.html#2b server-side processing].
+
+==== Implementation Details ====
+A Java Servlet implemented on top of the bespoke [http://grads.iges.org/anagram/ Anagram Framework] using the Java Runtime environment to execute the [http://www.iges.org/grads/grads.html GrADS] application to perform the data access and analysis and using the [http://www.opendap.org/swJava1.1/ Java OPeNDAP library] for DAP communication.
+
+==== Functions ====
+Any valid [[http://www.iges.org/grads/gadoc/expressions.html GrADS expression]].
+
+==== Syntax ====
+http://machine_name:9090/dods/_expr_
+followed immediately by three sets of curly braces containing arguments, as follows:
+
+{dataset1,dataset2,...}{''expression''}{x1:x2,y1:y2,z1:z2,t1:t2}
+
+where the first set of braces contains a list of data sets to be used in the analysis, ''expression'' is any valid GrADS expression operating on the variables in the scope of the referenced data sets and the thirds set of braces is the boundaries for the evaluation of the expression in world coordinates.
+
+== The Ferret-Thredds Data Server (F-TDS) ==
+
+==== Institution ====
+==== Documentation ====
+==== Implementation Details ====
+==== Functions ====
+==== Syntax ====
+
+== Ingrid ==
+
+==== Institution ====
+The [[http://iridl.ldeo.columbia.edu/ Data Library]] of the [[http://portal.iri.columbia.edu/ The International Research Institute for Climate and Society]]
+==== Documentation ====
+[[http://iridl.ldeo.columbia.edu/dochelp/Documentation/ Overview]]
+* [[http://iridl.ldeo.columbia.edu/dochelp/Documentation/funcmenu.html Function Menu]]
+* [http://iridl.ldeo.columbia.edu/ontologies/functions.owl Function Ontology]
+* [http://iridl.ldeo.columbia.edu/ontologies/functions_ingrid.owl Function Ontology with Ingrid Functions]
+
+* [http://iridl.ldeo.columbia.edu/ontologies/browse.pl?node=http%3A%2F%2Firidl.ldeo.columbia.edu%2Fontologies%2Ffunctions.owl&amp;repository=dl-owl Function Ontology Browse ]
+
+==== Implementation Details ====
+Mix of FORTRAN/C implementing a delayed-execution data-flow architecture.  Supports a number of data formats/exchange protocols.  Local code not under wide distribution.
+
+==== Functions ====
+Any Ingrid expression, which is RPN grammer on top of a large library of words (i.e. functions). There are many functions which operate on variables/datasets of which currently 166 are documented [[http://iridl.ldeo.columbia.edu/dochelp/Documentation/funcmenu.html detailed here]].   This documentation is generated from a semantic framework which is intended to help map interoperable functions.
+
+==== Syntax ====
+A URL-based (not in the query string) RPN notation.
+
+For example: 
+
+http://iridl.ldeo.columbia.edu/expert/SOURCES/.NOAA/.NCEP/.CPC/.GMSM/.w/5/add/
+
+SOURCES .NOAA .NCEP .CPC .GMSM .w (the OPeDNAP data variable)
+
+5 add (the constant 5; the operation desired)
+
+[http://iridl.ldeo.columbia.edu/expert/SOURCES/.NOAA/.NCDC/.ERSST/.version2/.SST/X/%28170W%29%28120W%29RANGE/Y/%285S%29%285N%29RANGE%5BX/Y%5Daverage/  http://iridl.ldeo.columbia.edu/expert/SOURCES/.NOAA/.NCDC/.ERSST/.version2/.SST/X/(170W)(120W)RANGE/Y/(5S)(5N)RANGE&amp;#91;X/Y&amp;#93;average/]
+(The actual URL is usually encoded.  See the link contents.)
+
+SOURCES .NOAA .NCDC .ERSST .version2 .SST (The OPeNDAP data variable)
+
+X (170W) (120W) RANGE (A range in X of the data variable's underlying grid in world coordinates)
+
+Y (5S) (5N) RANGE (A range in Y of the data variable's underlying grid in world coordinates)
+
+[X Y]average (the dimensions to be operated on; the operation)
+
+In this case, the OPeNDAP variable is three dimensional (X Y T), so after averaging we are left with a one dimensional variable (depending on T).
+
+If we had alternatively averaged only over X
+
+[X] average
+
+we would be left with a two-dimensional variable (depending on Y and T).
+
+An OPeNDAP service is created at any point by appending dods, e.g. dods.das,dods.dds,dods.dods -- this is, of course, index-based subsetting.  Users do not normally do index-based subsetting explicitly, though there are methods within the independent variables (first, second, secondtolast, last, valuetoindex, indextovalue) that would make it possible to do so.
+
+== pyDap ==
+
+==== Institution ====
+
+Independent implementation by Roberto De Almeida, initially developed at the [http://www.io.usp.br Oceanographic Institute] of the [http://www.usp.br University of São Paulo], and currently at the [http://www.cptec.inpe.br Center of Weather Forecast and Climate Studies].
+
+==== Documentation ====
+
+Server-side functions are currently being implemented for the next major release of pydap (2.3), still under development. There's an [http://groups.google.com/group/pydap overview] of the planned implementation.
+
+==== Implementation Details ====
+
+A WSGI stack with a pydap-aware middleware that handles server-side functions. The middleware converts OPeNDAP requests with server calls to regular data requests and pass them to the pydap server. The data returned by the server are used by the middleware to complete the function calls, with the result being passed back to the client.
+
+==== Functions ====
+
+geogrid and fill_value. Supports an auto-discovery mechanism for third-party functions installed separately.
+
+==== Syntax ====
+
+Follows the DAP 2 spec: http://example.com/dataset?function(param_1,param_2,...,param_n).
+
+== SWAMP ==
+
+==== Institution ====
+==== Documentation ====
+==== Implementation Details ====
+==== Functions ====
+==== Syntax ====</text>
+      <sha1>h7uro1146o3gwdsy7ifo6qls15ay62f</sha1>
+    </revision>
+  </page>
+</mediawiki>

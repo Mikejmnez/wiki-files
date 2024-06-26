@@ -1,0 +1,209 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Relational Database Handler</title>
+    <ns>0</ns>
+    <id>476</id>
+    <revision>
+      <id>5638</id>
+      <parentid>5449</parentid>
+      <timestamp>2010-04-28T14:02:25Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <origin>5638</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="13855" sha1="btd254gsgr6g0qwqhv5bct9kkv1gykj" xml:space="preserve">Hyrax needs a handler that allows it to access data in a Relational Database Management System (RDBMS). (This requirement stems from the observation that many of our stake holders store their in situ measurement data in RDBMSs)
+
+It is anticipated RDBMS handler will have a broad application for observation/in-situ data sets.
+
+
+== Use Cases ==
+# [[Adding the RDH to the BES]]
+# [[RDH handles bes:showCatalog request ]]
+# [[RDH handles a DDX request ]]
+# [[RDH handles a DDS request ]]
+# [[RDH handles a DAS request ]]
+# [[RDH handles a DAP2 data request ]]
+
+== Definitions ==
+
+; row set
+: A '''row set''' is an object which encapsulates a set of [http://en.wikipedia.org/wiki/Row_(database) rows]. [http://en.wikipedia.org/wiki/Database_table Database tables] are '''row sets'''.  A database ''[http://en.wikipedia.org/wiki/View_(database) view]'' is a '''row set'''. [http://en.wikipedia.org/wiki/SQL_query SQL queries] return '''row sets'''. [http://en.wikipedia.org/wiki/Join_(SQL) SQL JOIN] operations take '''row sets''' as input and produce '''row sets'''.
+
+; Constraint Expression (CE)
+: The DAP constraint expression string as described in the [http://www.opendap.org/pdf/ESE-RFC-004v1.1.pdf DAP2 Specification].
+
+== Background ==
+
+In the past a Java servlet called the DODS Relational Database Server (DRDS)  was used to provide DAP access to RDBMS holdings. However this older implementation has a number of shortcomings that preclude it's direct use in our current server architecture:
+* No longer supported.
+* Uses the Java DAP implementation 
+* Not a BES module
+* Significant memory limitations
+* Difficult to configure/localize
+
+Although there has been continuing interest in a DRDS replacement within the OPeNDAP community, no funding has been available to develop a soution until recently. The IOOS project has a need to provide a [http://www.opengeospatial.org/standards/sos Sensor Observation Service (SOS)] interface for Hyrax. Since much of the sensor data is already held in RDBMSs it is a natural and necessary time to develop a DRDS replacement.
+
+== Design ==
+There are a number of client/server interactions that can take place in the DAP protocol. However, from a programatic viewpoint, pretty much all of the activities involved in these interactions take place when a client requests DAP2 data from the server. In order for the server to respond to a DAP2 data request it must:
+* Build a DDS instance in memory.
+* Populate it with instances of DAP variables (typically from a custom class factory)
+* Parse the DAP2 Constraint Expression.
+* Read data from the underlying data source and apply the CE to the data.
+* Send the constrained data back to the client.
+In order to illuminate the design of the RDH we will examine each component of this interaction in some detail.
+
+The RDH will be a BES module/plug-in. It will use an implementation of the ODBC (most likely [http://www.unixodbc.org/ unixODBC]) to access the RDMS(s). ODBC Data Sources will be defined at the system level as usual.
+[http://www.unixodbc.org/odbcinst.html][http://msdn.microsoft.com/en-us/library/ms188681.aspx]
+[http://support.adobe.com/devsup/devsup.nsf/docs/53765.htm]
+[http://www.internet-webhosting.com/pleskfaq/ch03s77.html]
+
+As with other DAP service implementations, the abstract data type classes in the [[http://www.opendap.org/api/pref/html/index.html libdap library]] get sub-classed and data source specific read methods are implemented. Because of the nature of the RDBMS data sources some data types (such as Sequence) will need to have other methods implemented.
+
+[[Image:RDH StaticClasses.png|thumb|640px|center|Data type classes for RDH]]
+
+==== New Specialized Class Methods ====
+
+Here is a (surely incomplete) list of methods that we can expect to add to some of the more complicated child classes of of the various [http://www.opendap.org/api/pref/html/index.html libdap types]. 
+
+; SqlDDS
+: '''''setDataSource()''''' - Used to cache the ODBC Data Source reference associated with the DDS (probably during the construction of the DDS from ODBC introspection information) so that it may be used later for data access.
+: '''''getDataSource()''''' - Retrieves the ODBC Data Source reference so that it may used for database introspection or data access.
+
+; SqlSequence
+: '''''setDataSource()''''' - Used to cache the ODBC Data Source reference (probably during the construction of the DDS from ODBC introspection information) so that it may be used later for data access.
+: '''''getDataSource()''''' - Retrieves the ODBC Data Source reference so that it may used for database introspection or data access.
+: '''''setSqlQuery()''''' - Used to cache an SQL query string (typically generated by converting a DAP CE string to an SQL query during CE parsing activities)
+: '''''getSqlQuery()''''' - Retrieves the SQL query string for use during the read() (data access) activities.
+: '''''read()''''' - For SqlSequence the read() method will be fairly complex. It will be making one (or more?) database queries using the cached SQL query string, retrieving the '''row set''' result and passing it to it's child elements, controlling the '''row set's'''  row (and possibly column) cursor position, and cleaning up the database connection after use.
+
+; SqlTypeFactory
+: '''''NewUrl()''''' - Since the DAP URL data type has no logical counter part in the SQL data type mapping this method should probably just throw and exception if called.
+: '''''NewStructure()''''' - Since the DAP Structure data type has no logical counter part in the SQL data type mapping this method should probably just throw and exception if called.
+: '''''NewGrid()''''' - Since the DAP Grid data type has no logical counter part in the SQL data type mapping this method should probably just throw and exception if called.
+
+This list is by no means complete and as the development proceeds the list (along with the associated figure) should be updated.
+
+===Building the DDS object in memory.===
+
+
+The RDH will load (and cache) from it's specific configuration section of the BES configuration file a list of ODBC Data Sources that it will serve as DAP data sets (See Use Case  [[Adding the RDH to the BES]]).
+When the RDH receives a request for content (such as a DDS, DDX, DAP2 data etc.) it will identify the DAP dataset from the request, and determine which ODBC Data Source it must interact with to fulfill the request. 
+Then, using ODBC (or SQL) introspection methods in the [http://msdn.microsoft.com/en-us/library/ms714177.aspx ODBC API], the RDH will identify the collection of tables and views available in the ODBC Data Source and use them to construct a specialized DDS instance in memory.
+
+[[Image:RDH ActivityDiagram.png|thumb|400px|center| Activity diagram for the RDH]]
+
+
+The RDH will traverse the available tables and views in the ODBC Data Source and it will build a representation of each one as a DAP Sequence object.  The columns in each  table and view will represented by a DAP variable in the corresponding Sequence instance. 
+Each of these Sequence instances  will be added to the DDS instance. 
+When building  the Sequences and their variables the RDH will use a custom class factory to build instances of DAP objects that can utilize the ODBC API to extract data from the Result Set of an ODBC brokered database query.  Each of the data types generated by the custom factory will have implemented read methods able to read data from the '''row set''' returned through the ODBC API. The Sequence instances will each hold the information about their associated ODBC Data Source for use during the data serialization activity.
+
+
+[[Image:BuildingDDS.png|thumb|640px|center|Building a DDS instance from an ODBC Data Source]]
+
+==== Special Metadata for Sequences ====
+
+;Table Relationships
+: This implementation of the RDH will not perform SQL JOIN operations on the tables and views in the ODBC Data Source as it is beyond the current scope/funding to undertake such an effort. However, the primary and foreign key information about the tables and views should be available through the [http://msdn.microsoft.com/en-us/library/ms711722(VS.85).aspx ODBC/SQL introspection API]. This key information is what allows JOIN operations to be made, and it is considered important and useful information for users who are accessing the DAP data source. We would like to gather the primary and foreign key information for the tables and variables in the ODBC Data Source and include it in the DAP data source as DAP Attribute metadata. How this information should be represented as such is TDB. We will work out the representation as the implementation work on the RDH progresses. 
+
+;ODBC Datasource
+: Because each DAP Sequence represents a table or view in the ODBC Data Source, it is equivalent to saying that a DAP Sequence represents a '''row set'''. Since it not possible to return multiple '''row sets''' from a single query, and it is possible for a ODBC Data Source to contain multiple tables and/or views, it is implied that a DAP request for a DDS representing a ODBC Data Source could return multiple Sequences. Or, in other words, multiple '''row sets'''. Thus each Sequence's read() method will have to retrieve a '''row set'''. Which is a rather long winded way of saying that when each Sequence's read() method is called it will have to transmit an SQL query to the ODBC Data Source that holds the table or view that it represents. Thus each Sequence must know which ODBC Data Source contains its associated table or view.
+
+;SQL Query String
+: Retrieving the data for each Sequence involves submitting an SQL query to the underlying ODBC Data Source. This query is a product of parsing the DAP Constraint Expression. Since the CE parsing takes place prior to data access activities the Sequence must be able to hold the SQL query string until it is needed for data access.
+
+=== Handling the DAP Constraint Expression===
+
+Once an instance of SqlDDS has been created the Constraint Expression can be parsed and applied to it. This process is normally handled in 2 steps: First the CE is parsed and all of the projected variables in the DDS are marked as such. Second, during the reading of the data (which takes place during the serialization process), each data value is checked against the collection of Clauses in the CE. If it meets the CE criteria it is serialized back to the client. In the RDH the process is somewhat more complex because the RDBMS system can (and should) be used to apply most f the relational constraints. Thus in the RDH applying the CE works more like this:
+# Create the DDX in memory
+# Parse the CE
+# Mark all of the projected variables in the DDS.
+# Use the CE to create an SQL query for each Sequence (which represents a table in the RDBMS) in the DDS.
+## Projected variables should be "SELECT"ed in the SQL query.
+## Where possible convert all the clauses in the CE to SQL WHERE clauses.
+## [[RDH: Creating an SQL query from a DAP2 Constraint Expression | More details regarding the conversion of DAP Constraint Expressions to SQL queries here.]]
+[[Image:ParsingConstraintExpression.png|thumb| 640px|center|Processing a DAP Constraint Expression.]]
+
+=== Sending DAP2 Data ===
+
+When sending data to the requesting client via an SqlDDS:
+# As each Sequence containing projected variables in the DDS is read, the Sequence.read() method should first connect to the ODBC Data Source and issue the (previoulsy constructed) SQL query.
+# The '''row set''' returned by the query is then used as the data source for the Sequence's child variables.
+# Any CE clauses that were not converted into SQL query clauses should be applied to the data as it is read from the '''row set'''.
+# Any array sub-setting operations must be applied to the data returned in the '''row set'''.
+
+
+;Sequence.read() 
+: - Make database query using SQL query string generated by constraint parsing activity..
+: - Retrieve '''row set''' response
+: - Set '''row set''' cursor to first row, first column.
+: - For each row in the '''row set''':
+:: - Serialize() each projected child variable
+:: - Pass '''row set''' to each variable
+: - Move '''row set''' cursor to next row.
+
+;BaseTypeVariable.read()
+: - Read value from '''row set'''
+: - Apply remaining constraints and array sub-setting
+: - Transmit data
+
+
+'''Details'''
+* Each implementation of a simple DAP type will need to be able to read from the '''row set''' returned by an SQL query via ODBC.
+* The implementation of Sequence type will have to manage moving the '''row set''' "cursor" from one row to the next.
+* The DAP constraint expressions will have to be converted into SQL queries. (By a child class of [http://scm.opendap.org/svn/trunk/libdap/ConstraintEvaluator.cc  ConstraintEvaluator] perhaps? )
+* Each Sequence requested will be associated with a separate SQL query. As the DDS is serialized, each Sequence will use the ODBC API to send the query to the Data Source and then use the returned '''row set''' as the data content for the serialization of it's (the Sequence's) variables.
+
+== [[RDH: Mapping the ODBC data model to the DAP2 data model | Mapping the ODBC data model to the DAP2 data model]] ==
+
+== [[RDH: Creating an SQL query from a DAP2 Constraint Expression | Creating an SQL query from a DAP2 Constraint Expression]] ==
+
+== [[RDH Catalog Organization]] ==
+
+== Deliverables ==
+
+The RDH deliverables consist of:
+
+# Source code with inline (doxygen/javadoc) documentation for the various classes and components.
+# Usage, design, and configuration documentation.
+# Production rules for the software (make files, ant build files, etc.)
+# Compiled binaries for:
+#* CentOS (Linux packaged as RPMs)
+# Unit tests and regression for the software.
+
+== Period of use ==
+
+[[Category:Development|Relational Database Handler]][[Category:Hyrax Development|Relational Database Handler]]</text>
+      <sha1>btd254gsgr6g0qwqhv5bct9kkv1gykj</sha1>
+    </revision>
+  </page>
+</mediawiki>

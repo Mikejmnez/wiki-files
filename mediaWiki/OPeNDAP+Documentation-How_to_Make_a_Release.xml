@@ -1,0 +1,162 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>How to Make a Release</title>
+    <ns>0</ns>
+    <id>967</id>
+    <revision>
+      <id>13378</id>
+      <parentid>13377</parentid>
+      <timestamp>2022-07-29T17:08:46Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Send out a notice. */</comment>
+      <origin>13378</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6329" sha1="r0ea4yjqzer6yiook1kwa2z6imsq9tb" xml:space="preserve">This is an updated set of notes regarding a software release. It is tailored to a release of Hyrax, but the same process can be used for any of our code.
+
+# Look for any tickets that have been bound to the label 'fix release x.y.z' and make sure those are completed. Be sure to use both:
+#* The HyraxKB Kanban board in OPeNDAP's JIRA.
+#* The Hyrax board in our NASA JIRA. 
+# When we are ready to release, follow the process outlined in the sections below. 
+# Once done, close the board
+
+== When we decide to release software ==
+Use the developers at opendap.org list to send out notices to all the developers about pending releases.
+
+=== Planned release ===
+If this is a planned release, send out a notice at least two weeks in advance to anyone who likely has made changes to the software. More lead time is, of course, better. This will allow developers time to get their code and documentation changes into github and onto the master branch in time for the release. 
+
+Run Coverity!
+
+=== Emergency releases ===
+If this is an 'emergency' release, then send out a notice to developers as soon as the decision to release is made, since this will give a chance for other developers to lets us know if there are new changes in the master branch that are ready for release. if we don't get an email from those developers of a particular component, then we should assume that the code might not be 100% ready for release and we should use the version tagged with/for the last release if possible. 
+
+Maybe run Coverity - depends on the scope of the changes.
+
+== Release Prerequisites  ==
+Only start this process when hyrax-dependencies, libdap, bes and OLFS ''master'' branches all building and passing their tests.
+
+== Steps For A Major Release (ex: 1.16.x -&gt; 1.17.0) ==
+# &lt;span style="text-decoration: line-through;"&gt;Security Review for libdap, BES and OLFS&lt;/span&gt; Now Handled By TravisCI
+# Write a new X.Y web page. See the [https://docs.opendap.org/images/f/fe/Admin_instructions.pdf web site admin notes] for info about this. It has important information about the menu links. Base this on the previous release page's structure/content.
+# Follow the remaining steps for a ''minor'' release (below).
+
+== Steps For A Minor Release (ex: 1.16.5 -&gt; 1.16.6) ==
+; Notes
+* ''Committing and pushing the various changes made for the source releases will trigger a binary build and those binaries will have the version numbers made in the source distributions update.''
+
+* ''Perform these steps in the order stated as downstream activities rely on items created in earlier steps, such as the creation of the DOIs for libdap and BES are required when updating the OLFS README.md, ''
+
+=== Perform the [[Jira Release Process]] ===
+
+
+=== hyrax-dependencies: [[Source Release For hyrax-dependencies]] ===
+
+=== libdap: [[Source Release for libdap]] ===
+
+
+=== BES: [[Source Release for BES]] ===
+
+=== OLFS:  [[OLFSReleaseGuide | Source and Binary release for OLFS]] ===
+
+=== [[Signing And Publishing C++ Binary Distributions]] ===
+: '''Note:''' ''This was already done for the java OLFS in the previous steps.''
+
+=== [[HyraxDockerReleaseGuide | Build And Publish Docker Images For The Release]] ===
+
+=== Install the new server on test.opendap.org ===
+
+== [[Update The Hyrax Release Web Page]] ==
+== Send out a notice. ==
+Here's a sample email message. I sent this to: "OPeNDAP Inc." &lt;opendap-tech@opendap.org&gt;, opendap-announce@opendap.org, opendap@opendap.org
+
+Subject: We are pleased to announce the release of Hyrax 1.16.8
+
+&lt;pre&gt;
+Greetings!
+
+OPeNDAP is pleased to announce the release of Hyrax 1.16.8. This version of the DAP2 and DAP4 data server is available as RedHat 8 and CentOS 7 RPM packages, Docker containers and source code via GitHub. See https://www.opendap.org/software/hyrax/1.16#SoftwareDownloads for the details.
+
+Hyrax is Open Source.
+
+Below are the changes/updates for this version of the server.
+
+DMR++ Improvements - Direct subsetting access to data in S3
+
+	• Various improvements for supporting FillValue in dmr++ lifecycle.
+	• Improved support for arrays of type String.
+	• Fixed trusted url bug in DMZ parser.
+	• Added support for "empty" valued scalars with associated _FillValue metadata.
+	• get_dmrpp Improvements
+	• Added support for S3 hosted granules to get_dmrpp
+bes
+
+	• Support for RHEL8
+	• Improved the error messages returned to the client
+	• Refactored get_dmrpp, application. Some test features are still broken but core functionality is working now.
+	• Improved support for more GES DISC level 3 and level 4 products
+	• Added coverage the support for the AIRS level 3 and GLDAS level products.
+	• Patched bug in HDF5Array.cc introduced by the std::vector refactor
+	• Added time.h header to ppt/SocketUtilities.cc
+	• Modified fileout_netcdf handler to allow netcdf-3 responses to be up to 4GB in size.
+		This behavior can be reverted by setting FONc.NC3ClassicFormat=true in the BES configuration
+		(aka /etc/bes/site.conf file)
+olfs
+
+	• Improved the DAP4 Data Request Form (now the default form for the server)
+	• Patched bug where unexpected Authentication headers would trigger a redirect loop.
+	• Fixed the broken service that was failing to deliver flat (not-data) files to clients.
+	• Made the "Get As NetCDF-3" an "Get As DAP2 Binary" buttons on the DAP4 Data Request Form context sensitive. If the dataset in question contains variables whose data types are found in DAP4 and not in DAP2/NetCDF-3 then the buttons are disabled. A more complete solution is envisioned where the projected variables are assessed and if only DAP2/NetCDF-3 types are selected then the buttons would would be enabled. This fix is only a step in that more dynamic direction.
+	• Tested on Tomcat-9.0.x
+
+Thank you for your continued support,
+
+The Hyrax development team: Nathan Potter, Dan Holloway, Sam Lloyd, Kodi Neumiller, Kent Yang and James Gallagher
+
+Acknowledgement: OPeNDAP thanks NASA and Raytheon for continued support of the Hyrax Data Server.
+—
+James Gallagher
+jgallagher@opendap.org
+&lt;/pre&gt;
+
+== Time to complete by release ==
+Update and of the release checklists and the 'Time to complete...' information below.
+
+* Hyrax 1.12.2: The total time was planned as ''3w 1d 5h'' and turned out as ''1w 2d 2h 10m''.
+* Hyrax 1.15.1: ''3d'' calendar time
+* Hyrax 1.16.2: ''3d'' effort</text>
+      <sha1>r0ea4yjqzer6yiook1kwa2z6imsq9tb</sha1>
+    </revision>
+  </page>
+</mediawiki>

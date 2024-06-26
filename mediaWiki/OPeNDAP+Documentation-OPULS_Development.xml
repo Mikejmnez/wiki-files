@@ -1,0 +1,442 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>OPULS Development</title>
+    <ns>0</ns>
+    <id>764</id>
+    <revision>
+      <id>12098</id>
+      <parentid>10671</parentid>
+      <timestamp>2016-01-04T17:53:27Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <comment>/* Data model */</comment>
+      <origin>12098</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="13104" sha1="lt65014i0qrltkgk3s5gsmmb1p3o0tw" xml:space="preserve">== OPULS Process ==
+[[DAP4: Design Proposal Process| Design Proposal Process]]
+
+Short version: Each proposal is in one of the following categories:
+* New;
+* Under Consideration;
+* Accepted; 
+* Declined;
+* Under Revision; or
+* Obsolete
+
+== DAP4 Specification ==
+
+This section is deprecated in favor of the top-level [[DAP4 Specification |DAP4 Specification page]].
+
+&lt;!-- DO NOT EDIT this page without editing the main DAP4 Specification page.
+     (But this page doesn't need to match the main page wrt intro/overview paragraphs.)
+ --&gt;
+
+The draft specification has two volumes.
+# [[DAP4: Overview | Overview: New Features Introduced in DAP4]]
+# [[DAP4: Specification Volume 1 | Volume 1: Data Model, Persistent Representation, and Constraints]]
+#* [[DAP4: Specification Volume 1 Deltas]]
+# [[DAP4: Specification Volume 2 | Volume 2: Web Services Specification]]
+# [[DAP4: Specification Volume 3 | Volume 3: DAP4 Extensions]]
+# DAP4 Extensions
+#* [[DAP4 Extension: CSV Data Encoding and Response]]
+#* [[DAP4 Extension: NetCDF Data Response]]
+#* [[DAP4 Extension: Asynchronous Response]]
+#* [[DAP4 Extension: JSON Data and Metadata Encoding]]
+
+== DAP Use Cases ==
+As part of the DAP2 --&gt; DAP4 transition process, we are soliciting ''use cases regarding DAP client application development'' from the community. If you'd like to submit a use case, you can send it to any of the OPULS developers (e.g., [mailto:jgallagher@openadp.org James Gallagher]) or the [mailto:opendap-tech@opendap.org OPeNDAP technical discussion list]. If you'd like you use case to be anonymous, that's fine, just let us know.
+
+We will use these use cases to spot likely problems that may be encountered by members of the community who have developed specific client applications that interact with DAP servers.
+
+=== Use cases from GSFC ===
+These use cases were submitted by Chris Lynnes:
+
+;Use Case #1:  Spatial/Variable Subsetter.  Our Simple Subset Wizard (SSW) works by constructing URLs to download spatial / variable subsets from the server as netCDF files (http://disc.gsfc.nasa.gov/SSW). This has allowed us to stop writing custom subsetter programs for each dataset or group of datasets.
+
+;Use Case #2:  Giovanni (http://giovanni.gsfc.nasa.gov/giovanni/) provides data exploration capabilities for datasets from GES DISC as well as a few select other providers. Data are acquired from servers via OPeNDAP, saved as netCDF/CF1, which is the Giovanni internal standard.  This allows the deployment of many netCDF-capable tools for analysis and data manipulation purposes.
+
+;Use Case #3:  MapServer provides WMS services for GES DISC data. Rather than site individual instances on each data server, we use the .vrt (Virtual files) capability in MapServer to set up the OPeNDAP connections needed to acquire data for the MapServer.
+
+;Use Case #4:  We are currently experimenting with the NcML aggregation capability to see if it is feasible to offer the ability to generate time series at a point using just Hyrax and the NcML handler.
+
+== DAP4 Features Straw man ==
+This is a straw man design, broken down into sections. It is incomplete and its content is subject to revision. &lt;font color="red"&gt;This was our foil; don't use it.&lt;/font&gt; The two documents about under 'DAP Specification' are the current state of the DAP4 specification.
+ 
+#&lt;del&gt; [[DAP4: DAP Versions | Versions]]&lt;/del&gt;
+# &lt;del&gt; [[DAP4: Checksum | Checksum]]&lt;/del&gt;
+# &lt;del&gt; [[DAP Service Terminus]]&lt;/del&gt;
+# &lt;del&gt; [[DAP4: Data Model | Data Model]] and a [http://scm.opendap.org/trac/browser/trunk/xml/dap/dap4.xsd XML Schema] that provides one representation for the data model.&lt;/del&gt;
+# &lt;del&gt; [[DAP4: Requests | Requests ]]&lt;/del&gt;
+# &lt;del&gt; [[DAP4: Responses | Responses]]&lt;/del&gt;
+# &lt;del&gt; [[DAP4_Web_Services_-_StartingPoint | Web Services (Starting Point)]]&lt;/del&gt;
+
+== Proposals ==
+
+===Data model ===
+
+{| class="wikitable" width="85%"
+|+ DAP4 Data Model Proposals
+! Proposal
+! Status
+! Author
+! Date Proposed
+|-
+| [[DAP4: DAP4 Grids Proposal | Grids Ideas]] 
+| '''Accepted''' 
+| Dennis, et al. 
+| (Cleaned up  4/10/2012)
+|-
+| [[DAP4: DAP4 XML| XML Use in DAP4]]
+| '''Accepted''' 
+| Dennis 
+| 2/25/2012
+|-
+| [[DAP4: Top Level Group | Top Level Group]]
+| '''Accepted'''
+| Dennis
+| 4/12/2012
+|-
+| [[DAP4: Proposal for Keys in Sequences| Proposal for Supporting Keys in Sequences]]
+| '''Revised'''
+| Dennis
+| 5/28/2012
+|-
+| [[DAP4: Constraints and Shared Dimensions | Constraints and Shared Dimensions]] 
+| '''Under Consideration''', ''closely related to [[DAP4: DAP4 Grids Proposal | Grids Ideas]]''
+| James &amp; Dennis
+|  Modified 04/12/2012
+|-
+| [[DAP4: VLens (and Sequences)|Ideas for Defining VLens (and Sequences)]]  
+| '''Under Consideration'''
+| Dennis 
+| 02/25/2012
+|-
+| [[DAP4: DAP4 Paths| Path Specification in DAP4]] 
+| '''New'''
+| Dennis
+| 3/30/2012
+|-
+| [[DAP4: Coordinate Systems Element| Coordinate Systems Element]]
+| '''New''' 
+| Dennis
+| 4/10/2012
+|-
+| [[DAP4: Nested Attributes | Nested Attributes]]
+| '''New'''
+| Dennis
+| 4/12/2012
+|-
+| [[DAP4: Subsetting Arrays and Grids By Value| Subsetting Arrays and Grids By Value]]
+| '''New'''
+| Nathan
+| 4/27/2012
+|-
+| [[DAP4: Proposal for a Constraint Notation| Proposal for a Constraint Notation]]
+| '''New'''
+| Dennis
+| 4/30/2012
+|-
+| [[DAP4: Proposal for an abstract Constraint specification| Proposal for an Abstract Constraint Specification]]
+| '''New'''
+| James, ed.
+| 5/22/2012
+|-
+| [[DAP4: Proposal for Structure Projection| Proposal for Structure Projection]]
+| '''New'''
+| Dennis
+| 5/1/2012
+|-
+| [[DAP4: DAP4 Grids Ideas (Old Version) | Old Version of Grids Proposal]] 
+| '''Obsolete'''
+| Dennis
+| 4/10/2012
+|-
+| [[DAP4: DAP4 Filter Constraints| Filter Constraints]] 
+| '''new'''
+| Dennis, John, Ethan
+| 9/17/2012
+|-
+| [[DAP4: DAP4 Constraint Expressions| Constraint Expressions]] 
+| '''new'''
+| Everyone; original note by Dennis, ed. by James
+| 10/29/2012
+|-
+| [[DAP4: DAP4 Projection Syntax| DAP4 Projection Syntax]]
+| '''withdrawn'''
+| Dennis
+| 2/8/2013
+|-
+| [[DAP4: DAP4 Checksum Changes| Proposed Changes to Checksumming]]
+| '''accepted with modifications 3/19/2013'''
+| Dennis
+| 3/1/2013
+|-
+| [[DAP4: VLEN proposal| Proposal for new VLEN representation]]
+| '''New'''
+| Dennis
+| 7/21/2013
+|-
+| [[DAP4: Constraint Expressions, v2| Proposal for a Comprehensive Constraint Expression Syntax]]
+| '''New'''
+| James, Dennis, et al.
+| 7/29/2013
+|-
+| [[DAP4: Alternate Proposal for a Constraint Expression Syntax| Alternate Proposal for a Constraint Expression Syntax]]
+| '''New'''
+| Dennis
+| 10/16/2013
+|-
+| [[DAP4: Type 1 Server Side Functions| Type 1 Server Side Functions Proposal]]
+| '''New'''
+| Dennis
+| 1/4/16
+|}
+
+=== Responses Specific to DAP4 ===
+{| class="wikitable" width="85%"
+|+ Persistent Representation
+! Proposal
+! Status
+! Author
+! Date Proposed
+|-
+| [[DAP4 Error Response| Error Response]]
+|  '''new'''
+| Nathan
+| 11/19/2013
+|-
+| [[DAP4: DAP4 Using Multi-part Mime| Proposal to use Multi-part Mime]]
+| '''new 3/19/2013'''
+| Dennis
+| 3/1/2013
+|-
+| [[DAP4: Inclusion of response metadata in the DMR]]
+| '''New'''
+| James
+| 7/23/2013
+|-
+| [[DAP4: DDX Grammar | DAP4 DDX Grammar]] 
+| '''Under Consideration'''
+| Dennis
+| 
+|-
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+|-
+| [[DAP4: DDX Lexical Elements]] 
+| '''Accepted''' 
+| Dennis
+| 2/28/2012
+|-
+| [[DAP4: DAP4 Escapes| Character Escape Mechanisms in DAP4]] 
+| '''Accepted'''
+| Dennis
+| 4/5/2012
+|-
+| [[DAP4: Encoding for the Data Response]] 
+|'''Accepted''' 
+| James, based on [[DAP4: DAP4 On the Wire Format | Proposed DAP4 On-The-Wire Format]]  by Dennis
+| 6/5/2012, updated 8/31/12
+|-
+| [[DAP4: Chunked encoding]] 
+|'''Accepted''' 
+| James
+| 6/8/2012, updated 8/31/12
+|-
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+|-
+| [[DAP4: DAP4 On the Wire Format | Proposed DAP4 On-The-Wire Format]] 
+|'''Obsolete''' 
+| Dennis
+| 4/8/2012
+|-
+| [[DAP4: DAP4 Multipart Mime Format | Proposed Multipart Mime Format]] 
+|'''Obsolete''' 
+| Dennis
+| 4/8/2012
+|-
+| [[DAP4: DAP4 Error Responses | Proposed Error Response Format]] 
+|'''Obsolete''' 
+| Dennis
+| 5/8/2012
+|-
+| [[DAP4: DAP4 Replacing Chunking | Proposal to Replace Chunking ]] 
+|'''Obsolete''' 
+| Dennis
+| 8/23/2012
+|}
+
+=== Web &amp; HTTP ===
+
+{| class="wikitable" width="85%"
+|+ Web Service Proposals
+! Proposal
+! Status
+! Author
+! Date Proposed
+|-
+| [[DAP4: Constraint and Query | DAP4 Constraint expressions and query strings.]]
+| '''Under Consideration'''
+| Nathan Potter
+| 09/24/2012
+|-
+| [[DAP4: Possible Notation for Server Commands | Possible Notation for Server Commands]] 
+|'''New''' 
+| Dennis
+| Modified 04/12/2012
+|-
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+|-
+| [[DAP4: Asynchronous Request-Response Proposal v3 | DAP4 Asynchronous Request-Response Proposal (new new version)]]
+| '''Accepted'''
+| Ethan Davis and Nathan Potter and James Gallagher
+| 6/15/2012; updated 1 Aug 2012
+|-
+| &lt;del&gt;[[DAP4 Web Services v3 | DAP4 Web Services Proposal version 3]]&lt;/del&gt;&lt;ins&gt;[[DAP4: Specification Volume 2 | Volume 2: Web Services Specification]]&lt;/ins&gt;
+| '''Accepted'''
+| Nathan Potter
+| 6/18/2012
+|-
+| [[DAP4 Dataset Services Response ]]
+| '''Accepted'''
+| Nathan Potter
+| 6/19/2012
+|-
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+| &lt;hr/&gt;
+|-
+| &lt;del&gt;[[DAP4: Asynchronous Responses | Asynchronous Responses]] &lt;/del&gt;
+| &lt;del&gt;'''Obsolete'''&lt;/del&gt;
+| &lt;del&gt;Nathan&lt;/del&gt;
+| &lt;del&gt;4/5/2012&lt;/del&gt;
+|-
+|&lt;del&gt; [[DAP4: Asynchronous Request-Response Proposal | DAP4 Asynchronous Request-Response Proposal]]&lt;/del&gt;
+|&lt;del&gt; '''Obsolete'''&lt;/del&gt;
+|&lt;del&gt; EthanDavis&lt;/del&gt;
+|&lt;del&gt; 4/10/2012&lt;/del&gt;
+|-
+| &lt;del&gt;[[DAP4: Capabilities and Versioning | DAP4 Capabilities and Versioning]]&lt;/del&gt;
+| &lt;del&gt;'''Obsolete'''&lt;/del&gt;
+| &lt;del&gt;EthanDavis&lt;/del&gt;
+| &lt;del&gt;4/10/2012&lt;/del&gt;
+|}
+
+
+
+
+
+&lt;!--
+DAP4_Web_Services
+These proposals have been put forth by Dennis ([[User:Jimg|Jimg]] 15:18, 27 March 2012 (PDT) Ordered by priority at the 3/27/12 meeting):
+# [[DAP4: Constraints and Shared Dimensions | Constraints and Shared Dimensions]]  '''Under Review''', ''closely related to [[DAP4: DAP4 Grids Proposal | Grids Ideas]]'' (New 02/26/2012)
+# [[DAP4: VLens (and Sequences)|Ideas for Defining VLens (and Sequences)]]  '''Under Consideration''' (New 02/25/2012)
+# [[DAP4: DAP4 Paths| Path Specification in DAP4]] '''New''' (New 3/30/2012)
+# [[DAP4: DAP4 Escapes| Character Escape Mechanisms in DAP4]] '''New''' (Modified 4/5/2012)
+# [[DAP4: Asynchronous Responses | Asynchronous Responses]] '''New''' (New 4/5/2012)
+# [[DAP4: Coordinate Systems Element| Coordinate Systems Element]] '''New''' (New 4/10/2012)
+--&gt;
+
+== Commentary on DAP4 Related Topics ==
+These are not intended as specific proposal, but rather
+as commentary on some issues with DAP4 that need addressing
+with specific proposals.
+# [[DAP4: URL Annotations | Characterization of URL Annotations]] (Modified: 2/26/2012)
+# [[DAP4: Constructing a DDX from a Query | Constructing a DDX from a Query]] (new: 04/12/2012)
+# [[DAP4: Notes on Constraints | Notes on Constraints]] (new: 04/29/2012)
+# [[DAP4: An Essay on Domain Specific Models]] (new: 05/05/2012)
+
+== OPULS Implementation Thoughts ==
+=== Unidata's Current Thoughts ===
+
+Unidata needs:
+
+  1) DAP4 C client library for use in netCDF-C library
+  2) DAP4 Java client library for use in netCDF-Java library
+  3) DAP4 Java server library for use in TDS
+  4) Conformance test service against which a DAP4 client library can
+     be tested
+  5) Conformance test service against which a DAP4 server can be
+     tested
+
+The current CDM and TDS use of opendap-java library has performance
+problems due to extra API layers and extra copying of data. We would
+prefer direct serialization between CDM objects and the DAP
+on-the-wire data and would recommend that the OPeNDAP Java library
+leverage the netCDF-Java libraries.
+
+If there are needs that the DAP4 opendap-java library be independent
+of the netCDF-Java library, then in order for CDM and TDS to use the
+opendap-java library, we would need the performance concerns mentioned
+above addressed. A reasonable metric would be within some percentage
+of cdmremote[1], say within 20-25%.
+
+Unidata's performance requirements for Java libraries:
+
+  1) The netCDF-Java library performance reading DAP4 through the DAP4
+     Java client library must perform within 20-25% of cdmremote [1].
+  2) TDS performance when handling DAP4 requests using the DAP4 Java
+     server library should perform within 20-25% of cdmremote [1].
+
+We believe this means that the DAP4 Java libraries must provide a
+sufficiently generic API that can be used directly with the CDM/TDS
+IOSP interface.
+
+Unidata will:
+  1) Write the DAP4 C client library.
+  2) ??? some part of Java server library
+  3) ??? some parts of conformance testing services
+
+NOTES:
+
+[1] cdmremote is an experimental CDM streaming service. It is basically
+a direct serialization of the CDM.
+== OPULS references ==
+* http://www.mnot.net/blog/2011/10/25/web_api_versioning_smackdown
+
+== Old DAP4 Design and Implementation ==
+* [[DAP3/4]]
+* [[DAP 4.0 Design]] and [[DAP 4.0 Essential Features]] The ''design'' is meant to be a complete document while ''essential features'' are the minimal see we want to release. Since this task has been stalled for nearly a year, doing the latter seems like a noble goal.</text>
+      <sha1>lt65014i0qrltkgk3s5gsmmb1p3o0tw</sha1>
+    </revision>
+  </page>
+</mediawiki>

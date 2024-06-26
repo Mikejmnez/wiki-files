@@ -1,0 +1,258 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>How to use CLion with our software</title>
+    <ns>0</ns>
+    <id>1010</id>
+    <revision>
+      <id>13476</id>
+      <parentid>13466</parentid>
+      <timestamp>2023-02-22T16:20:58Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Configure this project for a Makefile build */</comment>
+      <origin>13476</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="18094" sha1="s6a5b86otpks6a2tcv3m2ui7ikj4see" xml:space="preserve">Setting up CLion to work with our software is really the same as using CLion with a 'Makefile' project. By default, CLion uses CMake to to figure out which files are part of a program or library. The problem for our software, and any software that does not use CMake, is that most of the benefit(s) of CLion (or any IDE) depend on knowing all the files that are used to build a program or library.
+
+This page shows how to set up CLion with software that uses make and/or autotools.
+
+NB: I used CLion version 2022.2.1. I think anything from 2022 works as I describe here.
+
+[[File:clion_version.png|640px|border|New Project dialog]]
+
+== Other sources of this kind of information ==
+;From Jet Brains: [https://www.jetbrains.com/help/clion/makefiles-support.html Makefile support]
+
+== The whole server or just parts ==
+First, you need to decide if you want to work with all of the C++ code as one 'project' or use a separate project for each of 'hyrax-dependencies,' 'libdap4,' and 'bes.' In practice, you can choose one way and then switch to the other without paying too great a penalty.
+
+For the rest of this HowTo, I'll assume you have done the following:
+# Checkout the '''hyrax''' git repo from GitHub (https://github.com/opendap/hyrax) and ...
+# Have used the script(s) to clone the three C++ projects ''hyrax-dependencies'', ''libdap4'', ''bes'' in that ''hyrax'' directory.
+# Or, you've manually cloned the ''hyrax-dependencies'', ''libdap4'', ''bes'' repos somewhere useful to you (which can be that hyrax directory). The 'magic' provided by the ''hyrax'' project is minimal. It does, however, contain a script called ''spath.sh'' that sets up some SHELL environment variables you may find useful and that will keep you from endless hours of headscrathing while you try to sort out why changes made to libdap don't seem to have any effect (the answer is that you have a hidden version of libdap installed in /usr/local/{bin,lib,include} and it's that library that is being used, not the copy you have just changed). '''Always''' using ''spath.sh'' saves you from that particular nightmare.
+
+== Open a directory that contains code ==
+I think it's best to have the three C++ projects/repos (''hyrax-dependencies'', ''libdap4'', and ''bes'') each opened independently, so let's do that, and open ''libdap4'' for now. However, if you have already opened the ''hyrax'' repo, take a quick peak in the ''libdap4'' directory it contains and see if there's an ''.idea'' directory in there. If there isn't, you should be able to open the ''libdap4'' directory and follow all of the instructions that follow. CLion only reads project information from the ''.idea'' directory in the at the top level of the project it opens. If there is an ''.idea'' directory in there already, remove it (there's nothing sacred in there...).
+
+The real power of something like CLion is that it can read and analyze the source code, providing a way to navigate from file to file finding the stuff you want without you doing too much searching. We have 1,000s of files and 100,000s of lines of code. In the (dark) past, we had to use CMake to do this. Now, in the renaissance, we can configure our projects using the Makefiles that we actually use to build the code. This has several advantages, including 1. Not having to maintain two lists of sources and, 2. builds where the errors and warnings are clickable links into the actual code (no more matching errors to line numbers in the editor).
+
+Before going to the next section, if you are using a fresh checkout of the sources, use ''autoreconf'' and ''configure'' to get a valid ''Makefile''. Doing this will make things easier. Since we have a ''CMakeList.txt'' file in the repo, we need to have a ''Makefile'' in there, too. So, run
+
+&lt;pre&gt;
+autoreconf --fiv
+./configure --prefix=$prefix --enable-developer
+&lt;/pre&gt;
+
+Where you can fiddle with the arguments to ''configure'' (you don't need ''--enable-developer'' and you can use whatever path you want for the ''prefix'' value).
+
+What '''''is''''' important is that the directory contain a Makefile.
+
+== Getting CLion to ''index'' our code ==
+
+Assuming your source code (I'm using ''libdap4'') does not contain a ''.idea'' directory, you can just 'Open' the directory '''''or''''' go into the repo directory and open the ''Makefile''. Either way seems to work. The key thing is that you convince CLion that this is a ''Makefile'' project:
+
+[[File:clion_open.png|640px|border|New Project dialog]]
+
+In the dialog that pops up, navigate to the directory that contains your sources:
+
+[[File:clion_open_2.png|640px|border|New Project dialog]]
+
+Since the directory has both a CMakeLists.txt and a Makefile, CLion asks which kind of project you want to make.
+
+[[File:clion_open_3.png|640px|border|New Project dialog]]
+
+Note that you can also choose the Makefile explicitly and IIRC, CLion will skip the question but instead ask if you want to open just the file or import a new project based on the ''Makefile''.
+
+The two key things to getting this to work are to have the ''Makefile'' in the directory and to using ''Open''. Using the options to make a New Project lead me round and round and the checkout from Get From VCS won't get something with a Makefile and then you'll be stuck with a CMake project. You might be able to coerce CLion to switching by re-opening the directory once it has a Makefile, but I have not tried that.
+
+Aside: Once you have done this once, you can click on the name in the ''Choose Project'' dialog and it'll open as a ''Makefile'' project.
+
+It's all pretty cool except, you'll see that there is a bit of a mess at the bottom of the CLion window that looks like indexing has failed. It has.
+
+[[File:clion_index_fail.jpg|640px|border|Index FAIL!]]
+
+However, now we are ready to...
+
+=== Configure this project for a ''Makefile'' build ===
+This is the key to getting the code to index and that is the key to all the sophisticated navigation capabilities of this IDE.
+
+You can check that this really has been slurped up as a ''Makefile'' project by looking under the ''Tools'' menu.
+
+[[File:clion_tools_menu.png|320px|border|Tools menu]]
+
+To configure the automatic indexing, go to the ''CLion'' menu and choose ''Preferences...'', In the dialog, open up the ''Build, Execution, Deployment'' section and select ''Makefile'':
+
+[[File:CLion libdap4 BED configuration.png|960px|border|Preferences --&gt; Build, ... --&gt; Makefile]]
+
+Now, here's where we are going to fix things so indexing works.
+
+Make the dialog entries look like this:
+
+[[File:clion_bed_done_right.png|960px|border|Build, ... Done Right]]
+
+To wit:
+# Build Directory: "'''.'''" (i.e., the current working directory)
+# Build options: "'''-j20'''" (unless you don't have 20 cores, in which case use a lower number ;-)
+# Pre-configuration commands: "'''make all -j20'''" (This seems redundant because we're going to run make as part of 'pre-configuration' and then we're going to do it all over again in the next section. However, we need to run make once as part of pre-configuration because ''make'' generates some of our source code)
+# Arguments: "'''-j20'''" (unless...)
+# Build target: "'''check'''" (For libdap4 I use ''check'' because that works to build all the source and the tests and we want ''everything'' to build so it's all indexed. For the ''BES'' use ''all check'' instead)
+# Clean target: "'''clean'''"
+
+Now, re-run the indexing. In the "Build" section of the bottom pane, click on the 'recycle' symbol inthe upper left corner:
+
+[[File:Screen_Shot_2022-08-30_at_13.46.10.png|320px|border|Build, ... Done Right]]
+
+If you open code like ''Byte.cc'', it should look like this after a few seconds:
+
+[[File:clion_code_is_indexed.png|960px|border|Build, ... Done Right]]
+
+NB: I had to run &lt;tt&gt;make all -j20&lt;/tt&gt; in the terminal before I could get this to work correctly. - ndp 11/3/22
+
+== Building code in CLion ==
+The big win here is that when code is built in the IDE, the errors and warnings are links that will take you directly to the source of the error.
+
+Goto the Edit Configurations item under the build item in the 'toolbar' or ''Run'' menu:
+
+[[File:clion_edit_config.png|320px|border|Edit Configurations...]] [[File:clion_run_menu.png|400px|border|Run menu]]
+
+And this will bring up a dialog for those items. Initially the dialog will look like:
+
+[[File:clion_initial_edit_conf_dialog.png|960px|border|Edit configurations dialog]]
+
+Edit that so it looks like:
+
+[[File:clion_targets.png|960px|border|Targets]]
+
+Where the different targets can be edited. There's no real reason to do them all, just get ''all'', ''clean'' and ''check'' working.
+
+Note that the ''Target:'' drop down list can either be a ''custom build configuration'' (something you can set up by clicking the gear to the right) or it can be one of the Makefile targets. It's easier to use one of the Makefile targets. I'm not 100% sure what this does... However, if leave it blank, the build won't start.
+
+'''NB:''' ''On OSX, in order to identify &lt;tt&gt;make&lt;/tt&gt; as the '''Executable''' I had to use the file system navigator that launches from the ellipsis button (...) on the far right side of the field and navigate to &lt;tt&gt;/usr/bin/make&lt;/tt&gt; There is a trick: Once the finder dialog box is open use "&lt;tt&gt;Command-Shift .&lt;/tt&gt;" to make it show the hidden files. Why? Because the finder hides &lt;tt&gt;/usr&lt;/tt&gt; be default.'' - ndp 11/3/22
+
+
+Most of the settings are straightforward, but the Environment variables are not. You need to set the environment variables so that ''PATH'' matches the value that the ''spath.sh'' script will set. Generally, this is the default value of ''PATH'' prefixed with ''$prefix/deps/bin:$prefix/bin'' where you should expand ''$prefix''. There may be a way to set values of environment variables that are used by default for a project, but I have not found it. Note that the first path is used to find things like ''ncdump'' while the second is used for things like ''besstandalone''. Both paths are needed to run the tests. The assumption is that the Makefiles are built using ''configure'' in a shell with the ''PATH'' set.
+
+You can cut and paste the value of ''PATH'' or use the dialog brought up using the little box icon on the right of the ''Environment variables'' edit field. That dialog looks like:
+
+[[File:clion_env_dialog.png|400px|border|Terminal window]]
+
+'''NB:''' ''I had to brute force the value of PATH. You cannot just set it to (the expanded $prefix) '''PATH=$prefix/deps/bin:$prefix/bin:$PATH''' That does not work. Rather, you must set it to the actual value of your shell path with out the reference. Otherwise the build will not find system basics like '''sed'''.'' - ndp 11/2/22
+
+One trick, however, is to use ''-k'' when you run make. This will build all the code instead of stopping at the first error (drop the ''-k'' if ''want'' to stop at the first error). This way you can fix a bunch of small issues without the time to run lots of builds.
+
+Lastly, look at the list box at the bottom. It will have a single entry ''Build''. Remove that by clicking on it and then clicking the minus sign at the top of the list box (right next to the plus sign). This will keep a default build from running before the build you just configured.
+
+=== Run a build ===
+To run a build, choose the item and hit the play button to the right:
+
+[[File:clion_run.png|600px|border|Run window]]
+
+To goto the line where there is an error or warning, click the link:
+
+[[File:clion_code_error_2.jpg|960px|border|error links]]
+
+== Running the debugger ==
+Running the debugger is easy once you get the hang of it. There is one really obscure detail, however. To debug a program we have built, you will need to make sure you name the correct file. Some background...
+
+Our build for both libdap and the BES makes ''shared object'' (SO) libraries. The libdap library, the libraries that make up the be and the modules that the BES loads at run time are all 'SOs.' What this means in practice is that even though we link object code with the library files, code from libraries is not transferred to the executable. Instead, a reference to the place where the code can be found is added to the executable. If 100 programs use the same library function, with a SO, there's only one copy of that function, the one in the SO library. The object code is shared by all 100 programs. 
+
+OK, that's cool, but what does that have to do with debugging? When we build programs and run them using libraries ''before the libraries are installed,'' the normal way the operating system finds the libraries does not work - that scheme depends on the libraries being installed (SO library installation populates a simple database). Instead, the run-time loader uses paths listed on an environment variable to search for the SO library. The particular package we use to manage the build of SOs replaces our program with a shell script of the same name that sets that environment variable and then calls the 'real' executable, which is cleverly put in a hidden directory called ''.libs'' (dot 'libs'). 
+
+So, when ''you'' want to run the program in a debugger (which must have access to the process that runs the object code), you need to look for that ''.libs'' directory, find you program in there and choose ''that'' program and not the trojan shell script that sits in the directory containing the ''.libs'' dir. Phew. Almost there...
+
+There's just one problem. IDEs like CLion do everything with GUIs and the dialog boxes for file selection hide the hidden directories by default. To get the file dialog to show files and directories with names that start with a dot ('''.'''), on a mac hit the Shift, Command and Period keys at the same time (Shift-Command Period). The dialog will suddenly show the hidden stuff. On Linux I think it's Shift-Control Period.
+
+=== Configuring a program for debugging ===
+There are at least three places where you can find the place to set up a ''debug configuration.'' First, to the left of the play button n the toolbar, the ''Edit Configurations...' item in the menu of 'things to play' will open this dialog, next the ''Edit Configurations...'' item in the ''Run/Debug'' menu will get you there and the ''Debug...'' menu, also in the ''Run/Debug'', will show the dialog. Here's what it looks like (but don't worry about the tile since it might be ''Run/Debug ...'' or ''Debug - ...'')
+
+[[File:Clion debug config.png|640px|border|Custom Build Application]]
+
+Click on ''Custom Build Application'' on the left to highlight it, then click on the plus sign and scroll down to ''Custom Build Application'', like this:
+
+[[File:Clion cbt.png|320px|border|Custom Build Application]]
+
+That gets you to the starting point. To run a program like ''besstandalone'' with some arguments, the configured dialog will wind up looking like:
+
+First, lets set the program we want to run. As was described above, we need to look in a hidden directory. Lets find the ''real'' besstandalone executable. First, hit the little ''open'' button next to the ''Executable:'' drop down item (the square with the three dots (...) in it). That opens a dialog and use that to navigate to the ''bes/standalone'' directory:
+
+[[File:clion_plain_dialog.png|960px|border|Custom Build Application]]
+
+Then hit Shift-Command Period and you'll see the hidden stuff. Go in the ''.libs'' directory and choose ''besstandalone.''
+
+[[File:clion_scp.png|960px|border|Custom Build Application]]
+
+With that done, you'll see the executable has been filled in.
+
+Next, fill in the program arguments. These vary, but usually if you are running besstandalone in a debugger, you are doing so because a test failed and the easiest way to find the arguments for a failed test is to run that test in verbose mode and look at how ''it'' ran besstandalone. Here's an example from bes/modules/functions/tests:
+
+&lt;pre&gt;
+functions/tests % ./testsuite 10 -v
+## -------------------------------------------------------------- ##
+## bes 3.20.13 test suite: bes/modules/functions/tests testsuite. ##
+## -------------------------------------------------------------- ##
+10. testsuite.at:17: testing bescmd/tabular_0.dap.bescmd ...
+COMMAND: besstandalone  -c bes.conf -i bescmd/tabular_0.dap.bescmd
+./testsuite.at:17: besstandalone -c $abs_builddir/$bes_conf -i $input
+stdout:
+...
+&lt;/pre&gt;
+
+So test number 10 using the command line arguments ''-c bes.conf -i bescmd/tabular_0.dap.bescmd''. Lets put those in the dialog.
+
+Now set the working directory to ''bes/modules/functions/tests''. This will enable besstandalone to find the correct ''bes.conf'' file and then correct ''bescmd'' file. Use the little button on the right or type it all in. You need the full path, starting with '/'. Make sure you set this, else the program will exit with an error.
+
+If you're running some other program in the debugger and it needs env vars, set them up. This program does not, so leave that alone.
+
+The ''Redirect input from'' option provides a way to read input from a file as if you had piped that input into the program. We're not using that for this example.
+
+Lastly, the ''Before launch'' box provides a way to build/rebuild your program before you run the debugger. This can be useful, but it also means running make on all the BES code. Not a big deal if you're not changing the code, but tedious if you don't need it. We don't for this example, so I'll click on the ''Build'' item to highlight it and then click the minus sign to remove it.
+
+Oh, set the name at the top to something useful. The result looks like:
+
+[[File:clion_complete_dialog.png|960px|border|Custom Build Application]]
+
+=== Start the programm in a debugger ===
+Now, look up at the toolbar. You'll see the configured 'debug task' in the drop down menu. Click the ''debug'' button to the right:
+
+[[File:clion_start_it.png|600px|border|Custom Build Application]]
+
+and here's the result (I trimmed the window size to make it easier to read):
+
+[[File:clion_debugging.png|1000px|border|Custom Build Application]]
+
+Note that although I'm running CLion in a project that contains only the BES, I stopped in a method inside libdap.</text>
+      <sha1>s6a5b86otpks6a2tcv3m2ui7ikj4see</sha1>
+    </revision>
+  </page>
+</mediawiki>

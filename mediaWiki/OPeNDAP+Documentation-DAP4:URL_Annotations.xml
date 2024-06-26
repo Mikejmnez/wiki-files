@@ -1,0 +1,119 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: URL Annotations</title>
+    <ns>0</ns>
+    <id>731</id>
+    <revision>
+      <id>7394</id>
+      <parentid>7393</parentid>
+      <timestamp>2012-02-26T21:08:08Z</timestamp>
+      <contributor>
+        <username>DennisHeimbigner</username>
+        <id>36</id>
+      </contributor>
+      <comment>/* Annotation Mechanisms */</comment>
+      <origin>7394</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5806" sha1="j2q8aiibyl48pj8re5k0h196ybv41wr" xml:space="preserve">[Most recent modifications are either underlined or struck out]
+
+== Characterization of URL Annotations ==
+
+Requests for data using the DAP4 protocol will require a significant number of annotations specifying what is to be retrieved, commands to the server, and commands to the client.
+
+This document is intended to just describe the information with which URLs need to annotated based on past experience. It also enumerates the possible URL components that can be used to encode the annotations. I will consider a specific encoding in a separate document.
+
+Looking at the DAP2 URLs, we see three classes of annotations: protocol, server commands, client commands, and queries (aka constraints).
+
+=== Protocol ===
+For DAP2, the fact that the protocol being used is inferred from context; in netcdf-C, for example, the fact that the dataset name is a URL is sufficient to indicate the use of the DAP2 protocol. For some servers, such as TDS, the protocol is also inferrable from elements of the URL path. For example, in http://.../thredds/dodsC/... the "dodsC" indicates the use of the DAP2 protocol. TDS also supports a schema called "dods:" that also indicates the use of DAP2.
+
+=== Server Commands ===
+
+Server commands in DAP2 are appended to the dataset URL to indicate attributes of the request. For example:
+ http://test.opendap.org/dataset.nc.dds
+The defined kinds of server commands for DAP2 are as follows:
+# Component requests: ".dds", ".das"
+# Data requests with format: ".dods", ".asc"
+# Miscellaneous: ".html", ".ver"
+
+=== Client commands ===
+
+Client commands are interpreted by the client-side library to specify actions to be performed by the library. The existence of client commands is important because we want to communicate from the user to the library without requiring any knowledge by intermediate code layers. For example, netcdf C tools such as ncdump sends URLs to the underlying netcdf DAP2 library without having to be cognizant of their structure.
+
+&lt;ins&gt;Currently, there are two primary uses for client commands.&lt;/ins&gt;
+# &lt;ins&gt;Debugging - cause the DAP library to output information about, for example, the specific requests it sends to the server.&lt;/ins&gt;
+# &lt;ins&gt;Caching - control the degree of caching and prefetch to be used with a given request to the server.&lt;/ins&gt;
+
+Currently, client commands are represented as "name=value" pairs or just "name" enclosed in square braces: "[nocache]", for example. These commands are prefixed to the URL such as this.
+ [show=fetch]http://test.opendap.org/dataset.nc
+The legal set of command is library specific.
+
+One notable problem with this form of client command is that it prevented generic URL parsers from parsing the URL because, of course, the square bracket notation is non-standard.
+
+&lt;ins&gt;An alternative to using client commands in the URL is to use a configuration file (often referred to as the ''.rc'' file such as ''.dodsrc''). This configuration file is assumed to be either in the caller's home directory or in the current working directory. It contains the necessary client commands to be applied. It is mildly less convenient for the user to use a .rc file than to embed a client command in the URL.
+&lt;/ins&gt;
+
+=== Queries ===
+The third class of URL annotations specifies some form of query to control the information to be extracted from a dataset on the server. This information is then passed back to the client.
+
+In DAP2, queries consisted of projections and selections specifying a subset of the data in a dataset.
+
+A projection represents a path through the DDS parse tree annotated with constraints on the dimensions. This, for example.
+ ?P1.P2[0:2:10].F[1:3][4:4]
+
+A selection represented a boolean expression to be applied to the records of a sequence. Syntactically, a selection could cross sequences, thus implying a join of the sequences, but in practice this was not allowed.
+
+DAP2 queries also allowed the use of functions in the projections and selections to compute, for example, sums or averages. But the semantics was never very well defined. The set of allowable functions is server dependent.
+
+=== Annotation Mechanisms ===
+
+DAP4 will need to support at least the three classes of annotations described above. Whatever annotation mechanisms are chosen, the following properties seem desirable.
+# The resulting URL should be parseable by generic URL parsers
+#:=&gt;Client commands should be embedded at the end of URLs, not the beginning.
+# Whatever annotation encoding is used, it is desirable if it is as uniform as possible.
+
+As mechanisms, we have the following available to us:
+# The URL schema -- "http:" for example, or the TDS "dods:" schema. Using this is somewhat undesirable because it would need to encode also an underlying encrypted protocol like https: (versus http:).
+# URL path elements such as the current use of e.g. http://host/../dodsC/... by TDS.
+# URL query -- everything after the first '?' in the URL. URL queries technically have a defined form as name=value pairs, but in practice are pretty much free form.
+# URL fragment -- everything after the last '#'. Again these are pretty much free form.
+# Filename extensions -- everything between the data set name in the path and the start of the query. The DAP2 ".dds" and ".dods" are examples of this.
+# &lt;ins&gt;Alternate extension formats. Ethan Davis has proposed the use of a "+" notation instead of filename extensions: +ddx+ascii, for example. This has the advantage of clearly not being confused with filename extensions while also making clear the additive nature of such annotation.&lt;/ins&gt;
+
+I should note that the Ferret server has taken to seriously abusing the URL format with URLs like this.
+ http://.../thredds/dodsC/hfrnet/agg/6km_expr_{}{let deq1ubar=u[d=1,l=1:24@ave]}
+so we have much to aspire to :-)
+
+''-Dennis Heimbigner''</text>
+      <sha1>j2q8aiibyl48pj8re5k0h196ybv41wr</sha1>
+    </revision>
+  </page>
+</mediawiki>

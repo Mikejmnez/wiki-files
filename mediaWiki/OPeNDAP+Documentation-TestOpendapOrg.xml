@@ -1,0 +1,81 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>TestOpendapOrg</title>
+    <ns>0</ns>
+    <id>887</id>
+    <revision>
+      <id>10874</id>
+      <parentid>10873</parentid>
+      <timestamp>2014-10-13T22:15:12Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <origin>10874</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2999" sha1="rvd6fugat08q8hkf4kndv9pcfzzy3r3" xml:space="preserve">This is less of a How To and more of a set of notes transcribed from paper scraps while I got our server running on [http://test.opendap.org test.opendap.org]. It's an interesting use case because we build that code from SVN but the machine is not a development machine. Here, I'm talking about a CentOS 6 host.  
+
+== Host configuration ==
+I used RPM packages for most of the dependencies. Here are the commands I ran to set the host for a build from SVN:
+;Get the build environment: yum install java-1.6.0-openjdk java-1.6.0-openjdk-devel ant subversion gcc-c++ flex bison openssl-devel libuuid-devel readline-devel zlib-devel libjpeg-devel libxml2-devel curl-devel emacs
+;Download and build from source autoconf, automake and libtool: There seems no way around this. I'm building on CentOS 6 here; for newer version of Linux, the ''autotools'' in RPMs might be good enough. [http://ftp.gnu.org/gnu/libtool/libtool-2.4.2.tar.gz libtool-2.4.2.tar.gz], [http://ftp.gnu.org/gnu/automake/automake-1.14.1.tar.gz automake-1.14.1.tar.gz], [http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz autoconf-2.69.tar.gz]
+;You can use all of the dependencies we have except the icu code, which is needed for OSX but breaks CentOS: yum install libicu-devel
+
+== Get the Hyrax source from SVN ==
+;Get the source: svn co $svn/branch/shrew/hyrax_1.9_release
+;Get Tomcat from the dependencies package: cp src/dependencies/downloads/apache-tomcat-7.0.29.tar.gz; tar -xzf apache-tomcat-7.0.29.tar.gz
+;Configure the metaproject: source spath.sh; autoreconf -fiv; ./configure --prefix=$prefix --enable-developer
+;Build the dependencies: cd src/dependencies; make -j9
+;Build the server: cp Makefile.am.master Makefile.am; make world -j9
+
+== Test the server ==
+;Start the parts manually: besctl start; $CATALINA_HOME/bin/startup.sh
+;Look for the right processes: ''ps -el | grep bes'' and ''ps -ef | grep tomcat''. These commands should show besdaemon, beslistener and tomcat running.
+;Stop the server: $CATALINA_HOME/bin/hutdown.sh
+
+== Fiddle with the ''hyraxctl'' script ==
+;Get the hyraxctl script out of its hidden location: ''cp src/bes/server/hyraxctl .''
+;Test it: sudo ./hyraxctl start
+;Look for the right stuff: ''ps -el | grep bes'' and ''ps -ef | grep tomcat''
+;Install it: ''cp hyraxctl /etc/init.d
+;Configure the links: ''sudo chkconfig --levels 23 --add hyraxctl''
+;Is it configured correctly?: ''chkconfig --list hyraxctl'' --&gt; ''hyraxctl       	0:off	1:off	2:on	3:on	4:off	5:off	6:off''
+
+== Notes ==
+* On CentOS 6, the ICU-3.6 source in src/dependencies did not work. It built and the ncml handler linked to it, but there was a run-time fault when the BES loaded the handler.
+* I tried a pure RPM install on a VM (OpenStack) where deps were pulled from EPEL and the HDF4 handler package installed a handler that failed to work at run-time.
+* Google ''how to configure /etc/rc.d'' for pages about how we should (re)write the ''hyraxctl'' script.
+* We really need to get Tomcat from the RPM working with Hyrax.</text>
+      <sha1>rvd6fugat08q8hkf4kndv9pcfzzy3r3</sha1>
+    </revision>
+  </page>
+</mediawiki>

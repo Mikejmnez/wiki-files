@@ -1,0 +1,78 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Version response</title>
+    <ns>0</ns>
+    <id>331</id>
+    <revision>
+      <id>2576</id>
+      <parentid>2395</parentid>
+      <timestamp>2008-12-22T19:25:48Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>2576</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2802" sha1="dx4hyzn4glz2j405c4w2vixjbujapes" xml:space="preserve">The version response is a way for a DAP-compliant server to advertise the versions of the DAP it supports along with the versions of the software with which it is built.
+
+There are two ways to request the version response. First, the token ''version'' may be appended to the URL which names a server. Second, the suffix ''.ver'' may be appended to a DAP URL (i.e., a URL to which a client could append ''.das'' or ''.ddx'' and expect to get the corresponding DAP response object. Both ways of requesting the version response have exactly the same affect. The reason two request forms exist is that it's useful for a person installing a server to be able to get some sort of response from it before it can serve data (so there maybe no URLs to which a standard DAP request suffix can be appended). Similarly, for those on the outside, with one or more URLs to data, it may be hard to determine which part of the URL corresponds to the server itself.
+
+In the past, the ''.ver'' suffix was also going to return the version number of the data referenced by the URL. However, often that information does not exist. A better solution to this is to generate CRC codes or digital watermarks on the fly. This does not provide a version number for the data, but it does provide a way to determine if a given request is returning the same data and, in the case of a watermark, may also help determine the origin of a subset.
+
+While we are requiring that 3.2 clients read and understand 3.1, 3.0 and 2.0 (and so on for 3.3, ...) that is not practical for the Version response since there are some widely different forms and since no clients actually use the 3.1 response. DAP 3.2 or 3.3 will set this in stone and then all 3.2 or 3.3 and subsequent clients will need to read and understand it.
+
+== DAP 3.1 ==
+
+In DAP 3.1, the version response is an XML document. This document contains version information for:
+# BES
+# Handlers (the DAP version is embedded in this part of the document)
+# OLFS
+# Hyrax (as a whole)
+
+The entire document is wrapped in a ''OPeNDAP-Version'' element.
+
+An [[example Version response]] from a 3.1-compliant server (Hyrax 1.4.0).
+
+'''Note''': See the ''discussion'' page for an alternative design.
+
+== DAP 3.2 ==
+
+The DAP version document as provided should be changed to make it's output more in line with something a person would really read and understand quickly. See [[:Talk:version_response|discussion]] for more about this.
+
+To provide DAP with a way for clients to discover server features that are common but not completely universal, the version response may be extended to include information about server-side functions. 
+
+[http://scm.opendap.org/trac/wiki/CEFunctionDiscovery One possible design].
+
+[[Category:Development|Version response]][[Category:DAP4|Version response]]</text>
+      <sha1>dx4hyzn4glz2j405c4w2vixjbujapes</sha1>
+    </revision>
+  </page>
+</mediawiki>

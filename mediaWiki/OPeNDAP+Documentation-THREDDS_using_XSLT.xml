@@ -1,0 +1,117 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>THREDDS using XSLT</title>
+    <ns>0</ns>
+    <id>398</id>
+    <revision>
+      <id>5786</id>
+      <parentid>3272</parentid>
+      <timestamp>2010-09-16T23:01:11Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Remote Browsing */</comment>
+      <origin>5786</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="5207" sha1="01wny7obbxtyldv1wmaujvvdfu5p5ps" xml:space="preserve">== Background ==
+
+Prior to Hyrax 1.5 THREDDS catalog functionality in Hyrax was provided using an imported implementation of THREDDS.  This was a large and complex dependancy for Hyrax, and the implementation had significant scalability problems for large catalogs (Catalogs with 20k or more entries would consume all available memory.)
+
+In response to this we have written new code for Hyrax. We have replaced the imported code with 2 OLFS handlers.
+
+== BES THREDDS Handler ==
+
+The ''opendap.bes.BESThreddsDispatchHandler''  provides THREDDS catalogs for all data served from a BES. It requires no configuration. Simply adding it to the olfs configuration (file: ''$CATALINA_HOME/content/opendap/olfs.xml'') will provide THREDDS catalogs for data served from the BES. 
+
+This handler uses XSL transforms to convert the BES &lt;showCatalog&gt; response into a THREDDS catalog.
+
+=== Default Configuration ===
+
+            &lt;Handler className="opendap.bes.BESThreddsDispatchHandler" /&gt;
+
+==  THREDDS Dispatch Handler ==
+
+The ''opendap.threddsHandler.Dispatch'' handler provides THREDDS catalog functionality for static THREDDS catalogs located on the system with the OLFS. The handler uses XSL transforms to provide HTML presentation views of both the catalogs and individual datasets within the catalog. Much like the TDS, data access links are available on the dataset pages (if the catalog contains the information for the access links).
+
+=== Memory Caching ===
+The implementation can be configured to use memory caching of THREDDS catalogs to improve speed and reduce disk thrashing. 
+
+When memory caching is enabled, the handler will traverse the local THREDDS catalogs at startup. Each catalog file will be read into a memory buffer and cached. The memory buffer is parsed to verify that the catalog represents valid XML, but the resulting document is not saved. When a ''thredds:catalogRef'' element is encountered during the traversal its  ''href'' is evaluated:
+* If the ''href'' is a relative URL (does not begin with a "/" or "&lt;nowiki&gt;http://&lt;/nowiki&gt;'') then the catalog is traversed and cached.
+* If the ''href'' begins with a "/" character it is assumed that the catalog is being provided by another service on the same system, and it is not traversed or cached.
+* If the ''href'' begins with a "http://" it is assumed to be a remotely hosted catalog provided by another service on a different system, and it is not traversed or cached.
+
+When a client asks for an XML catalog response, the entire cached buffer for the catalog is dumped to the client in a single write command. This should be very fast, as all that must happen is an existing byte buffer is written to the response stream. 
+
+If the client is asking for an HTML view of the catalog, the buffer is parsed and passed through an XSL transform to generate the HTML page. The thinking behind this is that machines will be traversing the XML files and would require very fast response times, while humans will be traversing the HTML views of the catalog and the latency generated by parsing and performing the transform would be acceptable to most users.
+
+If memory caching is disabled, then the start up remains the same, except no data is cached. Subsequent client requests for THREDDS products are handled in the same manner as before, only the catalog content is read from disk each time. Although this means that the XML responses will be much slower, it will scale to handle much larger static catalog collections.
+
+==== Cache Updates ====
+
+Each time a catalog request is processed the source file's last modified date is checked. If the catalog in memory was cached prior to the last modified date, it and all of it's descendants in the catalog hierarchy are purged from the cache and reloaded.
+
+=== prefix ===
+This handler requires a prefix element in the configuration: &lt;tt&gt;&lt;prefix&gt;thredds&lt;/prefix&gt;&lt;/tt&gt;The value of the prefix element is used by the handler to identify requests intended for it. Basically it will claim any request whose path begins with the prefix.
+
+For example, if the prefix is set to "thredds", then this request:
+
+: ''&lt;nowiki&gt;http://localhost:8080/opendap/thredds/catalog.xml&lt;/nowiki&gt;''
+
+Will be claimed by the handler while this request: 
+
+: ''&lt;nowiki&gt;http://localhost:8080/opendap/catalog.xml&lt;/nowiki&gt;''
+
+Will not. (Although it would be claimed by the BES THREDDS Handler)
+
+=== Presentation View (HTML) ===
+
+Supplanting the ''.xml'' at the end of a catalog's name with ''.html'' will cause the opendap.threddsHandler.Dispatch to return an HTML presentation view of the catalog. This is accomplished by parsing the catalog.xml document (either from memory if cached, or from disk if not) and running the resulting document through an XSL transform. All the metadata for all thredds:dataset elements can be inspected in a separate HTML page that details the dataset. This page is also generated by an XSL transform applied to the catalog XML document.
+
+
+
+
+=== Default configuration ===
+
+            &lt;Handler className="opendap.threddsHandler.Dispatch"&gt;
+                &lt;prefix&gt;thredds&lt;/prefix&gt;
+                &lt;useMemoryCache&gt;true&lt;/useMemoryCache&gt;
+            &lt;/Handler&gt;
+
+
+
+[[Category:Hyrax]]
+[[Category:THREDDS]]</text>
+      <sha1>01wny7obbxtyldv1wmaujvvdfu5p5ps</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,106 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/OpeNDAPQuickStartApril09</title>
+    <ns>0</ns>
+    <id>449</id>
+    <revision>
+      <id>3451</id>
+      <parentid>3450</parentid>
+      <timestamp>2009-04-01T18:43:23Z</timestamp>
+      <contributor>
+        <username>TomSgouros</username>
+        <id>39</id>
+      </contributor>
+      <origin>3451</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2771" sha1="908udjfh3ifph1xklw6bt9plffxzhs3" xml:space="preserve">&lt;h2&gt;&lt;span class="editsection"&gt;[&lt;ahref="/index.php?title=QuickStart&amp;amp;action=edit&amp;amp;section=5"title="Edit section: Sequence Data"&gt;edit&lt;/a&gt;]&lt;/span&gt; &lt;span
+class="mw-headline"&gt;Sequence Data&lt;/span&gt;&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;font size="+1"&gt;&lt;b&gt;Note&lt;/b&gt;: We're currently updating our documentation. The
+  information in this section references old demonstration servers we used to
+  host at the University of Rhode Island which are no longer running. Please
+  bear with us while we update this Guide. Thanks. 10/31/08 &lt;/font&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Gridded data works well for satellite images, model data, and data
+compilations such as the Reynolds data we've just looked at. Other data, such
+as data measured at a specific site, is not so readily stored in that form.
+OPeNDAP provides a data type called a Sequence to store this kind of data. &lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;
+A Sequence can be thought of as a relational data table, with each column
+representing a different data value, and each row representing a different data
+"instance." For example, an ocean {temperature profile} can be stored as a
+Sequence of pressure and temperature pairs, and a weather station's data can be
+stored as a Sequence with time in one column, and each weather variable
+occupying another column. &lt;/p&gt;
+
+&lt;p&gt;Let's look at a set of two Sequences. The first gives the locations of a set
+of inverted echo sounders, and the second gives their observations over time.
+The data is here:&lt;/p&gt;
+&lt;pre&gt;http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/iess/ies_locations.dat
+
+http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/iess/iess.dat&lt;/pre&gt;
+
+First, let's take a look at the data structure by appending &lt;b&gt;.das&lt;/b&gt; to the URLs for the data, like this: 
+&lt;pre&gt;http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/ies_locations.dat.das
+
+http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/iess.dat.das&lt;/pre&gt;
+
+The results look like this:
+
+[[Image:Iess_location_das.png|500px|caption=../ies/ies_locations.dat.das]]
+
+and like this:
+
+[[Image:Iess_dat_das.png|500px|caption=..//ies/iess.dat.das]]
+
+
+We can get more information by looking at the DDS:
+ &lt;pre&gt;http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/ies_locations.dat.dds&lt;/pre&gt;
+
+[[Image:Iess_location_dds.png|500px]]
+
+&lt;pre&gt;http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/iess.dat.dds&lt;/pre&gt;&lt;p&gt;
+[[Image:Iess_dat_dds.png|500px]]
+
+
+Now let's take a look at the actual data: &lt;br&gt;&lt;pre&gt;http://dods.gso.uri.edu/cgi-bin/nph-dods/dods/ies/iess.dat.asc&lt;/pre&gt;
+
+[[Image:Iess_dat_asc.png|500px]]
+
+
+We see that some sampling locations didn't produce interesting data right away. So let's restrict our query to the last few sampling locations, by adding a constraint to the URL:
+&lt;pre&gt;../dods/ies/iess.dat.asc?data_in.dyear,data_in.day,data_in.AET_inst08,data_in.AET_inst09,data_in.AET_inst10&lt;/pre&gt;</text>
+      <sha1>908udjfh3ifph1xklw6bt9plffxzhs3</sha1>
+    </revision>
+  </page>
+</mediawiki>

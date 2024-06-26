@@ -1,0 +1,92 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Google Summer of Code 2012 Ideas</title>
+    <ns>0</ns>
+    <id>733</id>
+    <revision>
+      <id>7344</id>
+      <parentid>7343</parentid>
+      <timestamp>2012-02-24T01:55:16Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Ideas */</comment>
+      <origin>7344</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3909" sha1="k701553fmdftgstt6lr95tqw110thcj" xml:space="preserve">=OPeNDAP Google Summer of Code 2012=
+
+[[Image :GSoC2012 300x200.png|right]]
+OPeNDAP would like to welcome all the [http://code.google.com/soc/ Summer of Code] (SoC) students for the 2012 iteration of the SoC program! On this page you'll find information about project ideas we have along with information to help you apply to work on our software. The projects range from web site implementation to complex problems in data systems. Several of the projects listed are focused on adding new features to our data server. However, we also have a set of client tools and GUI-based applications that would provide an ample basis for summer projects. If you don't see anything below in the [[#Ideas]] section don't let that stop you from starting a conversation with one of the mentors listed below ([[#Mentors]]) because you may have an idea, talent or skill that is the spark of a great project. Don't hesitate to email us! 
+
+We would like to stress that while the ideas included here can be the basis of your project, you can also propose something completely different - maybe you've used our software and wish it included a particular feature.
+
+Before submitting an application to GSoC with OPeNDAP as your mentoring organization, make sure you read our [[Google Summer of Code FAQ|GSoC FAQ]] as well as the [http://www.google-melange.com/document/show/gsoc_program/google/gsoc2012/faqs Google] FAQ, both of which provide some pointers on how to write a successful application.
+
+Once you are ready to submit an application, remember that you must do so '''before April 8th''' through the [http://socghop.appspot.com/ GSoC webapp]. A more complete [http://www.google-melange.com/document/show/gsoc_program/google/gsoc2012/faqs#timeline timeline] is available for the whole project period. From the GSoC FAQ: You may also want to look over [http://www.booki.cc/gsocstudentguide/_v/1.0/proposal-examples/ Proposal Example 1] and [http://www.booki.cc/gsocstudentguide/_v/1.0/proposal-example-2/ Proposal Example 2] in the [http://www.booki.cc/gsocstudentguide/ Google Summer of Code student manual] to see some examples.
+
+= Ideas =
+* [[Development of improved Hyrax User Interfaces]]: Browsers, JavaScript
+* [[Extending support for Matlab]]: C; Matlab a plus
+* [[Relational Database Handler | SQL Handler for Hyrax]]: C++, ODBC, SQL, DAP Constraints
+* [[KML responses for Hyrax]]: C++
+* [[GeoTIFF responses for Hyrax]]: C++
+
+= Mentors =
+
+* Dan Holloway (dholloway at opendap.org): The Hyrax data server, Matlab and IDL clients, C, C++, Java
+* James Gallagher (jgallagher at opendap.org): The Hyrax data server, Matlab and IDL clients, C, C++, Java
+* Patrick West (westp at rpi.edu): The Hyrax data server, C, C++, Java, Apache Modules, Semantic Web, OWL (Web Ontology Language), RDBMS, Java
+* Nathan Potter (ndp at opendap.org): The Hyrax data server, OLFS, Java-OPeNDAP,  Java
+
+= Proposal template =
+
+Each proposal should be a text document that should contain the following sections:
+;Synopsis: A one-paragraph description of the proposal
+;Project Description: A complete description of what you will do including a logical breakdown of the project into smaller parts and how the project will be completed on time
+;Profit for OPeNDAP Users: How will users of OPeNDAP's open source software benefit from this project?
+;Success Criteria: What's the target you are trying to reach with this project so that success can easily be measured
+;Roadmap: Describe the different development phases you expect to go through. For example: 
+# Add a description of my project to the OPeNDAP developer's wiki
+# Solicit community feedback
+# Develop base-level features
+# Testing and alpha release
+# Develop additional features 
+# ...
+;Biography: Tell us about yourself, why you want to do this and how to contact you
+
+'''Note''': Proposals without contact information ''will not be accepted''.
+
+[[Category:Google Summer of Code]]</text>
+      <sha1>k701553fmdftgstt6lr95tqw110thcj</sha1>
+    </revision>
+  </page>
+</mediawiki>

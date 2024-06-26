@@ -1,0 +1,184 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP Capabilities</title>
+    <ns>0</ns>
+    <id>561</id>
+    <revision>
+      <id>5480</id>
+      <parentid>5479</parentid>
+      <timestamp>2010-03-30T19:57:43Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Services */</comment>
+      <origin>5480</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6422" sha1="if4kef7w1o69ttg796eskwp8zqruit5" xml:space="preserve">== Overview ==
+
+Develop a definition of what a DAP servers Capabilities response should look like.
+
+==What is a Capabilities response?==
+In the world of OGC it's a document that contains a description of the 
+; ownership
+: (a.k.a  ows:ServiceProvider) Describes contact information and for both an individual and their parent organization for a  specific server instance.
+; service identification
+: (a.k.a. ows:ServiceIdentification) Provides a collection of keyword metadata and and the name and version number of the service.
+; service access
+: (a.k.a. ows:OperationsMetadata) Provides a set of service URLs for the OGC service. Since OGC services (all?? I'm not sure) rely on the constraint expression syntax of the URL or POST content  to identify and select data sets, the service components are easily tied to single URLs that identify the place in the URL space that the server will behave a s an OGC type service.
+; holdings
+: (a.k.a. *:Contents) Provides a catalog, generally flat,  but even when hierarchical must provided in it's entirety. No sub-setting or linking of catalog "nodes" that require making additional queries. This provides the convenience of one stop shopping with the disadvantage of the potential for clients to be overwhelmed by the size of the response.
+
+==What are we doing now that's similar?==
+* '''Ownership''' Nothing similar. Data providers can (but none that I have seen have) configure the OLFS to replace the standard documentation found through the Documentation link on every contents.html page. Otherwise they might get an email address about weho to write of the BES sends one in an error. The OLFS saves propagates the email address ''support@opendap.org'' from 14 different places in the code through a number of HTML responses . These could be modified by determined Hyrax installer, but it would be a hassle and wouldn't persist between installs. We have no structured response in this regard.
+* '''Service Identification''' Nothing similar. In the current version of Hyrax we return an list of the DAP versions the server supports in a larger XML document containing the names and version numbers of the software components running on the server.
+* '''Service Access''' Nothing similar
+* '''Holdings''' Currently we provide a linked list of holdings through THREDDS catalogs. Our THREDDS catalogs do not contain any THREDDS metadata, (or WCS metadata for that matter)
+
+
+==How might a DAP Capabilities response look==
+Here are some ideas for components of the response:
+
+
+Just to start things off, the root element: 
+ &lt;dap:Capabilities&gt;
+
+=== Ownership ===
+    &lt;dap:Contact&gt;
+        &lt;dap:Email&gt;name@org.org&lt;/dap:Email&gt;
+    &lt;dap:/Contact&gt;
+
+=== Holdings/Catalog ===
+
+Probably this would always be a child element of a service declaration.
+          &lt;dap:CatalogRoot xlink:href="/opendap/catalog.xml"  xlink:type="simple"&gt;
+
+What catalog metadata should we provide so that a complete enough picture of the holdings is available? The intent it to make it so that users don't need to delve into the granules to determine if the holding contains the information that they desire. See THREDDS Catalog Metadata section below
+
+
+
+
+=== Services ===
+
+    &lt;dap:Services&gt;
+    
+        &lt;dap:Service name="hyrax" base="/opendap/hyrax/" &gt;
+          &lt;dap:ServiceType&gt;DAP&lt;/dap:ServiceType&gt;
+          &lt;dap:Version&gt;2.0&lt;/dap:Version&gt;
+          &lt;dap:Version&gt;3.1&lt;/dap:Version&gt;
+          &lt;dap:Version&gt;3.2&lt;/dap:Version&gt;
+          &lt;dap:CatalogRoot xlink:href="/opendap/catalog.xml" xlink:type="simple" /&gt;
+          &lt;dap:ReturnFormat&gt;DAP&lt;/dap:ReturnFormat&gt;
+          &lt;dap:ReturnFormat&gt;NetCDF&lt;/dap:ReturnFormat&gt;
+        &lt;dap:Service&gt;
+        
+        &lt;dap:Service name="hyrax-WCS" base="/opendap/WCS/" &gt;
+          &lt;dap:ServiceType&gt;WCS&lt;/dap:ServiceType&gt;
+          &lt;dap:Version&gt;1.1.2&lt;/dap:Version&gt;
+          &lt;dap:CatalogRoot 
+              xlink:href="/opendap/WCS?service=WCS&amp;version=1.1.2&amp;request=GetCapabilities" &gt;
+              xlink:type="simple" /&gt;
+        &lt;dap:Service&gt;
+        
+    &lt;/dap:Services&gt;
+
+==== Return Types/Formats ====
+
+How do we advertise the different return types/formats available from the Server?
+
+Does each service definition announce a list of return types?
+
+=== Server-side functions.===
+We need to develop XML machine readable description of server side functions.
+
+Here's a couple of straw men for geogrid, grid, linear_scale, and version: 
+
+With properties as elements:
+    &lt;dap:ServerSideFunctions&gt;
+        &lt;function&gt;
+            &lt;name&gt;grid&lt;/name&gt;
+            &lt;version&gt;1.0&lt;/version&gt;
+            &lt;documentation 
+                xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#grid" 
+                xlink:type="simple" /&gt;
+        &lt;function&gt;
+ 
+        &lt;function&gt;
+            &lt;name&gt;geogrid&lt;/name&gt;
+            &lt;version&gt;1.1&lt;/version&gt;
+            &lt;documentation 
+                xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#grid" 
+                xlink:type="simple" /&gt;
+        &lt;function&gt;
+ 
+        &lt;function&gt;
+            &lt;name&gt;linear_scale&lt;/name&gt;
+            &lt;version&gt;1.0b1&lt;/version&gt;
+            &lt;documentation 
+                xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#grid" 
+                xlink:type="simple" /&gt;
+        &lt;function&gt;
+ 
+        &lt;function&gt;
+            &lt;name&gt;version&lt;/name&gt;
+            &lt;version&gt;1.0&lt;/version&gt;
+            &lt;documentation 
+                xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#grid" 
+                xlink:type="simple" /&gt;
+        &lt;function&gt;
+    &lt;/dap:ServerSideFunctions&gt;
+
+
+With properties as attributes
+    &lt;dap:ServerSideFunctions&gt;
+        &lt;function 
+            name="grid" 
+            version="1.0" 
+            documentation="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#grid" &gt;
+        &lt;function 
+            name="geogrid" 
+            version="1.1" 
+            documentation="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#geogrid"/&gt;
+        &lt;function 
+            name="linear_scale" 
+            version="1.0b1" 
+            documentation="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#linear_scale"/&gt;
+        &lt;function 
+            name="version" 
+            version="1.0" 
+            documentation="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#version"/&gt;
+    &lt;/dap:ServerSideFunctions&gt;
+
+ &lt;/dap:Capabilities&gt;</text>
+      <sha1>if4kef7w1o69ttg796eskwp8zqruit5</sha1>
+    </revision>
+  </page>
+</mediawiki>

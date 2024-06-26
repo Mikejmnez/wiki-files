@@ -1,0 +1,108 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4 Extension: CSV Data Encoding and Response</title>
+    <ns>0</ns>
+    <id>875</id>
+    <revision>
+      <id>10533</id>
+      <parentid>10468</parentid>
+      <timestamp>2014-04-22T16:23:10Z</timestamp>
+      <contributor>
+        <username>EthanDavis</username>
+        <id>5</id>
+      </contributor>
+      <comment>/* DAP4 Extension Details */</comment>
+      <origin>10533</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3052" sha1="p44yldk8qa57rernvojlqmntx5nm77s" xml:space="preserve">[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+This document specifies the DAP4 CSV data encoding, how DAP4 servers can advertise support for the DAP4 CSV encoding, and how DAP4 clients can request DAP4 CSV encoded data responses.
+
+The DAP4 CSV data encoding represents DAP4 data as structured Comma-Separated Values (CSV) in UTF-8 text. Though based on the ''text/csv'' media type described in &lt;nowiki&gt;RFC 4180&lt;/nowiki&gt;&lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#RFC_4180|RFC 4180]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;, the DAP4 CSV is more complex so that it can fully represent the more complex data structures of the DAP4 data model. Some structure beyond simple CSV is necessary to capture the DAP4 data structures.
+
+As with requests for data in the DAP4 binary data encoding described in Volume 1 of the DAP4 specification &lt;sup&gt;&lt;nowiki&gt;[&lt;/nowiki&gt;[[#DAP4_Vol1|DAP4 Vol1]]&lt;nowiki&gt;]&lt;/nowiki&gt;&lt;/sup&gt;, requests for DAP4 CSV encoded data can be constrained to a subset by using a standard DAP4 Constraint Expression [DAP4 CE]
+
+== DAP4 Extension Details ==
+
+The Role URI for the DAP4 CSV Data Encoding and Response extension is
+
+ '''&lt;nowiki&gt;http://services.opendap.org/dap4/extension/text-csv-data&lt;/nowiki&gt;'''
+
+DAP4 servers MUST include this role URI in a Dataset Service Response [DSR] ''extension'' element to indicate that the DAP4 CSV Data Encoding and Response extension is supported for the dataset (?represented by that DSR?). DAP4 clients MAY check for DSR '''extension''' elements with this role URI to determine if the DAP4 CSV Data Encoding and Response extension is supported.
+
+Dataset Service Response [DSR] ''extension'' elements must also contain a name and a description. The following are recommended text for the name and description:
+
+
+;Name
+: DAP4 CSV Data Encoding and Response
+
+;Description 
+: This extension provides an encoding for representing DAP4 data as structured Comma-Separated Values (CSV) in UTF-8 text.
+
+== Requesting DAP4 CSV Encoded Data Response ==
+
+&lt;blockquote&gt;
+{| class="wikitable" style="font-size: 95%;" width="90%"
+! style="width: 15%" | URL Suffix
+! style="width: 55%" | Media Type
+! style="width: 30%" | URL Example
+|-
+| "'''.dap'''" or "'''.dap.csv'''"
+|
+; application/vnd.opendap.dap4.data+csv
+:  DAP4 CSV  encoding
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dap'''
+&lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dap.csv'''
+|-
+| "'''.dap.csv'''"
+|
+; text/csv
+: DAP4 CSV (UTF-8) Data encoding with generic media type
+| &lt;nowiki&gt;http://server/path/dataset.nc&lt;/nowiki&gt;'''.dap.csv'''
+|}
+&lt;/blockquote&gt;
+
+== DAP4 CSV Encoding ==
+
+== Normative References ==
+
+&lt;div id="RFC_4180"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[RFC 4180]&lt;/nowiki&gt; [https://www.ietf.org/rfc/rfc4180.txt Common Format and MIME Type for Comma-Separated Values (CSV) Files]
+
+&lt;div id="DAP4_Vol1"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[DAP4 Vol1]&lt;/nowiki&gt; [[DAP4:_Specification_Volume_1|DAP4 Volume 1: Data Model, Persistent Representations, and Constraints]].
+
+&lt;div id="DAP4_Extensions"&gt;&lt;/div&gt;
+&lt;nowiki&gt;[DAP4 Extensions]&lt;/nowiki&gt; [DAP4:_Specification_Volume_1#Extensions|DAP4 Volume 1, Section 9.3 Extensions]</text>
+      <sha1>p44yldk8qa57rernvojlqmntx5nm77s</sha1>
+    </revision>
+  </page>
+</mediawiki>

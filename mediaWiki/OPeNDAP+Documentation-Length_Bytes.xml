@@ -1,0 +1,56 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Length Bytes</title>
+    <ns>0</ns>
+    <id>309</id>
+    <revision>
+      <id>2236</id>
+      <timestamp>2008-06-24T21:28:32Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>New page: The current spec (revision 1.17) contains a note about specifying lengths using a scheme that does not limit the length to one integer. The scheme is proposed for the &lt;nop&gt;BitImage type, b...</comment>
+      <origin>2236</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1134" sha1="d7cc8o8xgeaze1f3ls5k99fkucog5sa" xml:space="preserve">The current spec (revision 1.17) contains a note about specifying lengths using a scheme that does not limit the length to one integer. The scheme is proposed for the &lt;nop&gt;BitImage type, but I wonder if it should be used anywhere we specify a length? The scheme is as follows: the high-order bit is used to indicate whether another length byte follows and the remaining 7 bits are length value. For example, a length of 500 would be 1000 0011 0111 0100 (0x83 0x74). The set high-order bit of the first byte indicates a second byte follows. The cleared high-order bit of the second byte indicates it's the last byte.
+
+James Gallagher - 15 Sep 2003
+
+Take a look at the [http://www.cl.cam.ac.uk/~mgk25/unicode.html UTF-8] FAQ. UTF-8 uses an encoding scheme that is robust. It is easy to spot missing bytes, for example. OTOH, the scheme Tom has suggested has the advantage that it'll be easy to code and will never use more than N+1 bytes for somethng that would fit in N bytes as an unsigned integer.
+
+I think we should adopt this unless there's another widely-used scheme that accomplishes the same goal.
+
+James Gallagher - 26 Sep 2003</text>
+      <sha1>d7cc8o8xgeaze1f3ls5k99fkucog5sa</sha1>
+    </revision>
+  </page>
+</mediawiki>

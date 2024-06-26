@@ -1,0 +1,135 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>WCS Generating Range Fields</title>
+    <ns>0</ns>
+    <id>375</id>
+    <revision>
+      <id>2671</id>
+      <timestamp>2009-01-08T06:03:20Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>New page: == Generating Range Field Elements ==  === Issues with Definition element ===  In the Range section of a CoverageDescription, each Field element must have a child Definition element. The c...</comment>
+      <origin>2671</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4373" sha1="giktwf9knwl2wdlanh7iwa9caqdf7py" xml:space="preserve">== Generating Range Field Elements ==
+
+=== Issues with Definition element ===
+
+In the Range section of a CoverageDescription, each Field element must have a child Definition element. The contents/values of this element are discussed in section 13.2 of the OGC Web Services Common Specification (OWS) 1.1.0 (File: 06-121r3_OGC_Web_Services_Common_Specification_version_1.1.0_with_Corrigendum_1.pdf). 
+
+My reading indicates that we are going to have to delve into the CF metadata in order to construct this Definition element. The examples provided by OGC don't provide any details because they simply use the ows:AnyValue element. And this is not addressed in the ''Domenico &amp; Nativi'' proposal for encoding extensions.
+
+
+Here is an example of that usage from our (in progess) CoverageDescription:
+    &lt;Field&gt;
+        &lt;ows:Title&gt;surface_eastward_sea_water_velocity&lt;/ows:Title&gt;
+        &lt;ows:Abstract&gt;Eastward component of a 2D sea surface velocity vector.&lt;/ows:Abstract&gt;
+        &lt;Identifier&gt;u&lt;/Identifier&gt;
+        &lt;Definition&gt;
+            &lt;ows:AnyValue/&gt;
+        &lt;/Definition&gt;
+        &lt;NullValue&gt;-32768&lt;/NullValue&gt;
+        &lt;owcs:InterpolationMethods&gt;
+            &lt;owcs:DefaultMethod&gt;nearest&lt;/owcs:DefaultMethod&gt;
+        &lt;/owcs:InterpolationMethods&gt;
+    &lt;/Field&gt;
+
+However, the Definition element is the place where the range of the Field and the units of the Field are held. I'll refrain from putting the schema segment in here but it is in the WCS folder I passed around: WCS/OGC/SCHEMAS_OPENGIS_NET/ows/1.1.0/owsDomainType.xsd. The Definition element is of type UnNamedDomainType.
+
+So lets look at the Attributes from the DDX for u, from the example above:
+
+        &lt;Attribute name="standard_name" type="String"&gt;
+            &lt;value&gt;surface_eastward_sea_water_velocity&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="units" type="String"&gt;
+            &lt;value&gt;m s-1&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="_FillValue" type="Int16"&gt;
+            &lt;value&gt;-32768&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="scale_factor" type="Float32"&gt;
+            &lt;value&gt;0.009999999776&lt;/value&gt;
+        &lt;/Attribute&gt;
+        &lt;Attribute name="ancillary_variables" type="String"&gt;
+            &lt;value&gt;DOPx&lt;/value&gt;
+        &lt;/Attribute&gt;
+
+Which we need to morph into:
+        &lt;Definition&gt;
+            &lt;ows:AllowedValues&gt;
+                &lt;owcs:Range&gt;
+                    &lt;owcs:MinimumValue&gt;THE_MINIMUM_VALUE(How do we determine this?)&lt;/owcs:MinimumValue&gt;
+                    &lt;owcs:MaximumValue&gt;THE_MAXIMUM_VALUE(How do we determine this?)&lt;/owcs:MaximumValue &gt;
+                &lt;/owcs:Range&gt;
+            &lt;/ows:AllowedValues&gt;
+            &lt;owcs:DataType owcs:reference="http://link.to.dap.spec"&gt;Int16&lt;/owcs:DataType&gt;
+            &lt;owcs:ValuesUnit owcs:reference="http://link.to.some.definition.of.meters.per.second.maybe.from.gml?" &gt;m s-1&lt;/owcs:ValuesUnit&gt;
+            &lt;ows:MetaData xlink:simpleLink="http://link.to.dataset.ddx?u" &gt;
+                &lt;ows:AbstractMetaData&gt;
+                    &lt;Attribute name="scale_factor" type="Float32"&gt;
+                        &lt;value&gt;0.009999999776&lt;/value&gt;
+                    &lt;/Attribute&gt;
+                &lt;/ows:AbstractMetaData&gt;
+                &lt;ows:AbstractMetaData&gt;
+                    &lt;Attribute name="ancillary_variables" type="Float32"&gt;
+                        &lt;value&gt;DOPx&lt;/value&gt;
+                    &lt;/Attribute&gt;
+                &lt;/ows:AbstractMetaData&gt;
+            &lt;/ows:MetaData&gt;
+        &lt;/Definition&gt;
+
+It may be beyond our scope to try to generate an ows:AllowedValues element.
+
+We may have to use to ows:AnyValues for the mandatory "PossibleValues" group. 
+
+The other elements are important, I think...
+
+The Metadata section is particularly confusing, as the schema types the ows:AbstractMetaData element like this:
+
+    &lt;element name="AbstractMetaData" abstract="true"&gt;
+        &lt;annotation&gt;
+            &lt;documentation&gt;Abstract element containing more metadata about the element 
+                that includes the containing "metadata" element. A specific server implementation, 
+                or an Implementation Specification, can define concrete elements in the 
+                AbstractMetaData substitution group. &lt;/documentation&gt;
+        &lt;/annotation&gt;
+    &lt;/element&gt;
+
+The fact that this is an abstract type leads me to believe we are intended to develop an additional schema content to describe our metadata.
+
+
+[[Category:WCS]]</text>
+      <sha1>giktwf9knwl2wdlanh7iwa9caqdf7py</sha1>
+    </revision>
+  </page>
+</mediawiki>

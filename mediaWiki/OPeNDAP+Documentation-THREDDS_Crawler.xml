@@ -1,0 +1,68 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>THREDDS Crawler</title>
+    <ns>0</ns>
+    <id>562</id>
+    <revision>
+      <id>5367</id>
+      <parentid>5364</parentid>
+      <timestamp>2010-03-05T23:21:15Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>5367</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1540" sha1="0ucgjks1sxfd6i51upip4loplebq2nu" xml:space="preserve">See also [[REAP Cataloging and Searching]]
+
+== Implementation ==
+
+=== Version 0.8, 3/5/10 ===
+
+The crawler will crawl a THREDDS catalog, visiting all of the datasets it lists and, recursively, all of the child catalogs it contains. The traversal is breadth-first, so each dataset listed in a catalog is examined before crawling the child catalogs. To limit looping when two catalogs are mutually referential, the crawler records each catalog URL and uses that record to ensure that each catalog is examined only once. In addition the crawler uses a persistent store (serialized ConcurrentHashMap) to record each dataset examined. Because these operation are potentially expensive, this is used to stop retrieving and processing DDX documents from datasets already examined. The HTTP 1.1 Conditional GET request is used to access DDX documents only when they are different from the versions previously accessed.
+
+What the crawler does not yet do:
+* The crawler is not multi-threaded
+* It does not build EML documents from the DDX documents
+* It does not store the results in metacat 
+
+==== The code ====
+
+The Crawler is in SVN at http://scm.opendap.org/trac/browser/branch/ioos/olfs, but the code specific to the crawler is in http://scm.opendap.org/trac/browser/branch/ioos/olfs/src/opendap/metacat and can be built using the ant target ''DapIngest'' (and run from ant using ''dap_ingest'').
+
+There is code to process the DDX and build EML using XSLT at http://scm.opendap.org/trac/browser/trunk/reap
+
+[[Category:REAP]]
+[[Category:THREDDS]]</text>
+      <sha1>0ucgjks1sxfd6i51upip4loplebq2nu</sha1>
+    </revision>
+  </page>
+</mediawiki>

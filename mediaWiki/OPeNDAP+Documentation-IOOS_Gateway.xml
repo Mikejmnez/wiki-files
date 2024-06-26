@@ -1,0 +1,63 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>IOOS Gateway</title>
+    <ns>0</ns>
+    <id>302</id>
+    <revision>
+      <id>3983</id>
+      <parentid>2351</parentid>
+      <timestamp>2009-04-29T17:30:15Z</timestamp>
+      <contributor>
+        <username>Dan</username>
+        <id>6</id>
+      </contributor>
+      <origin>3983</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="503" sha1="ihs9dvvmulfwt34b9u0xrd2s8vd52vn" xml:space="preserve">Changes to the DAP, Hyrax, or other proposals stemming from the WCS Gateway Project. 
+
+
+Much of the WCS gateway work is focused on:
+
+# Providing DAP2 protocol access to WCS served data.
+
+=== DAP2 access to data served by WCS ===
+
+* [[WCS_Data Access|Data access via DAP2 requests]]
+* [[WCS Site Analysis |WCS Server Analysis]]
+==== DAP2.1 Namespace ====
+There have been some proposed changes to the DAP2 namespace (for the DDX) to hep accommodate this work.
+* [[WCS DAP Attributes|DAP Attributes]]
+
+----</text>
+      <sha1>ihs9dvvmulfwt34b9u0xrd2s8vd52vn</sha1>
+    </revision>
+  </page>
+</mediawiki>

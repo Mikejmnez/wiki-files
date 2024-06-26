@@ -1,0 +1,62 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Investigation of Patterns in Large Collections of Data</title>
+    <ns>0</ns>
+    <id>579</id>
+    <revision>
+      <id>5496</id>
+      <timestamp>2010-04-05T03:30:25Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>New page: ''' ''We're still flushig out this description, so please be patient... '' '''  == Background ==  == Work to date ==  We have developed a small set of python programs that can be used to e...</comment>
+      <origin>5496</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1689" sha1="300typigq2t8974f010tw93bwmiks9j" xml:space="preserve">''' ''We're still flushig out this description, so please be patient... '' '''
+
+== Background ==
+
+== Work to date ==
+
+We have developed a small set of python programs that can be used to examine collections of URLs that reference data accessible using various DAP servers.
+
+== Using the data ==
+
+A description of the UI idea from an email:
+
+&lt;blockquote&gt;
+So the idea is that when the data provider installs his/her server, it launches a job that crawls the site and organizes the data based on directory structure, file name and das/dds. It then launches a GUI in which this organization is presented to the data provider. I imagine a sort of hierarchy affair starting at the top of the web site and going down to individual files. In most cases it would not be possible to list all files, but there should be a way to represent an archive of similar files. For example, one element of a site might be all AVHRR SST fields for the western North Atlantic. This would show as a block for this archive and hen a sample file. The interface would also show the common metadata characteristics for the elements in a given archive and the differences between the metadata in this archive and another archive at the site. The data provider would able to combine elements or split them up in a graphical fashion, like Kepler. S/he would also be able to augment, correct or complete metadata objects. The result would be a THREDDS catalog that could be harvested as well as used by the server. All THREDDS catalogs produced by this GUI for any Hyrax server would be similar in structure and content and all would be CF based. This would make writing clients for these servers very easy.
+&lt;/blockquote&gt;</text>
+      <sha1>300typigq2t8974f010tw93bwmiks9j</sha1>
+    </revision>
+  </page>
+</mediawiki>

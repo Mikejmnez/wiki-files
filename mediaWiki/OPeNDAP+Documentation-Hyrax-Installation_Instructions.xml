@@ -1,0 +1,109 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Hyrax - Installation Instructions</title>
+    <ns>0</ns>
+    <id>113</id>
+    <revision>
+      <id>11823</id>
+      <parentid>11822</parentid>
+      <timestamp>2015-04-28T15:55:35Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>11823</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3626" sha1="dyejvyayhs3lrhiaa1y2crvp8lmjl9e" xml:space="preserve">&lt;font size="5"&gt;
+;This page is deprecated
+:These instructions apply to Hyrax version 1.10 and older.
+: [[Hyrax#Install|Current Installation Instructions Can Be Found Here.]]
+&lt;/font&gt;
+Hyrax is fairly easy to configure, but because there are several different components involved, it can seem complicated. Essentially you need to install two pieces of software: the BES and the OLFS. The BES reads data files and builds various kinds of responses and the OLFS is an interface to the BES that provides a web presence for the data and services. Because Hyrax uses a web server to work with web browsers and other kinds of programs, you will need to install the Apache Tomcat software too.
+
+What you will need to install a binary distribution:
+
+* 5 minutes
+* Java 1.7 Runtime
+* Tomcat 7 or newer
+* The two pieces of software the make up Hyrax
+
+==System Requirements==
+Hyrax is supported on Linux and OS/X, although we only build binary versions for Linux. We do not support Hyrax on Windows or Vista, although see the [[Using Virtual Machines to Serve Data]] project for a solution applicable to Win32 platforms. While that information is somewhat dated since it describes an older version of Hyrax, the approach is generally applicable to the current version of Hyrax.
+
+For our binary distribution of Hyrax for CentOS/RedHat/Fedora, use either ''yum'' or ''rpm'' to install the libdap and BES RPM packages. We also have DEB packages for Ubuntu/Debian. Either ''yum'' or ''apt-get'' will find and install any dependencies the libdap or BES package needs.
+
+==Secure Installation Guidelines==
+
+[[Hyrax - Secure Installation Guidelines|Making Hyrax Secure]]
+
+==Install the BES==
+
+[[Hyrax - BES Installation|Install and configure the BES.]]
+
+==Install the OLFS==
+
+[[Hyrax - OLFS Installation|Next You need to install and configure the OLFS inside of a Tomcat server]]
+
+==Starting and Stopping Hyrax==
+To correctly start and stop Hyrax, follow these simple recipes. 
+
+=====Starting=====
+# Start the BES first using the ''besctl'' program with the ''start'' argument. See [[Hyrax_-_Starting_and_stopping_the_BES|Starting and stopping the BES]] for more information.
+# Start the OLFS using the Tomcat startup script. See [[Hyrax_-_OLFS_Installation#Start_Tomcat| Starting Tomcat]] for more information.
+
+=====Stopping=====
+# Stop the OLFS first using the tomcat shutdown script.
+# Stop the BES using the ''besctl'' program with the ''stop'' argument.
+
+==Test the server==
+
+To test/use the server, open a web browser and open the URL:  http://localhost:8080/ and you should see the Tomcat default page. 
+
+Open the URL:  http://localhost:8080/opendap/ to see an HTML directory of the top of your data archive.
+
+You can get the HTML view THREDDS catalog by appending "catalog.html" to the end of any URL that returns an HTML directory, like so:  http://localhost:8080/opendap/catalog.html But you may need to do some additional configuration that to work.
+
+==Configure Your Hyrax Installation==
+
+At this point, Hyrax should be working.  When you install Hyrax for the first time it is pre-configured to serve test data sets that come with each of the installed data handlers. This will allow you to test the server and make sure it is functioning correctly. After that you will want to configure so that it works with your data.
+
+==Miscellaneous==
+
+Once opendap.war is expanded, manually copy the file favicon.ico file:
+ $CATALINA_HOME/webapps/opendap/docs/images/favicon.ico
+to 
+ $CATALINA_HOME/webapps/ROOT/
+
+The favicon.ico file is mostly a convenience to keep browsers from constantly asking for it (substitute your own icon if you like!).</text>
+      <sha1>dyejvyayhs3lrhiaa1y2crvp8lmjl9e</sha1>
+    </revision>
+  </page>
+</mediawiki>

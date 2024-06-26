@@ -1,0 +1,127 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>WCS Tutorial on Serving Data</title>
+    <ns>0</ns>
+    <id>714</id>
+    <revision>
+      <id>7557</id>
+      <parentid>6941</parentid>
+      <timestamp>2012-03-07T22:31:08Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>7557</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2893" sha1="ckv9d62bap4qor82eky7gekd2v5fk5r" xml:space="preserve">A work in progress that is not little more than notes.
+
+Here's an NcML file that will take the tried and true ''COADS Climaology'' file and add enough metadata for the WCS service to build a valid coverage:
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;netcdf location="/data/nc/coads_climatology.nc" xmlns="http://www.unidata.ucar.edu/namespaces/netcdf/ncml-2.2"&gt;
+
+  &lt;attribute type="Structure" name="NC_GLOBAL"&gt;
+    &lt;attribute type="String" name="Conventions" value="CF-1.0"/&gt;
+  &lt;/attribute&gt;
+
+  &lt;!-- We could use UDD metadata instead of this. --&gt;
+  &lt;attribute name="WcsMetadata" type="OtherXML"&gt;
+    &lt;Domain xmlns="http://www.opengis.net/wcs/1.1" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml"&gt;
+      &lt;SpatialDomain&gt;
+	&lt;ows:BoundingBox crs="urn:ogc:def:crs:EPSG::4326"&gt;
+	  &lt;ows:LowerCorner&gt;0 -90&lt;/ows:LowerCorner&gt;
+	  &lt;ows:UpperCorner&gt;360 90&lt;/ows:UpperCorner&gt;
+	&lt;/ows:BoundingBox&gt;
+      &lt;/SpatialDomain&gt;
+      &lt;TemporalDomain&gt;
+	&lt;TimePeriod&gt;
+	  &lt;BeginPosition&gt;2002-07-01T09:00/15:00&lt;/BeginPosition&gt;
+	  &lt;EndPosition&gt;2002-07-31T15:00/21:00&lt;/EndPosition&gt;
+	  &lt;TimeResolution&gt;6 hours&lt;/TimeResolution&gt;
+	&lt;/TimePeriod&gt;
+      &lt;/TemporalDomain&gt;
+    &lt;/Domain&gt;
+   &lt;!--  &lt;SupportedCRS xmlns="http://www.opengis.net/wcs/1.1"&gt;urn:ogc:def:crs:EPSG::4326&lt;/SupportedCRS&gt; --&gt;
+  &lt;/attribute&gt;
+
+  &lt;variable name="SST"&gt;
+    &lt;variable name="COADSX"&gt;
+      &lt;attribute name="standard_name" type="String" value="longitude"/&gt;
+    &lt;/variable&gt;
+
+    &lt;variable name="COADSY"&gt;
+      &lt;attribute name="standard_name" type="String" value="latitude"/&gt;
+    &lt;/variable&gt;
+
+    &lt;variable name="TIME"&gt;
+      &lt;attribute name="standard_name" type="String" value="time"/&gt;
+    &lt;/variable&gt;
+  &lt;/variable&gt;
+
+ &lt;variable name="AIRT"&gt;
+    &lt;variable name="COADSX"&gt;
+      &lt;attribute name="long_name" type="String" value="longitude"/&gt;
+    &lt;/variable&gt;
+
+    &lt;variable name="COADSY"&gt;
+      &lt;attribute name="long_name" type="String" value="latitude"/&gt;
+    &lt;/variable&gt;
+
+    &lt;variable name="TIME"&gt;
+      &lt;attribute name="long_name" type="String" value="time"/&gt;
+    &lt;/variable&gt;
+  &lt;/variable&gt;
+
+&lt;/netcdf&gt;
+
+&lt;/source&gt;
+&lt;/font&gt;
+
+Here's a note from Benno about  using UDD metadata in place of the cumbersome ''WcsMetadata'' element:
+&lt;blockquote&gt;
+UDD is my abbreviation, actually you need to say "Unidata Dataset Discovery v1.0", which is far longer than I will ever remember.
+&lt;br&gt;
+The conventions registry is at http://xml.opendap.org/ontologies/NetcdfConventionRegistry.owl
+
+which connects the ontology files describing the conventions to the strings that identify the convention in the Conventions tag
+&lt;br&gt;
+We have an example of using UDD.
+http://test.opendap.org:8090/ioos/mday_joinExist.ncml
+which has metadata that expands to
+http://iridl.ldeo.columbia.edu/cgi-bin/view/browse2.pl?node=http%3A%2F%2Ftest.opendap.org%3A8090%2Fioos%2Fmday_joinExist.ncml&amp;repository=opendap1-owl
+
+Benno
+&lt;/blockquote&gt;</text>
+      <sha1>ckv9d62bap4qor82eky7gekd2v5fk5r</sha1>
+    </revision>
+  </page>
+</mediawiki>

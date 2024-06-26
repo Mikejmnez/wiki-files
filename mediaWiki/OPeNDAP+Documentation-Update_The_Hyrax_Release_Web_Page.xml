@@ -1,0 +1,104 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Update The Hyrax Release Web Page</title>
+    <ns>0</ns>
+    <id>1030</id>
+    <revision>
+      <id>13299</id>
+      <parentid>13298</parentid>
+      <timestamp>2022-01-10T13:24:32Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Update the Hyrax Software Downloads section */</comment>
+      <origin>13299</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="4134" sha1="0t65w6f9o5u6rmyd4quvpu9plsokis2" xml:space="preserve">Currently we have a single page for each major release. Minor release information is added to the major release page to which the minor release is associated. For example if you are making minor release Hyrax-1.16.5 then you would add the release information to the Hyrax-1.16 page. 
+
+== Creating A Major Release Page ==
+# If this is a major release copy the previous major release X.Y page to X.(Y+1).
+# Clear out the contents of the page while maintaining the structure:
+#* Release Information
+#** New Features (''Remove content.'')
+#** Bug Fixes (''Remove content.'')
+#* Hyrax Software Downloads (''Keep contents but update as described in the Minor Release section below.'')
+#** Required External Dependencies (''Ibid'')
+#** Binary Packages (''Ibid'')
+#*** Installation Summary (''Ibid'')
+#** Source Code (''Ibid'')
+#** GitHub (''Ibid'')
+#** Snapshots (''Ibid'')
+#* Hyrax Server Documentation (''Ibid'')
+=== Edit The "Menu Setting" For The New Page ===
+# Edit the '''Menu Settings''' for the new release page. Find them at the top of the right hand column in the page editor.
+# Select the "'''Provide a menu link'''" check box. I
+# Set the '''Parent item''' to "''----Hyrax''"
+# Set the '''Weight''' to the weight of the previous release minus one.
+This should ensure the that new page appears at the top of the list of Hyrax releases in the side bar menus of the web site
+
+=== Follow the instructions for Updating The Release Page For A Minor Release below. ===
+
+== Updating The Release Page For A Minor Release ==
+
+=== Update the New Features section ===
+  
+# Under "New Features" create a new sub-section (Heading 2) titled "Added in Hyrax-xx.yy.zz" for the new release. If this is a major release then zz==0, example: Hyrax-1.16.0 
+# Create an html anchor at the beginning of this new heading titled "''hyrax-.xx.yy.zz-features''".
+# In the abbreviated table of contents at the top of the page add a new link in the bullet list under "New Features" titled "hyrax-xx.yy.zz" and point the link to your new anchor "#hyrax-xx.yy.zz-features"
+# Take the entires that you made to the NEWS files for libdap, BES, and OLFs and enter them into this new section, format them for readability and navigability. (See previous releases for examples.)
+
+=== Update the Bugs/Issues Addressed section ===
+# Create a new section for the release in the Bugs/Issue area.
+# When the [[Jira Release Process]] was completed you generated release page(s) for our one or both of our [https://opendap.atlassian.net/projects/HK?orderField=RANK&amp;selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&amp;status=released Hyrax JIRA] and/or our [https://bugs.earthdata.nasa.gov/projects/HYRAX?selectedItem=com.atlassian.jira.jira-projects-plugin:release-page&amp;status=released NASA JIRA]. Locate the appropriate release page from each JIRA for this release and link them to the bugs/issueThese release pages should be referenced in a paragraph that says something like:
+&lt;blockquote&gt;
+'''For Hyrax-1.16.5''':
+
+''Many bugs were fixed, and a lot of effort was put into continuous integration and testing. Rather than itemizing the tickets here, [https://opendap.atlassian.net/projects/HK/versions/10116/tab/release-report-all-issues if you want you can see all of the tickets we processed here].''
+
+''We also worked extensively with NASA on their NGAP project. We processed 94 tickets during the release period. [https://bugs.earthdata.nasa.gov/projects/HYRAX/versions/26233 If you have access to NASA's JIRA you can see the details here].''
+&lt;/blockquote &gt;
+
+=== Update the Hyrax Software Downloads section ===
+In the ''Hyrax Software Downloads'' section we only provide links to the most recent official release. 
+# Update all of the download links for the various products that were built and published to www.opendap.org
+#: Be sure to update the '''gpg signature''' links as well.
+#Test each link - source and binary.
+
+=== Publish the release page ===
+
+# Publish the release page. 
+# Check every link again!!!. 
+#:(Seriously. Please take the time to do this. Check the on page navigation links, the external links, and the download links. Thanks...)</text>
+      <sha1>0t65w6f9o5u6rmyd4quvpu9plsokis2</sha1>
+    </revision>
+  </page>
+</mediawiki>

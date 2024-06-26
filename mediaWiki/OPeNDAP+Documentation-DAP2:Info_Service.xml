@@ -1,0 +1,66 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP2: Info Service</title>
+    <ns>0</ns>
+    <id>788</id>
+    <revision>
+      <id>7731</id>
+      <timestamp>2012-03-29T21:16:24Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>Created page with "== Overview ==  The DAP2 INFO service provides a browser renderable page that combines both the DAP2 'syntactic' and  'semantic' metadata for the data resource in a human readabl..."</comment>
+      <origin>7731</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="914" sha1="9ilpxnsfbc89z7jciet04tvrqz0ty1f" xml:space="preserve">== Overview ==
+
+The DAP2 INFO service provides a browser renderable page that combines both the DAP2 'syntactic' and  'semantic' metadata for the data resource in a human readable way.
+
+== Request ==
+
+The DAP2 INFO Service is invoked by appending the suffix &lt;font size="2"&gt;&lt;code&gt;.info&lt;/code&gt;&lt;/font&gt; to the file part of the dataset's referent (aka base) URL and then dereferencing the new URL. The INFO service ignores a query string (constraint expression).
+
+&lt;font color="red"&gt; Need links to DAP2 spec bla blah blah &lt;/font&gt;
+== Response ==
+The DAP2 INFO response returns a web browser renderable document that combines both the DAP2 'syntactic' and  'semantic' metadata for the data resource in a human readable way.
+
+&lt;font color="red"&gt; Need links to DAP2 spec bla blah blah &lt;/font&gt;
+
+== Errors ==
+
+[[DAP2:_Responses#Error_Response | DAP2: Error Response]]
+
+[[Category:Development|Development]][[Category:DAP4|DAP4]]</text>
+      <sha1>9ilpxnsfbc89z7jciet04tvrqz0ty1f</sha1>
+    </revision>
+  </page>
+</mediawiki>

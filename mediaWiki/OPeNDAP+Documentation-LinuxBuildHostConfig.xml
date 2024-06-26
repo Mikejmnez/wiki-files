@@ -1,0 +1,103 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>LinuxBuildHostConfig</title>
+    <ns>0</ns>
+    <id>756</id>
+    <revision>
+      <id>7442</id>
+      <parentid>7441</parentid>
+      <timestamp>2012-03-01T04:10:23Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Yum */</comment>
+      <origin>7442</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2628" sha1="knz8jfk7ruqba5tqzoplov14rmt2w4o" xml:space="preserve">[[HowTo_guides|&lt;&lt; back to HowTo Guides]]
+
+== Configuring a Linux host for a Hyrax build ==
+
+Starting with a completely clean CentOS 5.3 64-bit linux machine, here's what I did to so that the ''shrew'' project will build. This assumes that the target machine is going to use only 'special' builds where absolutely needed and rely on ''yum'' as much as possible.
+
+== sudo ==
+
+Edit /etc/sudoers so that the wheel group is allowed to use sudo.
+
+Then edi /etc/group so that the build account ('opendap') is in the wheel group.
+
+== Update the autotools ==
+
+For this you cannot use rpm. Google autoconf, get the latest, ./configure and make install. You must be root to do 'make install'. Put it in the default location.
+
+Repeat for automake and libtool.
+
+== Yum ==
+
+I used ''yum'' to install packages. Because CentOS does not include ''extra'' packages (like netcdf), the 'extras' repository has to be added to the base configuration for yum. To do that, find EPEL on the wen and get the information for the ''EL5'' repo. The information to be added to yum should be in a single ''rpm'' file; download and install it:
+
+&lt;tt&gt;&lt;font size="+"&gt;rpm -i epel-release-5.4.noarch.rpm&lt;/font&gt;&lt;/tt&gt;
+
+Can be retrieved from http://mirror.seas.harvard.edu/epel/5/ and then choose i386 or x86_64
+
+=== Add packages for the hyrax dependencies ===
+
+The yum commands ''yum search &lt;string&gt;'' and ''sudo yum install &lt;package&gt;'' are most useful. I installed:
+
+# readline-devel (needed by bes)
+# bzip2-devel (needed by bes)
+# netcdf-devel
+# hdf-devel (this is hdf 4)
+# hdf5-devel
+# libicu-devel
+# java-1.6.0-openjdk (this gets CentOS java 1.6) and the -devel package
+# ant
+# ant-junit, junit
+# subversion (not 'svn'; this gets me every time)
+# graphviz (needed for the ''doc'' targets but I've removed these from the build because ''dot'' seems to be broken in CentOS for us since it cannot make 'png' files)
+
+Yum might work to update ''autoconf'', ''automake'' and ''libtool'', but I did these by hand and installed them in /usr/local/{bin,lib,...}. Google them.
+
+== Building ==
+
+Use ''svn'' to checkout shrew.
+
+Edit the first few lines of the ''nbuild_shrew.sh'' script. This script runs in the Bourne shell and sets the few environment variables needed for the build.
+
+Build time on a 4-core machine: about 42 minutes, including upload of the build results to the build database. Time to build the ''daemon'' target: about 9 minutes. (of course, java people will gloat because the time to build the OLFS is only seconds).
+
+== Issues ==
+
+I did not test the OLFS junit tests using the nbuild_shrew script because of a configuration goof. I think it'll work...</text>
+      <sha1>knz8jfk7ruqba5tqzoplov14rmt2w4o</sha1>
+    </revision>
+  </page>
+</mediawiki>

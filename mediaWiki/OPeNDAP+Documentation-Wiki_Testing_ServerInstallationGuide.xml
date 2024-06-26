@@ -1,0 +1,413 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/ServerInstallationGuide</title>
+    <ns>0</ns>
+    <id>199</id>
+    <revision>
+      <id>1561</id>
+      <parentid>1560</parentid>
+      <timestamp>2008-01-04T08:59:23Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Choosing a Data Handler */</comment>
+      <origin>1561</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="18353" sha1="2br7t4ykuh30al011cq334dcdull9qy" xml:space="preserve">The OPeNDAP software provides a way to access data over the Internet,
+from programs that weren't originally designed for that purpose, as
+well as some that were. The OPeNDAP software implements the Data
+Access Protocol [[Wiki_Testing/ServerInstallationGuideFootnotes|DAP]],
+version 2. A DAP server is a program that sends data in a
+standard transmission format to a client that has requested it. A
+DAP client is a program, running on a networked computer
+somewhere in the world, that requests and receives data. A client can
+be a specialized DAP client, or a standard web browser.
+
+Though originally developed to deal with oceanographic data, the
+OPeNDAP software has found wide use outside that community, and is now
+used for several different kinds of science data.
+
+Nothing limits the use of the DAP to science data; its framework will
+support many different data types. But the DAP has facilities for
+accommodating large arrays, relational tables, irregular grids, and
+many other otherwise anomalous data types. DAP servers can be adapted
+to serve data from any kind of storage format, and versions that
+support several popular data storage formats are readily available.
+
+=The OPeNDAP Server=
+
+The OPeNDAP DAP server is just an ordinary WWW server (httpd) equipped with a CGI program
+that enable it to respond to requests for data from DAP client
+programs. Web servers and CGI programs are standard parts of the Web,
+and the details of their operation and installation are beyond the scope of this guide. (That is, there are too many different varieties of web servers out there for us to help you install each different one of them.) Once you have one installed, this guide will explain how to use it to serve data using the OPeNDAP server for the DAP.
+
+Entire books are written about the operation of the Internet and the
+WWW, and about client/server systems. This is not one of them. To
+understand the OPeNDAP server's architecture, you need only understand
+the following:
+
+
+*A Web server is a process that runs on a computer (the   host machine) connected to the Internet. When it receives a URL from   some Web client, such as a user somewhere operating Netscape (or a   specialized DAP client) it packages and returns the data   specified by the URL to that client. The data can be text, as   in a web page, but it may also be images, sounds, a program to be   executed on the client machine, or some other data.
+*A properly specified URL can cause a Web server to invoke a CGI program on its host machine, accepting as input a part of   the URL, or some other data, and returning the output of that   program to the client that sent the URL in the first place. The CGI is executed on the server.
+
+The way the server is configured depends on the storage format of the
+data you intend to serve. The OPeNDAP server supports a variety of
+storage formats, including \netcdf , HDF4, and DSP. The server can
+also read data using the \ffnd and \jgofs libraries, which can be configured to read files with nearly any data format.
+
+ 
+
+==Server Architecture==
+
+
+The OPeNDAP server consists of a set of programs, and a CGI \new{dispatch
+script} used to decide which program can handle whatever request is
+at hand. A user can make three different sorts of requests to the server.
+The first request is for the "shape" of the data, and consists of
+the data descriptor structure (DDS).  The second request is for
+the data attribute structure (DAS) of the data types described
+\subj{You need to know the shape of the data before you request the data.}
+in the DDS. [http://docs.opendap.org/index.php/QuickStart| Quick Start Guide] and [http://docs.opendap.org/index.php/UserGuide| User Guide ] contain more information
+about these structures.)  Both of these requests return plain text
+data, readable in a web browser like Netscape Navigator.  You can see
+a typical DDS here:
+
+&lt;center&gt;
+
+[[Image:sst.mnmean.nc.dds.gif|actual size]]
+
+A DDS (One of the basic response types defined by the
+DAP,version2)[http://www.cdc.noaa.gov/cgi-bin/nph-nc/Datasets/reynolds_sst/sst.mnmean.nc.dds&lt;cite&gt;sst.mnmean.nc.dds&lt;/cite&gt;]
+
+&lt;/center&gt;
+
+ 
+
+Here's a DAS from the same dataset:
+
+
+&lt;center&gt;
+
+[[Image:sst.mnmean.nc.das.gif|actual size]] 
+
+A DAS [http://www.cdc.noaa.gov/cgi-bin/nph-nc/Datasets/reynolds_sst/sst.mnmean.nc.das&lt;cite&gt;sst.mnmean.nc.das&lt;/cite&gt;]
+
+&lt;/center&gt;
+
+
+After getting the metadata (defined, for DAP purposes, as the
+contents of the DAS and DDS), the DAP client can request actual data.  This
+is binary data, and is often too large to view easily in a web
+browser.  (See [http://docs.opendap.org/index.php/QuickStart| Quick Start Guide]  for strategies to use to examine DAP data
+from a standard web browser.)
+
+Depending on the data format in use, the DAS and DDS are either
+generated from the data served, or from ancillary information
+you have to supply (or both). The data in these structures may be cached by the
+client system.
+
+In addition to the three basic message types (DAS, DDS, and data), the
+OPeNDAPserver can also provide information about the server operation
+and about the data, can return data in ASCII comma-separated tables,
+and can provide a query form allowing users to craft subsampling
+requests to the server. Some of these services are provided by other
+service programs that must be installed with the dispatch script and
+its companions.
+
+==More Explanation of How It Works==
+
+To understand the operation of the OPeNDAP server, it is useful to
+follow the actions taken to reply to a data request. The diagrams in
+[[:Image:installfig1.gif | figure1]] and
+[[:Image:installfig2.gif | figure2]] lay out the relationship
+between the various entities. Consider a DAP request URL such as the
+following:
+
+&lt;pre&gt;
+http://test.opendap.org/opendap/nph-dods/data/nc/fnoc1.nc
+&lt;/pre&gt;
+
+The URL as written refers to the entire data file, but any particular request must be
+slightly more specific.  The precision is supplied by appending a
+suffix to the data URL.  Do you want binary data (&lt;font color='green'&gt;.dods&lt;/font&gt;), ASCII
+data (&lt;font color='green'&gt;.asc&lt;/font&gt;), the DDS (&lt;font color='green'&gt;.dds&lt;/font&gt;), the DAS (&lt;font color='green'&gt;.das&lt;/font&gt;), usage
+information (&lt;font color='green'&gt;.info&lt;/font&gt;), or a query form (&lt;font color='green'&gt;.html&lt;/font&gt;)?  To get a DDS, for example, you would use this URL:
+
+&lt;pre&gt;
+http://test.opendap.org/opendap/nph-dods/data/nc/fnoc1.nc.dds
+&lt;/pre&gt;
+
+A DAP client may silently add the appropriate suffix to the URL, but
+if you're using a standard WWW client, such as Netscape, you have to
+add the suffix yourself.
+
+Once the proper suffix has been appended to the URL, the URL is sent
+out into the world.  Through the magic of IP addressing, it makes its
+way to the web server (&lt;font color='green'&gt;httpd&lt;/font&gt;) running on the platform,
+&lt;font color='green'&gt;test.opendap.org&lt;/font&gt;.  \Figureref{dods-server,fig,server-design1} shows
+these first steps.  The client makes an internet connection to the
+&lt;font color='green'&gt;test.opendap.org&lt;/font&gt; machine, and the &lt;font color='green'&gt;httpd&lt;/font&gt; daemon executes the dispatch script (&lt;font color='green'&gt;opendap/nph-dods&lt;/font&gt;) and forwards it the remaining parts of the URL it had received [[Wiki_Testing/ServerInstallationGuideFootnotes| 2]]. (In this case, that would be &lt;font color='green'&gt;data/nc/fnoc1.nc.dods&lt;/font&gt;.)  DAP requests are "GET"
+requests, not "POST" requests, so all the
+information forwarded is in the URL [[Wiki_Testing/ServerInstallationGuideFootnotes| 3]].
+
+&lt;center&gt;
+
+[[Image:installfig1.gif|actual size]]
+
+The Architecture of the OPeNDAP Server, part I. 
+
+&lt;/center&gt;
+
+[[:Image:installfig1.gif | figure1]] illustrates what happens
+next.  Sitting in the CGI directory (here called &lt;font color='green'&gt;opendap&lt;/font&gt;) with
+the dispatch script are several \new{service programs}, also called
+\new{services} or \new{helper programs}.  The dispatch script
+(&lt;font color='green'&gt;nph-dods&lt;/font&gt;) analyzes the suffix on the URL to figure out what
+kind of request this is, and executes the corresponding service
+program.
+
+&lt;blockquote&gt; As of DODS release 3.2, the dispatch
+  script is named &lt;font color='green'&gt;nph-dods&lt;/font&gt; and OPeNDAP will use this name for
+  all of its version 3.x releases.  Earlier releases of DODS used
+  different dispatch scripts, depending on the storage format of the
+  data.  For earlier releases, there would be a &lt;font color='green'&gt;nph-nc&lt;/font&gt; to handle
+  netCDF data, &lt;font color='green'&gt;nph-jg&lt;/font&gt; to handle JGOFS data, and so on.
+&lt;/blockquote&gt;
+
+
+In the case illustrated, the &lt;font color='green'&gt;.dods&lt;/font&gt; suffix indicates that this is
+a request for binary data.  Therefore, the dispatch script executes
+the &lt;font color='green'&gt;dap_nc_handler&lt;/font&gt; service, and forwards to it the rest of the URL,
+which includes a data object name (which may be a file or not,
+depending on the API), and possibly a constraint
+expression [[Wiki_Testing/ServerInstallationGuideFootnotes|4]].  It's up to the service program to find the data, read it, read and parse the constraint expression (if any), and output
+the data message.  If the service requires any ancillary data, it
+may also read an ancillary data file or two, as necessary.
+
+&lt;center&gt;
+[[Image:installfig2.gif|actual size]]
+
+The Architecture of the OPeNDAP Server, part II. 
+
+&lt;/center&gt;
+
+The standard output of the service program is redirected to the output of
+the &lt;font color='green'&gt;httpd&lt;/font&gt;, so the client will receive the program output as the
+reply to its request.
+
+For APIs that are designed to read data in files, such as netCDF, the
+CGI program will be executed with the working directory (also called
+the default directory) specified by the &lt;font color='green'&gt;httpd&lt;/font&gt; configuration.
+However, the OPeNDAP software will look for its data relative to the
+document root tree.  On the &lt;font color='green'&gt;test.opendap.org&lt;/font&gt; server, for
+example, the nph-dods
+CGI program is executed native to the directory
+&lt;font color='green'&gt;/usr/local/share/dap-server/&lt;/font&gt;, but the document root directory
+is &lt;font color='green'&gt;/var/www/html/&lt;/font&gt;.  The last section of the URL,
+then, specifies the file &lt;font color='green'&gt;fnoc1.nc&lt;/font&gt; in the directory:  
+
+&lt;pre&gt;
+/var/www/html/data/nc/
+&lt;/pre&gt;
+
+Some existing data APIs, such as JGOFS, are not designed with file
+access as their fundamental paradigm. The JGOFS system, for example,
+uses an arrangement of "dictionaries" that define the location and
+method of access for specified data "objects." A URL addressing a
+JGOFS object may appear to represent a file, like the netCDF URL
+above.
+
+&lt;pre&gt;
+http://test.opendap.org/opendap/nph-dods/station43
+&lt;/pre&gt;
+
+However, the identifier (&lt;font color='green'&gt;station43&lt;/font&gt;) after the CGI program name (&lt;font color='green'&gt;nph-dods&lt;/font&gt;)
+represents, not a file, but an entry in the JGOFS data dictionary.
+The entry will, in turn, identify a file or a database index entry
+(possibly on yet another system) and a method to access the data
+indicated.  These are JGOFS server-specific installation issues
+covered in the installation documentation for that server.
+
+Note that the name and location of the CGI directory (&lt;font color='green'&gt;opendap&lt;/font&gt;), as
+well as the name and location of the working directory used by the CGI
+programs, are local configuration details of the particular web server
+in use. The location of the JGOFS data dictionary is a configuration
+issue of the JGOFS installation. That is to say these details will
+probably be different on different machines.
+
+==Service Programs==
+
+When the server gets a DAP request, it executes the
+dispatch script, which then figures out which service program should
+be invoked.  The output from that program is what gets returned to the
+client.
+
+Here is a table of the service programs required for each of
+the services of the server.  The dispatch script is
+called &lt;font color='green'&gt;nph-dods&lt;/font&gt;.  (Though see note [[Wiki_Testing/ServerInstallationGuideFootnotes | 1.2.]])  For
+another DODS server, the names of some of the helper programs would
+have a different root than &lt;font color='green'&gt;nc&lt;/font&gt;.  (For example, &lt;font color='green'&gt;ff&lt;/font&gt;
+identifies the FreeForm server, &lt;font color='green'&gt;jg&lt;/font&gt; for JGOFS, and so on.)
+
+
+DODS Services, with their suffixes and helper programs. Services, with their suffixes and helper programs. In the OPeNDAP server, different handlers are used for each supported data access format, e.g. &lt;font color='green'&gt;nc&lt;/font&gt; for netCDF, &lt;font color='green'&gt;jg&lt;/font&gt; for JGOFS, and so on.
+
+&lt;center&gt;
+
+{| border="3"
+
+! Service !! Suffix !! Helper Program
+|-
+| Data Attribute || &lt;font color='green'&gt;.das&lt;/font&gt; || &lt;font color='green'&gt;dap_nc_handler&lt;/font&gt;
+|-
+| Data Descriptor || &lt;font color='green'&gt;.dds&lt;/font&gt; || &lt;font color='green'&gt;dap_nc_handler&lt;/font&gt;
+|-
+| DODS Data  || &lt;font color='green'&gt;.dods&lt;/font&gt; || &lt;font color='green'&gt;dap_nc_handler&lt;/font&gt;
+|-
+| ASCII Data || &lt;font color='green'&gt;.asc&lt;/font&gt; or &lt;font color='green'&gt;.ascii&lt;/font&gt; || &lt;font color='green'&gt;dap_asciival&lt;/font&gt;
+|-
+| Information || &lt;font color='green'&gt;.info&lt;/font&gt; || &lt;font color='green'&gt;dap_usage&lt;/font&gt;, see
+([http://www &lt;cite&gt; sec,document-data&lt;/cite&gt;]).
+|-
+| \ifh || &lt;font color='green'&gt;.html&lt;/font&gt; || &lt;font color='green'&gt;dap_www_int&lt;/font&gt;
+|-
+| Version || &lt;font color='green'&gt;.ver&lt;/font&gt; || None
+|-
+| Compression || None || &lt;font color='green'&gt;deflate&lt;/font&gt;
+|-
+| Help || Anything else || None
+
+|}
+
+&lt;/center&gt;
+
+The service programs are started by the dispatch script depending on
+the extension given with the URL. If the URL ends with `.das' and the
+file name in the URL ends in `.nc', then the DAS service program
+(&lt;font color='green'&gt;dap_nc_handler&lt;/font&gt;) is started using the &lt;font color='green'&gt;-O das&lt;/font&gt; argument. Similarly, the extension `.dds' will cause the &lt;font color='green'&gt;dap_nc_handler&lt;/font&gt;
+service to be run with the &lt;font color='green'&gt;-O dds&lt;/font&gt; argument, and so on.  
+
+On the client side, when using a DAP client, the user may never see
+the `.das,' `.dds,' or `.dods' URL extensions. Nor will the user
+necessarily be aware that each data URL given to the DAP client may
+produce three different requests for information. These manipulations
+happen within the DAP client software, and the user need never be
+aware of them.
+
+&lt;blockquote&gt; This is only true ''when using a DAP client'' . Programs that
+  don't use the OPeNDAP client libraries, or similar, can still be
+  clients of a DAP server. You can use Netscape to contact a DAP
+  server and get data, in which case you have unmoderated access to the
+  server and need to include the service program URL extensions.
+&lt;/blockquote&gt;
+
+==Choosing a Data Handler==
+
+There are a variety of data format handlers available for the OPeNDAP
+data server, each designed to handle a different data storage format.
+Data handlers from OPeNDAP exist to serve data stored in the netCDF,
+HDF and HDF-EOS, and DSP storage formats (other groups have built data
+handlers for other formats). If you have data stored with one of these
+formats, the choice is quite simple: choose the one that works with
+your data.
+
+
+There is also a JDBC server, written in Java, for serving data
+stored in relational databases.  See ([[Wiki_Testing/ServerInstallationGuide4| chapter 4]]) for more
+information about installing that software.
+See [http://www.opendap.org/download/drds_server.html &lt;cite&gt;the DRDS Download page&lt;/cite&gt;]
+for more information about the DODS Java software.
+
+
+If your data is not already stored in one of the supported formats,
+don't despair.  Some standard API formats include tools for
+translating data into that format.  For example, netCDF includes an
+application called &lt;font color='green'&gt;ncgen&lt;/font&gt; you can use to translate array data
+into standard netCDF files by writing a data description in the netCDF
+CDL (Common Data Language).  See the [[http://www.unidata.ucar.edu/packages/netcdf/guidef/guidef-15.html#MARKER-2-3320&lt;cite&gt;netCDF documentation&lt;/cite&gt;]]
+for more information about this[[Wiki_Testing/ServerInstallationGuideFootnotes| 5]]. 
+
+
+If your data is not in a supported format and you don't want to
+translate it into one of those formats, there is still a way to serve
+your data.  There are two other data handlers available
+that can be used to serve data that are not already in one of these
+formats.  These are the FreeForm and JGOFS servers.  It may be that
+one of these servers can be easily adapted to your uses.  The FreeForm
+handler is somewhat easier to set up, and the JGOFS handler is more
+flexible. A key difference is that the JGOFS handler can process data
+contained in several different data files.  (The FreeForm handler can,
+as well, but, being slightly less flexible, it may require the files
+to be rearranged or renamed.)
+
+
+Here's a brief comparison of the two:}
+
+{|  border="3"
+! Server !! Advantages !! Disadvantages
+|-
+|      FreeForm 
+||    Simple to set up.  Serving data in a new format requires only
+      creating a text file describing that format. Serves data in
+      Arrays or Sequences.  
+||    Not quite as flexible as its name implies.  If the format in
+      question is too complex or too variable, the FreeForm API cannot
+      handle it.  Sequences can be served, but only flat ones.  (That
+      is, Sequences that contain other Sequences will not work.)
+      Generally, data must line up in columns.
+|-
+|      JGOFS    
+||     Extremely flexible.  Uses specialized access methods
+      to read data, and these methods can be extensively customized.
+      Optimized for Sequence data (relational tables), including
+      hierarchical Sequences (Sequences that contain other
+      Sequences). 
+||    Writing a
+      data access method can be complex, since it involves writing a
+      program in C or \Cpp .  Does not support Array data types.
+ 
+|}
+&lt;center&gt;
+    Advantages and Disadvantages of the Two Flexible DODS Servers
+&lt;/center&gt;
+
+It is possible that none of these options is the right one for you, in
+which case you can use the OPeNDAP DAP library to craft a server of your
+very own.  The library is available in both C++ and Java.
+If you choose this route, contact OPeNDAP; we may be
+able to direct you to someone who has already done something like
+it.  The [[http://docs.opendap.org/index.php/ProgrammerGuide &lt;cite&gt;Programmer Guide&lt;/cite&gt;]] contains useful information about the DAP library,
+including instructions on how to construct servers and clients.</text>
+      <sha1>2br7t4ykuh30al011cq334dcdull9qy</sha1>
+    </revision>
+  </page>
+</mediawiki>

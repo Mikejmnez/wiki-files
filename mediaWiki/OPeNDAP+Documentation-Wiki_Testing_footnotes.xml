@@ -1,0 +1,57 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/footnotes</title>
+    <ns>0</ns>
+    <id>295</id>
+    <revision>
+      <id>1951</id>
+      <timestamp>2008-02-06T13:38:20Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>New page: ==Footnotes==   (1)     The Data Access Protocol, version 2, was originally developed for the DODS project, then used by NVODS. In 2000 the principals from the DODS project formed OPeNDAP,...</comment>
+      <origin>1951</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="876" sha1="ajewxdp5poks5ehqivej8euzehy5nu3" xml:space="preserve">==Footnotes==
+
+ (1)
+    The Data Access Protocol, version 2, was originally developed for the DODS project, then used by NVODS. In 2000 the principals from the DODS project formed OPeNDAP, Inc., a not-for-profit corporation, tocontinue the development of the protocol and the associated software. 
+ (2)
+    The request comes via http. The DAP2 server is, in reality, an ordinary http server, equipped with a set of CGI programs to process requests from DAP2 clients. See Section  and The OPeNDAP User Guide for more information. 
+ (3)
+    A serial date, with a year and the day of the year, expressed in an ordinal number from 1 to 365 or 366. 
+ (4)
+    There is a Solaris utility called newform, supplied with the operating system. If you use a Solaris machine, you may want to change the name of the FreeForm ND tool to newfor or something similar, to avoid name collisions.</text>
+      <sha1>ajewxdp5poks5ehqivej8euzehy5nu3</sha1>
+    </revision>
+  </page>
+</mediawiki>

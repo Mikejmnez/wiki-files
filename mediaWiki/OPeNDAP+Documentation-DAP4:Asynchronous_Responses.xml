@@ -1,0 +1,137 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4: Asynchronous Responses</title>
+    <ns>0</ns>
+    <id>794</id>
+    <revision>
+      <id>8042</id>
+      <parentid>8041</parentid>
+      <timestamp>2012-04-26T00:18:05Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Proposal */</comment>
+      <origin>8042</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="8100" sha1="hl8f5c8r5vhb6wv17xpgsaxc44dzwus" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+[[OPULS_Development| &lt;&lt; Back to OPULS Development]]
+
+== Background ==
+
+Sometimes servers are unable to respond to a clients request for (meta)data in a timely manner (timely could be defined as the maximum time that a user will normally wait or the time it takes for the tcp connection to time out, or something else). The primary reasons that we imagine are data centers that hold data in near-line storage, and servers that are going to perform a complex computation on large dataset in order to build the response. We need a mechanism through which we can tell the client that the response will be delayed, and to return to particular place after a particular time (or during a particular period)  to retrieve the requested information. The key thing is that the server can figure it out, but clients don't get much choice.
+
+== Problems Addressed ==
+
+Provides a mechanism through which the server may instruct the client that the response will be delayed, and how to access the response when it becomes available.
+
+== Proposal ==
+
+The "story" goes something like this:
+* Server gets a Request 
+* Something in the server evaluates the request and determines if it has to be an async response. A pseudo-code example might look like:
+
+&lt;font size="2"&gt;
+&lt;source lang="java"&gt;
+ if ( ( fileSize&gt;ITS_A_NEAR_LINE_FILE  &amp;&amp;  serverProcessing==REPROJECT_THE_WORLD) || 
+       fileOnTape)
+      isAsyncResponse = true;
+&lt;/source&gt;
+&lt;/font&gt;
+: Whatever test makes sense…  
+
+* If the response is going to be asynchronous, the server returns a specialization of the Dataset response like this:
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;Dataset xml:base="balahblahblah"&gt;
+   &lt;async 
+       xlink:href="http://host.server.gov/opendap/tmp/file.h5.xml" &gt;
+       &lt;accessDelay&gt;60000&lt;/accessDelay&gt;
+       &lt;accessDuration&gt;3600&lt;/accessDuration&gt;
+   &lt;/async&gt;
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+: And similarly for the Data response:
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;Dataset xml:base="balahblahblah"&gt;
+   &lt;async 
+       xlink:href="http://host.server.gov/opendap/tmp/file.h5.dap" &gt;
+       &lt;beginAccess&gt;2012-11-05T13:15:30Z&lt;/beginAccess&gt;
+       &lt;endAccess&gt;2012-11-05T14:15:30Z&lt;/endAccess&gt;
+   &lt;/async&gt;
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+* '''Notes:'''
+**&lt;strike&gt; The Dublin Core specification supports both simple dates and ranges, so the &lt;dc:date/&gt; element can be use to indicate when the response might/will be available as well as when an ephemeral response might be removed.&lt;/strike&gt;The beginAccess element specifies when the data set will be available for access, and the endAccess specifies when the data set may no longer be available. Both of these times are in ISO 8601 date format.
+** In the DAP4 Dataset and Data responses returned from the &lt;font size="2"&gt;&lt;code&gt;xlink:href&lt;/code&gt;&lt;/font&gt; in these examples, the value of &lt;font size="2"&gt;&lt;code&gt;xml:base&lt;/code&gt;&lt;/font&gt;  should be the same as the original request: &lt;font size="2"&gt;&lt;code&gt;xml:base="balahblahblah"&lt;/code&gt;&lt;/font&gt;. In other words, the value of the &lt;font size="2"&gt;&lt;code&gt;xml:base&lt;/code&gt;&lt;/font&gt; should be the URL that references the original dataset and not the URL to the response object. 
+** The staged dataset must maintain the same authentication and authorization controls of the original data source.
+
+=== Regarding the use of HTTP headers ===
+
+When the transport is HTTP the server should return a 202 ''Accepted'' (http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3) response with a ''Location:'' header pointing to the new URL (also stored as the value of the &lt;font size="2"&gt;&lt;code&gt;xlink:href&lt;/code&gt; attribute of the &lt;font size="2"&gt;&lt;code&gt;&lt;async /&gt;&lt;/code&gt; response element. ). Accessing the new URL should return either a '''404 Not Found''' if the response is not available; '''200 OK''' if it is.&lt;strike&gt;; and '''410 Gone''' if it has been generated and deleted after some time.&lt;/strike&gt; 
+
+(This scheme for applying HTTP status and HTTP headers to asynchronous responses was originally suggested by Roberto De Almeida (roberto at dealmeida.net), and has been modified to suit or needs.)
+
+== Discussion ==
+
+[[User:Jimg|Jimg]] 09:56, 4 April 2012 (PDT) Random thoughts about the 410-Gone response:
+* How will servers know that a purged 'ephemeral' response is 'Gone?' To implement this, the server will need to store some information about each response for a while beyond the response's lifetime. That's doable, but I think to keep server implementors from feeling like they should store information about each ephemeral response forever, we can say that the 410 response is only supported for a day (to be arbitrary) and after the ephemeral response is gone for more than 24 hours, trying to access it returns a 404. Servers can stretch that time out longer if they want to, but the purged asynchronous response has to return 410 for at least 24 hours. 
+* I can see the allure of the 410 response, but I wonder how many clients will really make use of it and, if they do, how? The big benefit seems to be that a client can realized that either it or the person using it has missed the window of opportunity for the response. Contrast this with using 404, the 404 just tells you it's not there - not that it was but now it's gone. So a smart client can say, you need to make the request again. 
+* As an implementation note, this 404, 200, 410 behavior could be coded using a lookup scheme. If the URL references something that's there, return it (200), if not look in a data store of some sort and if a 'gone' record is present, return 410, else return 404. Not too hard, but is does mean that the server can't just write the response to a file and let Apache/Tomcat just serve the file. That's what I'd want as a server-writer. That way there's no web service to hassle with, no data store to maintain and I can let cron purge my 'cache' of asynchronous responses every hour using whatever Perl/Python/sh program I or the data provider want.
+* I think simplicity argues for just using the 404 in both cases and betting that a smart client will use the time ranges in the response.
+
+[[User:Ndp|ndp]] 08:42, 5 April 2012 (PDT) 
+: I agree with James, the 410 is a tough response to code, although I could see implementing a server to use a file based semaphore: When the file is purged from the cache the server "touches" a file of the same name and a prepended  ". Then if a client asks for "x" and the server finds ".x"  then the client gets a 410.  If the server stages again "x" it just removes ".x" once "x" is staged. But oh god - the concurrency nightmare that this creates. Like I said: I agree with James, the 410 response might be unreasonably tough to code.
+
+[[User:Ndp|ndp]] 19:40, 18 April 2012 (PDT)
+: I worked with the response prototype and discovered a few things: 
+:# Dublin Core date ranges (as mentioned above) are problematic for clients because they have to be parsed. In other words instead of a single date the DC date range is expressed as date1/date2. For example: &lt;font size="2"&gt;&lt;code&gt;&lt;dc:date&gt;2007-03-01T13:00:00Z/2008-05-11T15:30:00Z&lt;/dc:date&gt;&lt;/code&gt;&lt;/font&gt; This is a monumental pain in the a** for XSLT and only moderately less of a drag for javascript.
+:# The ISO 8601 date format is not parseable in javascript land with out the use of special functions. That's kind of a drag!
+:# Then there's always clock synchronization problems between the server and the client, timezones, etc.
+: These things lead me to believe that what we might want to consider dumping the whole date thing and instead send a value in say, seconds, that must elapse before the response is available, and another value in say, seconds, that defines the duration of the availability. So for a dataset that will become available in 10 minutes and that will remain available for 24 hours after that:
+&lt;font size="2"&gt;
+&lt;source lang="xml"&gt;
+&lt;Dataset xml:base="http://host.server.gov/opendap/data/hdf/file.h5"&gt;
+   &lt;async xlink:href="http://host.server.gov/opendap/tmp/file.h5.dap" &gt;
+       &lt;beginAccess&gt;600&lt;/beginAccess&gt;
+       &lt;accessDuration&gt;86400&lt;/accessDuration&gt;
+   &lt;/async&gt;
+&lt;/Dataset&gt;
+&lt;/source&gt;
+&lt;/font&gt;</text>
+      <sha1>hl8f5c8r5vhb6wv17xpgsaxc44dzwus</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,109 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>HAI Use Case: Turn on/off OLFS debugging and view/save/stream the output</title>
+    <ns>0</ns>
+    <id>604</id>
+    <revision>
+      <id>6001</id>
+      <parentid>5984</parentid>
+      <timestamp>2010-11-09T01:11:57Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>6001</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2781" sha1="kh1f77svbh3gzgcf7t49h0zhct1o4ik" xml:space="preserve">[[Category:HAI]]
+'''Point Of Contact:''' ''[[User:ndp | Nathan Potter]]''
+
+== Description ==
+Allows the Administrator to control the OLFS logging framework.
+ 
+== Goal ==
+Improving Admin problem solving by allowing the Admin to easily change debugging controls for the OLFs  and to capture to a file or stream the debugging output of the OLFS.
+
+== Summary == 
+The Admin logs into the HAI and uses the HAI interface to control and direct the output of the OLFS logging framework.
+
+== Actors ==
+* Administrator
+* HAI
+* Hyrax (OLFS &amp; BES(s))
+
+== Preconditions ==
+The Administrator has an authentication privileges for an HAI.
+
+== Triggers ==
+The Admin wants to view and control the OLFS logging output.
+
+== Basic Flow ==
+# [[HAI_Use_Case:_Administrator_Logs_into_the_Hyrax_Admin_Interface  | The Admin logs into the HAI]]
+# The Admin uses the HAI interface and chooses to control the OLFS logging activity.
+# In the returned page (or portion thereof) the HAI provides an interface through which the Admin can:
+## Control the logging levels of the OLFS logging framework. 
+## Control the level of logging output for different package/class components of the OLFS
+## Save the loging output to a local file.
+## Stream the logging output to the HAI interface.
+## View existing log files for the OLFS.
+
+== Alternate Flow ==
+&lt;font size="-2" color="green"&gt;''Here we give any alternate flows that might occur. May include flows that involve error conditions. Or flows that fall outside of the basic flow.''&lt;/font&gt;
+
+== Post Conditions ==
+&lt;font size="-2" color="green"&gt;''Here we give any conditions that will be true of the state of the system after the use case has been completed.''&lt;/font&gt;
+
+== Activity Diagram ==
+&lt;font size="-2" color="green"&gt;''Here a diagram is given to show the flow of events that surrounds the use case.''&lt;/font&gt;
+
+== Notes ==
+&lt;font size="-2" color="green"&gt;''There is always some piece of information that is required that has no other place to go. This is the place for that information.''&lt;/font&gt;
+
+== Resources ==
+&lt;font size="-2" color="green"&gt;''In order to support the capabilities described in this Use Case, a set of resources must be available and/or configured.  These resources include data and services, and the systems that offer them.  This section will call out examples of these resources.''&lt;/font&gt;
+
+
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|&lt;font size="-2" color="green"&gt;''name''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Organization that owns/ manages resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Short description of the resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''How often the resource is available''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Name of system which provides resource''&lt;/font&gt;
+|}</text>
+      <sha1>kh1f77svbh3gzgcf7t49h0zhct1o4ik</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,91 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/ServerInstallationGuide8</title>
+    <ns>0</ns>
+    <id>206</id>
+    <revision>
+      <id>1631</id>
+      <parentid>1630</parentid>
+      <timestamp>2008-01-04T13:45:04Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* Building OPeNDAP Data Handler */</comment>
+      <origin>1631</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2235" sha1="eneotpe3jrwsbl7fikag6jfagbb3iai" xml:space="preserve">=Building OPeNDAP Data Handler=
+
+
+Though several different handlers are included in the OPeNDAP
+software, some users may wish to write their own data handlers. The
+architecture of the &lt;font color='green'&gt;httpd&lt;/font&gt; server and the OPeNDAP software make
+this a relatively simple task.
+
+A user may wish to write his or her own data handler for any or all of
+the following reasons:
+
+
+*The data to be served may be stored in a format not compatible   with one of the existing handlers.
+*The data may be arranged in a fashion that allows a user to   optimize the access of those data by rewriting one of the handlers.
+*The user may wish to provide ancillary data to clients not   anticipated by the writers of the servers available.
+
+The design of the OPeNDAP libdap library makes the task a relatively
+simple one for a programmer already familiar with the data access API
+to be used. The library provides a complete set of classes with most
+of the hard parts done already: evaluation of constraint expressions,
+network connections, and so on. You can create working sub-classes
+simply by adding the read methods which read data from the local disk.
+
+Also, though the handlers provided with the server are written in C++,
+they may be written in any language from which the OPeNDAP libraries
+may be called. There is also a Java version of the class library.
+
+Once it is invoked, a CGI program scoops up whatever input is going to the
+standard input stream of the Web server (&lt;font color='green'&gt;httpd&lt;/font&gt;) that invoked it.
+Further, the standard output of the CGI is sent directly back to the
+requesting client. This means that the CGI program itself need only read its
+input from standard input and write its output to standard output.
+
+
+
+Most of the task of writing a server, then, consists of reading the
+data with the data access API and loading it into the libdap classes.
+Methods defined for each class make it simple to output the data so
+that it may be sent back to the requesting client.
+
+Refer to  [http://docs.opendap.org/index.php/ProgrammerGuide&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;] for specific information about the classes and the
+facilities of the libdap software, and instructions about how to write
+a new server.</text>
+      <sha1>eneotpe3jrwsbl7fikag6jfagbb3iai</sha1>
+    </revision>
+  </page>
+</mediawiki>

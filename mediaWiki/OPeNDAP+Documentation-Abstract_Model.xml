@@ -1,0 +1,71 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Abstract Model</title>
+    <ns>0</ns>
+    <id>318</id>
+    <revision>
+      <id>2254</id>
+      <parentid>2253</parentid>
+      <timestamp>2008-06-24T23:19:58Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>2254</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="1804" sha1="sl14yiq7c9ld14mp5rz6q2fytd1u035" xml:space="preserve">I'd like to use this topic to discuss the abstract data model, as suggested by John Caron. I'll try to get some UML here for what I think the ADM should be. 
+
+John (and anyone else), can you add UML for other data models like netCDF and HDF5? What I'm concerned about is making sure that our model has a way to represent the concepts present in HDF4/5 and netCDF reasonably well. I'd still like to pursue the goal of having HDF4 and HDF5 client libraries... James Gallagher - 03 Oct 2003
+
+== DAP's ADM ==
+
+[[Image:DAP_4_ADM.jpg‎|frame|The DAP 4 Abstract Data Model]]
+
+Notes:
+* I used aggregation for Value because it seems those have a lifetime that is, in the abstract sense, different from the lifetime of a variable in the DAP. I used 0..* because there are times when a variable has no value.
+* I wonder about making Attribute use Type...
+* I'm not totally comfortable with UML, so make any changes you want. I used Poseidon to draw the figures; I can put the stuff in CVS if you'd like.
+
+== NetCDF Data Models ==
+
+Ok, Im attaching a recent UML diagram of both the current model and a draft of a new model as we merge/munge/mangle with HDF5. John Caron - 03 Oct 2003
+
+[[Image:Netcdf1.jpg|frame|NetCDF 3 current model]]
+
+[[Image:Netcdf4.jpg|frame|Draft "NetCDF-4" model (2003)]]
+
+== Sequences and Selection ==
+
+I see sequences as a nice addition that will allow variable length arrays to be efficiently represented. Allowing them to be selected in all cases seems to me to be problematic. If I have a large sequence, i cannot efficiently implement the equivalent of a SQL WHERE clause, unless i have built an index. It seems to me that this ability is an additional capability similar to a function, which should only be allowable if its advertised in the capability object. John Caron - 16 Oct 2003</text>
+      <sha1>sl14yiq7c9ld14mp5rz6q2fytd1u035</sha1>
+    </revision>
+  </page>
+</mediawiki>

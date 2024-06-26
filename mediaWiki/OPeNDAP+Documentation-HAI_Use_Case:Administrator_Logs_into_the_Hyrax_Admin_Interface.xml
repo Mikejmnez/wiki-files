@@ -1,0 +1,116 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>HAI Use Case: Administrator Logs into the Hyrax Admin Interface</title>
+    <ns>0</ns>
+    <id>599</id>
+    <revision>
+      <id>5977</id>
+      <parentid>5951</parentid>
+      <timestamp>2010-11-08T22:01:23Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>5977</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2910" sha1="3rg5lyxx2a1cxjf4vkuse1x3qmvuhzy" xml:space="preserve">[[Category:HAI]]
+'''Point Of Contact:''' ''[[User:ndp | Nathan Potter]]''
+
+== Description ==
+The Administrator logs into the Hyrax Admin Interface.
+
+== Goal ==
+
+Provide a secure login and session for Administrators to operate the Hyrax Admin Interface.
+
+== Summary == 
+
+The Administrator uses a web browser to access the URL for the Hyrax Admin Interface. When accessed the server returns a secure authentication challenge. Once the Administrator has provided correct authentication  credentials all subsequent interactions with the HAI are secure (encrypted) until the session times out or the Administrator logs off.
+
+== Actors ==
+
+* Administrator
+
+== Preconditions ==
+The Administrator has access too, and authentication credentials for, a running Hyrax server.
+
+== Triggers ==
+One or more of:
+* Hyrax needs re configuration.
+* Hyrax needs to be restarted.
+* The Administrator needs/wants to view the Hyrax logs.
+
+== Basic Flow ==
+# The Administrator points their browser at the URL for their HAI.
+# The HAI returns a secure page containing an authentication challenge.
+# The Administrator enters their authentication credentials.
+# The HAI Administrators credentials are recognized.
+# From this point on all pages sent from the HAI to the Administrator are secured through encryption (https??)
+# The HAI returns it's home page.
+
+== Alternate Flow ==
+# The Administrator points their browser at the URL for their HAI.
+# The HAI returns a secure page containing an authentication challenge.
+# The Administrator enters their authentication credentials.
+# The HAI Administrators credentials are NOT recognized.
+# The HAI returns it's an authentication failure page.
+
+== Post Conditions ==
+
+# The Administrator has an active session with the HAI which provides secure pages for controlling a Hyrax instance.
+
+== Activity Diagram ==
+&lt;font size="-2" color="green"&gt;''Here a diagram is given to show the flow of events that surrounds the use case.''&lt;/font&gt;
+
+== Notes ==
+&lt;font size="-2" color="green"&gt;''There is always some piece of information that is required that has no other place to go. This is the place for that information.''&lt;/font&gt;
+
+== Resources ==
+&lt;font size="-2" color="green"&gt;''In order to support the capabilities described in this Use Case, a set of resources must be available and/or configured.  These resources include data and services, and the systems that offer them.  This section will call out examples of these resources.''&lt;/font&gt;
+
+
+{| cellspacing="0" border="1"
+|Resource
+|Owner
+|Description
+|Availability
+|Source System
+|-
+|&lt;font size="-2" color="green"&gt;''name''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Organization that owns/ manages resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Short description of the resource''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''How often the resource is available''&lt;/font&gt;
+|&lt;font size="-2" color="green"&gt;''Name of system which provides resource''&lt;/font&gt;
+|}</text>
+      <sha1>3rg5lyxx2a1cxjf4vkuse1x3qmvuhzy</sha1>
+    </revision>
+  </page>
+</mediawiki>

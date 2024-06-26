@@ -1,0 +1,325 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/OPeNDAPUserGuideA</title>
+    <ns>0</ns>
+    <id>281</id>
+    <revision>
+      <id>2193</id>
+      <parentid>2192</parentid>
+      <timestamp>2008-04-21T22:51:52Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <comment>/* Installing the OPeNDAP Libraries */</comment>
+      <origin>2193</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="13523" sha1="jymbwwolcshmgpq6lyrjrk0ivb018be" xml:space="preserve">=Installing the OPeNDAP Software=
+
+
+The current version of the Distributed Oceanographic Data System core
+software is 3.2.  Note that this number applies only to the
+core software.  The individual servers, clients, and client libraries
+have their own version numbers.
+
+Full information about the latest versions of the OPeNDAP software is
+available from the OPeNDAP web site: [http://www.opendap.org  OPeNDAP Home Page].
+
+This version of OPeNDAP uses CGI standard 1.1.1.
+
+
+==Acquiring the OPeNDAP Software==
+
+
+====The OPeNDAP Web Site====
+
+We recommend that you use the [http://www.opendap.org  OPeNDAP Home Page] to obtain the most current version of the software.  The "Software" page includes a form for
+selecting OPeNDAP components.  Completing the form automatically creates
+a custom compressed archive of all the software components you
+selected, which you can then download to your own machine.
+
+Whenever possible, you should use the provided binary software rather
+than trying to compile and link OPeNDAP yourself.  Compiling will work,
+but the OPeNDAP software is large, and it takes a long time to compile.
+
+Don't forget to select the core software as well as the specific data
+access API or server you need.  For an OPeNDAP client, you will also need
+&lt;font color='green'&gt;Tcl/Tk&lt;/font&gt; and &lt;font color='green'&gt;gzip&lt;/font&gt;.
+
+====By Anonymous FTP====
+
+The OPeNDAP software may be down-loaded by anonymous &lt;font color='green'&gt;ftp&lt;/font&gt; from the [http://opendap.org/pub/dods  &lt;cite&gt;OPeNDAP ftp site&lt;/cite&gt;].
+
+Don't forget to down-load the core software &lt;font color='green'&gt;tar&lt;/font&gt; file as well as the &lt;font color='green'&gt;tar&lt;/font&gt; file corresponding to whatever data access API you need.
+
+
+The OPeNDAP project provides a small number of archive files containing
+linked libraries and executables for some computing platforms.  You
+should use these files whenever possible, to avoid the hassle of
+compiling the software yourself.  The OPeNDAP software is a substantial
+chunk of code, and it takes a long time to compile and link.
+
+==Installing the Software==
+
+
+To install the OPeNDAP software, choose a directory to be the OPeNDAP root
+directory.  This directory must be identified with the
+&lt;font color='green'&gt;DODS_ROOT&lt;/font&gt; environment variable for the OPeNDAP software to
+run.
+
+First, set the working directory to the &lt;font color='green'&gt;DODS_ROOT&lt;/font&gt; directory.For
+example,
+
+&lt;pre&gt;
+export DODS_ROOT=/usr/local/DODS
+cd $DODS_ROOT
+&lt;/pre&gt;
+
+
+Next, expand the archives with &lt;font color='green'&gt;gzip&lt;/font&gt; and unpack the expanded
+files with &lt;font color='green'&gt;tar&lt;/font&gt;:
+
+&lt;pre&gt;
+gzip -d DODS-88772.tar.gz
+tar -xvf DODS-88772.tar
+&lt;/pre&gt;
+
+If you got the files via anonymous ftp, you would have to repeat the
+process for each down-loaded archive file, specifying the name of each
+component file.  For example:
+
+&lt;pre&gt;
+gzip -d DODS-core-2.19.tar.gz
+tar -xvf DODS-core-2.19.tar
+&lt;/pre&gt;
+
+====Building the OPeNDAP Core====
+
+Unpacking the core software archive will create a configure script in
+the &lt;font color='green'&gt;DODS_ROOT&lt;/font&gt; directory.  The core software may then be built
+with:
+
+&lt;pre&gt;
+cd $DODS_ROOT
+./configure
+make
+&lt;/pre&gt;
+
+
+ 
+If you downloaded binary files, you can skip the "building" steps.
+
+====Building an OPeNDAP Client or Server====
+
+Unpacking the client library archives in the &lt;font color='green'&gt;DODS_ROOT&lt;/font&gt;
+directory will produce directories such as &lt;font color='green'&gt;jg-dods&lt;/font&gt; for the JGOFS
+software and &lt;font color='green'&gt;nc-dods&lt;/font&gt; for the netCDF software.  These will appear
+in the &lt;font color='green'&gt;src&lt;/font&gt; subdirectory under &lt;font color='green'&gt;DODS_ROOT&lt;/font&gt;.  Each of these
+directories will also be equipped with a configure script to create a
+makefile, so the build procedure for them is the same as for the core
+software, for example:
+
+&lt;pre&gt;
+cd $DODS_ROOT/src/nc-dods
+./configure
+make
+&lt;/pre&gt;
+
+
+====Getting the Software Used by DODS====
+
+Several pieces of software are required to run OPeNDAP.  These are all
+free software, and are descibed in [[Wiki_Testing/OPeNDAPUserGuideA| Appendix]].
+
+===Installing the OPeNDAP Libraries===
+
+In order to link and run client programs, the only OPeNDAP software that
+must be installed are the OPeNDAP libraries. The following libraries,
+described in ([http://www &lt;cite&gt; opd-client,link&lt;/cite&gt;]) must be installed in the
+&lt;font color='green'&gt;/usr/lib&lt;/font&gt; directory, or somewhere else where the linker will find them. Simply copy them into that directory from the OPeNDAP distribution.
+
+*&lt;font color='green'&gt;libdap++.a&lt;/font&gt;
+*The OPeNDAP version of the API your software uses.
+
+==The OPeNDAP Client Initialization File (&lt;font color='green'&gt;.dodsrc&lt;/font&gt;)==
+
+The following section refers only to OPeNDAP clients from release 3.2 and
+after.
+
+When an OPeNDAP client starts up, it checks to
+see whether the user has an initialization file available to control
+the setting of a number of parameters having to do with caching, proxy
+servers, and other http issues.  If this file is not found, one is
+created in the user's home directory, using default
+values.[[Wiki_Testing/OPeNDAPUserGuideFootnotes|(24)]]
+
+The client initialization file is usually called &lt;font color='green'&gt;.dodsrc&lt;/font&gt;, and is usually located in the user's home directory.  You can change this by creating an environment variable called &lt;font color='green'&gt;DODS_CONF&lt;/font&gt; and setting it to the full pathname of the configuration file.
+
+Here is a sample configuration file:
+
+&lt;pre&gt;
+# OPeNDAP client configuration file. See the OPeNDAP
+# users guide for information.
+USE_CACHE=0
+# Cache and object size are given in megabytes (20 ==&gt; 20Mb).
+MAX_CACHE_SIZE=20
+MAX_CACHED_OBJ=5
+IGNORE_EXPIRES=0
+CACHE_ROOT=/home/jimg/.dods_cache/
+DEFAULT_EXPIRES=86400
+ALWAYS_VALIDATE=0
+
+# Request servers compress responses if possible?
+# 1 (yes) or 0 (false).
+DEFLATE=0
+
+# Should SSL certificates and hosts be validated? SSL
+# will only work with signed certificates.
+VALIDATE_SSL=1
+
+# Proxy configuration (optional parts in []s):
+# You may also use the 'http_proxy' environment variable.
+# A value in this file will override that env variable.
+# PROXY_SERVER=&lt;http://[username:password@]host[:port]&gt;
+# NO_PROXY_FOR=&lt;host|domain&gt;
+PROXY_SERVER=http://username:password@squid.proxy.org:3128/
+NO_PROXY_FOR=localhost
+
+# AIS_DATABASE=&lt;file or url&gt;
+&lt;/pre&gt;
+
+====Comments====
+
+Starting a line with a &lt;font color='green'&gt;#&lt;/font&gt; makes that line a comment.
+
+====Caching====
+
+The first seven parameters control caching. The OPeNDAP client
+can store data you've requested on your local computer.  If you repeat
+a request, the data can be retrieved from this local cache, saving the
+expense of a network connection.  Most web browsers operate the same
+way.  You can control the caching behavior with the following
+configuration file parameters.
+
+&lt;blockquote&gt;
+; &lt;font color='green'&gt;USE_CACHE&lt;/font&gt; : 1 turns on caching and 0 turns it off.
+; &lt;font color='green'&gt;MAX_CACHE_SIZE&lt;/font&gt; : The value of &lt;font color='green'&gt;MAX_CACHE_SIZE&lt;/font&gt; sets the maximum size of the cache in megabytes.  Once the cache reaches this size, caching more objects will cause cache garbage collection. OPeNDAP will first purge the cache of any stale entries and then remove remaining entries starting with those that have the lowest hit count. Garbage collection stops when 90% purged.
+; &lt;font color='green'&gt;MAX_CACHED_OBJ&lt;/font&gt; : This parameter sets the maximum size of any individual object in the cache in megabytes. Objects received from a server larger than this value will not be cached even if there's room for them without purging other objects.
+&lt;/blockquote&gt;
+
+Many web documents, and OPeNDAP data, are delivered with an expiration
+date in their header information.  Generally, this is done for
+time-sensitive information that may not be valid after the expiration
+date.  You can control the behavior of the OPeNDAP client with respect to
+expiration dates with two configuration file parameters.
+
+&lt;blockquote&gt;
+; &lt;font color='green'&gt;IGNORE_EXPIRES&lt;/font&gt; : If the value of this parameter is 1 (one), then expiration dates will be ignored, and the caching behavior will be ruled by the &lt;font color='green'&gt;DEFAULT_EXPIRES&lt;/font&gt; parameter.
+; &lt;font color='green'&gt;CACHE_ROOT&lt;/font&gt; : This parameter contains the pathname to the cache's top directory.  If two or more users want to share a cache, then they must both have read and write permissions to the cache root. NB: Do not share caches unless you're using libdap version 3.8.1 or newer.
+; &lt;font color='green'&gt;DEFAULT_EXPIRES&lt;/font&gt; : Any data received without an expiration time will expire in the number of seconds given by this parameter. If &lt;font color='green'&gt;IGNORE_EXPIRES&lt;/font&gt; is zero, this will apply to all data, whether or not it comes with an expiration date.  The value is given in seconds.  The configuration in the example is set for 24 hours.
+; &lt;font color='green'&gt;ALWAYS_VALIDATE&lt;/font&gt; : Entries in a cache might be stale even though the default expiration time has not elapsed and some servers might not provide expiration dates for all of their responses. Setting this to '1' forces all cache entries to be validated before the client will use them. This makes for slower response times than just assuming the cached data is valid, but it is faster than fetching new data for every request.
+&lt;/blockquote&gt;
+
+====Proxy Servers====
+
+An OPeNDAP client can negotiate proxy servers, with help from directions
+derived from its configuration file.  There are three parameters that
+control proxy behavior.  There can be more than one of each of these
+declarations.
+
+&lt;blockquote&gt;
+; &lt;font color='green'&gt;PROXY_SERVER&lt;/font&gt; : This identifies a proxy server to use for all OPeNDAP requests, except for requests specifically modified by the other two proxy behavior directives. The format is:
+&lt;pre&gt;
+PROXY_SERVER=http://[username:password@]&lt;host&gt;[:port]
+&lt;/pre&gt;
+The username, password and port are all optional elements. If no username and password is given the client will assume that none is needed. If the port is not given, the default value of 80 will be used. This syntax is new for clients using libdap 3.8.1 and newer; the old syntax is still supported but was error-prone and should not be used in new &lt;font color='green'&gt;.dodsrc&lt;/font&gt; files.
+
+; &lt;font color='green'&gt;NO_PROXY_FOR&lt;/font&gt; : Use this parameter to say that access to a certain host should never go through a proxy.
+&lt;/blockquote&gt;
+====Compression====
+
+Many OPeNDAP servers support compression of the returned data.  This can save network bandwidth, and transmission time.  You can tell your client to ask the server for compressed data by including a line in your &lt;font color='green'&gt;.dodsrc&lt;/font&gt; file like this:
+
+&lt;pre&gt;
+DEFLATE=1
+&lt;/pre&gt;
+
+Using a value of zero will make the client request only uncompressed data. If the directive is omitted, the default value is zero.
+
+====SSL Validation====
+
+SSL Validation can be turned off using the &lt;font color='green'&gt;VALIDATE_SSL&lt;/font&gt; parameter. if set to '1' all SLL hosts and certificates will be validated. The certificates must be signed for this to work. The default is on. Set to '0' to turn off.
+
+=Software you will need for OPeNDAP's Software=
+
+Most modern computers has all the basics in place. However, in some rare cases you might be stuck without some tools that you'll need to unpack our software. If that's the case here's what you'll need:
+
+&lt;blockquote&gt;
+; gzip : This is the GNU compression and de-compression program. You will need to install it before you can unpack any of the other software described here.
+; tar : This is used to bundle many files together into a single package and it is how we (and many others) package source code.
+&lt;/blockquote&gt;
+
+Most of the software you need for OPeNDAP is avaliable from the GNU
+archives.  Refer to [http://www.gnu.org &lt;cite&gt;http://www.gnu.org&lt;/cite&gt;] for instructions.  Look at
+[http://www.gnu.org/order/ftp.html &lt;cite&gt;http://www.gnu.org/order/ftp.html&lt;/cite&gt;]for a list of mirrors of that archive.  Use the mirror closest to you, the transmission will be faster.
+
+Follow the instructions to install each of the following software packages.  Typically, you would install a package called &lt;font color='green'&gt;foo&lt;/font&gt; as follows:
+
+&lt;pre&gt;
+gzip -dc foo.tar.gz | tar xvf -
+cd foo
+./configure
+make
+make install
+&lt;/pre&gt;
+
+This is simply a guide, of course, and the installation instructions
+for each software package should be followed carefully.
+
+==Building OPeNDAP's Software Using the Source Code==
+
+If you need to build the OPeNDAP software, or link it to existing libraries, you will need the following GNU software. Refer to [http://www.gnu.org &lt;cite&gt;http://www.gnu.org&lt;/cite&gt;] forinstructions.  Look at [http://www.gnu.org/order/ftp.html &lt;cite&gt;http://www.gnu.org/order/ftp.html &lt;/cite&gt;]for a list of mirrors of that archive.  Use the mirror closest to you, the transmission will be faster.
+
+&lt;blockquote&gt;
+; GNU C/C++ Compiler : OPeNDAP needs &lt;font color='green'&gt;g++&lt;/font&gt;, the GNU C++ compiler to compile.
+; binutils : The GNU linker is part of this package.
+; libstdc++ : The standard C++ library. Generally part of the C++ compiler so you rarely ever need to get this on its own.
+; GNU Make : GNU Make is not essential, but will make like easier.
+; flex : The GNU lexical-analyzer generator
+; bison : The GNU parser generator.
+; CppUnit : Optional; You'll need this to run the unit tests included with our software
+; DejaGNU : Optional; Needed to run the regression tests included with our software
+; Doxygen : Optional; Needed to build the documentation
+&lt;/blockquote&gt;</text>
+      <sha1>jymbwwolcshmgpq6lyrjrk0ivb018be</sha1>
+    </revision>
+  </page>
+</mediawiki>

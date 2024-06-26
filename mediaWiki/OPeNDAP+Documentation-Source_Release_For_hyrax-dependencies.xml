@@ -1,0 +1,107 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Source Release For hyrax-dependencies</title>
+    <ns>0</ns>
+    <id>1029</id>
+    <revision>
+      <id>13525</id>
+      <parentid>13357</parentid>
+      <timestamp>2024-01-24T23:25:36Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <minor/>
+      <comment>/* Tag The Release */</comment>
+      <origin>13525</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3547" sha1="rpmy8pxs9yaq78t91j9vpx5kcgvfzja" xml:space="preserve">
+This task is to ensure that the ''hyrax-dependencies'' project is up to date and tar balls on www.o.o. are current.
+
+== Update ChangeLog, NEW, and release version ==
+=== Update the '''ChangeLog''' file. ===
+Use the script &lt;tt&gt;gitlog-to-changelog&lt;/tt&gt; (which can be found with Google) to update the '''ChangeLog''' file by running it using the &lt;tt&gt;--since="&lt;date&gt;"&lt;/tt&gt; option with a date one day later in time than the newest entry in the current ChangeLog. 
+: '''gitlog-to-changelog --since="1970-01-01"''' (''Specify a date one day later than the one at the top of ChangeLog'')
+Save the result to a temp file and combine the two files: &lt;br/&gt;
+: '''cat tmp ChangeLog &gt; ChangeLog.tmp; mv ChangeLog.tmp ChangeLog'''
+If you're making the first ChangeLog entries, then you'll need to create the ChangeLog file first. &lt;br/&gt;
+'''Tip''': ''When you're making the commit log entries, use line breaks so ChangeLog will be readable. That is, use lines &lt; 80 characters long.''
+
+=== Update the Version Numbers ===
+If the review of the ChangeLog indicates that there have been changes since the last release, increment the version number in the Makefile. 
+
+Make sure any change in version number is also reflected in the NEWS file.
+
+=== Update the NEWS file ===
+To update the NEWS file, just read over the new ChangeLog entries and summarize.
+
+== Commit And Push ==
+# Save, commit, and push the changes to master branch.
+# Once the ''hyrax-dependencies'' CI build is finished
+## Trigger a CI build ''libdap4'' by pushing a small change to the ''libdap4'' master branch. When that CI build has completed successfully,
+## Trigger a CI build in the ''bes'' by pushing a small change to the ''bes'' master branch.
+# Wait for the successful completion. 
+#: If there's a problem with the CI builds at this point you may wish to follow the advice of '''''Herman Wouk''''': ''"When in danger or in doubt, run in circles, scream and shout"''
+
+== Publish and Sign ==
+
+All you need do is build the tar file using &lt;tt&gt;make dist&lt;/tt&gt;, sign it, and push (or pull) these files onto www.opendap.org/pub/source. 
+
+# Go to the '''hyrax-dependencies''' project on your local machine and run &lt;tt&gt;make dist&lt;/tt&gt; which will make a hyrax-dependencies-x.y.tar.gz file in the directory above the top level of the '''hyrax-dependencies''' project.
+# Use '''gpg''' to sign the tar bundle:
+#: &lt;tt&gt;gpg --detach-sign --local-user security@opendap.org ../hyrax-dependencies-x.y.tar&lt;/tt&gt;
+# Use '''sftp''' to push the signature file and the tar bundle to the /httpdocs/pub/source directory on www.opendap.org
+#: ''(Assuming your current working directory is the top of the '''hyrax-dependencies''' project)''
+#: &lt;tt&gt;sftp opendap@www.opendap.org&lt;/tt&gt;
+#: &lt;tt&gt;cd httpdocs/pub/source&lt;/tt&gt;
+#: &lt;tt&gt;put hyrax-dependencies-x.y.tar.sig&lt;/tt&gt;
+#: &lt;tt&gt;put hyrax-dependencies-x.y.tar&lt;/tt&gt;
+#: &lt;tt&gt;quit&lt;/tt&gt;
+# Check your work!
+## Download the source tar bundle and signature from www.opendap.org.
+## Verify the signature:
+##: &lt;tt&gt; gpg --verify hyrax-dependencies-x.y.tar.sig hyrax-dependencies-x.y.tar&lt;/tt&gt;
+
+== Tag The Release ==
+# Tag, and push the tag. 
+#* ''git tag -m "version-&lt;number&gt;" -a &lt;numbers&gt;'' 
+#* ''git push origin &lt;numbers&gt;''
+
+== Make The Release On GitHub ==
+# Goto the [https://github.com/OPENDAP/hyrax-dependencies/tags GitHub 'tags' page for ''hyrax-dependencies'']. 
+# Click the "Create release from tag" button
+# Enter a title for the release (looks at previous releases for examples)
+# Copy the most recent text from the NEWS file into the describe field
+# Click Save/Update this release.</text>
+      <sha1>rpmy8pxs9yaq78t91j9vpx5kcgvfzja</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,623 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/OPeNDAPUserGuide5-2</title>
+    <ns>0</ns>
+    <id>276</id>
+    <revision>
+      <id>1695</id>
+      <timestamp>2008-01-05T12:27:24Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>New page: ==Installing an OPeNDAP Server==   Most of the task of installing an OPeNDAP server consists of getting the required Web server installed and running. The intricacies of this task, and the...</comment>
+      <origin>1695</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="29591" sha1="bn11v7l2km5p1xesudzgc0b6tubtbnz" xml:space="preserve">==Installing an OPeNDAP Server==
+
+
+Most of the task of installing an OPeNDAP server consists of getting the
+required Web server installed and running. The intricacies of this
+task, and the variety of available Web servers make this task beyond
+the scope of this guide. Proceed with the following steps only after
+the Web server itself is operational.
+
+
+Installing the OPeNDAP CGI programs and the data to be served is a
+ relatively simple operation. After
+installing the OPeNDAP source tree and building the software, (See
+[[Wiki_Testing/OPeNDAPUserGuideAppendix|Appendix]]), the user need only copy the CGI program from the
+&lt;font color='green'&gt;etc&lt;/font&gt; directory in the OPeNDAP source tree (&lt;font color='green'&gt;&amp;#36;(DODS_ROOT)/etc&lt;/font&gt;)
+to one of the directories where the Web server expects to find its CGI
+programs. The exact name of this directory is an implementation detail
+of the Web server itself.
+
+The service programs used by the CGI are generally kept in the same
+directory as the CGI itself, although this can be changed by modifying
+the OPeNDAP CGI dispatch script.
+
+&lt;blockquote&gt;The server programs come with release notes and installation
+notes, in files &lt;font color='green'&gt;README&lt;/font&gt; and &lt;font color='green'&gt;INSTALL&lt;/font&gt;, among others.  These
+will be found in the distribution directories for the particular
+server.  For example, the documentation for the JGOFS server will be
+found in &lt;font color='green'&gt;&amp;#36;DODS_ROOT/src/http/jg-dods&lt;/font&gt;.  See [http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;] for
+additional information about server documentation.
+&lt;/blockquote&gt;
+
+After installing the CGI program and the services, the data to be
+provided must be put in some location where it may be served to
+clients. Again, the location of the data depends on the configuration
+of the Web server and the API used by the CGI services. Most often,
+data that is served by a Web server is kept in the &lt;font color='green'&gt;htdocs&lt;/font&gt;
+directory, the exact pathname of which is specified in the
+&lt;font color='green'&gt;httpd&lt;/font&gt;.configuration file. A server may also be enabled to search
+a user's home directory tree or may follow links from the &lt;font color='green'&gt;htdocs&lt;/font&gt;
+directory (if the server is enabled to follow symbolic links). There
+may be yet other options provided by the specific server used in a
+particular installation, so there is really no way to avoid consulting
+the configuration instructions of the Web server.
+
+As noted, the location of the data depends not only on the
+configuration of the Web server, but also on the API used to access
+the data requested.  For example, the netCDF server simply
+stores data in a path relative to the working directory of the CGI
+program, &lt;font color='green'&gt;htdocs&lt;/font&gt;, while the JGOFS server uses its data
+dictionary to specify the location of its data. Refer to the specific
+installation notes for each API for more information about the
+location of the data.
+
+===Configuring the Server===
+
+
+The issues of server configuration depend to a large extent on the
+particular server in question.  The OPeNDAP server for JGOFS data is
+configured differently than the OPeNDAP server for netCDF data.  Each
+server comes with its own installation and configuration instructions.
+These can be found in a file called &lt;font color='green'&gt;INSTALL&lt;/font&gt; in the distribution
+directory for the server.  The server distribution directories are in
+&lt;font color='green'&gt;&amp;#36;DODS_ROOT/src&lt;/font&gt;.  Here is a checklist of items that need to be
+attended in order to install any OPeNDAP server:  
+
+
+*Is the &lt;font color='green'&gt;httpd&lt;/font&gt; server configured to execute CGI programs?
+*Are the main CGI and subsidiary CGI programs installed in the
+server's CGI directory?  For the netCDF API, these will be called
+&lt;font color='green'&gt;nph-nc&lt;/font&gt;, and &lt;font color='green'&gt;nc_das&lt;/font&gt;, &lt;font color='green'&gt;nc_dds&lt;/font&gt;, and so on.  The
+server CGI's for other API's will have comparable names.
+*Is the &lt;font color='green'&gt;gzip&lt;/font&gt; program installed in the &lt;font color='green'&gt;PATH&lt;/font&gt; of the
+&lt;font color='green'&gt;httpd&lt;/font&gt; server?  This is used to compress data messages returned
+to the client.
+
+===Constructing the URL===
+
+After a dataset has been installed, and the server programs installed,
+you need to know what its address is.  ([[Wiki_Testing/OPeNDAPUserGuide2|Section 2.1]])
+contains an explanation of the various parts of the OPeNDAP URL,
+including a diagram in figure 2.1.  Refer
+to this section, with a copy of the Web server configuration data
+readily available.  Using the configuration data, you should be able
+to determine the appropriate URL for the data you are serving.
+
+Remember that the web server will have its own definition of the root
+directory for data, and another definition for CGI programs, depending
+on the configuration.
+
+===Documenting Your Data===
+
+OPeNDAP contains provisions for supplying documentation to users about a
+server, and also about the data that server provides.  When a server
+receives an information request (through the &lt;font color='green'&gt;info&lt;/font&gt; service that
+invokes the &lt;font color='green'&gt;usage&lt;/font&gt; program), it
+returns to the client an HTML document created from the DAS and DDS of
+the referenced data.  It may also return information about the server,
+and more detail about the dataset.
+
+If you would like to provide more information about a dataset than is
+contained in the DAS and DDS, simply create an HTML document (without
+the &lt;font color='green'&gt;&lt;html&gt;&lt;/font&gt; and &lt;font color='green'&gt;&lt;body&gt;&lt;/font&gt; tags, which are supplied by the
+&lt;font color='green'&gt;info&lt;/font&gt; service), and store it in the same directory as the
+dataset, with a name corresponding to the dataset filename.  For
+example, the datasets &lt;font color='green'&gt;fnoc1.nc&lt;/font&gt;, &lt;font color='green'&gt;fnoc2.nc&lt;/font&gt;, and
+&lt;font color='green'&gt;fnoc3.nc&lt;/font&gt; might be documented with a file called &lt;font color='green'&gt;fnoc.html&lt;/font&gt;.
+
+
+You may prefer to override this method of creating documentation and
+simply provide a single, complete HTML document that contains general
+information for the server or for a group of datasets.  For example,
+to force the info server to return a particular HTML document for all
+its datasets, you would create a complete HTML document and give it
+the name dataset &lt;font color='green'&gt;.ovr&lt;/font&gt;, where dataset is the dataset
+name.
+
+
+More information about providing user information, including sample
+HTML files, and a complete description of the search procedure for
+finding the dataset documentation, is to be found in [http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;].
+
+
+===Testing the Installation===
+
+It is possible to test the OPeNDAP server to see whether an installation
+has been properly done.  The easiest way to test the installation is
+with a simple Web client like Netscape or Mosaic. (A simple Web client
+called &lt;font color='green'&gt;geturl&lt;/font&gt; is provided in the OPeNDAP core software which
+can retrieve text from Web servers.  Look for it in the
+&lt;font color='green'&gt;&amp;#36;(DODS_ROOT)/etc&lt;/font&gt; directory.)
+
+The simplest test is simply to ask for the version of the server, or
+the help message.  The OPeNDAP server uses helper programs to return the
+DAS, DDS, and data.  If you want to test the server itself, and not
+the configuration of the helper programs, the version, help, or info
+services will suffice.  Issuing a URL with &lt;font color='green'&gt;.ver&lt;/font&gt; on the end will
+return the version information for this server, appending &lt;font color='green'&gt;.info&lt;/font&gt;
+will return the info message, and issuing a URL with a nonsense suffix
+or &lt;font color='green'&gt;.help&lt;/font&gt; will return a help message:
+
+&lt;pre&gt;
+&gt; geturl http://dods.gso.uri.edu/cgi-bin/nph-nc/data/test.nc.ver
+&gt; geturl http://dods.gso.uri.edu/cgi-bin/nph-nc/data/test.nc.info
+&gt; geturl http://dods.gso.uri.edu/cgi-bin/nph-nc/data/test.nc.help
+&lt;/pre&gt;
+
+To return the data attribute structure of a dataset, use a URL such as
+the following: ([[Wiki_Testing/OPeNDAPUserGuideFootNotes|15]])
+
+&lt;pre&gt;
+&gt; geturl http://dods.gso.uri.edu/cgi-bin/nph-nc/data/test.nc.das
+&lt;/pre&gt;
+
+Refer to ([[Wiki_Testing/OPeNDAPUserGuide6| Section 6.4.2]]) for a description of a data attribute
+structure. You can compare the description against what is returned by
+the above URL to test the operation of the OPeNDAP server.
+
+You can use your web client to test the OPeNDAP server by using it to
+submit URLs that address specific services of the client.  See
+([[Wiki_Testing/OPeNDAPUserGuide2| Section 2.2]]) for information about how to request
+individual services.  If any of the services fail, you can check the
+list of helper programs in ([[Wiki_Testing/OPeNDAPUserGuide5| Section 5.1.1]]) to find
+out which is missing.  From the web browser, you can access all the
+OPeNDAP services, except the (binary) data service.  However, if all the
+others work, you can be relatively assured that one will, too.
+
+Using the &lt;font color='green'&gt;.html&lt;/font&gt; suffix produces the \ifh, providing a
+forms-based interface with which a user can query the dataset using a
+simple web browser.  There's more about the \ifh in
+([[Wiki_Testing/OPeNDAPUserGuide3| Chapter 3]]).
+
+
+
+==Displaying Information to the OPeNDAP User==
+
+
+OPeNDAP contains a system that allows an OPeNDAP server a degree of control over the user's graphic user
+interface (GUI).  This system runs the
+system progress indicator, that displays to the user the status of a
+pending data request. However, a server may also use the GUI interface
+to display messages to the user, such as error messages, and even to
+query the user for information.
+
+
+===GUI Architecture===
+
+
+
+Since OPeNDAP is built inside a data access API, and since the
+application program that has become the OPeNDAP client was presumably not
+built with network I/O in mind, an OPeNDAP client will typically not do
+any processing at all while it awaits a return message from a data
+request. Any communication that must happen between the OPeNDAP software
+and the user must occur without the involvement of the application
+program that has invoked the OPeNDAP software. To avoid this limitation,
+OPeNDAP starts up a GUI manager sub-process. This sub-process can
+receive data from the OPeNDAP core software, and can operate the user's
+graphical user interface.   
+
+The operation of the GUI manager is illustrated in
+[[:Image:wish.gif|figure 5.3.1]].  As seen in the figure, the client
+application can usually control the user's screen, but during a data
+request, this communication is suspended. Until the request returns
+control to the client application, messages returned from the OPeNDAP
+server can be displayed to the user by passing them to the GUI manager
+sub-process, who can display them in a window to the user.
+
+&lt;center&gt;
+
+[[Image:wish.gif|actual size]] 
+
+The Architecture of an OPeNDAP Client GUI
+
+&lt;/center&gt;
+
+ 
+
+The GUI manager in \OPDversion uses a Tcl/Tk interpreter (the
+&lt;font color='green'&gt;wish&lt;/font&gt; program is the default) to interpret messages from the
+server. These messages usually contain Tcl programs to display
+information to the user. However, the &lt;font color='green'&gt;wish&lt;/font&gt; interpreter can also
+be sent programs to query the user for more information, or draw
+little rabbits on the screen or any other graphic function the server
+needs to have displayed to the user. See Tcl and the Tk
+Toolkit~\citel{osterhout:tcl} for more information about Tcl.
+
+By default, the GUI manager initializes by running the Tcl programs in
+the files &lt;font color='green'&gt;dods_gui.tcl&lt;/font&gt;, &lt;font color='green'&gt;error.tcl&lt;/font&gt; and &lt;font color='green'&gt;progress.tcl&lt;/font&gt;.
+(These are stored in &lt;font color='green'&gt;&amp;#36;DODS_ROOT/etc&lt;/font&gt;.) Server commands to the
+GUI manager can use the functions defined in these files. Note also
+that the user may be using a "safe" Tcl interpreter, with a
+restricted subset of the usual array of Tcl commands available to it.
+The user can control these features of the operation of the GUI by
+changing several environment variables.  These are described in
+([http://www &lt;cite&gt; opd-client,environment&lt;/cite&gt;]).
+
+
+
+
+A server will use the features of the GUI manager to display error
+messages to the user. A server may also use the GUI to query a user to
+correct whatever condition caused the error. For example, if a user has
+misspelled some part of a constraint expression in a URL submitted to a
+server, the server can send the constraint expression back to the user in
+an edit window, with instructions to fix it. The user can edit the
+expression, and send it back, allowing the server to proceed without
+submitting a new request. Consult the client and server toolkit manual
+for more information about the \class{Error} object on this subject.
+
+==Building OPeNDAP Data Servers==
+
+
+Though servers are included in the OPeNDAP core software, some
+users may wish to write their own OPeNDAP data servers. The architecture
+of the &lt;font color='green'&gt;httpd&lt;/font&gt; server and the OPeNDAP core software make this a
+relatively simple task.
+
+A user may wish to write his or her own OPeNDAP server for any or all of
+the following reasons:
+
+
+*The data to be served may be stored in a format not compatible
+with one of the existing OPeNDAP servers.
+*The data may be arranged in a fashion that allows a user to
+optimize the access of those data by rewriting the service programs.
+*The user may wish to provide ancillary data to OPeNDAP clients not
+anticipated by the writers of the servers available.
+
+The design of the OPeNDAP library make the task a relatively simple one
+for a programmer already familiar with the data access API to be used.
+Also, though the servers provided with the OPeNDAP core software are
+written in C++, they may be written in any language from which the
+OPeNDAP libraries may be called.
+
+Once it is invoked, a CGI program scoops up whatever input is going to
+the standard input stream of the Web server (&lt;font color='green'&gt;httpd&lt;/font&gt;) that invoked it.
+Further, the standard output of the CGI is piped directly to the WWW
+library, which sends it directly back to the requesting client. This means
+that the CGI program itself need only read its input from standard input
+and write its output to standard output.
+
+Most of the task of writing a server, then, consists of reading the data
+with the data access API and loading it into the OPeNDAP classes. Method
+functions defined for each class make it simple to output the data so that
+it may be sent back to the requesting client.
+Refer to [http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;] for specific information about the classes and the
+facilities of the OPeNDAP core software, and instructions about how to
+write a new server.
+==Installing an OPeNDAP Server==
+
+
+Most of the task of installing an OPeNDAP server consists of getting the
+required Web server installed and running. The intricacies of this
+task, and the variety of available Web servers make this task beyond
+the scope of this guide. Proceed with the following steps only after
+the Web server itself is operational.
+
+
+Installing the OPeNDAP CGI programs and the data to be served is a
+ relatively simple operation. After
+installing the OPeNDAP source tree and building the software, (See
+[[Wiki_Testing/OPeNDAPUserGuideAppendix|Appendix]]), the user need only copy the CGI program from the
+&lt;font color='green'&gt;etc&lt;/font&gt; directory in the OPeNDAP source tree (&lt;font color='green'&gt;&amp;#36;(DODS_ROOT)/etc&lt;/font&gt;)
+to one of the directories where the Web server expects to find its CGI
+programs. The exact name of this directory is an implementation detail
+of the Web server itself.
+
+The service programs used by the CGI are generally kept in the same
+directory as the CGI itself, although this can be changed by modifying
+the OPeNDAP CGI dispatch script.
+
+&lt;blockquote&gt;The server programs come with release notes and installation
+notes, in files &lt;font color='green'&gt;README&lt;/font&gt; and &lt;font color='green'&gt;INSTALL&lt;/font&gt;, among others.  These
+will be found in the distribution directories for the particular
+server.  For example, the documentation for the JGOFS server will be
+found in &lt;font color='green'&gt;&amp;#36;DODS_ROOT/src/http/jg-dods&lt;/font&gt;.  See [http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;] for
+additional information about server documentation.
+&lt;/blockquote&gt;
+
+After installing the CGI program and the services, the data to be
+provided must be put in some location where it may be served to
+clients. Again, the location of the data depends on the configuration
+of the Web server and the API used by the CGI services. Most often,
+data that is served by a Web server is kept in the &lt;font color='green'&gt;htdocs&lt;/font&gt;
+directory, the exact pathname of which is specified in the
+&lt;font color='green'&gt;httpd&lt;/font&gt;.configuration file. A server may also be enabled to search
+a user's home directory tree or may follow links from the &lt;font color='green'&gt;htdocs&lt;/font&gt;
+directory (if the server is enabled to follow symbolic links). There
+may be yet other options provided by the specific server used in a
+particular installation, so there is really no way to avoid consulting
+the configuration instructions of the Web server.
+
+As noted, the location of the data depends not only on the
+configuration of the Web server, but also on the API used to access
+the data requested.  For example, the netCDF server simply
+stores data in a path relative to the working directory of the CGI
+program, &lt;font color='green'&gt;htdocs&lt;/font&gt;, while the JGOFS server uses its data
+dictionary to specify the location of its data. Refer to the specific
+installation notes for each API for more information about the
+location of the data.
+
+===Configuring the Server===
+
+
+The issues of server configuration depend to a large extent on the
+particular server in question.  The OPeNDAP server for JGOFS data is
+configured differently than the OPeNDAP server for netCDF data.  Each
+server comes with its own installation and configuration instructions.
+These can be found in a file called &lt;font color='green'&gt;INSTALL&lt;/font&gt; in the distribution
+directory for the server.  The server distribution directories are in
+&lt;font color='green'&gt;&amp;#36;DODS_ROOT/src&lt;/font&gt;.  Here is a checklist of items that need to be
+attended in order to install any OPeNDAP server:  
+
+
+*Is the &lt;font color='green'&gt;httpd&lt;/font&gt; server configured to execute CGI programs?
+*Are the main CGI and subsidiary CGI programs installed in the
+server's CGI directory?  For the netCDF API, these will be called
+&lt;font color='green'&gt;nph-nc&lt;/font&gt;, and &lt;font color='green'&gt;nc_das&lt;/font&gt;, &lt;font color='green'&gt;nc_dds&lt;/font&gt;, and so on.  The
+server CGI's for other API's will have comparable names.
+*Is the &lt;font color='green'&gt;gzip&lt;/font&gt; program installed in the &lt;font color='green'&gt;PATH&lt;/font&gt; of the
+&lt;font color='green'&gt;httpd&lt;/font&gt; server?  This is used to compress data messages returned
+to the client.
+
+===Constructing the URL===
+
+After a dataset has been installed, and the server programs installed,
+you need to know what its address is.  ([[Wiki_Testing/OPeNDAPUserGuide2|Section 2.1]])
+contains an explanation of the various parts of the OPeNDAP URL,
+including a diagram in figure 2.1.  Refer
+to this section, with a copy of the Web server configuration data
+readily available.  Using the configuration data, you should be able
+to determine the appropriate URL for the data you are serving.
+
+Remember that the web server will have its own definition of the root
+directory for data, and another definition for CGI programs, depending
+on the configuration.
+
+===Documenting Your Data===
+
+OPeNDAP contains provisions for supplying documentation to users about a
+server, and also about the data that server provides.  When a server
+receives an information request (through the &lt;font color='green'&gt;info&lt;/font&gt; service that
+invokes the &lt;font color='green'&gt;usage&lt;/font&gt; program), it
+returns to the client an HTML document created from the DAS and DDS of
+the referenced data.  It may also return information about the server,
+and more detail about the dataset.
+
+If you would like to provide more information about a dataset than is
+contained in the DAS and DDS, simply create an HTML document (without
+the &lt;font color='green'&gt;&lt;html&gt;&lt;/font&gt; and &lt;font color='green'&gt;&lt;body&gt;&lt;/font&gt; tags, which are supplied by the
+&lt;font color='green'&gt;info&lt;/font&gt; service), and store it in the same directory as the
+dataset, with a name corresponding to the dataset filename.  For
+example, the datasets &lt;font color='green'&gt;fnoc1.nc&lt;/font&gt;, &lt;font color='green'&gt;fnoc2.nc&lt;/font&gt;, and
+&lt;font color='green'&gt;fnoc3.nc&lt;/font&gt; might be documented with a file called &lt;font color='green'&gt;fnoc.html&lt;/font&gt;.
+
+
+You may prefer to override this method of creating documentation and
+simply provide a single, complete HTML document that contains general
+information for the server or for a group of datasets.  For example,
+to force the info server to return a particular HTML document for all
+its datasets, you would create a complete HTML document and give it
+the name dataset &lt;font color='green'&gt;.ovr&lt;/font&gt;, where dataset is the dataset
+name.
+
+
+More information about providing user information, including sample
+HTML files, and a complete description of the search procedure for
+finding the dataset documentation, is to be found in [http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;].
+
+
+===Testing the Installation===
+
+It is possible to test the OPeNDAP server to see whether an installation
+has been properly done.  The easiest way to test the installation is
+with a simple Web client like Netscape or Mosaic. (A simple Web client
+called &lt;font color='green'&gt;geturl&lt;/font&gt; is provided in the OPeNDAP core software which
+can retrieve text from Web servers.  Look for it in the
+&lt;font color='green'&gt;&amp;#36;(DODS_ROOT)/etc&lt;/font&gt; directory.)
+
+The simplest test is simply to ask for the version of the server, or
+the help message.  The OPeNDAP server uses helper programs to return the
+DAS, DDS, and data.  If you want to test the server itself, and not
+the configuration of the helper programs, the version, help, or info
+services will suffice.  Issuing a URL with &lt;font color='green'&gt;.ver&lt;/font&gt; on the end will
+return the version information for this server, appending &lt;font color='green'&gt;.info&lt;/font&gt;
+will return the info message, and issuing a URL with a nonsense suffix
+or &lt;font color='green'&gt;.help&lt;/font&gt; will return a help message:
+
+&lt;pre&gt;
+&gt; geturl http://dods.gso.uri.edu/cgi-bin/nph-nc/data/test.nc.ver
+&gt; geturl http://dods.gso.uri.edu/cgi-bin/nph-nc/data/test.nc.info
+&gt; geturl http://dods.gso.uri.edu/cgi-bin/nph-nc/data/test.nc.help
+&lt;/pre&gt;
+
+To return the data attribute structure of a dataset, use a URL such as
+the following: ([[Wiki_Testing/OPeNDAPUserGuideFootNotes|15]])
+
+&lt;pre&gt;
+&gt; geturl http://dods.gso.uri.edu/cgi-bin/nph-nc/data/test.nc.das
+&lt;/pre&gt;
+
+Refer to ([[Wiki_Testing/OPeNDAPUserGuide6| Section 6.4.2]]) for a description of a data attribute
+structure. You can compare the description against what is returned by
+the above URL to test the operation of the OPeNDAP server.
+
+You can use your web client to test the OPeNDAP server by using it to
+submit URLs that address specific services of the client.  See
+([[Wiki_Testing/OPeNDAPUserGuide2| Section 2.2]]) for information about how to request
+individual services.  If any of the services fail, you can check the
+list of helper programs in ([[Wiki_Testing/OPeNDAPUserGuide5| Section 5.1.1]]) to find
+out which is missing.  From the web browser, you can access all the
+OPeNDAP services, except the (binary) data service.  However, if all the
+others work, you can be relatively assured that one will, too.
+
+Using the &lt;font color='green'&gt;.html&lt;/font&gt; suffix produces the \ifh, providing a
+forms-based interface with which a user can query the dataset using a
+simple web browser.  There's more about the \ifh in
+([[Wiki_Testing/OPeNDAPUserGuide3| Chapter 3]]).
+
+
+
+==Displaying Information to the OPeNDAP User==
+
+
+OPeNDAP contains a system that allows an OPeNDAP server a degree of control over the user's graphic user
+interface (GUI).  This system runs the
+system progress indicator, that displays to the user the status of a
+pending data request. However, a server may also use the GUI interface
+to display messages to the user, such as error messages, and even to
+query the user for information.
+
+
+===GUI Architecture===
+
+
+
+Since OPeNDAP is built inside a data access API, and since the
+application program that has become the OPeNDAP client was presumably not
+built with network I/O in mind, an OPeNDAP client will typically not do
+any processing at all while it awaits a return message from a data
+request. Any communication that must happen between the OPeNDAP software
+and the user must occur without the involvement of the application
+program that has invoked the OPeNDAP software. To avoid this limitation,
+OPeNDAP starts up a GUI manager sub-process. This sub-process can
+receive data from the OPeNDAP core software, and can operate the user's
+graphical user interface.   
+
+The operation of the GUI manager is illustrated in
+[[:Image:wish.gif|figure 5.3.1]].  As seen in the figure, the client
+application can usually control the user's screen, but during a data
+request, this communication is suspended. Until the request returns
+control to the client application, messages returned from the OPeNDAP
+server can be displayed to the user by passing them to the GUI manager
+sub-process, who can display them in a window to the user.
+
+&lt;center&gt;
+
+[[Image:wish.gif|actual size]] 
+
+The Architecture of an OPeNDAP Client GUI
+
+&lt;/center&gt;
+
+ 
+
+The GUI manager in \OPDversion uses a Tcl/Tk interpreter (the
+&lt;font color='green'&gt;wish&lt;/font&gt; program is the default) to interpret messages from the
+server. These messages usually contain Tcl programs to display
+information to the user. However, the &lt;font color='green'&gt;wish&lt;/font&gt; interpreter can also
+be sent programs to query the user for more information, or draw
+little rabbits on the screen or any other graphic function the server
+needs to have displayed to the user. See Tcl and the Tk
+Toolkit~\citel{osterhout:tcl} for more information about Tcl.
+
+By default, the GUI manager initializes by running the Tcl programs in
+the files &lt;font color='green'&gt;dods_gui.tcl&lt;/font&gt;, &lt;font color='green'&gt;error.tcl&lt;/font&gt; and &lt;font color='green'&gt;progress.tcl&lt;/font&gt;.
+(These are stored in &lt;font color='green'&gt;&amp;#36;DODS_ROOT/etc&lt;/font&gt;.) Server commands to the
+GUI manager can use the functions defined in these files. Note also
+that the user may be using a "safe" Tcl interpreter, with a
+restricted subset of the usual array of Tcl commands available to it.
+The user can control these features of the operation of the GUI by
+changing several environment variables.  These are described in
+([http://www &lt;cite&gt; opd-client,environment&lt;/cite&gt;]).
+
+
+
+
+A server will use the features of the GUI manager to display error
+messages to the user. A server may also use the GUI to query a user to
+correct whatever condition caused the error. For example, if a user has
+misspelled some part of a constraint expression in a URL submitted to a
+server, the server can send the constraint expression back to the user in
+an edit window, with instructions to fix it. The user can edit the
+expression, and send it back, allowing the server to proceed without
+submitting a new request. Consult the client and server toolkit manual
+for more information about the \class{Error} object on this subject.
+
+==Building OPeNDAP Data Servers==
+
+
+Though servers are included in the OPeNDAP core software, some
+users may wish to write their own OPeNDAP data servers. The architecture
+of the &lt;font color='green'&gt;httpd&lt;/font&gt; server and the OPeNDAP core software make this a
+relatively simple task.
+
+A user may wish to write his or her own OPeNDAP server for any or all of
+the following reasons:
+
+
+*The data to be served may be stored in a format not compatible
+with one of the existing OPeNDAP servers.
+*The data may be arranged in a fashion that allows a user to
+optimize the access of those data by rewriting the service programs.
+*The user may wish to provide ancillary data to OPeNDAP clients not
+anticipated by the writers of the servers available.
+
+The design of the OPeNDAP library make the task a relatively simple one
+for a programmer already familiar with the data access API to be used.
+Also, though the servers provided with the OPeNDAP core software are
+written in C++, they may be written in any language from which the
+OPeNDAP libraries may be called.
+
+Once it is invoked, a CGI program scoops up whatever input is going to
+the standard input stream of the Web server (&lt;font color='green'&gt;httpd&lt;/font&gt;) that invoked it.
+Further, the standard output of the CGI is piped directly to the WWW
+library, which sends it directly back to the requesting client. This means
+that the CGI program itself need only read its input from standard input
+and write its output to standard output.
+
+Most of the task of writing a server, then, consists of reading the data
+with the data access API and loading it into the OPeNDAP classes. Method
+functions defined for each class make it simple to output the data so that
+it may be sent back to the requesting client.
+Refer to [http://www.opendap.org/support/docs.html/api/pguide-html/&lt;cite&gt;The OPeNDAP Programmer's Guide&lt;/cite&gt;] for specific information about the classes and the
+facilities of the OPeNDAP core software, and instructions about how to
+write a new server.</text>
+      <sha1>bn11v7l2km5p1xesudzgc0b6tubtbnz</sha1>
+    </revision>
+  </page>
+</mediawiki>

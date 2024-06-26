@@ -1,0 +1,633 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiki Testing/hdfutils</title>
+    <ns>0</ns>
+    <id>221</id>
+    <revision>
+      <id>2040</id>
+      <parentid>2039</parentid>
+      <timestamp>2008-02-06T17:28:00Z</timestamp>
+      <contributor>
+        <username>Yuan</username>
+        <id>8</id>
+      </contributor>
+      <comment>/* &lt;font color='green'&gt;makehdf&lt;/font&gt; */</comment>
+      <origin>2040</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="21559" sha1="jah6zqvklh3buhlydzyqcpmrv9oart0" xml:space="preserve">=HDF Utilities=
+
+
+FreeForm ND includes three utilities for use with HDF (hierarchical
+data format) files: &lt;font color='green'&gt;makehdf&lt;/font&gt;, &lt;font color='green'&gt;splitdat&lt;/font&gt;, and &lt;font color='green'&gt;pntshow&lt;/font&gt;.
+These programs were built using both the FreeForm library and the HDF
+library, which was developed at the National Center for Supercomputer
+Applications (NCSA).
+
+The &lt;font color='green'&gt;makehdf&lt;/font&gt; program converts binary and ASCII data files to HDF
+files and converts multiplexed band interleaved by pixel image files
+into a series of single parameter files. The &lt;font color='green'&gt;splitdat&lt;/font&gt; program is
+used to separate and reformat data files containing headers and data
+into separate header and data files, or to translate them into HDF
+files. The &lt;font color='green'&gt;pntshow&lt;/font&gt; program extracts point data from HDF files
+into binary or ASCII format.
+
+It is assumed in this chapter that you have a working familiarity with
+HDF terminology and conventions. See the HDF user documentation for
+detailed information.
+
+&lt;blockquote&gt;NOTE: Do not try the examples in this chapter. The example file set is
+incomplete.  &lt;/blockquote&gt;
+
+
+==&lt;font color='green'&gt;makehdf&lt;/font&gt;==
+
+
+Using &lt;font color='green'&gt;makehdf&lt;/font&gt; you can convert data files with formats described
+in a FreeForm format file into HDF files. You should follow FreeForm
+naming conventions for the data and format files. For details about
+FreeForm conventions, see ([[Wiki_Testing/convs | Chapter 8]]).
+
+&lt;blockquote&gt;A dBASE input file must be converted to ASCII or binary using
+&lt;font color='green'&gt;newform&lt;/font&gt; before you can run &lt;font color='green'&gt;makehdf&lt;/font&gt; on it.  &lt;/blockquote&gt;
+
+The HDF file resulting from a conversion consists either of a group of
+scientific datasets (SDS's), one for each variable in the input data
+file, or of a ''vgroup'' containing all the variables as one
+''vdata''. If you are working with grid data, you will want SDS's
+(the default) in the output HDF file. A vdata (&lt;font color='green'&gt;-vd&lt;/font&gt; option) is the
+appropriate choice for point data.
+
+The &lt;font color='green'&gt;makehdf&lt;/font&gt; command has the following form:
+
+&lt;pre&gt;
+    makehdf input_file [-r rows] [-c columns] [-v var_file] [-d HDF_description_file]
+
+    [-xl x_label -yl y_label] [-xu x_units -yu y_units] [-xf x_format -yf y_format] [-id file_id] [-vd [vdata_file]] [-dmx [-sep]] [-df] [-md missing_data_file] [-dof HDF_file] 
+&lt;/pre&gt;
+
+ 
+
+; ''input_file'' :
+Name of the input data file. Following FreeForm naming conventions,
+the standard extensions for data files are &lt;font color='green'&gt;.dat&lt;/font&gt; for ASCII
+format and &lt;font color='green'&gt;.bin&lt;/font&gt; for binary.
+
+; -r rows :
+Option flag followed by the number of rows in each resulting
+scientific dataset. The number of rows must be specified through
+this option on the command line, or in an equivalence table, or in a
+header (&lt;font color='green'&gt;.hdr&lt;/font&gt;) file defined according to FreeForm standards.
+
+; -c columns :
+Option flag followed by the number of columns in each resulting
+scientific dataset. The number of columns must be specified through
+this option on the command line, or in an equivalence table, or in a
+header (&lt;font color='green'&gt;.hdr&lt;/font&gt;) file defined according to FreeForm standards.
+For information about equivalence tables, see the GeoVu Tools
+Reference Guide.
+
+; -v var_file :
+Option flag followed by the name of the variable file. The file
+contains names of the variables in the input data file to be
+processed by &lt;font color='green'&gt;makehdf&lt;/font&gt;. Variable names in \var{var_file} can be
+separated by one or more spaces or each name can be on a separate
+line.
+
+; -d HDF_description_file :
+Option flag followed by the name of the file containing a
+description of the input file. The description will be stored as a
+file annotation in the resulting HDF file.
+
+; -xl x_label -yl y_label :
+Option flags followed by strings (labels) describing the x and y
+axes; labels must be in quotes (&lt;font color='green'&gt;" "&lt;/font&gt;) if more than one word.
+
+; -xu x_units -yu y_units :
+Option flags followed by strings indicating the measurement units
+for the x and y axes; strings must be in quotes (&lt;font color='green'&gt;" "&lt;/font&gt;) if more than
+one word.
+
+; - xf x_format -yf y_format :
+Option flags followed by strings indicating the formats to be used
+in displaying scale for the x and y dimensions; strings must be in
+quotes (&lt;font color='green'&gt;" "&lt;/font&gt;) if more than one word.
+
+; - id file_id :
+Option flag followed by a string that will be stored as the ID of
+the resulting HDF file.
+
+; - vd [vdata_file] :
+Option flag indicating that the output HDF file should contain a
+vdata. The optional file name specifies the name of the output HDF
+file; the default is &lt;font color='green'&gt;input_file.HDF&lt;/font&gt;.
+
+; - dmx [-sep] :
+The option flag &lt;font color='green'&gt;-dmx&lt;/font&gt; indicates that input data should be
+demultiplexed from band interleaved by pixel to band sequential form
+in &lt;font color='green'&gt;input_file.dmx&lt;/font&gt;. If &lt;font color='green'&gt;-dmx&lt;/font&gt; is followed by &lt;font color='green'&gt;-sep&lt;/font&gt;,
+the input data are demultiplexed into separate variable files called
+&lt;font color='green'&gt;data_file.1&lt;/font&gt; \ldots &lt;font color='green'&gt;data_file.n&lt;/font&gt;
+
+; - df :
+To use this option, the input file (&lt;font color='green'&gt;data_file.ext&lt;/font&gt;) must be a
+binary demultiplexed (band sequential) file.  For each input
+variable in the applicable FreeForm format description file, there
+is a corresponding demultiplexed section in the output HDF file.
+
+; - md missing_data_file :
+Option flag followed by the name of the file defining missing data
+(data you want to exclude). Use this option only along with the
+vdata (-vd) option. Each line in the missing data file has the form:
+
+&lt;pre&gt;
+variable_name lower_limit upper_limit
+&lt;/pre&gt;
+
+The precision of the upper and lower limits matches the precision of
+the input data.
+
+; - dof HDF_file :
+Option flag followed by the name of the output HDF file. If you do
+not use the &lt;font color='green'&gt;-dof&lt;/font&gt; option, the default output file name is
+&lt;font color='green'&gt;input_file.HDF&lt;/font&gt;.
+
+ 
+
+===Example===
+
+You will use &lt;font color='green'&gt;makehdf&lt;/font&gt; to store &lt;font color='green'&gt;latlon.dat&lt;/font&gt; as an HDF file.
+The HDF file will consist of two SDS's, one each for the two variables
+latitude and longitude. Each SDS will have four rows and five columns.
+
+To convert &lt;font color='green'&gt;latlon.dat&lt;/font&gt; to an HDF file, enter the following
+command:
+
+&lt;pre&gt;
+makehdf latlon.dat -r 4 -c 5
+&lt;/pre&gt;
+
+As &lt;font color='green'&gt;makehdf&lt;/font&gt; translates &lt;font color='green'&gt;latlon.dat&lt;/font&gt; into HDF, processing
+information is displayed on the screen:
+
+&lt;pre&gt;
+1   Caches (1150 bytes) Processed: 800 bytes written to latlon.dmx
+Writing latlon.HDF and calculating maxima and minima ...
+
+Variable latitude:
+Minimum: -86.432712  Maximum 89.170904
+Variable longitude:
+Minimum: -176.161101  Maximum 165.066193
+&lt;/pre&gt;
+
+The output from &lt;font color='green'&gt;makehdf&lt;/font&gt; is an HDF file named &lt;font color='green'&gt;latlon.HDF&lt;/font&gt;
+(by default). It contains the minimum and maximum values for the two
+variables as well as the two SDS's.
+
+A temporary file named &lt;font color='green'&gt;latlon.dmx&lt;/font&gt; was also created. It contains
+the data from latlon.dat in demultiplexed form . The data was
+converted from its original multiplexed form to enable &lt;font color='green'&gt;makehdf&lt;/font&gt;
+to write sections of data to SDS's.
+
+If you start with a demultiplexed file such as &lt;font color='green'&gt;latlon.dmx&lt;/font&gt;, the
+translation process is much quicker, particularly for large data
+files. As an illustration, try this. Rename &lt;font color='green'&gt;latlon.dmx&lt;/font&gt; to
+&lt;font color='green'&gt;latlon.bin&lt;/font&gt; (renaming is necessary for &lt;font color='green'&gt;makehdf&lt;/font&gt; to find the
+format description file &lt;font color='green'&gt;latlon.fmt&lt;/font&gt; by default). Enter the
+following command:
+
+&lt;pre&gt;
+makehdf latlon.bin -df -r 4 -c 5
+&lt;/pre&gt;
+
+The output file again is &lt;font color='green'&gt;latlon.HDF&lt;/font&gt;, but notice that no
+demultiplexing was done.
+
+==&lt;font color='green'&gt;splitdat&lt;/font&gt;==
+
+
+The &lt;font color='green'&gt;splitdat&lt;/font&gt; program translates files with headers and data into
+separate header and data files or into HDF files. If the translation
+is to separate header and data files, the header file can include
+indexing information.
+
+The combination of header and data records in a file is often used for
+point data sets that include a number of observations made at one or
+more stations or locations in space. The header records contain
+information about the stations or locations of the measurements. The
+data records hold the observational data. A station record usually
+indicates how many data records follow it. The structure of such a
+file is similar to the following:
+
+&lt;pre&gt;
+Header for Station 1
+Observation 1 for Station 1
+Observation 2 for Station 1
+
+.
+
+.
+Observation N for Station 1
+
+Header for Station 2
+Observation 1 for Station 2
+Observation 2 for Station 2
+
+.
+
+.
+
+.
+Observation N for Station 2
+
+Header for Station 3
+
+.
+
+.
+
+.
+&lt;/pre&gt;
+
+Many applications have difficulty reading this sort of heterogeneous
+data file. One solution is to split the data into two homogeneous
+files, one containing the headers, the other containing the data. With
+&lt;font color='green'&gt;splitdat&lt;/font&gt;, you can easily create the separate data and header
+files. To use &lt;font color='green'&gt;splitdat&lt;/font&gt; for this purpose, the input and output
+formats for the record headers and the data must be described in a
+FreeForm format description file. To use &lt;font color='green'&gt;splitdat&lt;/font&gt; for
+translating files to HDF, the input format must be described in a
+FreeForm format description file. You should follow FreeForm naming
+conventions for the data and format files. For details about FreeForm
+conventions, see ([http://www &lt;cite&gt; ff,convs&lt;/cite&gt;]).
+
+The &lt;font color='green'&gt;splitdat&lt;/font&gt; command has the following form:
+
+\proto{&lt;font color='green'&gt;splitdat&lt;/font&gt; \var{input_file} [\var{output_data_file} &gt; \var{output_header_file}]}
+
+&lt;blockquote&gt;
+
+; \var{input_file}  :
+Name of the file to be processed. Following FreeForm naming
+conventions, the standard extensions for data files are &lt;font color='green'&gt;.dat&lt;/font&gt;
+for ASCII format and &lt;font color='green'&gt;.bin&lt;/font&gt; for binary.
+
+; \var{output_data_file}  :
+Name of the output file into which data are transferred with the
+format specified in the applicable FreeForm format description file.
+The standard extensions are the same as for input files. If an
+output file name is not specified, the default is standard output.
+
+; \var{output_header_file}  :
+Name of the output file into which headers from the input file are
+transferred with the format specified in the applicable FreeForm
+format description file. If an output header file name is not
+specified, the default is standard output.
+&lt;/blockquote&gt;
+
+===Index Creation===
+
+You can use the two variables begin and extent (described below) in
+the format description for the output record headers to indicate the
+location and size of the data block associated with each record
+header. If you then use &lt;font color='green'&gt;splitdat&lt;/font&gt;, the header file that results
+can be used as an index to the data file.
+
+&lt;blockquote&gt;
+
+; &lt;font color='green'&gt;begin&lt;/font&gt; :
+Indicates the offset to the beginning of the data associated with a
+particular header. If the data is being translated to HDF, the units
+are records; if not, the units are bytes.
+
+; &lt;font color='green'&gt;extent&lt;/font&gt; :
+Indicates the number of records (HDF) or bytes (non-HDF) associated
+with each header record.
+&lt;/blockquote&gt;
+
+
+====Example====
+
+You will use &lt;font color='green'&gt;splitdat&lt;/font&gt; to extract the headers and data from a
+rawinsonde (a device for gathering meteorological data) ASCII data
+file named &lt;font color='green'&gt;hara.dat&lt;/font&gt; (HARA = Historic Arctic Rawinsonde Archive)
+and create two output files-&lt;font color='green'&gt;23338.dat&lt;/font&gt; containing the ASCII data
+and &lt;font color='green'&gt;23338hdr.dat&lt;/font&gt; containing the ASCII headers. The format
+description file &lt;font color='green'&gt;hara.fmt&lt;/font&gt; should contain the necessary format
+descriptions.
+
+Here is &lt;font color='green'&gt;hara.fmt&lt;/font&gt;:
+
+&lt;pre&gt;
+ASCII_input_record_header "ASCII Location Record input format"
+WMO_station_ID_number 1 5 char 0
+latitude 6 10 long 2
+longitude_east 11 15 long 2
+year 17 18 uchar 0
+month 19 20 uchar 0
+day 21 22 uchar 0
+hour 23 24 uchar 0
+flag_processing_1 28 28 char 0
+flag_processing_2 29 29 char 0
+flag_processing_3 30 30 char 0
+station_type 31 31 char 0
+sea_level_elev 32 36 long 0
+instrument_type 37 38 uchar 0
+number_of_observations 40 42 ushort 0
+identification_code 44 44 char 0
+
+ASCII_input_data "Historical Arctic Rawinsonde Archive input format"
+atmospheric_pressure 1 5 long 1
+geopotential_height 7 11 long 0
+temperature_deg 13 16 short 0
+dewpoint_depression 18 20 short 0
+wind_direction 22 24 short 0
+wind_speed_m/s 26 28 short 0
+flag_qg 30 30 char 0
+flag_qg1 31 31 char 0
+flag_qt 33 33 char 0
+flag_qt1 34 34 char 0
+flag_qd 36 36 char 0
+flag_qd1 37 37 char 0
+flag_qw 39 39 char 0
+flag_qw1 40 40 char 0
+flag_qp 42 42 char 0
+flag_levck 43 43 char 0
+
+ASCII_output_record_header "ASCII Location Record output format"
+
+.
+
+.
+
+.
+
+ASCII_output_data "Historical Arctic Rawinsonde Archive output format"
+
+.
+
+.
+
+.
+&lt;/pre&gt;
+
+To "split" &lt;font color='green'&gt;hara.dat&lt;/font&gt;, enter the following command:
+
+&lt;pre&gt;
+splitdat hara.dat 23338.dat &gt; 23338hdr.dat
+&lt;/pre&gt;
+
+The data values from &lt;font color='green'&gt;hara.dat&lt;/font&gt; are stored in &lt;font color='green'&gt;23338.dat&lt;/font&gt; and
+the headers in &lt;font color='green'&gt;23338hdr.dat&lt;/font&gt;.
+
+Because the variables begin and extent were used in the header output
+format in &lt;font color='green'&gt;hara.fmt&lt;/font&gt; to indicate data offset and number of
+records, &lt;font color='green'&gt;23338hdr.dat&lt;/font&gt; has two columns of data showing offset and
+extent. Thus, it can serve as an index into &lt;font color='green'&gt;23338.dat&lt;/font&gt;.
+
+===HDF Translation===
+
+If output files are not specified on the &lt;font color='green'&gt;splitdat&lt;/font&gt; command line,
+a file named &lt;font color='green'&gt;input_file.HDF&lt;/font&gt; is created. It is hierarchically
+named and organized as follows:
+
+&lt;pre&gt;
+
+vgroup
+
+input_file_name
+
+/      \
+
+/        \
+
+vdata1       vdata2
+"PointIndex"      "input_file_name"
+&lt;/pre&gt;
+
+
+*&lt;font color='green'&gt;vdata1&lt;/font&gt; contains the record headers
+*&lt;font color='green'&gt;vdata2&lt;/font&gt; contains the data
+*If writing to a Vset (represented by a vgroup), both output
+formats are converted to binary, if not binary already.
+
+====Example====
+
+To create the file &lt;font color='green'&gt;hara.HDF&lt;/font&gt; from &lt;font color='green'&gt;hara.dat&lt;/font&gt;, enter the
+following abbreviated command:
+
+&lt;pre&gt;
+splitdat hara.dat
+&lt;/pre&gt;
+
+The output formats in &lt;font color='green'&gt;hara.fmt&lt;/font&gt; are automatically converted to
+binary, and subsequently the ASCII data in &lt;font color='green'&gt;hara.dat&lt;/font&gt; are also
+converted to binary for HDF storage.
+
+==&lt;font color='green'&gt;pntshow&lt;/font&gt;==
+
+
+The &lt;font color='green'&gt;pntshow&lt;/font&gt; program is a versatile tool for extracting point
+data  from HDF files containing scientific datasets and Vsets. The
+extraction can be done into any binary or ASCII format described in a
+FreeForm format description file. Before using &lt;font color='green'&gt;pntshow&lt;/font&gt; on an HDF
+file, you should pack the file using the NCSA-developed HDF utility
+hdfpack.
+
+You can use &lt;font color='green'&gt;pntshow&lt;/font&gt; to extract headers and data from an HDF file
+into separate files or to extract just the data. It's a good idea to
+define GeoVu keywords in an equivalence table to facilitate access to
+HDF objects. For information about equivalence tables, see the GeoVu
+Tools Reference Guide. The input and output formats must be described
+in a FreeForm format description file. You should follow FreeForm
+naming conventions for the data and format files. For details about
+FreeForm conventions, see ([http://www &lt;cite&gt; ff,convs&lt;/cite&gt;]).
+
+If a format description file is not specified on the command line, the
+output format is taken by default from the FreeForm output format
+annotation stored in the HDF file. If there is no annotation, a
+default ASCII output format is used.
+
+&lt;blockquote&gt;An equivalence table takes precedence over
+everything. (vdata=1963, SDS=702)&lt;/blockquote&gt;
+
+If you have not specified an HDF object in an equivalence table,
+&lt;font color='green'&gt;pntshow&lt;/font&gt; uses the following sequence to determine the appropriate
+source for output:
+
+
+#Output the first vdata with class name Data.
+#Output the largest vdata.
+#Output the first SDS.
+
+If no vdatas exist in the file, but an SDS is found, it is extracted
+and a default ASCII output format is used.
+
+===Extracting Headers and Data===
+
+The &lt;font color='green'&gt;pntshow&lt;/font&gt; command takes the following form when you want to
+extract headers and data from HDF files into separate files.
+
+&lt;pre&gt;
+    pntshow input_HDF_file [-h [output_header_file]] [-hof output_header_format_file]
+
+    [-hof output_header_format_file] [-d [output_data_file]] [-dof output_data_format_file]
+&lt;/pre&gt;
+
+&lt;blockquote&gt;
+
+; \var{input_HDF_file} :
+Name of the input HDF file, which has been packed using
+&lt;font color='green'&gt;hdfpack&lt;/font&gt;.
+
+; \hdfh :
+Option flag followed optionally by the name of the file designated
+to contain the record headers currently stored in a vdata with a
+class name of Index. If an output header file name is not specified,
+the default is standard output.
+
+; \hdfhof :
+Option flag followed by the name of the FreeForm format file that
+describes the format for the headers extracted to standard output or
+output_header_file.
+
+; \hdfd :
+Option flag followed optionally by the name of the file designated
+to contain the data currently stored in a vdata with a class name of
+Data. If an output file name is not specified, the default is
+standard output.
+
+; \hdfdof :
+Option flag followed by the name of the FreeForm format file that
+describes the format for data extracted to standard output or
+\var{output_data_file}.
+
+&lt;/blockquote&gt;
+
+====Example====
+
+You will extract data and headers from &lt;font color='green'&gt;hara.HDF&lt;/font&gt; (created by
+&lt;font color='green'&gt;splitdat&lt;/font&gt; in a previous example). This file contains two vdatas:
+one has the class name Data and the other has the class name Index.
+Because this file is extremely small, no appending links were created
+in the file, so there is no need to pack the file before using
+&lt;font color='green'&gt;pntshow&lt;/font&gt;, though you can if you wish.
+
+To extract data and headers from &lt;font color='green'&gt;hara.HDF&lt;/font&gt;, enter the following
+command:
+
+&lt;pre&gt;
+pntshow hara.HDF -d haradata.dat -h harahdrs.dat
+&lt;/pre&gt;
+
+The data from the vdata designated as Data in &lt;font color='green'&gt;hara.HDF&lt;/font&gt; are now
+stored in &lt;font color='green'&gt;haradata.dat&lt;/font&gt;. The data are in their original format
+because the original output format was stored by &lt;font color='green'&gt;splitdat&lt;/font&gt; in the
+HDF file. The header data from the vdata designated as Index in
+&lt;font color='green'&gt;hara.HDF&lt;/font&gt; are now stored in &lt;font color='green'&gt;harahdrs.dat&lt;/font&gt;. In addition to
+the original header data, the variables begin and extent have also
+been extracted to &lt;font color='green'&gt;harahdrs.dat&lt;/font&gt;.
+
+===Extracting Data Only===
+
+The &lt;font color='green'&gt;pntshow&lt;/font&gt; command takes the following form when you want to
+extract just the data from an HDF file:
+
+&lt;pre&gt;
+    pntshow input_HDF_file [-of default_output_format_file]
+
+    [&gt; output_file]
+&lt;/pre&gt;
+
+&lt;blockquote&gt;
+; \var{input_HDF_file} :
+Name of the input HDF file, which has been packed using &lt;font color='green'&gt;hdfpack&lt;/font&gt;.
+
+; \hdfof :
+Option flag followed by the name of the FreeForm format file that
+describes the format for data extracted to standard output or
+\var{output_file.}
+
+; \var{output_file} :
+Name of the output file into which data is transferred. If an output
+file name is not specified, the default is standard output.
+
+&lt;/blockquote&gt;
+
+====Examples====
+
+You can use &lt;font color='green'&gt;pntshow&lt;/font&gt; to extract designated variables from an HDF
+file. In this example, you will extract temperature and pressure
+values from &lt;font color='green'&gt;hara.HDF&lt;/font&gt; to an ASCII format. First, the following
+format description file must exist.
+
+Here is &lt;font color='green'&gt;haradata.fmt&lt;/font&gt;:
+
+&lt;pre&gt;
+ASCII_output_data "ASCII format for pressure, temp"
+atmospheric_pressure 1 10 long 1
+temperature_deg 15 25 float 1
+&lt;/pre&gt;
+
+To create a file named &lt;font color='green'&gt;temppres.dat&lt;/font&gt; containing only the
+temperature and pressure variables, enter either of the following
+commands:
+
+&lt;pre&gt;
+pntshow hara.HDF -of haradata.fmt &gt; temppres.dat
+&lt;/pre&gt;
+
+or
+
+&lt;pre&gt;
+pntshow hara.HDF -d temppres.dat -dof haradata.fmt
+&lt;/pre&gt;
+
+If you use the first command, &lt;font color='green'&gt;pntshow&lt;/font&gt; searches &lt;font color='green'&gt;hara.HDF&lt;/font&gt;
+for a vdata named Data. Since &lt;font color='green'&gt;hara.HDF&lt;/font&gt; contains only one vdata
+named &lt;font color='green'&gt;Data&lt;/font&gt;, this vdata is extracted by default with the format
+specified in &lt;font color='green'&gt;haradata.fmt&lt;/font&gt;.
+
+The results are the same if you use the second command. Now, try
+running &lt;font color='green'&gt;pntshow&lt;/font&gt; on the previously created file &lt;font color='green'&gt;latlon.HDF&lt;/font&gt;,
+which contains two SDS's. Use the following command:
+
+&lt;pre&gt;
+pntshow latlon.HDF &gt; latlon.SDS
+&lt;/pre&gt;
+
+The &lt;font color='green'&gt;latlon.SDS&lt;/font&gt; file now contains the latitude and longitude
+values extracted from &lt;font color='green'&gt;latlon.HDF&lt;/font&gt;. They have the default ASCII
+output format. You could have used the -of option to specify an output
+format included in a FreeForm format description file.</text>
+      <sha1>jah6zqvklh3buhlydzyqcpmrv9oart0</sha1>
+    </revision>
+  </page>
+</mediawiki>

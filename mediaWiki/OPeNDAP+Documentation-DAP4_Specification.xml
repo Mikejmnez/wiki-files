@@ -1,0 +1,58 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4 Specification</title>
+    <ns>0</ns>
+    <id>880</id>
+    <revision>
+      <id>10737</id>
+      <parentid>10528</parentid>
+      <timestamp>2014-08-15T18:16:37Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>10737</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="581" sha1="2wt5x4c1p7ofzwzbndjkxamf3t878d5" xml:space="preserve">The DAP4 Specification has two main volumes and a number of optional extensions:
+
+# [[DAP4: Overview | Overview: New Features Introduced in DAP4]]
+# [[DAP4: Specification Volume 1 | Volume 1: Data Model, Persistent Representation, and Constraints]]
+#* [[DAP4: Specification Volume 1 Deltas]]
+# [[DAP4: Specification Volume 2 | Volume 2: Web Services Specification]]
+# DAP4 Extensions
+#* [[DAP4 Extension: CSV Data Encoding and Response]]
+#* [[DAP4 Extension: NetCDF Data Response]]
+#* [[DAP4 Extension: Asynchronous Response]]
+#* [[DAP4 Extension: JSON Data and Metadata Encoding]]</text>
+      <sha1>2wt5x4c1p7ofzwzbndjkxamf3t878d5</sha1>
+    </revision>
+  </page>
+</mediawiki>

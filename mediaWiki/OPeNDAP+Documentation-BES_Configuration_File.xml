@@ -1,0 +1,70 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>BES Configuration File</title>
+    <ns>0</ns>
+    <id>534</id>
+    <revision>
+      <id>4968</id>
+      <parentid>4907</parentid>
+      <timestamp>2009-11-20T18:02:52Z</timestamp>
+      <contributor>
+        <username>PatrickWest</username>
+        <id>4</id>
+      </contributor>
+      <comment>/* Suggested Solution */</comment>
+      <origin>4968</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="2037" sha1="6rr3hrgz6tews9x843rr2ks2dom2pu4" xml:space="preserve">== Current Problem ==
+Currently, any modules that the BES loads adds information to the one BES configuration file. This causes problems in many scenarios.
+* Development work where you have to do a 'make install' many times, which over-writes the BES configuration file
+* Upgrading the BES, the install over-writes the configuration file
+
+== Suggested Solution ==
+
+# The BES configuration file holds only the information for the BES, no loaded modules
+# Add new keywords in the configuration file to include other configuration files, like what Apache HTTPD does
+#* include conf.d/*.conf - we would do something similar to this
+#* allow regular expression matching of files (If we want it where they don't have to edit the bes.conf file, then we will need this)
+#* allow for a direct include
+#* allow multiple includes
+#* recommend that they leave the include line alone, and rename conf files if they don't want them installed (like with Apache HTTPD)
+#* Modify the behavior for BES.modules, or have a new keyword like "Add BES.modules", or BES.addModules=nc and keep the BES.nc.module=&lt;path_to_so&gt;
+# When doing an install, don't install a new configuration file, but update the one that is there, if need be. Same with the install target to make, only make changes that need to be made.
+#* Do not edit an existing configuration file as part of make install. Install a replacement file that, maybe, is built from the existing file using a new name. So read bes.conf and use that to build bes.conf.new that is then copied to the new directory. We can include a special target to do the 'dangerous' operation of moving the bes.conf.new to bes.conf so our automated builds run more smoothly, but sysadmins will balk at having 'make install' modify their configuration(s). This also applies to the rpm upgrade process.
+# Allow for addition to parameters
+#* Perhaps BES.Var+=
+#* Perhaps BES.Var=, and if there is already a value, add to it
+
+[[Category:Development|BES Configuration File]][[Category:Hyrax Development|BES Configuration File]]</text>
+      <sha1>6rr3hrgz6tews9x843rr2ks2dom2pu4</sha1>
+    </revision>
+  </page>
+</mediawiki>

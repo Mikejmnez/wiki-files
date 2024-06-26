@@ -1,0 +1,97 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DDX</title>
+    <ns>0</ns>
+    <id>334</id>
+    <revision>
+      <id>2574</id>
+      <parentid>2527</parentid>
+      <timestamp>2008-12-22T19:24:07Z</timestamp>
+      <contributor>
+        <username>Jimg</username>
+        <id>3</id>
+      </contributor>
+      <origin>2574</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3079" sha1="gme2p5w1fmdwqxnlw1rksj7776jni7g" xml:space="preserve">The DDX is an attempt to combine the information in the both the DDS and DAS into one response to eliminate the need to cross-walk the two responses when applying DAS information to variables. It will also streamline access somewhat and will employ XML as the content-type, although these are secondary objectives.
+
+== DAP 3.1 ==
+
+DAP 3.1 contains an implementation of this feature, which is described, in spirit, in the original [[Media:Dap_objectsdraft3nov03.pdf  | Draft DAP 4 specification document]].
+
+== DAP 3.2 ==
+
+=== Implemented ===
+
+==== GRDDL Namespace ====
+
+In version 3.2 the namespace for ''grddl'' is defined and the DDX to RDF XSL transform is the value of the ''grddl:transform'' attribute in the ''Dataset'' element.
+
+ xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+ grddl:transformation="http://xml.opendap.org/transforms/ddxToRdfTriples.xsl"
+
+==== BLOB element ====
+
+Removed as of Version 3.2.
+
+==== Version information and the structure of the ''Dataset'' element ====
+
+The information in the DDX ''Dataset'' element is different starting with DAP 3.2. For this version onward, the ''Dataset'' element will contain a default namespace that is ''http://xml.opendap.org/ns/DAP/3.2#'' where the last pathname component will vary to reflect the version number. This will also be set as a prefix like ''dap3.2'' so that attributes can be put in the namespace. The ''Dataset'' element will also have the schema location set to ''http://xml.opendap.org/dap/dap/3.2.xsd'' where, again, the last part of the pathname will reflect the version.
+
+Here's the current stuff that appears in a 3.2 DDX's ''Dataset'' element:
+&lt;pre&gt;
+&lt;Dataset name="fnoc1.nc"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://xml.opendap.org/ns/DAP/3.2#  http://xml.opendap.org/dap/dap/3.2.xsd"
+xmlns="http://xml.opendap.org/ns/DAP/3.2#"
+xmlns:dap="http://xml.opendap.org/ns/DAP/3.2#"
+dap_version="3.2"&gt;
+&lt;/pre&gt;
+
+Why have ''.../DAP/3.2#'' appear twice? Because this sets the default namespace to DAP 3.2 and sets the prefix ''dap'' to that as well. The default namespace is not used by XML attributes, only elements, so defining the symbol ''dap'' as a shorthand provides an easy way to place attributes is a given namespace.
+
+The ''schemaLocation'' attribute is used by conforming validating parsers but is not used to assign namespaces for the elements and attributes in the document, so the information is repeated.
+
+=== Added the ''Data'' element to ease defining the ''DataDDX'' response ===
+
+See the design/discussion in [[DataDDX]]. The ''Data'' element is essentially the old BLOB element, but I'm calling it 'Data' this time ;-)
+
+=== Suggestions ===
+
+Adopt the use of MIME that is used by WCS 1.1.
+
+Modify Attributes so that they appear 'anywhere' in the DDX and eliminate the ''Attribute'' element. At the same time, every Attribute must be in a namespace to bind that attribute to some semantic context. We will define an 'opendap' namespace for stuff that's not clearly part of CF, FGDC, et cetera.
+
+[[Category:Development|DDX]][[Category:DAP4|DDX]]</text>
+      <sha1>gme2p5w1fmdwqxnlw1rksj7776jni7g</sha1>
+    </revision>
+  </page>
+</mediawiki>

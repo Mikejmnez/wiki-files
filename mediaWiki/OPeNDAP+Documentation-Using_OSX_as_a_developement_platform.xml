@@ -1,0 +1,166 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Using OS-X as a developement platform</title>
+    <ns>0</ns>
+    <id>157</id>
+    <revision>
+      <id>1008</id>
+      <parentid>1007</parentid>
+      <timestamp>2007-06-28T02:02:02Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Building and Installing Software */</comment>
+      <origin>1008</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="10046" sha1="ikp6tu7pp6cgwf71vguihjmt9i525e1" xml:space="preserve">There are a number of tricks to get OS-X to work as an OPeNDAP development platform. Apple provides their own versions of some of these tools and they are not compatible with the production rules for OPeNDAP. You do not need to install thses in any particular order. Once you've got them installed '''make sure that they are on your path'''! Otherwise the exisiting Apple versions may be used and that would be a bad thing.
+
+=Building and Installing Software=
+OS-X occupies a fairly unique place in the collection of modern operating systems: It is a full featured variant of the UNIX ooperating system that provides all of the modern conveniences of a user centric desktop (Apple Macintosh). As such many software applications can be installed using a GUI based install tool. Other applications, such as the majority of the software listed below, must be installed using the traditional UNIX style code distribution mechanisms.
+
+This process typically works like ths:
+# '''Download the software bundle.''' This is typically a compressed ''tar'' file, usually named after the software component and version thereof.
+# '''Unpack the software.''' This can be done from the command line (either using a ''Terminal'' or an ''xterm'') or using the finder. The finder is able to uncompress and unpack compressed ''tar'' files. However, later steps will '''require'' a comand line so you might as well start here. To unpack the software using the command line:
+#* Open a "terminal" window (Lanuch the ''Terminal'' application or launch ''X11'' and open an ''xterm'')
+#* Change directory to the directory containing the compressed ''tar'' file.
+#* Run the command: &lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;zcat filename.tar.gz | tar -xvf -&lt;/font&gt;&lt;br&gt;This should unpack the software, typically creating a single directory containing the software.
+# '''Configure the software.'''In a ''terminal'' window change directory to the directory containing the software. Run the command:&lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;./configure&lt;/font&gt;
+# '''Build the software.''' In the same ''terminal'' run the command: &lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;make&lt;/font&gt;
+# '''Test the software.'''  In the same ''terminal'' run the command: &lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;make check&lt;/font&gt;
+# '''Install the software.'''  In the same ''terminal'' run the command: &lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;sudo make install&lt;/font&gt;&lt;br&gt; This command installs the software using the ''root'' or ''superuser'' shell (via the ''sudo'' command). You will be prompted for your password. If you do not have administrator privleges on you OS-X system then, well... Get Them.
+# '''Adjust Your Path''' Most of these packages install themselves into ''/usr/local'' you will need to modify your ''path'' environment variables to ensure that ''/usr/local/bin'' appears on your path before other things (like ''/usr/bin''). You can do this by modifying the "dot" files for your shell in your home directory (For '''bash''', the default shell for OS-X, that's ''.profile'') You may also wish to edit the path variable in the OS-X environment plist. This can be accomplished by issuing the command: &lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; open ~/.MacOSX/environment.plist &lt;/font&gt;&lt;br&gt;In a ''terminal''. This will open the PlistEditor and from there you're on your own.
+# '''Fini''' At this point the software package should be installed.
+
+=libdap core development=
+These are the things you need to compile/modify the core OPeNDAP software known as ''''libdap''''.
+
+
+==GCC, The Gnu Compiler (Apple Developer Tools)==
+The easy way to get the Gnu compiler is to install the developers bundle from the OS-X installation disks. This is appears as an "Xcode Tools" on (my) Tiger distribution disks. Open that folder and run the '''XcodeTools''' installer. The default install should be enough.  This will give you the GNU gcc 4.x compiler, which you must have.
+
+Once you have that installed I suggest that you run the appliction ''/Developer/Applications/Utilities/CrashReporterPrefs'' and use it to set the system crash reporting level to "Developer". You'll thank me for this later.
+
+
+==[http://subversion.tigris.org/ Subversion]==
+Although OS-X comes with a bundled Subversion client I suggest that you get a recent one.
+
+'''''Minimum''''': subversion 1.4.4
+
+'''''Recommended''''': subversion 1.4.4
+
+You will probably want to get a to get a binary of the Subversion client. I had good luck with [http://downloads.open.collab.net/binaries.html This One] which comes with a nice GUI based installer.
+
+==[http://www.gnu.org/software/autoconf/ autoconf]==
+Apple ships OS-X with an ''unusual'' version of autoconf. Go get the Gnu one, compile, test, and install it.
+
+'''''Minimum''''': autoconf 2.57
+
+'''''Recommended''''': autoconf 2.61
+
+==[http://www.gnu.org/software/automake/ automake]==
+Apple ships OS-X with an ''unusual'' version of automake. Go get the Gnu one, compile, test, and install it.
+
+'''''Minimum''''': automake 1.9.6
+
+'''''Recommended''''': automake 1.9.6
+
+==[http://www.gnu.org/software/libtool libtool]==
+Apple ships OS-X with an ''unusual'' version of libtool. Go get the Gnu one, compile, test, and install it.
+
+'''''Minimum''''': libtool 1.5.18
+
+'''''Recommended''''': libtool 1.5.22
+
+==[http://www.gnu.org/software/dejagnu/ DejaGnu]==
+If you intend to actually test your changes to the software you will need to install the GNU DejaGnu package to run the bundled tests.
+
+'''''Minimum''''': dejagnu 1.4.4
+
+'''''Recommended''''': dejagnu 1.4.4
+
+
+=Additional Software Packages=
+There are several addtional software packages that you will need if you wish to work with different OPeNDAP componets. Since the Hyrax server has handlers for HDF4, HDF5, and NetCDF datatypes you will need to install those libraries in order to work with the handlers. 
+
+==[http://hdf.ncsa.uiuc.edu/hdf4.html HDF4]==
+''(This discussion is based on the HDF4.2r1 release)''
+
+In order to build and use the [http://scm.opendap.org:8090/svn/trunk/hdf4_handler/ hdf4_handler] package used by the BES you will need to successfully build and install the HDF4 libraries and dependancies (szip, zlib, and jpeg). We have had no success using the OS-X binary distributions of HDF4 and it's dependancies offered at the [http://hdf.ncsa.uiuc.edu/hdf4.html HDF4 home page]. We recommend that you build HDF4 and it's components from source. Because it's so difficult to get this done successfully I am providing a detailed accounting of how to make it work:
+
+Go get HDF4 from http://hdf.ncsa.uiuc.edu/hdf4.html &lt;br&gt;This entails retrieving the source for the HDF4, szip, zlib, and jpeg software packages. Get the source for all of these via the links found at the [http://hdf.ncsa.uiuc.edu/hdf4.html HDF4 home page] so that you are assured that the versions are compatible.
+
+You will need to Unpack, configure, build, test, and install each software component as described above.
+
+# '''szip''': Download, unpack, configure, build, test, and install the szip package.&lt;br&gt;&lt;br&gt;
+# '''zlib''': Download, unpack, configure, build, test, and install the zlib package.&lt;br&gt;&lt;br&gt;
+# '''jpeg''': Download, unpack, configure, build, test, and install the jpeg package. &lt;br&gt;Once it's installed you will need to perform the following additional steps:
+## Copy the jpeg library to ''/usr/local/lib'' with the command:&lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;sudo cp libjpeg.a /usr/local/lib&lt;/font&gt;
+## Update the table of contents of archive libraries (to add the new library) with the command:&lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; sudo ranlib /usr/local/lib/libjpeg.a &lt;/font&gt;
+## Copy the required include files to ''/usr/local/include'' with the command:&lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;sudo cp jerror.h jpeglib.h jconfig.h jmorecfg.h /usr/local/include&lt;/font&gt;&lt;br&gt;&lt;br&gt;
+# '''HDF4''': After downloading  and unpacking the HDF4 software do the following:
+## Configure it using the command:&lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;./configure --prefix=/usr/local --disable-fortran&lt;/font&gt;
+## Build it using the command:&lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;make&lt;/font&gt;
+## Test it using the command:&lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;make check&lt;/font&gt;
+## Install it using the command:&lt;br&gt;&lt;font style="font-family:courier"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;sudo make install&lt;/font&gt;
+
+
+
+==[http://www.unidata.ucar.edu/software/netcdf/  NetCDF]==
+
+In order to build and use the [http://scm.opendap.org:8090/svn/trunk/netcdf_handler/ netcdf_handler] package used by the BES you will need to download and install the NetCDF libraries from our friends at [http://www.unidata.ucar.edu/software/netcdf/ Unidata NetCDF project]
+
+'''''Minimum''''': NetCDF 3.6.0-p1
+
+'''''Recommended''''': NetCDF 3.6.2
+
+==[http://hdf.ncsa.uiuc.edu/HDF5/ HDF5]==
+In order to build and use the [http://scm.opendap.org:8090/svn/trunk/hdf5_handler/ hdf5_handler] package used by the BES you will need to download and install the HDF5 libraries from the [http://hdf.ncsa.uiuc.edu/HDF5/ HDF5 project]. 
+
+'''''Minimum''''': HDF5 1.6.5
+
+'''''Recommended''''': HDF5 1.6.5
+
+If you have '''already''' installed the HDF4 package then the installation is straight forward. 
+
+Otherwise you will need to:
+# '''szip''': Download, unpack, configure, build, test, and install the szip package.&lt;br&gt;&lt;br&gt;
+# '''zlib''': Download, unpack, configure, build, test, and install the zlib package.&lt;br&gt;&lt;br&gt;
+# '''HDF5''': Download, unpack, configure, build, test, and install the HDF 5 package.&lt;br&gt;&lt;br&gt;
+
+
+==[http://www.gnu.org/software/tar/ GNU tar]==
+
+You may or may not find that there are issues with the ''tar'' program supplied with OS-X. IF you suspect that there is a problem go get the latest from GNU: http://www.gnu.org/software/tar/ build and install it. (Make sure it's on your path before the old one!!)</text>
+      <sha1>ikp6tu7pp6cgwf71vguihjmt9i525e1</sha1>
+    </revision>
+  </page>
+</mediawiki>

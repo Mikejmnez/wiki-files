@@ -1,0 +1,922 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4 Dataset Services Response</title>
+    <ns>0</ns>
+    <id>833</id>
+    <revision>
+      <id>10158</id>
+      <parentid>10157</parentid>
+      <timestamp>2013-11-20T17:20:48Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <comment>/* Background */</comment>
+      <origin>10158</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="55152" sha1="5u6jw4wvc12gczi444xdx3rxoh2blhp" xml:space="preserve">[[Category:Development|Development]][[Category:DAP4|DAP4]]
+
+[[OPULS_Development | &lt;-- back to OPULS Development]]
+
+Author: [[User:Ndp|ndp]]
+
+== Background ==
+
+Legacy DAP2 servers provide a number of  dataset level responses (services). These include DAP2 services such as the DDS, DAS, and DDX, plus other services that have been added over time such as the RDF and ISO responses. There is no method defined by the DAP2 protocol for a user (or software agent) to discover which of these many services might be available for a particular dataset.  While THREDDS catalogs do provide a mechanism for determining which services are associated with which datasets, they don't actually provide a mechanism for discovering the details of the various service URLs. A THREDDS catalog might identify a DAP2 service, but the URL that can be assembled from the THREDDS catalog for that service is limited to just the base dataset URL. Typically dereferencing this URL will provide one of two things - either the underlying data file (for example a netcdf file) or an HTTP 403 error if direct access to the underlying files has been disabled in the server configuration.
+
+'''Example:'''
+
+This URL points to a dataset on a DAP2 server:
+&lt;font size="2"&gt;
+ http://test.opendap.org:8080/opendap/data/nc/fnoc1.nc
+&lt;/font&gt;
+
+Dereferencing the link will not connect you to a DAP2 service or DAP2 response. It will (likely) return the underlying netcdf file. The only way to know that DAP2 services exist for this is by reading the URL path and recognizing that it is probably an instance of a DAP2 server based on the composition of the URL. In fact, there is no guarantee that dereferencing this URL will even yield the underlying file, as that behavior is a configuration option for some server implementations. If that access is not allowed in the configuration, then dereferencing the URL will simply return an HTTP 403 (forbidden) error.
+
+== Dataset Services Response ==
+
+The Dataset Services Response provides a 'Services' or 'Capabilities' response for DAP4. Dereferencing an unadorned DAP4 dataset resource URL will return a document describing the DAP services available for the dataset. This is a REQUIRED response and the only valid response for an 'unadorned' dataset resource URL. We will refer to this response as the 'Dataset Services Response' or 'DSR' in the 'DAP4 Web Services' specification and the remainder of this document. 
+
+At minimum the DSR document MUST provide, for each service available for the dataset:
+
+* A human readable title of that service (e.g., The Dataset Metadata Response service for the dataset)
+* One or more links that can be dereferenced to get the various representations of the response for the dataset.
+* An unambiguous, unique to the service type, resource role ID that serves as a way to clearly identify what each service does. (Note: ''Resource roles for all DAP4 services are defined, as well as for several other legacy DAP2 related services in the 'DAP4 Specification, Volume 2 Web Services'. Defining a resource role for a new service will be the responsibility of the service creator.'')
+* A brief description of the service
+
+The response should also include:
+* A link to a complete, human readable, description of the service.
+* A reference to an XSLT that a browser would use to render the description into HTML for a presentation view.
+* Descriptions and syntax of server side functions available for the dataset
+
+=== Service Access ===
+
+A service is accessed by dereferencing one of the access URLs held in the &lt;font size="2"&gt;&lt;code&gt;'''href'''&lt;/code&gt;&lt;/font&gt; attribute of a &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:link&gt;'''&lt;/code&gt;&lt;/font&gt; elements, which is typically constructed by adding some type of suffix to the dataset's referent (aka base) URL. The way in which the query string (aka constraint expression) is used is defined by each service, and there is no requirement for inter-service query string API conformity.
+
+A more extensive discussion of the various services that might appear in a DatasetServices document can be found in [[DAP4:_Specification_Volume_2| DAP4 Volume 2, Web Services]].
+
+'''Note:''' If a client understands how to modify/augment the dataset resource URL (as described in the  [[DAP4:_Specification_Volume_2| DAP4 Volume 2, Web Services]] ) such that it becomes a DAP response URL then it need never obtain the Dataset Services response.
+
+===  Dataset Services Response Encoding  === 
+
+c.f. [[DAP4:_Specification_Volume_2| DAP4 Volume 2, Web Services]]
+
+''In this section the namespace prefix &lt;font size="2"&gt;&lt;code&gt;'''dsr'''&lt;/code&gt;&lt;/font&gt;  is associated with the namespace '''&lt;font size="2"&gt;&lt;code&gt;&lt;nowiki&gt;http://xml.opendap.org/ns/DAP/4.0/dataset-services#&lt;/nowiki&gt;&lt;/code&gt;&lt;/font&gt;'''.''
+
+==== dsr:DatasetServices element ====
+
+The Dataset Services Response MUST contain a top level &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:DatasetServices&gt;'''&lt;/code&gt;&lt;/font&gt; element. This &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:DatasetServices&gt;'''&lt;/code&gt;&lt;/font&gt; element MUST contain:
+* An &lt;font size="2"&gt;&lt;code&gt;'''xml:base'''&lt;/code&gt;&lt;/font&gt; attribute whose value is the resource URL that was dereferenced to request the DSR response.
+* A list of DAP versions supported by server
+*: These appear as one or more child &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:DapVersion&gt;'''&lt;/code&gt;&lt;/font&gt; elements of the &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:DatasetServices&gt;'''&lt;/code&gt;&lt;/font&gt; element.
+* The implementation version of the server that produced the DSR.
+*: This appears as a single &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:ServerSoftwareVersion&gt;'''&lt;/code&gt;&lt;/font&gt; child element of the &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:DatasetServices&gt;'''&lt;/code&gt;&lt;/font&gt; element. 
+* A list of all available DAP4 services for the dataset
+*: This is represented as 3 or more &lt;font size="2"&gt;&lt;code&gt;'''[[#Service_Element | &lt;dsr:Service&gt;]]'''&lt;/code&gt;&lt;/font&gt; elements. (There are 3 required services for a DAP4 server.) 
+* A list of supported extensions
+** Resource type extensions
+** Media type extensions
+** Server-side function extensions
+
+The &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:DatasetServices&gt;'''&lt;/code&gt;&lt;/font&gt; element SHOULD contain:
+* A &lt;font size="2"&gt;&lt;code&gt;'''title'''&lt;/code&gt;&lt;/font&gt; attribute whose value is a human readable title for the dataset.
+
+The &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:DatasetServices&gt;'''&lt;/code&gt;&lt;/font&gt; element MAY contain:
+* A &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:Description&gt;'''&lt;/code&gt;&lt;/font&gt; element whose value is a human readable description of the dataset.
+
+==== dsr:DapVersion Element ====
+The &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:DapVersion&gt;'''&lt;/code&gt;&lt;/font&gt; element contains a single DAP version value as a text string. The DAP version is represented as two integer values separated by a period, MM.mm where the first value (MM) is the major version of the DAP protocol, and the second value (mm) is the minor version. Multiple &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:DapVersion&gt;'''&lt;/code&gt;&lt;/font&gt; elements are used to represent that server can support multiple versions of the DAP protocol, one instance for each supported version.
+
+Example:
+&lt;font size="2"&gt;
+&lt;source lang="xml" &gt;
+&lt;DapVersion&gt;4.0&lt;/DapVersion&gt;
+&lt;DapVersion&gt;3.2&lt;/DapVersion&gt;
+&lt;DapVersion&gt;2.0&lt;/DapVersion&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+==== dsr:ServerSoftwareVersion element ====
+
+The &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:ServerSoftwareVersion&gt;'''&lt;/code&gt;&lt;/font&gt; element has no attributes and may contain as little as a simple text string (e.g., "TDS 4.3.57" or "Hyrax 1.7.45"), or it may contain any well-formed XML content not in the &lt;font size="2"&gt;&lt;code&gt;'''dsr'''&lt;/code&gt;&lt;/font&gt; namespace that the server implementer sees fit to use to describe the software version of their server implementation.
+
+==== dsr:Service element ====
+
+Each DAP4 web service is described by a &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:Service&gt;'''&lt;/code&gt;&lt;/font&gt; element with:
+* An optional &lt;font size="2"&gt;&lt;code&gt;'''title'''&lt;/code&gt;&lt;/font&gt; attribute whose value is a simple human readable title for the service. 
+* An required &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt; attribute whose value is a unique to the service type, resource role ID (a URI) that serves as a way to clearly identify what each service does. This is intended to allow people and software to unambiguously identify specific services, irrespective of their human readable title. The idea is that that the role attribute tells you what is going to happen when you dereference the URL held in the &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:link&gt;'''&lt;/code&gt;&lt;/font&gt; element. Each service has a single role and all of the links (alternate representations) must fulfill the same role.
+* An optional &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:Description&gt;'''&lt;/code&gt;&lt;/font&gt; element .
+* One or more &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:link&gt;'''&lt;/code&gt;&lt;/font&gt; elements.
+
+===== Regarding the &lt;font size="3"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt; attribute =====
+
+With regards to multiple representations of a service response and the &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt;  attribute: While there may be many alternate representations of a response, not all will fufill the same &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt;. Representations fulfilling the same &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt; should be bundled together in their own '''Service''' with the appropriate &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt; value. For example the DMR can be mapped to the ISO19115 metadata space, but IS0-19115 responses are clearly outside of the &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt; of the regular DMR service, which returns a DAP4 metadata response. One could view it as the two roles described different domains.
+
+==== dsr:Description element ====
+Each &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:Description&gt;'''&lt;/code&gt;&lt;/font&gt; element MUST contain:
+* An optional &lt;font size="2"&gt;&lt;code&gt;'''href'''&lt;/code&gt;&lt;/font&gt; attribute whose value is a URL string that points to a human readable document describing the service. 
+* The required text content of the &lt;font size="2"&gt;&lt;code&gt;'''dsr:Description'''&lt;/code&gt;&lt;/font&gt; element MUST be a human readable description of the service.
+
+==== dsr:link element ====
+
+Each &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:link&gt;'''&lt;/code&gt;&lt;/font&gt; element MUST contain:
+
+* A required &lt;font size="2"&gt;&lt;code&gt;'''type'''&lt;/code&gt;&lt;/font&gt; attribute whose value is the media-type for the normative representation returned by that URL held in the &lt;font size="2"&gt;&lt;code&gt;'''href'''&lt;/code&gt;&lt;/font&gt; attribute.
+* A required attribute called &lt;font size="2"&gt;&lt;code&gt;'''href'''&lt;/code&gt;&lt;/font&gt; whose value is a URL that when dereferenced will return the service response in the media type described by the value of the &lt;font size="2"&gt;&lt;code&gt;'''type'''&lt;/code&gt;&lt;/font&gt; attribute.
+* An optional attribute called &lt;font size="2"&gt;&lt;code&gt;'''description'''&lt;/code&gt;&lt;/font&gt; whose value is a human readable string that provides a brief description of the &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:link&gt;'''&lt;/code&gt;&lt;/font&gt; elements semantics.
+* Zero or more &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:alt&gt;'''&lt;/code&gt;&lt;/font&gt; elements, one for each and every alternate representation of the response that can be requested using [http://www.w3.org/Protocols/rfc2616/rfc2616-sec12.html#sec12.1 HTTP server-driven content negotiation] in conjunction with the &lt;font size="2"&gt;&lt;code&gt;'''href'''&lt;/code&gt;&lt;/font&gt; URL. Each &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:alt&gt;'''&lt;/code&gt;&lt;/font&gt; element MUST contain:
+** A required &lt;font size="2"&gt;&lt;code&gt;'''type'''&lt;/code&gt;&lt;/font&gt; attribute whose value is the MIME type that would be used in the [http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1 HTTP '''Accept''' header] to request that representation from the server.
+
+=== Extensions ===
+
+Server extensions are simple descriptions of server behaviors that fall outside of the services descriptions provided so far. There are three types of extensions: &lt;font size="2"&gt;&lt;code&gt;'''function'''&lt;/code&gt;&lt;/font&gt;, &lt;font size="2"&gt;&lt;code&gt;'''functionGroup'''&lt;/code&gt;&lt;/font&gt;, and &lt;font size="2"&gt;&lt;code&gt;'''extension'''&lt;/code&gt;&lt;/font&gt;.
+
+A linear regression, a re-gridding operation, and a coordinate re-projection are all examples of a &lt;font size="2"&gt;&lt;code&gt;'''function'''&lt;/code&gt;&lt;/font&gt;. A collection of functions that allows the user to perform geocentric manipulations of the data (such as re-gridding operations, reprojection operations) taken together could define a &lt;font size="2"&gt;&lt;code&gt;'''functionGroup'''&lt;/code&gt;&lt;/font&gt;.  An &lt;font size="2"&gt;&lt;code&gt;'''extension'''&lt;/code&gt;&lt;/font&gt; is a server behavior that does not operate directly on the data values, but may provide other types of services and functionality for the client.
+
+It is beyond the scope of this specification to attempt to describe the syntax of usage of a  &lt;font size="2"&gt;&lt;code&gt;'''function'''&lt;/code&gt;&lt;/font&gt; in some general way. Rather we have chosen to provide a simple mechanism (the &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt; attribute) to alert client software implementations that the server supports specific additional behaviors they can utilize, along with more descriptive elements through which humans can be alerted to the presence of server features and where to find out more about them.
+
+==== dsr:function ====
+
+A function extension always describes an operation that applies to the Data Response and the Dataset Metadata Response (because some functions might alter the syntacic structure of the data the change would be previewed by applying the function to the DMR).  
+
+Each &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:function&gt;'''&lt;/code&gt;&lt;/font&gt; MUST contain:
+* A &lt;font size="2"&gt;&lt;code&gt;'''name'''&lt;/code&gt;&lt;/font&gt; attribute whose value is the name of the function as it would be used in a DR or DMR request.
+* A &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt; attribute whose value is a URI that universally defines the function.
+* A &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:Description&gt;'''&lt;/code&gt;&lt;/font&gt; element whose value is a human readable description of the function and a link to detailed documentation of the function and its usage.
+
+A common example of a function would be the DAP2 (and DAP4)  geogrid function that allows users to be sub-sampled gridded data using georeferenced values.
+
+==== dsr:functionGroup ====
+
+A function group identifies that the server supports a group of functions. Rather than enumerating a large list of related functions, the functionGroup provides the user with the information that the server supports a collection of related functions.
+
+Each &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:functionGroup&gt;'''&lt;/code&gt;&lt;/font&gt; MUST contain:
+* A &lt;font size="2"&gt;&lt;code&gt;'''name'''&lt;/code&gt;&lt;/font&gt; attribute whose value is the human readable name of the collection of functions.
+* A &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt; attribute whose value is a URI that universally defines the function group.
+* A &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:Description&gt;'''&lt;/code&gt;&lt;/font&gt; element whose value is a human readable description of the function group and a link to detailed documentation regarding the functions in the function group and their usage.
+
+An example of a function group would be a server that implemented a functional syntax for all of the functions found in the [http://ferret.wrc.noaa.gov/Ferret/ Ferret] application.
+
+==== dsr:extension ====
+An extension is a mechanism for indicating that the server supports a certain behavior. This behavior MUST NOT be an operation/computation on the data (other wise it would be a &lt;font size="2"&gt;&lt;code&gt;'''dsr:function'''&lt;/code&gt;&lt;/font&gt;or a &lt;font size="2"&gt;&lt;code&gt;'''dsr:functionGroup'''&lt;/code&gt;&lt;/font&gt;), but rather some other behavior that the server can undertake.
+
+Each &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:extension&gt;'''&lt;/code&gt;&lt;/font&gt; MUST contain:
+* A &lt;font size="2"&gt;&lt;code&gt;'''name'''&lt;/code&gt;&lt;/font&gt; attribute whose value is the human readable name of the extension.
+* A &lt;font size="2"&gt;&lt;code&gt;'''role'''&lt;/code&gt;&lt;/font&gt; attribute whose value is a URI that universally defines the extension.
+* A &lt;font size="2"&gt;&lt;code&gt;'''&lt;dsr:Description&gt;'''&lt;/code&gt;&lt;/font&gt; element whose value is a human readable description of the extension and a link to detailed documentation regarding the extension and it's behavior and  usage.
+
+An example of an extension would be the DAP4 asynchronous response support. Some servers will support this functionality, and the functionality is not defined as an operation on the data itself, but in terms of the transaction procedures for accessing the data.
+
+=== Example:  A Minimal DSR ===
+
+This example contains only the required components of the DSR document from a minimal DAP4 server implementation.
+
+&lt;font size="2"&gt;
+&lt;source lang="xml" &gt;
+
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;DatasetServices xmlns="http://xml.opendap.org/ns/DAP/4.0/dataset-services#"
+    xml:base="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml"&gt;
+
+    &lt;DapVersion&gt;4.0&lt;/DapVersion&gt;
+    
+    &lt;ServerSoftwareVersion&gt;Hyrax-2.7.9&lt;/ServerSoftwareVersion&gt;
+        
+    &lt;Service title="DAP4 Dataset Services" role="http://services.opendap.org/dap4/dataset-services"&gt;
+        &lt;link type="application/vnd.opendap.org.dataset-services+xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml"&gt;
+              &lt;alt type="text/xml"/&gt;
+        &lt;/link&gt;
+        &lt;link type="text/xml"  href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xml"/&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAP4 Dataset Metadata"  role="http://services.opendap.org/dap4/dataset-metadata"&gt;
+        &lt;link type="application/vnd.org.opendap.dap4.dataset-metadata+xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dmr"&gt;
+              &lt;alt type="text/xml"/&gt;
+        &lt;/link&gt;
+        &lt;link type="text/xml" href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dmr.xml"/&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAP4 Data" role="http://services.opendap.org/dap4/data"&gt;
+        &lt;link type="application/vnd.org.opendap.dap4.data" href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dap" /&gt;
+    &lt;/Service&gt;
+
+    
+&lt;/DatasetServices&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+=== Example: A fully featured and annotated DSR document ===
+
+This example contains all of the optional components for a hypothetical DAP4 server that also supports DAp2 requests, server side functions, and asynchronous transactions.
+
+&lt;font size="2"&gt;
+&lt;source lang="xml" &gt;
+
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="/opendap/xsl/serviceDescription.xsl"?&gt;
+&lt;DatasetServices xmlns="http://xml.opendap.org/ns/DAP/4.0/dataset-services#" 
+                 xml:base="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc"&gt;
+
+    &lt;Description&gt;Our friend fnoc1.nc&lt;/Description&gt;
+
+    &lt;!-- ##################################################################################### --&gt;
+    &lt;!--       DAP versions this server supports                                               --&gt; 
+    &lt;!-- ..................................................................................... --&gt;
+    &lt;DapVersion&gt;4.0&lt;/DapVersion&gt;
+    &lt;DapVersion&gt;3.2&lt;/DapVersion&gt;
+    &lt;DapVersion&gt;2.0&lt;/DapVersion&gt;
+    
+    &lt;!-- ##################################################################################### --&gt;
+    &lt;!--  The software version of the server that is providing the DAP4 Dataset Services       --&gt;
+    &lt;!--   response.                                                                           --&gt; 
+    &lt;!-- The ServerSoftwareVersion element may contain text, or any XML element content as     --&gt;
+    &lt;!-- long as the XML is not in the document namespace                                      --&gt;
+    &lt;!-- ..................................................................................... --&gt;
+    &lt;ServerSoftwareVersion&gt;Hyrax-2.7.9&lt;/ServerSoftwareVersion&gt;
+    
+    
+    &lt;!-- ##################################################################################### --&gt;
+    &lt;!--       Required DAP4 Services                                                          --&gt; 
+    &lt;!-- ..................................................................................... --&gt;
+
+    &lt;Service title="DAP4 Dataset Services" role="http://services.opendap.org/dap4/dataset-services"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Dataset_Services_Description_Service"&gt;An index of the Services available for this data resource.&lt;/Description&gt;
+
+        &lt;link description="Normative form of the DSR" 
+              type="application/vnd.opendap.org.dataset-services+xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc"&gt;
+              &lt;alt type="text/html"/&gt;
+              &lt;alt type="text/xml"/&gt;
+        &lt;/link&gt;
+        
+        &lt;link description="HTML representation of the DSR"  
+              type="text/html" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.html"/&gt;
+              
+        &lt;link description="Normative DSR with generic Content-Type" 
+              type="text/xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.xml"/&gt;
+              
+    &lt;/Service&gt;
+
+    &lt;Service title="DAP4 Dataset Metadata"  role="http://services.opendap.org/dap4/dataset-metadata"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Dataset_Service_-_The_metadata"&gt;The DAP4 metadata content for this data resource..&lt;/Description&gt;
+
+        &lt;link description="Normative form of the DMR" 
+              type="application/vnd.org.opendap.dap4.dataset-metadata+xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dmr"&gt;
+              &lt;alt type="text/html"/&gt;
+              &lt;alt type="text/xml"/&gt;
+              &lt;alt type="application/rdf+xml"/&gt;
+        &lt;/link&gt;
+        
+        &lt;link description="Data Request Form" 
+              type="text/html" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dmr.html"/&gt;
+              
+        &lt;link description="Normative DMR with generic Content-Type" 
+              type="text/xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dmr.xml"/&gt;
+              
+        &lt;link description="RDF representation of DMR" 
+              type="application/rdf+xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dmr.rdf"/&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAP4 Data" role="http://services.opendap.org/dap4/data"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Data_Service"&gt;DAP4 Data object for this data resource.&lt;/Description&gt;
+        &lt;link description="The normative form of the DAP4 Data Response"
+              type="application/vnd.org.opendap.dap4.data"  
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dap" &gt;
+              &lt;alt type="text/plain"/&gt;
+              &lt;alt type="text/xml"/&gt;
+              &lt;alt type="application/x-netcdf"/&gt;
+        &lt;/link&gt;
+        
+        &lt;link description="A comma separated values (CSV) representation of the DAP4 Data Response object."
+              type="text/plain"  
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dap.ascii" /&gt;
+        &lt;link description="XML representation of the DAP4 Data Response object."
+              type="text/xml"   
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dap.xml" /&gt;
+        &lt;link description="NetCDF-3 representation of the DAP4 Data Response object."
+              type="application/x-netcdf"   
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dap.nc" /&gt;
+    &lt;/Service&gt;
+
+    &lt;!-- ##################################################################################### --&gt;
+    &lt;!--   Optional DAP4 Related Services                                                      --&gt; 
+    &lt;!-- ..................................................................................... --&gt;
+
+    &lt;Service title="ISO-19115 Metadata Service" role="http://services.opendap.org/dap4/iso-19115"&gt;
+        &lt;link description="Dataset metadata as ISO-19115" 
+              type="text/xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dmr.iso"&gt;
+              &lt;alt type="text/html"/&gt;
+        &lt;/link&gt;
+        &lt;link description="ISO-19115 conformance score" 
+              type="text/html" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dmr.rubric"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_ISO_Conformance_Score_Service"&gt;ISO-19115 conformance score for the DMR.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="File Access" role="http://services.opendap.org/dap4/file"&gt;
+        &lt;link type="text/xml ## This value depends on the file being accessed."  
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.file"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Native_File_Access_Service"&gt;Access to dataset file.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+
+
+    &lt;!-- ##################################################################################### --&gt;
+    &lt;!--       DAP2 Services                                                                   --&gt; 
+    &lt;!-- ..................................................................................... --&gt;
+    &lt;Service title="DAP2 Data" role="http://services.opendap.org/dap2/dods"&gt;
+        &lt;link type="application/octet-stream" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dods"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_Data_Service"&gt;DAP2 Data Object.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DDX" role="http://services.opendap.org/dap2/ddx"&gt;
+        &lt;link type="text/xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.ddx"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_DDX_Service"&gt;OPeNDAP Data Description and Attribute XML Document.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DDS" role="http://services.opendap.org/dap2/dds"&gt;
+        &lt;link type="text/plain" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.dds"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_DDS_Service"&gt;OPeNDAP Data Description Structure.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAS" role="http://services.opendap.org/dap2/das" &gt;
+        &lt;link type="text/plain" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.das"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_DAS_Service"&gt;OPeNDAP Dataset Attribute Structure.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+
+    &lt;Service title="INFO" role="http://services.opendap.org/dap2/info"&gt;
+        &lt;link type="text/html" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.info"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_Info_Service"&gt;OPeNDAP Dataset Information Page.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="Server Version" role="http://services.opendap.org/dap4/version"&gt;
+        &lt;link type="text/xml" 
+              href="http://test.opendap.org:8090/opendap/hyrax/data/fnoc1.nc.ver"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Server_Version_Service"&gt;An XML document containing information about the software version of the server..&lt;/Description&gt;
+    &lt;/Service&gt;
+
+
+    &lt;!-- ##################################################################################### --&gt;
+    &lt;!--       Server Side Functions                                                           --&gt; 
+    &lt;!-- ..................................................................................... --&gt;
+
+
+    &lt;function name="geogrid" role="http://services.opendap.org/dap4/server-side-function/geogrid"&gt;
+        &lt;Description  href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#geogrid"&gt;Allows a DAP Grid variable to be sub-sampled using georeferenced values.&lt;/Description&gt;
+    &lt;/function&gt;
+
+    &lt;function name="grid" role="http://services.opendap.org/dap4/server-side-function/grid"&gt;
+        &lt;Description  href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#grid"&gt;Allows a DAP Grid variable to be sub-sampled using the values of the coordinate axes.&lt;/Description&gt;
+    &lt;/function&gt;
+
+    &lt;function name="linear_scale" role="http://services.opendap.org/dap4/server-side-function/linear-scale"&gt;
+        &lt;Description  href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#linear_scale"&gt;Applies a linear scale transform to the named variable.&lt;/Description&gt;
+    &lt;/function&gt;
+
+    &lt;function name="version" role="http://services.opendap.org/dap4/server-side-function/version"&gt;
+        &lt;Description  href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#version"&gt;Returns version information for each server side function.&lt;/Description&gt;
+    &lt;/function&gt;
+   
+    &lt;!-- ##################################################################################### --&gt;
+    &lt;!--       Server Side Function Group                                                      --&gt; 
+    &lt;!-- ..................................................................................... --&gt;
+
+ 
+    &lt;functionGroup name="ferret" role="http://pmel.noaa.gov/dap4extension/ferret" &gt;
+        &lt;Description href="http://ferret.pmel.noaa.gov/Ferret/documentation"&gt;This server supports ferret functions.&lt;/Description&gt;
+    &lt;/functionGroup&gt;
+
+    &lt;!-- ##################################################################################### --&gt;
+    &lt;!--       Extensions                                                                      --&gt; 
+    &lt;!-- ..................................................................................... --&gt;
+
+    &lt;extension name="async" role="http://opendap.org/extension/async"&gt;
+        &lt;Description href="http://docs.opendap.org/index.php/DAP4:_Asynchronous_Request-Response_Proposal_v3"&gt;The server supports asynchronous transactions.&lt;/Description&gt;
+    &lt;/extension&gt;
+    
+    
+&lt;/DatasetServices&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+
+== Rationale for the solution ==
+
+The solution provides DAP4 servers with an interface that allows for both server-driven and agent driven content negotiation as described in [[http://www.w3.org/Protocols/rfc2616/rfc2616-sec12.html  section 12 of the HTTP 1.1 specification]].  Providing the Dataset Services Response in XML allows many downstream applications to ingest the content and leaves open the option for server implementers to add XSLT references to the document so that clients like browsers can easily build a presentation view of the information. &lt;!-- Using the Atom 1.0 appears to involve no additional overhead and will enable other uses for the response. --&gt;
+
+== Discussion ==
+&lt;!-- It is possible to embed in the above a reference to a XSLT that will transform the above XML into HTML similar to the following (with the caveat that this image is actually of a similar, but not identical, XML response): --&gt;
+Here is one idea for the HTML version of the DSR; it could be generated by the server using XSLT on the XML or by the browser when the user explicitly requests the ''.xml'' variant of the response (by embedding a reference to the XSL transform in that response document):
+
+[[File:ServiceDescriptionPrototype-01.png]]
+
+
+&lt;!--
+&lt;font size="2"&gt;
+&lt;source lang="xml" &gt;
+
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="/opendap/xsl/serviceDescription.xsl"?&gt;
+&lt;DatasetServices xmlns="http://xml.opendap.org/ns/DAP/4.0/dataset-services#"
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
+    xml:base="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml"&gt;
+    
+    &lt;Service title="DAP4 Dataset Services" xlink:role="http://services.opendap.org/dap4/dataset-services#"&gt;
+        &lt;link type="application/vnd.opendap.org.dataset-services+xml" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml"&gt;
+        &lt;link type="text/html" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.html"&gt;
+        &lt;link type="text/xml" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xml"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Dataset_Services_Description_Service"&gt;An XML document itemizing the Services available for this dataset.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+
+    &lt;Service title="DAP4 Dataset Metadata" xlink:role="http://services.opendap.org/dap4/dataset-metadata#"&gt;
+        &lt;link type="application/vnd.org.opendap.dap4.dataset-metadata+xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dmr"&gt;
+        &lt;link description="Data Request Form"
+             type="text/html" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dmr.html"&gt;
+        &lt;link type="text/xml" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dmr.xml"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Dataset_Service_-_The_metadata"&gt;DAP4 Dataset Description and Attribute XML Document.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAP4 Data" xlink:role="http://services.opendap.org/dap4/data#"&gt;
+        &lt;link type="application/vnd.org.opendap.dap4.data" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dap" &gt;
+        &lt;link type="text/plain" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dap.ascii" &gt;
+        &lt;link type="text/xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dap.xml" &gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Data_Service"&gt;DAP4 Data object.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAP2 Data" xlink:role="http://services.opendap.org/dap2/dods#"&gt;
+        &lt;link type="application/octet-stream" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dods"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_Data_Service"&gt;DAP2 Data Object.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="ASCII Data" xlink:role="http://services.opendap.org/dap4/ascii#"&gt;
+        &lt;link type="text/plain" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.asc"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_ASCII_Data_Service"&gt;The DAP4 Data response in ASCII form.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="NetCDF-File" xlink:role="http://services.opendap.org/dap4/netcdf-3#"&gt;
+        &lt;link type="application/x-netcdf" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.nc"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_NetCDF_File-out_Service"&gt;NetCDF file-out response.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="XML Data Response" xlink:role="http://services.opendap.org/dap4/xml-data#"&gt;
+         &lt;link type="text/xml" 
+               xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xdap"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_XML_Data_Service"&gt;An XML document containing both the dataset's structural metadata along with data values.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DDX" xlink:role="http://services.opendap.org/dap2/ddx#"&gt;
+        &lt;link type="text/xml" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.ddx"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_DDX_Service"&gt;OPeNDAP Data Description and Attribute XML Document.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DDS" xlink:role="http://services.opendap.org/dap2/dds#"&gt;
+        &lt;link type="text/plain" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dds"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_DDS_Service"&gt;OPeNDAP Data Description Structure.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="DAS"
+             xlink:role="http://services.opendap.org/dap2/das#" &gt;
+        &lt;link type="text/plain" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.das"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_DAS_Service"&gt;OPeNDAP Dataset Attribute Structure.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="RDF" xlink:role="http://services.opendap.org/dap4/rdf#"&gt;
+        &lt;link type="application/rdf+xml" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.rdf"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_RDF_Service"&gt;An RDF representation of the Dataset response (DDX) document.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="INFO" xlink:role="http://services.opendap.org/dap2/info#"&gt;
+        &lt;link type="text/html" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.info"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP2:_Info_Service"&gt;OPeNDAP Dataset Information Page.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="Server Version" xlink:role="http://services.opendap.org/dap4/version#"&gt;
+        &lt;link type="text/xml" 
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.ver"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Server_Version_Service"&gt;An XML document containing information about the software version of the server..&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="ISO-19115" xlink:role="http://services.opendap.org/dap4/iso-19115-metadata#"&gt;
+        &lt;link type="text/xml" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.iso"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_ISO_19115_Service"&gt;ISO 19115 Metadata Representation of the Dataset (DDX) response.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="ISO-19115-Score" xlink:role="http://services.opendap.org/dap4/iso-19115-score#"&gt;
+        &lt;link type="text/html" 
+             xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.rubric"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_ISO_Conformance_Score_Service"&gt;ISO 19115 Metadata Representation conformance score for this dataset.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;Service title="File Access" xlink:role="http://services.opendap.org/dap4/file#"&gt;
+        &lt;link type="text/xml ## This value depends on the file being accessed."  
+              xlink:href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.file"&gt;
+        &lt;Description xlink:href="http://docs.opendap.org/index.php/DAP4_Web_Services#DAP4:_Native_File_Access_Service"&gt;Access to dataset file.&lt;/Description&gt;
+    &lt;/Service&gt;
+
+    &lt;ServerSideFunctions&gt;
+        &lt;Function name="geogrid"
+          xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#geogrid"&gt;
+            &lt;Description&gt;Allows a DAP Grid variable to be sub-sampled using georeferenced values.&lt;/Description&gt;
+        &lt;/Function&gt;
+        &lt;Function name="grid"
+          xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#grid"&gt;
+            &lt;Description&gt;Allows a DAP Grid variable to be sub-sampled using the values of the coordinate axes.&lt;/Description&gt;
+        &lt;/Function&gt;
+        &lt;Function name="linear_scale"
+          xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#linear_scale"&gt;
+            &lt;Description&gt;Applies a linear scale transform to the named variable.&lt;/Description&gt;
+        &lt;/Function&gt;
+        &lt;Function name="version"
+          xlink:href="http://docs.opendap.org/index.php/Server_Side_Processing_Functions#version"&gt;
+            &lt;Description&gt;Returns version information for each server side function.&lt;/Description&gt;
+        &lt;/Function&gt;
+    &lt;/ServerSideFunctions&gt;
+&lt;/DatasetServices&gt;
+&lt;/source&gt;
+&lt;/font&gt;
+--&gt;
+
+
+== Appendix: Dataset Services Response XML schema (&lt;font color="orange"&gt;Under Construction&lt;/font&gt;)==
+
+This schema works, but it rigidly enforces the order of the content. We may want to rewrite to be more lenient.
+
+&lt;font size="2"&gt;
+&lt;source lang="xml" &gt;
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xs:schema 
+    targetNamespace="http://xml.opendap.org/ns/DAP/4.0/dataset-services#"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:dsr="http://xml.opendap.org/ns/DAP/4.0/dataset-services#"
+    xmlns="http://xml.opendap.org/ns/DAP/4.0/dataset-services#"
+    elementFormDefault="qualified" 
+    attributeFormDefault="unqualified"&gt;
+    
+    &lt;xs:import  namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/&gt;
+    &lt;!--
+	
+    --&gt;
+    &lt;xs:element name="DatasetServices" type="DatasetServicesType"/&gt;
+    &lt;xs:element name="DapVersion" type="DapVersionType"/&gt;
+    &lt;xs:element name="ServerSoftwareVersion" type="AnyContentType"/&gt;
+    &lt;xs:element name="Service" type="ServiceType"/&gt;
+    &lt;xs:element name="Description" type="DescriptionType"/&gt;
+    &lt;xs:element name="link" type="linkType"/&gt;
+    &lt;xs:element name="alt" type="altType"/&gt;
+    &lt;xs:element name="function" type="ExtensionType"/&gt;
+    &lt;xs:element name="functionGroup" type="ExtensionType"/&gt;
+    &lt;xs:element name="extension" type="ExtensionType"/&gt;
+    &lt;!--
+	
+    --&gt;
+    &lt;xs:complexType name="DatasetServicesType"&gt; 
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DatasetServices root element type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element ref="DapVersion" minOccurs="1" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="ServerSoftwareVersion" minOccurs="1" maxOccurs="1"/&gt;
+            &lt;xs:element ref="Description" minOccurs="0" maxOccurs="1"/&gt;
+            &lt;xs:element ref="Service" minOccurs="3" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="function" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="functionGroup" minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;xs:element ref="extension" minOccurs="0" maxOccurs="unbounded"/&gt;
+        &lt;/xs:sequence&gt;
+        &lt;xs:attribute ref="xml:base"  use="required"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+	
+     --&gt;
+    &lt;xs:complexType name="ServiceType"&gt; 
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DatasetServices Service type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element ref="Description" minOccurs="0" maxOccurs="1"/&gt;
+            &lt;xs:element ref="link" minOccurs="1" maxOccurs="unbounded"/&gt;
+        &lt;/xs:sequence&gt;
+        &lt;xs:attribute name="title" type="xs:string" use="optional"/&gt;
+        &lt;xs:attribute name="role" type="xs:anyURI" use="required"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+        
+    --&gt; 
+    &lt;xs:simpleType name="DapVersionType"&gt;
+        &lt;xs:restriction base="xs:string"&gt;
+            &lt;xs:pattern value="\d{1,}.\d{1,}"&gt;&lt;/xs:pattern&gt;
+        &lt;/xs:restriction&gt;
+    &lt;/xs:simpleType&gt;
+    &lt;!--
+        
+    --&gt;
+    &lt;xs:complexType name="DescriptionType"&gt;
+        &lt;xs:simpleContent&gt;
+            &lt;xs:extension base="xs:string"&gt;
+                &lt;xs:attribute name="href" type="xs:anyURI"/&gt;
+            &lt;/xs:extension&gt;
+        &lt;/xs:simpleContent&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+        
+    --&gt;
+    &lt;xs:complexType name="altType"&gt;
+        &lt;xs:attribute name="type" type="xs:string"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--	
+        
+    --&gt;
+    &lt;xs:complexType name="linkType"&gt; 
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;DatasetServices link type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element ref="alt" minOccurs="0" maxOccurs="unbounded"/&gt;
+        &lt;/xs:sequence&gt;
+        &lt;xs:attribute name="href" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="type" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="description" type="xs:string" use="optional"/&gt;         
+    &lt;/xs:complexType&gt;
+    &lt;!--
+	
+    --&gt;
+    &lt;xs:complexType  name="AnyContentType" mixed="true"&gt;
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;
+                An element of this type may contain arbitrary XML or text content.
+                The resulting content is may be ignored by DAP software. Other software
+                might find the information useful. The XML elements must
+                satisfy the requirements for 'lax' processing under schema 1.0.
+                In practice, that means just about anything.
+                ( &lt;xs:any/&gt;+ ) 
+            &lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:any namespace="##any" minOccurs="0" processContents="lax"/&gt;
+        &lt;/xs:sequence&gt;
+        &lt;xs:anyAttribute processContents="lax" namespace="##any"/&gt;
+    &lt;/xs:complexType&gt;   
+    &lt;!--
+	
+    --&gt;
+    &lt;xs:complexType name="ExtensionType"&gt; 
+        &lt;xs:annotation&gt;
+            &lt;xs:documentation&gt;Server Extension Type&lt;/xs:documentation&gt;
+        &lt;/xs:annotation&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element ref="Description" minOccurs="1" maxOccurs="1"/&gt;
+        &lt;/xs:sequence&gt;
+        &lt;xs:attribute name="name" type="xs:string" use="required"/&gt;
+        &lt;xs:attribute name="role" type="xs:anyURI" use="required"/&gt;
+    &lt;/xs:complexType&gt;
+    &lt;!--
+	
+     --&gt;
+    
+&lt;/xs:schema&gt;
+
+&lt;/source&gt;
+&lt;/font&gt;
+
+== fini ==
+
+Contains cruft in comments...
+
+
+&lt;!--
+I also put together a simple XSLT to make this a human friendly HTML. I added a reference to it in the XML document. When you point a browser at the resource URL (For example http://localhost:8080/opendap/data/nc/fnoc1.nc ) the Service Description response is returned as an XML file (above), the browser detects the xml-stylesheet reference, grabs the XSLT, uses it to convert the XML to HTML and renders it like this:
+
+[[File:ServiceDescriptionPrototype-01.png]]
+
+== Rationale for the solution ==
+
+The solution provides DAP4 servers with an interface that allows for both server-driven and agent driven content negotiation as described in [[http://www.w3.org/Protocols/rfc2616/rfc2616-sec12.html  section 12 of the HTTP 1.1 specification]].  Providing the DatasetServices response in XML allows many downstream applications to ingest the content and leaves open the option for server implementers to add XSLT references to the document so that clients like browsers can easily build a presentation view of the information.
+
+== Discussion ==
+
+
+=== Using Atom 1.0 ===
+
+The proposed encoding for this information is to use [http://en.wikipedia.org/wiki/Atom_(standard) Atom 1.0]. The advantages of this encoding are several and the detractions are close to nil. Atom 1.0 provides the DAP with a widely-used standard for representing information that is very general in nature (that data are accessible using a set of web services, each of which provides a sightly different kind of response and can be accessed using a different URL). Furthermore, we can use this same response in other responses a server might like to provide such as a ''data cast'' provides to subscribers or an OpenSearch result. Using Atom is important in those contexts because a response that it not specific to DAP is a requirement. At the same time, because the Atom specification does not impose needless or complex additional requirements, the cost of using it is low. In fact the only information in Atom 1.0 that is not listed above is a the name and email of an ''author'' for the ''entry''. While this might be rationalization, including that information could help a number of users who send email to support lists asking about dataset ''X'' simply because they don't know where/who else to ask.
+
+Using Atom, A DAP4 web service is described by:
+* An 'entry' that serves to group a set of ''link'' elements that reference different services to a common set of information about the dataset. For the dataset, that information is:
+** A simple human readable name called ''title''.
+** An ''id'' that uniquely identifies the ''entry''.
+** The last modified time for the dataset (''updated'').
+** A person responsible for the dataset (''author'').
+** An optional ''content'' element. (well, it's conditionally optional - see the [http://tools.ietf.org/html/rfc4287 Atom spec])
+* For each service, a ''link'' element is used where the four attributes ''title'', '' rel'', ''type'', ''href'' are used as follows:
+** ''title'' - A human-readable description of the service
+** ''rel'' - See the [http://tools.ietf.org/html/rfc4287 Atom spec]
+** ''type'' - A MIME-type that identifies the response as specific to OPeNDAP such as ''application/vnd.opendap.org.dap4.xdp+xml''
+** ''href'' - The full URL used to get the response
+
+For the Atom-based response, we propose to use MIME types as Ethan suggested (application/vnd.opendap.org.dap4.data etc.)  when describing services in the Dataset Services Response, and then, when the server provides those responses over HTTP it sets the content header to the [[DAP4_Web_Services_v3#Media_Types | lowest common mime type]]. 
+
+For example, in the Dataset Services response we might describe the Dataset Metadata service like this:
+&lt;font size="2"&gt;
+&lt;source lang="xml" &gt;
+...
+    &lt;link title="DAP4 Dataset Metadata XML Document."
+          rel="related"
+          type="application/vnd.opendap.org.dap4.xdp+xml" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xdp"/&gt;
+...
+&lt;/source&gt;
+&lt;/font&gt;
+
+And when a DAP4 server responds to a client asking for http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xdp the server would set the HTTP headers so that the Content-Type would be the  [[DAP4_Web_Services_v3#Media_Types | lowest common mime type]] (in this case ''text/xml'') . The server could put the more expressive type tag in the ''Content-Description'' header:
+&lt;font size="2"&gt;
+&lt;source lang="txt" &gt;
+HTTP/1.1 200 OK
+Date: Mon, 23 May 2005 22:38:34 GMT
+Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT
+Content-Type: test/xml
+Content-Description: application/vnd.opendap.org.dap4.xdp+xml; url=http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xdp
+Content-Encoding: gzip
+X-DAP: 4.0
+&lt;/source&gt;
+&lt;/font&gt;
+
+For normative information on Atom, see [http://tools.ietf.org/html/rfc5023 RFC 5023] and [http://tools.ietf.org/html/rfc4287 RFC 4287].
+
+==== Example: Validated Atom Document with one atom:entry for a dataset, and an atom:link for each service ====
+
+&lt;font size="2"&gt;
+&lt;source lang="xml" &gt;
+
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;entry xmlns="http://www.w3.org/2005/Atom"&gt;
+
+    &lt;title&gt;DatasetServices: ECMWF_ERA-40_subset.ncml&lt;/title&gt;
+
+    &lt;id&gt;http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml&lt;/id&gt;
+
+    &lt;updated&gt;2003-12-13T18:30:02-05:00&lt;/updated&gt;
+    
+    &lt;author&gt;
+        &lt;name&gt;Nathan Potter&lt;/name&gt;
+        &lt;email&gt;johndoe@devnull.com&lt;/email&gt;
+    &lt;/author&gt;
+    &lt;content type="xhtml" xml:lang="en" xml:base="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml"&gt;
+        &lt;div xmlns="http://www.w3.org/1999/xhtml"&gt;DAP Dataset Services for http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml&lt;/div&gt;
+    &lt;/content&gt;
+
+    &lt;link title="Dataset Services Description"
+          rel="self"
+          type="application/atom+xml" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml"/&gt;
+    
+    &lt;link title="DAP4 Dataset Metadata XML Document."
+          rel="related"
+          type="application/vnd.opendap.org.dap4.dmr+xml" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dmr"/&gt;
+    
+    &lt;link title="DAP4 Data object."
+          rel="enclosure"
+          type="application/vnd.opendap.org.dap4.data" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dap"/&gt;
+
+    &lt;link title="OPeNDAP HTML Data Request Form for data sub-setting and access."
+          rel="related"
+          type="text/html" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.html" /&gt;
+
+    &lt;link title="DAP2 Data Object."
+          rel="enclosure"
+          type="application/vnd.opendap.org.dap2.data" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dods"/&gt;
+          
+    &lt;link title="DAP4 Data response in ASCII form."
+          rel="enclosure"
+          type="text/plain" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.asc"/&gt;
+          
+    &lt;link title="NetCDF-3 file-out response."
+          rel="enclosure"
+          type="application/x-netcdf" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.nc"/&gt;
+          
+    &lt;link title="XML Data Response"
+          rel="enclosure"
+          type="application/vnd.opendap.org.dap4.data+xml" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.xdap"/&gt;
+          
+    &lt;link title="DAP2 DDX document"
+          rel="related"
+          type="application/vnd.opendap.org.dap2.ddx+xml" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.ddx"/&gt;
+          
+    &lt;link title="DAP2 DDS document"
+          rel="related"
+          type="application/vnd.opendap.org.dap2.dds" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.dds"/&gt;
+          
+    &lt;link title="DAP2 DAS document"
+          rel="related"
+          type="application/vnd.opendap.org.dap2.dds" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.das"/&gt;
+          
+    &lt;link title="RDF representation of the Dataset Metadata response."
+          rel="related"
+          type="application/rdf+xml" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.rdf"/&gt;
+          
+    &lt;link title="DAP2 Dataset Information Page"
+          rel="related"
+          type="text/html" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.info"/&gt;
+          
+    &lt;link title="Server Version Document"
+          rel="related"
+          type="text/xml" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.ver"/&gt;
+          
+    &lt;link title="ISO 19115 Metadata Representation of the Dataset (DDX) response."
+          rel="related"
+          type="text/xml" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.iso"/&gt;
+          
+    &lt;link title="ISO 19115 Metadata Representation conformance score for this dataset."
+          rel="related"
+          type="text/html" 
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.rubric"/&gt;
+          
+    &lt;link title="Dataset file access"
+          rel="enclosure"
+          type="text/xml"  
+          href="http://test.opendap.org:8090/opendap/hyrax/ECMWF_ERA-40_subset.ncml.file"/&gt;
+          
+&lt;/entry&gt;
+    
+
+&lt;/source&gt;
+&lt;/font&gt;
+--&gt;</text>
+      <sha1>5u6jw4wvc12gczi444xdx3rxoh2blhp</sha1>
+    </revision>
+  </page>
+</mediawiki>

@@ -1,0 +1,125 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>OPeNDAP Documentation</sitename>
+    <dbname>wikidb</dbname>
+    <base>https://docs.opendap.org/index.php/Home</base>
+    <generator>MediaWiki 1.38.4</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">OPeNDAP Documentation</namespace>
+      <namespace key="5" case="first-letter">OPeNDAP Documentation talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>DAP4 Error Response</title>
+    <ns>0</ns>
+    <id>870</id>
+    <revision>
+      <id>10260</id>
+      <parentid>10149</parentid>
+      <timestamp>2013-12-27T22:30:43Z</timestamp>
+      <contributor>
+        <username>Ndp</username>
+        <id>2</id>
+      </contributor>
+      <origin>10260</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="3509" sha1="0vc0gw96l7hbg0tqjco7ozqyhixqtt9" xml:space="preserve">
+The DAP4 protocol returns error information using an Error response. If a request for any of the three basic responses cannot be completed then an Error response is returned in its place.
+=== Schema ===
+The normative XML representation for the Error Response is defined by the following RELAX-NG schema.
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+&lt;grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:doc="http://www.example.com/annotation" datatypeLibrary="http://xml.opendap.org/datatypes/dap4" ns="http://xml.opendap.org/ns/DAP/4.0#"&gt;
+    &lt;start&gt;
+        &lt;ref name="errorresponse"/&gt;
+    &lt;/start&gt;
+    &lt;define name="errorresponse"&gt;
+        &lt;element name="Error"&gt;
+            &lt;optional&gt;
+                &lt;element name="code"&gt;
+                    &lt;attribute name="protocol"&gt;
+                        &lt;data type="text"/&gt;
+                    &lt;/attribute&gt;
+                    &lt;data type="dap4_integer"/&gt;
+                &lt;/element&gt;
+            &lt;/optional&gt;
+            &lt;optional&gt;
+                &lt;interleave&gt;
+                    &lt;element name="Message"&gt;
+                        &lt;text/&gt;
+                    &lt;/element&gt;
+                    &lt;element name="Context"&gt;
+                        &lt;text/&gt;
+                    &lt;/element&gt;
+                    &lt;element name="OtherInformation"&gt;
+                        &lt;text/&gt;
+                    &lt;/element&gt;
+                &lt;/interleave&gt;
+            &lt;/optional&gt;
+        &lt;/element&gt;
+    &lt;/define&gt;
+&lt;/grammar&gt;
+&lt;/source&gt;
+
+The body of the &amp;lt;Error&amp;gt; element may contain any or all of the following
+inner elements:
+# &amp;lt;code&amp;gt; &amp;mdash; An numerically valued error code. This code must be associated with a protocol, such as HTTP, via the ''protocol'' attribute. It is not a requirement that the protocol over which the originating request and subsequent Error response where transmitted be the same as the protocol identified by the value of the ''protocol'' attribute.
+# &amp;lt;Message&amp;gt; &amp;mdash; A short informative text message describing the error.
+# &amp;lt;Context&amp;gt; &amp;mdash; Textual information describing the context in which the error occurred: position of a parse error in a constraint expression, for example.
+# &amp;lt;OtherInformation&amp;gt; &amp;mdash; Arbitrary additional text information: a Java stack trace, for example.
+
+=== Error Response Resource Role ===
+
+DAP4 Error Responses are identified by the resource role:
+
+: '''&lt;code&gt;&lt;nowiki&gt;http://services.opendap.org/dap4/error&lt;/nowiki&gt;&lt;/code&gt;'''
+
+=== Normative Encoding of the Error Response ===
+
+The normative XML representation for the Error Response is defined in Appendix x "Normative XML Encoding of the Error Response". The media type for the normative XML representation is:
+
+: &lt;font size="2"&gt;&lt;code&gt;'''application/vnd.opendap.dap4.error.xml'''&lt;/code&gt;&lt;/font&gt;
+
+=== Examples ===
+; Not Found
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;dap4:Error xmlns:dap4="http://xml.opendap.org/ns/DAP/4.0#"&gt;
+    &lt;code protocol="http"&gt;404&lt;/code&gt;
+    &lt;Message&gt;Unable to locate requested resource&lt;/Message&gt;
+&lt;/dap4:Error&gt;
+&lt;/source&gt;
+; Parse Error
+&lt;source lang="xml"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;dap4:Error xmlns:dap4="http://xml.opendap.org/ns/DAP/4.0#"&gt;
+    &lt;code protocol="http"&gt;400&lt;/code&gt;
+    &lt;Message&gt;Bad DAP4 Request Syntax&lt;/Message&gt;
+    &lt;Context&gt;
+        The constraint expression "?u[3][lat&lt;66]" failed to parse at the sub expression "lat&lt;66". 
+         Relational syntax expressions are not supported for array subsetting operations.
+    &lt;/Context&gt;
+&lt;/dap4:Error&gt;
+&lt;/source&gt;</text>
+      <sha1>0vc0gw96l7hbg0tqjco7ozqyhixqtt9</sha1>
+    </revision>
+  </page>
+</mediawiki>
