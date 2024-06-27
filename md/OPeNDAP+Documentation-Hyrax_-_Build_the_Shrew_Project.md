@@ -1,0 +1,227 @@
+# What to Checkout
+
+There are two main Hyrax 'shrew' development projects active at any
+given time: The project actually named *shrew* which is located on the
+trunk of our subversion repository and a second version of this project
+located on a branch that corresponds to the current release of the Hyrax
+server. The trunk copy of shrew if for active development while the
+branch is primarily used for fixes made to a specific release. By
+convention, the release branches are all named
+'hyrax_*version*_release', where *version* is a two digit number like
+'1.8'.
+
+The 'trunk shrew' should be used if you're developing new features for
+libdap or the BES or if you're developing new features that will depend
+on changes to them. The release branch should be used for fixes to a
+release (there are some complicated processes that must be followed to
+ensure those fixes are merged back to the trunk so they can be included
+in future version) or if you're developing new features for a handler
+and that development will benefit from a stable set of libdap and BES
+versions. The latter means that server installations can use you
+handler/module changes without updating the entire server (but you must
+be very careful regarding libdap and BES ABI (Application Binary
+Interface) compatibility).
+
+To check out:
+
+The trunk *shrew* project: *svn co \$svn/trunk/shrew*
+The release branch of shrew: *svn co \$svn/branch/shrew/hyrax_1.8_release* (note that you can browse around on <https://scm.opendap.org/trac/branch/shrew> to see which versions are there).
+
+Note that *shrew* uses svn externals, so the 'shrew' checkout really
+means you are checking out a directory with some build files and then
+performing a number of other checkouts. The result is a collection of
+projects all rooted in one place. The 'mater project' contains the build
+files that tie the entire ting together. You could do all of this by
+hand; the shrew project checkout is much easier.
+
+To check the externals being used, get the property in the shrew
+directory you checked out:
+
+`svn propget `[`svn:externals`](svn:externals)
+
+which for the trunk shrew returns:
+
+    aries@chinchilla$ svn propget svn:externals
+    ^/trunk/libdap src/libdap
+    ^/trunk/bes src/bes
+    ^/trunk/dap-server src/modules/dap-server
+    ^/trunk/freeform_handler src/modules/freeform_handler
+    ^/trunk/fileout_netcdf src/modules/fileout_netcdf
+    ^/trunk/netcdf_handler src/modules/netcdf_handler
+    ^/trunk/hdf4_handler src/modules/hdf4_handler
+    ^/trunk/hdf5_handler src/modules/hdf5_handler
+    ^/trunk/ncml_module src/modules/ncml_module
+    ^/trunk/wcs_gateway_module src/modules/wcs_gateway_module
+    ^/trunk/wcs_module src/modules/wcs_module
+    ^/trunk/olfs src/olfs
+
+# Configuring Prior to the Build
+
+For all of the builds, first you ***MUST*** initialize the terminal's
+environment. In fact, you need to do this every time you work with
+shrew. To do the initialization, change you current working directory to
+the top of your shrew checkout and then use these commands:
+
+``` sh
+source spath.sh
+autoreconf --force --install --verbose
+```
+
+The *autoreconf* command can be shortened to *autoreconf -fiv*
+
+These commands set up the *\$PATH* environment variable so that when you
+run programs in the terminal, it will look in *`shrew`*`/bin` (and look
+there first). Second, the environment variable *\$prefix* is defined as
+the CWD of the shrew checkout. This comes in handy for a number of
+operations and is relied on by the other build files. The second command
+builds the initial version *configure* script from *configure.ac* and
+also builds the *Makefile.in* template from *Makefile.am*. (Slight lie
+here - in most of our build instructions we have you run autoreconf -fiv
+because you really should run that any time you edit the Makefile.am or
+configure.ac file, so it is not really required for the initialization
+step.)
+
+# A Note About the Build
+
+One thing that's a little different about the shrew project is that it
+is made up of a collection of largely independent modules (*handlers*)
+that each share two common dependencies, libdap and the BES. For this
+reason, the shrew project must *build and install* both of these before
+it can build, check, install, ..., any of the handlers. Thus, changes in
+a handler are simpler and faster to test than changes in libdap, where
+for many changes the entire server must be rebuilt. When you make
+changes in several places, and some of them are libdap/BES, keep this in
+mind, especially if odd behavior starts cropping up.
+
+# Different Ways to Build
+
+There are three ways to build the shrew project:
+
+1.  Using the *build_hyrax* and *build_hyrax_debug* scripts
+2.  Using the *nbuild_nightly.sh* script
+3.  Using the top-level *configure* and *Makefile*
+4.  ... and a fourth way is in each directory 'by hand'
+
+## Using the scripts
+
+The build scripts have the advantage that you run one command, get some
+coffee and then start your work. The downsides are two: They don't
+always work and they are fine for initial builds, but can become a real
+time sink when you are developing software and working in an
+edit-compile-link loop.
+
+### The **build_hyrax** scripts
+
+From this point the two scripts *build_hyrax* and *build_hyrax_debug* do
+pretty much what they say. The first one builds the entire Hyrax server
+and installs it into *\$prefix/{bin,lib,etc,...}* ready to run. The
+second one does all of that but also arranges the build so that the
+compilation and linking of libdap, the BES and all of the handlers
+includes critical information for debugging. It also builds the BES in
+'developer mode' so that you will not have to use a root account (or
+*su* or *sudo*) to start the server. Because run-time debuggers really
+need the debugging symbols, we recommend that Hyrax be built this way
+when you are planning on doing development work.
+
+Take a look at the scripts and the Makefile.am to see how the
+*build_hyrax* and *build_hyrax_debug* scripts run *configure*
+differently.
+
+Some useful information about autotools:
+
+- configure.ac --- *autoconf* ---\> configure
+- Makefile.am --- *automake* ---\> Makefile.in --- *configure* ---\>
+  Makefile
+- *autoreconf* runs both *autoconf* and *automake* as well as other
+  stuff
+
+### The **nbuild_shrew.sh** script
+
+This is used for nightly builds. To use this to its fullest, you need an
+account on our host used to record the [nightly build
+results](http://test.opendap.org/cgi-bin/build_reader.pl?show=current&sort=yes).
+However, you can run your own builds and look at the results. read over
+the preceding, edit the nbuild_shrew.sh script and run it from the
+terminal and/or from cron.
+
+Note: The name of the script you checkout is actually
+*nbuild_shrew.sh.in* to keep your local changes from being checked back
+into svn.
+
+## Using the Top-level Build
+
+You will essentially do the same things as the *build_hyrax* and
+*build_hyrax_debug* scripts, but by typing each line. This makes it
+somewhat easier to recover from errors.
+
+Given that the initialization steps have been performed to run a 'debug'
+build:
+
+1.  *autoreconf -fiv*
+2.  *./configure --enable-debug --prefix=\$prefix*
+3.  *make world*
+
+This will leave lots of log output in files named 'make.*component*.log'
+in both *\$prefix* and *\$prefix/modules*
+
+## Some Tricks
+
+There are some useful tricks to the build process you will want to know.
+
+### Limiting the builds
+
+For Hyrax, you must always have libdap and the BES, so you'll always be
+building those. However, for lots of development work, you may only need
+a few of the full compliment of handlers. Limiting the handlers you
+build and install is a good way to speed builds *and* a good way to
+limit dependencies (like many open source software projects, Hyrax has a
+prodigious number of dependencies) because most of the dependencies stem
+from a particular handler's needs.
+
+To limit the handlers built, edit the
+*\$prefix/src/modules/configure.ac* and
+*\$prefix/src/modules/Makefile.am* trimming down the list to just what
+you want. The lines in question for each (resp) are:
+
+``` sh
+AC_CONFIG_SUBDIRS([dap-server netcdf_handler freeform_handler fileout_netcdf gateway_module csv_handler hdf4_handler hdf5_handler fits_handler ncml_module])
+```
+
+``` sh
+SUBDIRS = dap-server netcdf_handler freeform_handler fileout_netcdf \
+        ncml_module gateway_module csv_handler hdf4_handler hdf5_handler \
+        fits_handler
+```
+
+In most cases, you will want to keep *dap-server* in the list because
+that is handler that provides the HTML form, the ASCII data response and
+the Info response - all useful when you are developing and testing a
+handler or new feature in a handler. Remove everything you don't need.
+
+#### Hidden Benefits to a limited build
+
+When you do this, the top-level builds become much more useful because
+they build a much smaller number of independent projects.
+
+### Building things by hand
+
+Once you have built the entire server (using *build_hyrax_debug*, e.g.)
+you can work almost completely in a handler directory and just run
+*make*, *make check* and *make install* there. In fact, you should be
+able to run both *make* and *make install* from within eclipse as well.
+Unfortunately, you will almost certainly have to run *make check* from a
+terminal where you have done the *source spath.sh* initialization step
+in order to have *\$PATH* set correctly because the tests depend on
+various executables installed in \$prefix/bin.
+
+# Testing and Running the Server
+
+Using the command *make check* at the top-level will run all of the C++
+code's unit and regression tests and append the output to the
+'make.*component*.log' files.
+
+Using the commands *make distcheck*, *make rpm* and *make pkg* will run
+those tagers, respectively. The distcheck target is the stock autotools
+distcheck target which tests tar.gz source distributions for
+completeness. The rpm and pkg targets test building RPM and OS/X
+Packages and apply only to their respective operating systems.

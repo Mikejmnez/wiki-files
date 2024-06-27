@@ -1,0 +1,116 @@
+## Overview
+
+Two current projects are deeply involved in the metadata aspects of our
+services.
+
+- The [REAP project](REAP_Cataloging_and_Searching "wikilink") is
+  working on crawling the DDX holdings of our servers and building an
+  EML based catalog of the holdings for Metacat.
+- The [WCS project](WCS "wikilink") is using semantic web tools to build
+  a catalog of WCS Coverages from existing metadata in the DDXs help on
+  a server.
+
+New projects in the pipeline have similar needs for metadata:
+
+- [THREDDS Catalog Metadata](THREDDS_Catalog_Metadata "wikilink")
+- [GeoTIFF responses for Hyrax](GeoTIFF_responses_for_Hyrax "wikilink")
+- [KML responses for Hyrax](KML_responses_for_Hyrax "wikilink")
+
+All of these projects require that the DDX content of some part of a
+Hyrax server be collected. Both the [EML
+work](REAP_Cataloging_and_Searching "wikilink") and the [THREDDS Catalog
+Metadata](THREDDS_Catalog_Metadata "wikilink") will likely need to
+ingest the entire DDX holdings of a server.
+
+I posit that it is not going to be effective to build THREDDS catalogs
+dynamically for each request received. This would mean opening all of
+the data files in a collection (potentially thousands) and reading
+enough data to build the DDX and then returning that to the THREDDS
+catalog response builder. The overhead for this on a busy service would
+be unacceptable, not to mention the fact that there would be a
+significant amount of building identical responses.
+
+I think similar arguments exist for the EML project, WCS, and possibly
+the image services.
+
+Which brings me to my point:
+
+Do we need to build a metadata data cache within Hyrax?
+I think the answer is **YES**.
+
+The community of data providers is maturing. Major projects such as IOOS
+and OOI are driving forward with the cyber infrastructure for the
+sharing of data between nearly disjoint fields of study. The regional
+OOS systems in NOAA are building web applications that utilize catalog
+and dataset metadata to drive their applications.
+
+Other software such as the TDS are clearly using the metadata content to
+provide higher level services.
+
+## Products
+
+What results, or products, would we want to get from this?
+
+### THREDDS Catalog Metadata
+
+I think that for datasets that support the CF=1.0 and UDD 1.0
+conventions we extract most, if not all, of the information needed for
+the THREDDS catalog metadata from the dataset DDX.
+
+### NcML
+
+Based on work done by Roland Schwietzer it looks like we could use some
+smart crawling of the DDX's and interrogation of the datasets to build
+NcML files that define simple aggregations.
+
+### API Access
+
+API level access to the metadata collection without the penalty of
+crawling through the data for every metadata activity. This might be the
+biggest benefit in that it could promote more handlers to provide
+metadata driven services.
+
+### Performance
+
+By caching all of the DDX content apart from the source data and keeping
+it either in memory or "closer" at hand than in the original data source
+we should be able to provide significantly improvements in response
+times and processing for metadata (DDX, DDS, DAS, and THREDDS) requests.
+
+## Possible Technologies
+
+### We could home grow our own.
+
+James has been working with a crawler that caches content. This could
+potentially be used to build a metadata cache. The idea here would be to
+allow the C++ API to load DDX (documents? Memory objects?) from a cache
+and then utilize them in the C++ programing environment.
+
+### NoSQL Database of some sort
+
+What might we use for a key?
+
+- ResourceID: /data/nc/coads_climatology.nc
+- Request URL:
+  <http://myserver.com/opendap/data/nc/coads_climatology.nc.dds>
+- URL + query string?
+  <http://myserver.com/opendap/data/nc/coads_climatology.nc.dds?SST>
+
+### Semantic Web & RDF Triple Store
+
+We could extend the semantic repository tools that have been developed
+for WCS. The DDX document would be converted to their RDF representation
+and placed in a Triple Store (Semantic Repository). New inferencing
+rules, queries, and (java) software could be written to create new
+products.
+
+- Do they scale?
+- How hard is it to add inferencing and queries to the system?
+- As of now this appears to be a java only implementation.
+
+### Relational Database
+
+We could use a relational database to hold the metadata content. At this
+point I don't even have an idea for a database schema...
+
+- Is installing PostgreSQL or the equivalent an undo burden for users?

@@ -1,0 +1,53 @@
+KML Output From Hyrax
+
+Why?
+
+The Data Access Protocol provides a way to transfer structured data into
+sophisticated analysis tools without first requiring that the data be
+packaged in particular format like TIFF which is so specialized it can
+only be practically used for a limited set of purposes. Instead DAP uses
+a very general self-describing format that can encode virtually anything
+stored in or processed by a computer. However, there are many
+applications now available that expect georeferenced data and can at
+least display such data if it’s encoded in one of several ways. While
+the main emphasis of OPeNDAP has been to provide data for analysis,
+these newer display applications are important tools for many users (and
+potential users) of our software. That is, even though ‘display’ of data
+has not be a primary focus of our work up to now, that doesn't mean it’s
+not important.
+
+How?
+
+We can support a wide variety of network-aware display applications for
+georeferenced data by combining the ability to render data as a GIF,
+JPEG or TIFF image with an encoding of the georeferencing information
+for that image in KML. Many of the emerging display applications can
+render data encoded in these ways. It is possible that our our work on
+support for WCS can be leveraged to produce these types of responses: We
+will take existing software which uses semantic web tools to build WCS
+responses from existing metadata and use that to power a ‘.kml’ response
+that can combine the KML document with a rendering of the data it
+describes in one of a set of formats like GIF, JPEG or TIFF. We can use
+any of our ‘standard tricks’ for encoding the return types in a URL
+because for these display applications, the URL is essentially an opaque
+object used to refer to data.
+
+What?
+
+Applications that would be able to display information from our servers
+includes: Google Earth, Google Maps, Google Maps for mobile devices,
+NASA WorldWind, ESRI ArcGIS Explorer, Adobe PhotoShop, AutoCAD, and
+Yahoo! Pipes.
+
+To do:
+
+- How are data typically returned by KML so that they are useful to the
+  clients named above? That is, how is a data set like a climatology
+  returned so that it can be displayed on/over/with Google Earth?
+- Do the clients above already use a standard ‘KML request’ URL? If so,
+  we should support that.
+- Read over the KML Reference doc at
+  <http://code.google.com/apis/kml/documentation/kmlreference.html>
+
+[Category:Google Summer of
+Code](Category:Google_Summer_of_Code "wikilink")
