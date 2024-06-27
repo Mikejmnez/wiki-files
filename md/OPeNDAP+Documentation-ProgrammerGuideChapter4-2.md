@@ -1,0 +1,321 @@
+## Client Libraries
+
+The goal of building a client library is to provide a drop-in
+replacement for an existing API so that user programs written for that
+API can switch to the OPeNDAP version and access remote OPeNDAP data.
+The user programs should not require any modification to change over to
+the OPeNDAP client library version of the API. However, the API will
+clearly need substantial changes to its current implementation.
+
+In order to build the OPeNDAP client library for a particular API, it is
+useful to divide the API to be re-implemented into five categories of
+functions:
+
+- Open or connect
+- Variable information read
+- Data read
+- Write
+- Close or disconnect
+
+### Rewriting the Open and Close Functions
+
+The functions that perform the dataset "open" and "close" operations
+must be implemented so that information about the data set can be
+retrieved from the data server. These functions must store the necessary
+state information so that subsequent accesses for variable information
+or data reads can be satisfied. This state information will, in almost
+every case, be the dataset's DAS and DDS.
+
+The open function for a OPeNDAP client library version of a given API
+must first determine if the data object (typically a file) is local to
+the user program making the open call or is a remote data object to be
+accessed through OPeNDAP. It is possible to access OPeNDAP objects which
+are local to a user program, but there is little reason to do so if the
+data object can also be accessed through the original API. In any case,
+the distinction of local or remote is made on the basis whether a URL is
+used to reference the data object, or a local filename.
+
+If the data object is remote, then the open function must build a
+structure which can hold the DAS and DDS objects which describe the
+named data set. This is the Connect class object. Once this object is
+built, the open function must map this structure to a file identifier or
+pointer which can be passed back to the user program as the return value
+of the open function. You add this data to the Connect objects when you
+sub-class them for a particular API. Subsequent accesses to the data set
+will include this identifier (or pointer), and each function that is a
+member of the API can be modified to use it to gain access to the state
+information stored by the open function.
+
+The close function should use the state information accessible with the
+file identifier or pointer returned by the open function to determine if
+the dataset is local or remote. In the case of a local data set, the
+original implementation's close function must be called. In the case of
+a remote data set, the locally stored state information must be freed.
+You can do this by destroying the Connect object.
+
+See ([<cite> tk,subclass-netio</cite>](http://www)) for an example of a
+recoded open function and a description of its use. (The example uses
+the \netcdf\\ API.)
+
+### Getting Information about Variables
+
+Most APIs for self-describing data sets include functions which return
+information about the variables that comprise a data set. These
+functions return information about the type and shape of variables in a
+form that can be used by a program as well as attribute information
+about the variables that is more often than not intended for use by
+humans. Each of these functions must be rewritten so that to the extent
+possible, information present in the DAS and DDS is used to satisfy
+them.
+
+While many \`self-describing' APIs may have dozens of these functions,
+the basic structure of the re-implemented code is the same for each one.
+If the data set is local, use the original implementation, otherwise use
+the locally stored state information (DAS and DDS) to answer the request
+for data.
+
+Rewriting these functions can be the most labor intensive part of
+re-imple\\menting a given API. This is typically the largest group of
+functions in the API and the information stored in the DAS and DDS must
+often be \`massaged' before it fulfills the specifications of the API.
+Thus the rewritten functions must not only get the necessary information
+from the DAS and DDS objects, but they must also transform the types of
+the objects used to return that information to the user program into the
+data types the program expects.
+
+### Reading the Values of Variables from a Dataset
+
+To read data values from a dataset using a typical data access API, a
+user would submit to some API function the name of the variable to be
+read. The OPeNDAP client library version of this same function must take
+that variable name and use it to construct a constraint expression. (See
+Section~(tk,using-constraints) for more information on using constraint
+expressions to access data.) The constraint expression must then be
+appended to the dataset URL (with the suffix
+<font color='green'>.dods</font>), and the resulting URL sent out into
+the internet.
+
+For example, to get a variable called <font color='green'>var</font>
+from a dataset at:
+
+    http://blah/cgi-bin/nph-nc/weekly.nc.dods
+
+\noindent~you would use the URL:
+
+    http://blah/cgi-bin/nph-nc/weekly.nc.dods?var
+
+The Connect class contains a member function,
+<font color='green'>request_data</font> that performs this task. It
+takes the constraint expression and the suffix to use for requesting
+data, appends them to the Connect URL, and sends the entire string off
+to retrieve its corresponding data.
+
+The <font color='green'>request_data</font> function returns a pointer
+to a DDS object, which contains the data as well as the structure
+description corresponding to the data request.
+
+Once the <font color='green'>request_data</font> member function has
+returned, the client library must still call the
+<font color='green'>deserialize</font> member function (which is part of
+the OPeNDAP Type Classes) for each returned variable. The client library
+should use the variable objects contained in the DDS object returned by
+<font color='green'>request_data</font> to invoke the
+<font color='green'>deserialize</font> member function. Once that is
+done, the data values are stored in the internal buffers of the variable
+objects in the new DDS \footnote{For the Sequence data type, the DDS
+contains only the current instance of the data. Repeated calls to the
+Sequence's <font color='green'>deserialize</font> function are required
+to return successive instances of the sequence.}. The client library
+should store this new DDS, along with the constraint expression passed
+to <font color='green'>request_data</font> so that future requests by
+the user program for the same information can be handled without
+accessing the remote data server.
+
+The data values of variables in a DDS are accessed using the
+<font color='green'>buf2val</font> member function for the cardinal and
+vector types and by accessing the values of fields for constructor
+types.
+
+#### Translation
+
+For a OPeNDAP client library to be robust, it may have to be equipped to
+deal with data types it was not designed to use. For example, the
+\netcdf software cannot manipulate a OPeNDAP Sequence. But a user can
+use the OPeNDAP version of the \netcdf library to request data from a
+server that provides Sequence data. When cases like this arise (and they
+arise farily often), the author of the client library must choose an
+appropriate data type into which the served data is to be translated,
+and implement functions to do that translation.
+
+Often, translation from one data type to another is a simple task.
+Translating an Array into Sequence format is fairly straightforward,
+although there are several ways to do it. (The author of the client
+library should choose one, and document that choice in a README file.)
+
+Other translations are more complex, and may even require that the
+client library violate the semantics of the original API, or of one of
+the OPeNDAP data types. For example, translating a Sequence to an Array
+in \netcdf requires that the client know in advance the length of the
+Sequence, which is not necessarily known.
+
+### Functions that Write to Data Sets
+
+OPeNDAP is a read-only data system. While it is not technically
+inconceivable, a system which allows modification of remote data sets
+would be operationally much more complex than OPeNDAP. Thus, functions
+that write data are rewritten so that they call the original
+implementation in the case of a local access or return an error code in
+the case of a remote access. The error code should indicate a
+recoverable error so that programs which perform both reads and writes
+can recover if their logic permits.
+
+### Adding Local Access to a OPeNDAP Client Library
+
+In order to ensure that programs, once they have been re-linked with
+OPeNDAP client libraries, can still access local data files it is
+necessary to add software to read those local data to the functions in
+the re-implemented library. Typically in each function in the new
+library the state information accessed by the identifier passed to the
+function is used to determine if the call is to access local or remote
+data. In the former case, the function must do exactly what the original
+implementation of the API would have done to satisfy the function call.
+
+It is wasteful to completely recode the entire API just to achieve local
+access. However, it is also not possible to simply link the user program
+with both the OPeNDAP client library and the original library. because
+both libraries must \emph{define the same external
+
+` symbols}. Linking with both libraries will produce link-time`
+
+conflicts on most computers or result in an incorrectly linked binary
+image.
+
+In order to use the original implementation of the library, you must
+rename all of its external symbols that will appear in user programs.
+For example, if an API defines four functions
+(<font color='green'>open</font>, <font color='green'>close</font>,
+<font color='green'>read</font> and <font color='green'>write</font>)
+and one global variable (<font color='green'>errno</font>), then each of
+those must be renamed to some new symbol (e.g.,
+<font color='green'>orig_open</font>,
+<font color='green'>orig_close</font>, \ldots). These source modules can
+then be added to the set of object modules used to build the OPeNDAP
+client library. Of course the OPeNDAP client library must also include
+the original external symbol names; one approach is to recode each of
+the APIs external symbols as a function which either calls the
+OPeNDAP-replacement or the original function (now renamed so that the
+symbols do not conflict) depending on whether the access is local or
+remote.
+
+## Using Constraints
+
+Constraint expressions are an important part of OPeNDAP, providing a
+powerful way to control how data is accessed without forcing the \Dap to
+support a lot of different messages. Constraint expressions are used to
+select which variables will be extracted from a data set by both the
+user and by the client library. The constraint expression syntax is
+described in detail in the
+\[<http://www.opendap.org/support/docs.html/user/guide-html/><cite>The
+OPeNDAP User Guide</cite>\].
+
+### How Constraint Expressions are Evaluated
+
+The server-side constraint expressions are evaluated using a two step
+process. Every constraint expression has two parts, the projection and
+the selection subexpressions. The projection part of a constraint
+expression tells which variables to include in any return document
+describing the data set and the selection subexpression limits the
+returned data to variables with values that satisfy a set of relational
+expressions. The projection subexpression is evaluated when the entire
+constraint expression is parsed; at parse-time the server's copy of the
+data set's DDS is marked with the variables included in the projection.
+The selection subexpression, however, is not evaluated until values are
+read from the data set. One way to classify the projection and selection
+subexpressions is that projections depend solely on the logical
+structure of a data set, while selections depend on the values of
+particular variables within that data set.
+
+### Different Ways of Using Constraint Expressions
+
+There are two different ways that constraint expressions can be used.
+One is by the client library and the other is by the user. When writing
+a client library that has features for selecting variables or parts of
+variables, try to code the replacements to those calls so that they
+build up OPeNDAP constraint expressions that will request only the data
+the user wants. Then read the data from the returned DDS and store it in
+the variable(s) passed to the API call by the user. This is a much
+better solution than requesting the entire variable from the data set
+and then throwing away parts of it.
+
+Suppose that the user program (via the APIs functional interface) asks
+for the data in variable \var{X}. The constraint expression that will
+retrieve \var{X} is simply \`\var{X}'. Suppose, given the following
+DDS}that the user program requests the two variables \var{u and \var{v}
+from the embedded structure.
+
+    Dataset {
+        Int32 u[time_a = 16][lat = 17][lon = 21];
+        Int32 v[time_a = 16][lat = 17][lon = 21];
+        Float64 lat[lat = 17];
+        Float64 lon[lon = 21];
+        Float64 time[time = 16];
+    } fnoc1;
+
+A constraint expression that would project just those variables would be
+<font color='green'>fnoc1.u,fnoc1.v</font>. To restrict the arrays
+\var{u} and \var{v} to only the first two dimensions
+(<font color='green'>time</font> and <font color='green'>lat</font>),
+the projection subexpression would be:
+
+    fnoc1.u[0:15][0:16],fnoc1.v[0:15][0:16]
+
+Both of these constraint expressions have null selection subexpressions.
+Note that the comma operator separates the two clauses of the projection
+subexpression. Also note that whitespace is ignored by the constraint
+expression parser. See the grammar for CEs in the
+\[<http://www.opendap.org/support/docs.html/user/guide-html/><cite>The
+OPeNDAP User Guide</cite>\] for more information about constraint
+expression grammar and the kind of things that can be done with the
+projection subexpression.
+
+The user program may have an interface that provides the user with a way
+to request only certain values be returned. This is particularly true
+for APIs such as JGOFS that support access to relational data sets.
+Suppose the following DDS describes a relational data set:
+
+    Dataset {
+        Sequence {
+            Int32 id;
+            Float64 lat;
+            Float64 lon;
+            Sequence {
+                Float64 depth;
+                Float64 temperature;
+            } xbt;
+        } site;
+    } cruise;
+
+To request data with a certain range of latitude and longitude values,
+you can use a selection subexpression like this:
+
+    & lat>=10.0 & lat<=20.0 & long>=5.5 & long<=7.5
+
+Note that each clause of the selection subexpression begins with a
+*\\\\* and that the clauses are combined using a boolean *and* .
+Finally, using the previous DDS, if a user requested only depth and
+temperature given the above latitude and longitude range (i.e., the user
+program requests that only the depth and temperature values be returned
+given a certain latitude and longitude range) the client library would
+use the following constraint expression:
+
+    site.xbt.depth, site.xbt.temp & lat>=10.0 & lat<=20.0 &
+       long>=5.5 & long<=7.5
+
+A second way that constraint expressions can be used is that users may
+specify an initial URL with a constraint expression already attached. In
+this case the <font color='green'>request_data</font> member function
+will append the constraint expression built by the client library to the
+one supplied by the user and request data constrained by both
+expressions. From the standpoint of a client library (or a data server,
+for that matter) there is no difference between a URL supplied with an
+initial constraint and one supplied without one.

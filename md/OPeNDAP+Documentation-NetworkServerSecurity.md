@@ -1,0 +1,174 @@
+## OPeNDAP Security Policy and Procedures
+
+## Policy
+
+This is our policy regarding the security of the software we distribute.
+The intent of this policy is to increase the security of that software
+and to document the steps we have taken to produce that increase. It is
+a public policy to promote transparency.
+
+In addition, because we run many sites which are used to provide access
+to our source code, other collaborative tools and also provide the main
+venue for software downloads by users, site security is also a component
+of this policy.
+
+This policy does not apply to third-party distribution of our software.
+
+### For software we develop
+
+We will have someone in the group review any changes we make before any
+software is released. The person performing the review must not be the
+person who wrote the software. This must be done for each release.
+
+### For our web sites
+
+We will act as though all of our web sites, even those used for the SCM
+portal, are completely open.
+
+> Since our project is open-source, it's easy for people outside to see
+> what we are doing and why. In most cases, that's good, but when we are
+> addressing a security problem that is not yet general knowledge,
+> putting a description of that in Trac (in a ticket, for example, which
+> might be referenced in a public mail list and thus indexed by Google)
+> makes it public knowledge, albeit somewhat obscure.
+
+Private web sites, or private areas of a web site, *must* be protected
+with a password.
+
+## Incident Response Policies
+
+When/if OPeNDAP learns of an incident or vulnerability, all
+communication regarding that will be conducted using secure channels
+until we are prepared to make a general-audience announcement regarding
+the issue. When/if an organization reports such an incident or
+vulnerability, they will not be identified to other parties. An
+exception may be made if the notifier explicitly authorizes the use of
+their name or organization name (e.g., US CERT might notify us of a
+vulnerability and authorize us to refer to their vulnerability database
+in a general announcement we send to users).
+
+Because OPeNDAP represents a community of users, we will maintain a
+community communication tool so that announcements can be sent to
+interested parties in a timely manor. This tool will take the form of an
+email list and the use of the list will be restricted to security items
+or items which are likely to be of interest to the overwhelming majority
+or community members when those items relate directly to software which
+we have authored. The intent is to use the list frequently enough to
+ensure it is a robust social tool but still re-enforce the attitude that
+the information presented there is critically important.
+
+Announcements should alert users to the affected versions and provide
+any other information needed to reduce confusion. Users who do not have
+to upgrade should understand that.
+
+## Procedures
+
+### Code reviews
+
+All software must undergo thorough source-code reviews prior to public
+release. These reviews will include peer-reviews, performed by a
+designated Security Officer (SO) and automated reviews. Additionally,
+major changes in the architecture of the software will be reviewed by an
+external source qualified to conduct such a review.
+
+#### Peer Review
+
+Peer review of all software will be conducted by the SO and all
+vulnerabilities found will be addressed prior to release of the affected
+software. Until we develop our own internal guidelines, these reviews
+will be conducted using the [CERT Secure Coding
+Standards](https://www.securecoding.cert.org/confluence/display/seccode/CERT+Secure+Coding+Standards),
+[CERT C++ Programming Language Secure Coding
+Standard](https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=637)
+and the US CERT [Security
+Rules](https://buildsecurityin.us-cert.gov/daisy/bsi-rules/home.html).
+
+Another aspect of Peer Review is checking the tools we use to build
+binaries to make sure that the platforms we build on are not using tools
+that will introduce security holes in those binaries. Look at
+[Secunia](http://secunia.com/) to check on reported issues for build
+tools.
+
+#### Automated Review
+
+Automated review of source code will also be conducted by either the SO
+or developer of the software (in the later case with oversight by the
+SO) and all vulnerabilities addressed prior to public release. \[N.B. We
+are considering a tool which categorize issues found as *critical*,
+*important* and *informational*. We will amend this policy to reflect
+this distinction since the *informational* issues are often noise, but
+merit examination.\] An automated static source review tool must be
+integrated into the nightly build process but those results will not be
+made available outside OPeNDAP (unlike the normal nightly builds'
+results) unless the OPeNDAP Board of Directors decides to amend this
+interim policy.
+
+#### External Review
+
+External reviews will be limited to major changes in the architecture of
+the software, with the exception that the SO may determine that such a
+review is in the best interests of OPeNDAP and/or its users. Because
+these reviews are very expensive and OPeNDAP is a non-profit entity with
+a very limited budget, use of an external audit will be limited.
+However, OPeNDAP is currently pursuing, and will continue to work
+toward, relationships that enable such reviews as part of its budget.
+
+### Site Review/Setup
+
+When a new site is established within OPeNDAP, it should be 'hardened'
+to reduce the likelihood that software such as MySQL, et c., can be
+compromised. Existing sites should be reviewed periodically to make sure
+they are still robust. This is because even though they were setup
+securely, software additions might introduce vulnerabilities and new
+vulnerabilities might crop up in old software (i.e., the vulnerability
+was really there all along, but was unknown).
+
+### Personnel
+
+The Security Officer (SO) will be appointed/designated by the OPeNDAP
+CEO. The SO will provide final acceptance of all software before public
+release and such acceptance will constitute authorization to release the
+software.
+
+To improve the efficiency of the various review processes, OPeNDAP will
+obtain reasonable training for software developers.
+
+#### Secure Communication
+
+All OPeNDAP personnel will obtain GPG public/private keys and share
+their public key with all other OPeNDAP personnel or make their public
+key available on a public key server. OPeNDAP personnel are responsible
+for ensuring the integrity of their private keys and notifying people at
+once if they believe that integrity has been violated.
+
+### Software Distribution
+
+All software released publicly after 1 June 2007 will be paired with a
+MD5 and/or SHA1 digest. The digest files will be available in an obvious
+location so that users can reasonably be expected to access them. The
+MD5 and SHA1 algorithms have been chosen because they represent a
+reasonable level of security while still being likely to be used by
+those who download the software (whereas digital signatures are 'more
+secure' but less likely to be used).
+
+### Terms
+
+public release: A release of software which is made available for people outside of OPeNDAP. Internal releases of software do not need to undergo the full automated and peer review process (although the policy to maintain secure web sites must still be followed).
+
+<!-- -->
+
+security: The likelihood that computers which run the data servers will compromised by network-based attacks such as Denial of Service attacks, remote command execution or other forms of electronic vandalism. Higher security reduces the likelihood.
+
+<!-- -->
+
+software: In the context of these procedures, the term *software* refers to computer programs which are used by people to provide access to data. These programs are commonly called 'servers' to distinguish them from 'client' programs, which are used to access view/manipulate/ingest data which are served.
+
+<!-- -->
+
+third-party distributions: Examples of third-party distributions are found on RPMFIND (http://rpmfind.userfriendly.net/) and other sites.
+
+## Notes
+
+- See the
+  [Resources](http://docs.opendap.org/index.php/Security#Resources)
+  section of the Security Working Group for more online info.

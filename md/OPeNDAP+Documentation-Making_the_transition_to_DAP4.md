@@ -1,0 +1,881 @@
+This How-To describes modifying existing modules written for the Hyrax
+Back End Server (BES) so that they support both DAP4 as well as the
+older DAP2 protocol. The information here is mostly anecdotal, based on
+experience working with five existing handlers that read data and return
+DAP2 metadata and data responses. The libdap and bes software have been
+modified to provide support for all but a very few of the features
+described in the DAP4 draft specification document. The versions of
+those packages that include this support are accessible from our SVN
+repository on a special branch that exists for DAP4 development and
+testing.
+
+In the following, I assume you're going to modify a module so that it
+will support DAP4, in addition to supporting DAP2. The basic steps are
+pretty simple:
+
+- Get the *dap4* Shrew branch
+- Move your working copy of the module to a *dap4* branch
+- Learn about how DAP4 has been added to *libdap*
+- Modify the module
+- Write tests
+- Check in the result
+
+How long does this take? On average it take about a day to two days for
+any given module.
+
+**Note**: I'm using *\$svn* as if it were a shell variable defined as
+*<https://scm.opendap.org/svn>*.
+
+## Get the DAP4 branch
+
+The short version of this is to *svn co \$svn/branch/shrew/dap4*. See
+[Hyrax - Build the Shrew
+Project](Hyrax_-_Build_the_Shrew_Project "wikilink") for more
+information on *shrew* (caveat: that's a fairly old article and unlikely
+to be completely accurate). Build the code, run the tests, make sure the
+libdap and bes libraries are installed, etc., so that you are
+comfortable that the code you're working with is functioning.
+
+## Move your module working copy to a *dap4* branch
+
+In the *shrew* project there is a file named *externals.txt* that lists
+the external projects that are checked out to make up *shrew*. You will
+see that *libdap*, *bes*, and at least 5 of the 14 modules are on a
+branch. The *externals.txt* file will look something like this:
+
+``` bash
+^/trunk/hyrax-dependencies/ src/dependencies
+
+^/branch/libdap/dap4 src/libdap
+^/branch/bes/dap4 src/bes
+
+^/trunk/olfs/ src/olfs
+
+^/branch/csv_handler/dap4 src/modules/csv_handler
+...
+^/branch/gdal_handler/dap4 src/modules/gdal_handler
+
+^/trunk/hdf4_handler/ src/modules/hdf4_handler
+^/trunk/hdf5_handler/ src/modules/hdf5_handler
+
+^/branch/ncml_module/dap4 src/modules/ncml_module
+^/trunk/gateway_module/ src/modules/gateway_module
+...
+```
+
+I'm assuming you're working on a module that does not yet support DAP4
+and so probably does not have a *dap4* branch. Beware the old *DAP4*
+branches in our repository; they are evil and should be avoided.
+
+What you need to do to move your module to a *dap4* branch in
+*shrew/dap4*:
+
+1.  Go to the top-level *shrew* directory: *cd ~/src/dap4* (for example)
+2.  Make a branch called *dap4* for your module: *svn cp
+    \$svn/trunk/module \$svn/branch/module/dap4* It'll ask for a
+    comment, mumble about dap4...
+3.  Edit *externals.txt* so that the reference to the external *module*
+    is not *^/trunk/module* but instead *^/branch/module/dap4*
+4.  Run the *set-externals.sh* script: *./set-externals.sh*
+5.  Check in the changes to the top-level shrew directory: *svn ci -N*
+    Again, comment about dap4 and your module in the comment...
+6.  Verify the new property value: *svn pg <svn:externals>* This should
+    look very similar to the stuff int he *externals.txt* file and
+    should show the branch is to be checked out into
+    *src/modules/module*.
+7.  Go to the directory that holds your *module*: *cd
+    src/modules/module*
+8.  Switch to the newly made branch: *svn switch
+    \$svn/branch/module/dap4 .* \<-- Note the trailing dot; it means do
+    the switch to the current directory
+9.  Verify that the switch worked: *svn info* The repository URL should
+    point toward the branch.
+
+OK, now we are done with SVN and revision control monkey shines for a
+while...
+
+## How DAP4 support has been added to *libdap*
+
+DAP4 is an extension of DAP2, to a large extent. While there are some
+ways in which it is fundamentally different, for the scope of this
+tutorial, many of those differences don't matter that much. Modifying a
+handler so that it supports DAP4 has mostly to do with the DAP4 data
+model and how it has been implemented in *libdap*.
+
+The DAP4 data model includes all of the types used in DAP2 with the
+exception of the Grid and Sequence types. The Grid type has been removed
+and replaced by a more general notion of collections of Arrays that
+share a set of Dimensions. This corresponds to the notion of a
+*coverage* as defined by the OGC. The Sequence type remains in DAP4, but
+the semantics of the type have changed in some important ways, making
+them much more useful. For example, it's now possible to have an array
+of Sequences, which provides a compact representation for profile data.
+Sequence in DAP4 is implemented in a completely new class, even though
+the essential semantics of nested tables with an unspecified number of
+rows is still the core of its definition. The remainder of the types
+defined by DAP2 *use the same implementations* in DAP4. This means that
+existing code, e.g., the modules, can make use of the any
+specializations they have defined for those classes. For an example of
+this, take a look at the *netcdf_handler* software.
+
+DAP4 adds to the collection of datatypes defined by DAP2. The added
+types are Group, Enum, Opaque and Int64 (both signed and unsigned). When
+porting existing code, you can ignore these initially. A more
+sophisticated module might use Groups or Enums, but if you've written a
+module without them, its clear there's a way to represent the data and
+ignore them.
+
+Note also that DAP4 changed the syntax for Constraint Expressions and
+that *libdap*uses a different implementation for the DAP4 CE
+parser/evaluator. The implementation of this part of the specification
+is still in development, but for now all of the *projection* features
+outlined in the DAP4 specification have been implemented. Instead of
+getting a *ConstraintEvaluator* object from the BES and passing that
+into the *serialize()* method, Transmitter-type modules should
+instantiate a D4CEParser. The section on Transmitter modules has more
+information on this and other related topics.
+
+Because DAP4 uses a different metadata and data response, in *libdap* we
+chose to replace the DDS object with a new container for DAP4. This way
+there's never any confusion about which version of the protocol is being
+used - if a DDS has been created, then it holds variables that are DAP2
+and if it is a DMR object, the variables are DAP4. In the discussion
+below, you'll see that there is a way to take a DAP2 DDS and build a
+DAP4 DMR, transforming the variables in the process. The primary method
+used to enable copying variables from a DDS to a DMR is
+*BaseType::transform_to_dap4()* which is specialized by Array,
+Constructor, Grid, Structure and Sequence. I'll discuss each method,
+looking at how the Array, ..., classes specialized the BaseType version
+and why. This will provide information about why your module might need
+to specialize it too as well as how to write the specialization.
+
+### How the variable transform code works
+
+``` cpp
+BaseType *
+BaseType::transform_to_dap4(D4Group */*root*/, Constructor */*container*/)
+{
+    BaseType *dest = ptr_duplicate();
+
+    dest->attributes()->transform_to_dap4(get_attr_table());
+
+    dest->set_is_dap4(true);
+
+    return dest;
+}
+```
+
+The BaseType::transform_to_dap4() method. This is used by all of the
+classes that do not specialize it. I'll cover what's special about those
+in a moment, but first, lets look at the *BaseType* version:
+
+- Line 4 calls the *ptr_duplicate()* method to copy *this*, meaning that
+  if your module specializes the type (e.g., MyModuleFloat64 \<--
+  Float64) then *dest* will hold an instance of MyModuleFloat64 and your
+  module can get/do all the great things you've packed into that
+  specialization.
+- The other lines are less thrilling, although note that the 'is_dap()''
+  property is set for the variable.
+
+Next is the Array class specialization for the method:
+
+``` cpp
+BaseType *
+Array::transform_to_dap4(D4Group *root, Constructor */*container*/)
+{
+    Array *dest = static_cast<Array*>(ptr_duplicate());
+
+    D4Dimensions *dims = root->dims();
+    for (Array::Dim_iter d = dest->dim_begin(), e = dest->dim_end(); d != e; ++d) {
+        if (!(*d).name.empty()) {
+            // If a D4Dimension with the name already exists, use it.
+        D4Dimension *d4_dim = dims->find_dim((*d).name);
+        if (!d4_dim) {
+        d4_dim = new D4Dimension((*d).name, (*d).size);
+        dims->add_dim_nocopy(d4_dim);
+        }
+        else if (d4_dim->size() != (unsigned long) (*d).size) {
+        d4_dim = new D4Dimension((*d).name + "_" + name(), (*d).size);
+        dims->add_dim_nocopy(d4_dim);
+        }
+
+        (*d).dim = d4_dim;
+    }
+    }
+
+    dest->attributes()->transform_to_dap4(get_attr_table());
+
+    dest->set_is_dap4(true);
+
+    return dest;
+}
+```
+
+The *Array::transform_to_dap4()* method also copies the variable using
+*ptr_duplicate()* with the same effect as with BaseType WRT any
+specializations defined by your module. Once that's done, the method
+scans the Array for dimensions that are shared. The criteria it uses is
+definitely heuristic; if a Shared Dimension with the same name and size
+is already in the root group's collection of shared dimensions, assume
+this dimension is that Shared Dimension; if the names match but not the
+sizes, make a new Shared Dimension with with a name composed of the
+dimension and variable name; and lastly, if there's no shared dimension
+with a matching name, make one. In all cases, any named dimension is
+treated as a DAP4 Shared Dimension. If this is not true for your module,
+you will need to specialize this method.
+
+Note: In DAP2 there are no Groups. Given this, the top-level of a DAP2
+dataset is conceptually similar to the root Group of DAP4, hence the use
+of the 'root' group in this and other versions of the
+*transform_to_dap4()* method. In general, where this code make
+statements about the 'root' group and things like Shared Dimensions, the
+correct statement for DAP4 *in general* would be *enclosing group*. For
+the case this method addresses, the root group is always the enclosing
+group.
+
+Next is the Grid class specialization for the method:
+
+``` cpp
+BaseType *
+Grid::transform_to_dap4(D4Group *root, Constructor *container)
+{
+    BaseType *btp = array_var()->transform_to_dap4(root, container);
+    Array *coverage = static_cast<Array*>(btp);
+    if (!coverage)
+        throw InternalErr(__FILE__, __LINE__, "Expected an Array while transforming a Grid (coverage)");
+
+    coverage->set_parent(container);
+
+    // Next find the maps; add them to the coverage and to the container,
+    // the latter only on the condition that they are not already there.
+
+    for (Map_iter i = map_begin(), e = map_end(); i != e; ++i) {
+        btp = (*i)->transform_to_dap4(root, container);
+        Array *map = static_cast<Array*>(btp);
+        if (!map)
+            throw InternalErr(__FILE__, __LINE__, "Expected an Array while transforming a Grid (map)");
+
+        // map must be non-null (Grids cannot contain Grids in DAP2)
+        if (map) {
+            // Only add the map/array if it not already present; given the scoping rules
+        // for DAP2 and the assumption the DDS is valid, testing for the same name
+        // is good enough.
+        if (!root->var(map->name())) {
+            map->set_parent(container);
+        container->add_var_nocopy(map);
+        }
+        D4Map *dap4_map = new D4Map(map->name(), map, coverage);    // bind the 'map' to the coverage
+        coverage->maps()->add_map(dap4_map);    // bind the coverage to the map
+    }
+    else {
+        throw InternalErr(__FILE__, __LINE__, "transform_to_dap4() returned a null value where there can be no Grid.");
+    }
+    }
+
+    container->add_var_nocopy(coverage);
+
+    // Since a Grid (DAP2) to a Coverage (DAP4) removes a lexical scope
+    // in favor of a set of relations, Grid::transform_to_dap4() does not
+    // return a BaseType*. Callers should assume it has correctly added
+    // stuff to the container and group.
+    return 0;
+}
+```
+
+Since there's no *Grid* type in DAP4, this code does not copy the Grid
+but instead looks inside it and copies the Arrays that make up the Grid.
+Each Array is *indirectly* copied using *ptr_duplicate()* in all but two
+cases since the (discussed in the next section) *transform_to_dap4()*
+will call *ptr_duplicate()*. Note that unlike the BaseType and Array
+versions, this code uses the *container* parameter and returns a null
+for the BaseType. If C++ allowed for the return of multiple values, the
+*container* parameter wouldn't be needed because we could return the
+Grid's array and Maps as a set of values and then load them into the
+parent container in the DMR (which is not the Grid's parent container -
+that's a DAP2 variable). The caller knows that a return value of null
+means this is a Grid and variables have been added into the DMR as a
+side effect of the call and there's nothing more to do. Take a look at
+the DMR::build_using_dds() code.
+
+Regarding the code on line 21 (*if (map) {...*): DAP4 represents Maps as
+arrays in an enclosing group (the root group for this code) and the if
+clause makes sure those are present. If two Grids have Maps with the
+same names, they are assumed by this code to be *the same Maps and have
+the same values*. If this is not the case for your module, you will need
+to specialize the method. Note that an Array in DAP4 that has Maps holds
+a special object for each Map so the binding is explicit.
+
+### The Constructor types are a bit more complicated
+
+Here is *Constructor::transform_to_dap4()*. It exists to reduce code
+duplication in the Structure and Sequences classes and may play a part
+in a specialization you write or may serve as nothing more than a
+template for your code. The method calls transform_to_dap4() on all of
+the variables held by the Constructor, transfers attributes and sets the
+*is_dap4()* property.
+
+``` cpp
+BaseType *
+Constructor::transform_to_dap4(D4Group *root, Constructor *dest)
+{
+    for (Constructor::Vars_citer i = var_begin(), e = var_end(); i != e; ++i) {
+        BaseType *new_var = (*i)->transform_to_dap4(root, dest);
+        if (new_var) {  // Might be a Grid; see the comment in BaseType::transform_to_dap4()
+            new_var->set_parent(dest);
+            dest->add_var_nocopy(new_var);
+        }
+    }
+
+    // Add attributes
+    dest->attributes()->transform_to_dap4(get_attr_table());
+
+    dest->set_is_dap4(true);
+
+    return dest;
+}
+```
+
+*Structure::transform_to_dap4()*. This code builds a new Structure
+instance, runs Constructor::transform_to_dap4() for it side effects,
+sets the parent container and returns the new Structure. The method does
+not use *ptr_duplicate()* because doing so calls Constructor's copy
+constructor which *does not* use *ptr_duplicate()*. This means that if
+you specialize Structure in your module you *must* modify the code to
+provide a new version of this method for that class.
+
+``` cpp
+BaseType *
+Structure::transform_to_dap4(D4Group *root, Constructor *container)
+{
+    // Structure *dest = static_cast<Structure*>(ptr_duplicate());
+    Structure *dest = new Structure(name());
+    Constructor::transform_to_dap4(root, dest);
+
+    dest->set_parent(container);
+
+    return dest;
+}
+```
+
+*Sequence::transform_to_dap4()*. As with
+*Structure::transform_to_dap4()*, your handler must provide a definition
+for this method if you specialize Sequence. Note that in this case, DAP4
+uses a new class for Sequences: *D4Sequence*.
+
+``` cpp
+BaseType *
+Sequence::transform_to_dap4(D4Group *root, Constructor *container)
+{
+    D4Sequence *dest = new D4Sequence(name());
+
+    Constructor::transform_to_dap4(root, dest);
+
+    dest->set_length(-1);
+    dest->set_parent(container);
+
+    return dest;
+}
+```
+
+## Modify the module
+
+The most important thing to do when modifying a module so that it will
+support DAP4 is to make sure and run it's tests before you start hacking
+away at the code. Make sure all of the tests pass or that you know why
+the tests that don't pass are failing and that those failures are not
+that big a deal. I made all of the modules I worked on pass all their
+tests before I started modifying them - so far.
+
+There are two kinds of modules we have in Hyrax that I'll cover here:
+Modules that read a specific kind of data and modules that build a new
+(non-DAP) kind of response. I'll call these *format* and *transmitter*
+modules, respectively.
+
+### Format module
+
+There is one class every format module contains that will require
+modification: *RequestHandler*. You will need to add two new static
+(class) methods to *RequestHandler* so that it can return the
+'dmr*and*dap*(metadata and data, resp.) responses when the BES framework
+processes a request that contains*\<get type="dmr" .../\>*or*\<get
+type="dap" .../\>*. Here's what it looks like for the*csv_handler''
+software:
+
+``` cpp
+CSVRequestHandler::CSVRequestHandler(string name) : BESRequestHandler(name)
+{
+    add_handler(DAS_RESPONSE, CSVRequestHandler::csv_build_das);
+    add_handler(DDS_RESPONSE, CSVRequestHandler::csv_build_dds);
+    add_handler(DATA_RESPONSE, CSVRequestHandler::csv_build_data);
+
+    // We can use the same DMR object for both the metadata and data
+    // responses. jhrg 8/13/14
+    add_handler(DMR_RESPONSE, CSVRequestHandler::csv_build_dmr);
+    add_handler(DAP4DATA_RESPONSE, CSVRequestHandler::csv_build_dmr);
+
+    add_handler(VERS_RESPONSE, CSVRequestHandler::csv_build_vers);
+    add_handler(HELP_RESPONSE, CSVRequestHandler::csv_build_help);
+}
+```
+
+And in the *CSVRequestHandler.h* header file:
+
+``` cpp
+...
+    static bool csv_build_data(BESDataHandlerInterface &dhi);
+
+    static bool csv_build_dmr(BESDataHandlerInterface &dhi);
+
+    static bool csv_build_vers(BESDataHandlerInterface &dhi);
+...
+```
+
+Before we describe how to write the new *build_dmr()* class method, note
+that while DAP2 used two different C++ objects for metadata and data,
+DAP4 has just one, the *DMR*, so for both the metadata ("dmr") and data
+("dap") response, we can use the same class method. Of course, your
+handler might need to do something special when building a data
+response, so having a separate class method for that is an option. So
+far, csv, fits, freeform, netcdf, and gdal have not needed that so I
+don't have any examples of it yet.
+
+#### Writing *build_dmr()*
+
+There are two ways you can go about this task. The first, and likely
+more time consuming, is to modify your handler to build a DMR object and
+just return it. The second way is to use the existing capability in the
+module to build a DDS object that also contains DAP2 attributes - most
+handlers do this by building the DDS, then the DAS and then merging the
+two using the *DDS::transfer_attributes(DDS \*)* method - and then
+transform that DDS into a DMR using one of the DMR object's methods.
+Your handler can either use *DMR::DMR(D4BaseTypeFactory \*factory, DDS
+&dds)* or *void DMR::build_using_dds(DDS &dds)*.
+
+Here's code that implements *build_dmr()* suing the *void
+DMR::build_using_dds(DDS &dds)* method:
+
+``` cpp
+bool CSVRequestHandler::csv_build_dmr(BESDataHandlerInterface &dhi)
+{
+    // First step, build the 'full DDS'
+    string data_path = dhi.container->access();
+
+    BaseTypeFactory factory;
+    DDS dds(&factory, name_path(data_path), "3.2");
+    dds.filename(data_path);
+
+    try {
+    csv_read_descriptors(dds, data_path);
+
+    DAS das;
+    csv_read_attributes(das, data_path);
+    Ancillary::read_ancillary_das(das, data_path);
+    dds.transfer_attributes(&das);
+    }
+    catch (InternalErr &e) {
+    throw BESDapError(e.get_error_message(), true, e.get_error_code(), __FILE__, __LINE__);
+    }
+    catch (Error &e) {
+    throw BESDapError(e.get_error_message(), false, e.get_error_code(), __FILE__, __LINE__);
+    }
+    catch (...) {
+    throw BESDapError("Caught unknown error build CSV DMR response", true, unknown_error, __FILE__, __LINE__);
+    }
+
+    // Second step, make a DMR using the DDS
+
+    // Extract the DMR Response object - this holds the DMR used by the
+    // other parts of the framework.
+    BESResponseObject *response = dhi.response_handler->get_response_object();
+    BESDMRResponse &bdmr = dynamic_cast<BESDMRResponse &>(*response);
+
+    // Extract the DMR Response object - this holds the DMR used by the
+    // other parts of the framework.
+    DMR *dmr = bdmr.get_dmr();
+    dmr->set_factory(new D4BaseTypeFactory);
+    dmr->build_using_dds(dds);
+
+    bdmr.set_dap4_constraint(dhi);
+    bdmr.set_dap4_function(dhi);
+
+    return true;
+}
+```
+
+Line 3-8 build a new, temporary DDS. Lines 11-16 load metadata into the
+DDS using whatever code your module has to do that. This code is
+building instances of values that know about DAP2. See the above section
+on *libdap* support for DAP4 and the common issues you might face as
+well as discussion below about specific issues found with the five
+modules ported so far. Line 32-38 extract the DMR from the
+*BESDMRResponse* object. Line 39 does the magic transformation, copying
+the variables and attributes from the DDS to the DMR. Line 41-42 sets
+the DAP4 constraints so that code in the BES (bes/dap/BESDapTransmitter,
+etc.) will work correctly.
+
+That's it. That was all that was needed to add support for DAP4 to the
+*csv_handler* code. But...
+
+#### What can go wrong...
+
+The CSV module was ported very easily. I'll discuss the issues with the
+other four modules and how they were addressed.
+
+##### FITS: Multiple Grids with maps that have the same name
+
+The FITS module reads each variable into a DAP2 Grid. But there are no
+Grids in DAP4 (the only type that was dropped; although Sequences are
+substantially different as well) so the transform code (in
+*Grid::transform_to_dap4()*) must move the data and map arrays from the
+DAP2 Grid to three Arrays in a D4Group. In doing so, the maps must be
+transformed to DAP4 Shared Dimensions. There's no particular issue with
+that, but when maps in different Grids have the same name, there is an
+issue. Are the two maps the same? What if they have different sizes but
+the same name?
+
+If two maps from different grids have the same name, size and type, they
+are assumed to be the same. If your module make Grids where the maps are
+not the same (i.e., they have different values) but have the same name,
+size and type then you'll need to specialize the
+Grid::transform_to_dap4() method.
+
+##### FreeForm: DAP2 and DAP4 Sequences have subtle differences
+
+The *libdap* class *BaseType* defines *transform_to_dap4()* and most
+classes use that version.
+
+``` cpp
+BaseType *
+BaseType::transform_to_dap4(D4Group */*root*/, Constructor */*container*/)
+{
+    BaseType *dest = ptr_duplicate();
+
+    // Copy the D2 attributes from 'this' to dest's D4 Attributes
+    dest->attributes()->transform_to_dap4(get_attr_table());
+
+    dest->set_is_dap4(true);
+
+    return dest;
+}
+```
+
+Exceptions are Array, Grid, Structure and Sequence. I'll cover what's
+special about those in a moment, but first, lets look at the *BaseType*
+version:
+
+- Line 4 calls the *ptr_duplicate()* method to copy *this*, meaning that
+  if your module specializes the type (e.g., MyModuleFloat64 \<--
+  Float64) then *dest* will hold an instance of MyModuleFloat64 and your
+  module can go all the great things you've packed into that
+  specialization.
+- The other lines are less thrilling although note that the 'is_dap()''
+  property is set for the variable.
+
+For the FreeForm module, the Sequence class is specialized and has a
+unique version of the *read()* method, defined in *FFSequence.cc* and
+this matters because in DAP4 the Sequence type is different enough that
+it warrants it's own class (*D4Sequence*) and has different behavior
+than the DAP2 *Sequence* class. Because of this, the
+Sequence::transform_to_dap4() method does not call *ptr_duplicate*, but
+instead looks like (NB: this is repeated from above):
+
+``` cpp
+BaseType *
+Sequence::transform_to_dap4(D4Group *root, Constructor *container)
+{
+    D4Sequence *dest = new D4Sequence(name());
+
+    Constructor::transform_to_dap4(root, dest);
+
+    dest->set_length(-1);
+    dest->set_parent(container);
+
+    return dest;
+}
+```
+
+- Line 4: instead of calling ptr_duplicate() the code calls *new
+  D4Sequence()* because in DAP4, sequences are different enough to
+  require a new class.
+
+Since the FreeForm handler defines special behavior for Sequence, I made
+a new class for the module named *FFD4Sequence* and then specialized
+*FFSequence::transform_to_dap4()* so that it made a FFD4Sequence and not
+a plain D4Sequence. Here's the whole method:
+
+``` cpp
+BaseType *
+FFSequence::transform_to_dap4(D4Group *root, Constructor *container)
+{
+    FFD4Sequence *dest = new FFD4Sequence(name(), dataset(), d_input_format_file);
+
+    Constructor::transform_to_dap4(root, dest);
+
+    dest->set_length(-1);
+    dest->set_parent(container);
+
+    return dest;
+}
+```
+
+This enables the handler to run the DMR::build_using_dds() method and
+get a DMR that holds instances of the FFD4Sequence class.
+
+#### The GDAL module subclasses the DDS class
+
+While the GDAL module does not need to specialize any of the DAP2
+datatypes, it does need some modification to work with the
+*DMR::build_using_dds()* method. The GDAL module specialized the DDS so
+that a handle to the data source can remain open and be used for access
+to information. This is true partly for efficiency and partly because
+some of the data values it returns are synthesized (DAP2 Grid Map
+vectors, which become DAP4 Maps). I did this by defining a
+specialization of the DMR (GDALDMR) and modifying the template
+*RequestHandler::build_dmr()* method. Here's the salient parts of the
+modified template (see the about version for the CSV module for the
+unmodified version).
+
+``` cpp
+bool GDALRequestHandler::gdal_build_dmr(BESDataHandlerInterface &dhi)
+{
+    string data_path = dhi.container->access();
+
+    BaseTypeFactory factory;
+    DDS dds(&factory, name_path(data_path), "3.2");
+    dds.filename(data_path);
+
+    GDALDatasetH hDS = 0;   // Set in the following block but needed later.
+
+    try {
+    hDS = gdal_read_dataset_variables(&dds, data_path);
+
+...
+    }
+
+...
+
+    DMR *dmr = bes_dmr.get_dmr();
+    dmr->set_factory(new D4BaseTypeFactory);
+    dmr->build_using_dds(dds);
+
+    GDALDMR *gdal_dmr = new GDALDMR(dmr);
+    gdal_dmr->setGDALDataset(hDS);
+
+    delete dmr; // The call below will make 'dmr' unreachable; delete it now to avoid a leak.
+    bes_dmr.set_dmr(gdal_dmr); // BESDMRResponse will delete gdal_dmr
+
+...
+}
+```
+
+The important parts are on the highlighted lines: 9, 19 and 23. On line
+9 the DDS is built and a handle to the open GDAL dataset is returned. On
+line 19 a new GDALDMR is built, and immediately following that the
+handle from line 9 is saved in the GDALDMR instance. The GDALDMR
+object's destructor will close this handle. The primary purpose for the
+specialization of the DDS (and DMR) is to manage the GDAL dataset handle
+lifetime. The BES framework will take care of deleting the DMR after the
+framework orchestrates the read and transmission of data values. Code on
+line 23 sets the DMR specialization as the object managed by the
+BESDMRResponse object.
+
+NB: The GDALDMR code is in the source file GDAL_DMR.h in the
+gdal_handler package.
+
+#### Writing code to build the DMR directly
+
+For direct support of DAP4, replace the functions included in a handler
+that build the DDS and DAS with new ones that build the DMR directly. As
+is implied by the existance of a DMR constructor that takes a DDS as an
+argument, the two (DMR and DDS) are similar in many key ways, so the
+existing code should be very useful in writing the new functions. The
+main things to consider are the differences in Grids (DAP2) versus
+coverages (DAP4) and how they are encoded in the D4Group/DMR and the new
+data types present in DAP4 (Group, Enum, Opaque, Int64).
+
+### Transmitter module
+
+We want to make all of the modules that include their own *Transmitter*
+class are run when using the *retrunAs* attribute of the *get* element
+in the bes request. Here's an example request document:
+
+``` xml
+<?xml version="1.0" encoding="UTF-8"?>
+<bes:request xmlns:bes="http://xml.opendap.org/ns/bes/1.0#" reqID="[http-8080-1:27:bes_request]">
+  <bes:setContext name="xdap_accept">4.0</bes:setContext>
+  <bes:setContext name="dap_explicit_containers">no</bes:setContext>
+  <bes:setContext name="errors">xml</bes:setContext>
+  <bes:setContext name="max_response_size">0</bes:setContext>
+
+  <bes:setContainer name="c" space="catalog">tests/data/fnoc1.data</bes:setContainer>
+
+  <bes:define name="d1" space="default">
+    <bes:container name="c">
+        <dap4constraint>lat</dap4constraint>
+    </bes:container>
+  </bes:define>
+
+  <bes:get type="dap" definition="d1" returnAs="ascii"/>
+
+</bes:request>
+```
+
+Using the *returnAs* attribute provides a way for the front end (the
+OLFS in Hyrax) to say that the BES should build either the DAP2 (*dods*)
+or DAP4 (*dap*) data response object and then use the appropriate module
+to build the alternate response.
+
+To implement this, we need do only a few things besides writing the
+software that takes the DataDDS (DAP2) or DMR (DAP4). Two classes that
+implement the mechanics of the BES module and the 'Transmitter'
+functionality: Module; and Transmitter. The Module class is pretty much
+the same as for a *format* module with the exception that if you want to
+make the BES run your transmitter code using a new name for the
+*returnAs* parameter, you need to add that to the Module. If you're
+happy using the existing name, there's no need to modify the Module
+class at all. At the end of this section on Transmitters I show how to
+add a new name for *returnAs*.
+
+#### The Transmitter class
+
+The magic happens in the Transmitter class. The constructor for this
+class registers two methods, one for each of the DAP2 and DAP4 data
+responses.
+
+``` cpp
+BESAsciiTransmit::BESAsciiTransmit() : BESBasicTransmitter()
+{
+    add_method(DATA_SERVICE, BESAsciiTransmit::send_basic_ascii);
+    add_method(DAP4DATA_SERVICE, BESAsciiTransmit::send_dap4_csv);
+}
+```
+
+Note that *DATA_SERVICE* is the string *dods* and is the DAP2 data blob;
+*DAP4DATA_SERVICE* is the string *dap* and is the DAP4 data blob.
+
+Since it's likely that your code already implements the transmitter
+method for DAP2 data, I'll show only the DAP4 one below. First, lines 8
+to 15 are basic boiler plate for extracting values from the
+*BESDataHandlerInterface* for later use. Next, lines 25 and 31 take care
+of processing the DAP4 function and/or constraint expression. (NB: the
+function code has yet to be added to this example.) Note that if there
+is no constraint expression, then the module must mark all of the
+variables to be sent (line 30). Lastly, on line 33 the *dmr* object is
+passed to code that actually performs the transformation. The resulting
+output is written to the DHI output stream. As is the case with DAP2,
+the DMR object is ready to read values, so the code that is passed the
+DMR can use the BaseType::intern_data() method. Since this How-To is all
+about porting an existing module, I assume that there's already code to
+transform the values held by variables in a DDS; you'll use the same
+basic logic to transform values held by variables in the DMR
+(technically, held by Groups that are held by the DMR). One thing to
+watch out for is needlessly copying values or retaining values in memory
+longer than thay are needed. Once a value has been written out to a file
+or to the DHI's output sink, it can be removed from memory. Take a look
+at how the ASCIIVAL handler code for DAP4 treats values differently than
+the older DAP2 code. These differences have less to do with DAP2 versus
+DAP4 than the do with us having more experience using the BES framework.
+The bottom line is that a Transmitter is always going to be the last
+module in a chain of processing operations, so it can assume there are
+no other modules that will need these objects.
+
+``` cpp
+/**
+ * Transmits DAP4 Data as Comma Separated Values
+ */
+void BESAsciiTransmit::send_dap4_csv(BESResponseObject *obj, BESDataHandlerInterface &dhi)
+{
+    BESDEBUG("ascii", "BESAsciiTransmit::send_dap4_csv" << endl);
+
+    BESDMRResponse *bdmr = dynamic_cast<BESDMRResponse *>(obj);
+    DMR *dmr = bdmr->get_dmr();
+
+    string dap4Constraint = www2id(dhi.data[DAP4_CONSTRAINT], "%", "%20%26");
+    string dap4Function = www2id(dhi.data[DAP4_FUNCTION], "%", "%20%26");
+
+    // Not sure we need this...
+    dhi.first_container();
+
+    try {
+    // Handle *functional* constraint expressions specially
+    // Use the D4FunctionDriver class and evaluate the functions, building
+    // an new DMR, then evaluate the D4CE in the context of that DMR.
+    // This might be coded as "if (there's a function) do this else process the CE".
+    // Or it might be coded as "if (there's a function) build the new DMR, then fall
+    // through and process the CE but on the new DMR". jhrg 9/3/14
+
+    if (!dap4Constraint.empty()) {
+        D4CEDriver d4ce(dmr);
+        d4ce.parse(dap4Constraint);
+    }
+    else {
+        dmr->root()->set_send_p(true);
+    }
+
+    print_values_as_ascii(dmr, dhi.get_output_stream());
+        dhi.get_output_stream() << flush;
+    }
+    catch (InternalErr &e) {
+        throw BESDapError("Failed to return values as ascii: " + e.get_error_message(), true, e.get_error_code(), __FILE__, __LINE__);
+    }
+    catch (Error &e) {
+        throw BESDapError("Failed to return values as ascii: " + e.get_error_message(), false, e.get_error_code(), __FILE__, __LINE__);
+    }
+    catch (...) {
+        throw BESInternalFatalError("Failed to return values as ascii: Unknown exception caught", __FILE__, __LINE__);
+    }
+
+    BESDEBUG("ascii", "Done BESAsciiTransmit::send_dap4_csv" << endl);
+}
+```
+
+#### The Module class
+
+The Module class' *initialize* method binds names to the module's
+Transmitter class and it is using these strings with the *returnAs*
+attribute that trigger the BES' invocation of the module. We can add a
+new string using a second call to *add_transmitter* as shown below. If
+you don't want to use a new string as the value of *returnAs* for the
+DAP4 version of this response, then there is no need to modify this
+code. Using the code below (from ASCIIVAL), both
+*<get type="dap" returnAs="ascii">* and
+*<get type="dap" returnAs="csv">* will trigger the ASCIIVAL handler
+feeding it the DAP4 data response.
+
+``` cpp
+void BESAsciiModule::initialize(const string &modname)
+{
+    BESDEBUG("ascii", "Initializing module " << modname << endl);
+
+    BESRequestHandler *handler = new BESAsciiRequestHandler(modname);
+    BESRequestHandlerList::TheList()->add_handler(modname, handler);
+
+    BESReturnManager::TheManager()->add_transmitter(ASCII_TRANSMITTER, new BESAsciiTransmit());
+    BESReturnManager::TheManager()->add_transmitter(DAP4_CSV_TRANSMITTER, new BESAsciiTransmit());
+
+    BESDebug::Register("ascii");
+
+    BESDEBUG("ascii", "Done Initializing module " << modname << endl);
+}
+
+void BESAsciiModule::terminate(const string &modname)
+{
+    BESDEBUG("ascii", "Cleaning module " << modname << endl);
+
+    BESReturnManager::TheManager()->del_transmitter(ASCII_TRANSMITTER);
+    BESReturnManager::TheManager()->del_transmitter(DAP4_CSV_TRANSMITTER);
+
+    BESRequestHandler *rh = BESRequestHandlerList::TheList()->remove_handler(modname);
+    if (rh)
+        delete rh;
+
+    BESDEBUG("ascii", "Done Cleaning module " << modname << endl);
+}
+```
+
+Where *ASCII_TRANSMITTER* and *DAP4_CSV_TRANSMITTER* are defined as:
+
+``` cpp
+#define ASCII_TRANSMITTER "ascii"
+#define DAP4_CSV_TRANSMITTER "csv"
+```
