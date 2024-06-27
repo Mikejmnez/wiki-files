@@ -25,8 +25,25 @@ Here, I make use of [mediawiki-to-gfm](https://github.com/outofcontrol/mediawiki
 docker run -v $PWD:/app oooc/mediawiki-to-gfm --filename=file_name.xml
 ```
 
-This makes a new markdown file named `file_name.md`. It contains a copy of the contents of `file_name.xml`.
+This makes a new markdown file named `file_name.md`. It contains a copy of the contents of `file_name.xml`. The markdown document will be located in a folder `output` in the same directory as where the code above is being run. In the example above, then, you would find the following file structure:
+```
+file_name.xml
+output/file_name.md
+```
 
 
+### Troubleshooting
+
+Not all files were successfully copied into markdown, and in some cases, an xml file was turned into a folder with a markdown inside it. 
+
+1. Case: folder creation.
+Example: An xml file called `DAP4:_Aggregg.xml`. Then executing `docker run -v ...` on the command line produced:
+```
+output/DAP4/Aggregg.md
+```
+
+2. Case: error and no markdown file creation.
+
+This happened with a few files. For each case I created an issue explaining the error message and the file that lead to the error. 
 
 
