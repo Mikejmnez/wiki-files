@@ -1,0 +1,349 @@
+# Responses
+
+## Persistent representations
+
+DAP4 defines two core responses that represent all of the information in
+a dataset:
+
+Dataset: The *Dataset* response is requested by appending the suffix *.xml* to the *file part* of the dataset's referent URL. The *Dataset* response is an XML document that contains all of the metadata included in the original dataset. .
+Data: The *Data* response is requested by appending the suffix *.dap* to the *file part* of the dataset's referent URL. The *Data* response is a multipart MIME document that contains a N+1 parts for a response with N variables. The document starts with a preamble (i.e., 'part' in MIME parlance) that contains a link to the *Dataset* response (which contains the dataset's metadata) followed by N parts which contain the name and type of the data, the data, encoded in XDR, and a checksum. Each of these three pieces of information is separated by a newline.
+
+## Old text below
+
+DAP4 defines only two response objects\*: The DDX and DataDDX. Since the
+later includes the DDX, that XML document is common to all/both DAP4
+responses. In DAP2, important information was present only in the HTTP
+headers. In DAP4, all of the information specified by the protocol will
+be present in the DDX document. Some of that information may also be
+present in HTTP headers, for example, when it's appropriate. Other
+protocols might have other ideas about where information like where the
+particular DAP version should go and the DAP binding for that protocol
+will include that information. But regardless, the DDX itself will be a
+standalone document.
+
+All character data is assumed to be UTF8 encoded.
+
+\*But see the [DAP4 Web Services](DAP4_Web_Services "wikilink") document
+for the list of response objects - both required and suggested.
+
+### DDX Organization
+
+DAP4 and the DDX will be extended to include Groups, Shared dimensions
+and user-defined types. Groups will be added as a kind of
+constructor-type with properties similar to Structure and to Java or C++
+namespaces. Unlike Structure, Groups cannot be dimensioned.
+
+A rough syntax which describes how these additions will fit into the DAP
+and the existing DDX Notation is (<font color="red">Replace with XML
+schema</font>):
+
+    Dataset :== Groups | anonymous_group
+    anonymous_group :== Dimensions Attributes Groups Variables
+    Groups :== null | Group Groups
+    Group :== Dimensions Attributes Groups Variables
+    Dimensions :== null | Dimension Dimensions
+    Attributes :== null | Attribute Attributes
+    Variables :== null | Variable Variables
+
+This pseudo-grammar does not capture what can be produced for a *Group*,
+et cetera. Instead it shows how these sections of the DDX must be
+organized.
+
+NB: If a DDX describes a data set that has been constrained, attributes
+will not be included. It is not possible to know if attributes correctly
+describe the data once it has been constrained.
+
+#### Elements
+
+##### Dataset
+
+The *Dataset* element is the root element of the DDX response.
+
+The *Dataset* element has the following attributes:
+
+name
+The name of the dataset. This can be any name the server chooses. This
+should probably be the name of the file or database table/token.
+
+<!-- -->
+
+dapVersion
+The version of DAP used by the server to form this DDX. This must be in
+digit dot digit form (e.g., "3.2") <font color="red">Why not
+*dap:version*?</font>
+
+<!-- -->
+
+xml:base
+The value of the *xml:base* attribute is the URL which was dereferenced
+to get this DDX. The *xml* namespace should also be declared in the
+*Dataset* element.
+
+<font color="red">How much of the other namespaces and attributes (e.g.,
+*grddl:transformation*) need to be formally part of the DAP4
+specification?</font>
+
+Here's and example of the *Dataset* element:
+
+    <Dataset name="fnoc1.nc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xml.opendap.org/ns/DAP/3.2#  http://xml.opendap.org/dap/dap/3.2.xsd"
+    xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+    grddl:transformation="http://xml.opendap.org/transforms/ddxToRdfTriples.xsl"
+    ns="http://xml.opendap.org/ns/DAP/3.2#"
+    xmlns:dap="http://xml.opendap.org/ns/DAP/3.2#"
+    dapVersion="3.2"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xml:base="http://test.opendap.org/opendap/data/nc/fnoc1.nc.ddx"
+    >
+
+#### Examples
+
+##### Group Examples
+
+*This data set contains one Group - the root group - which has by
+convention the name '/'*
+
+    <Dataset ... >
+        ...
+    </Dataset>
+
+*This data set contains two Groups, one after the other.*
+
+    <Dataset ... >
+    <group name="primary">
+        ...
+    </group>
+    <group name="secondary">
+        ...
+    </group>
+    </Dataset>
+
+*This data set contains more Groups, and shows they can be nested.*
+
+    <Dataset ... >
+    <group name="primary">
+        ...
+        <group name="in_situ">
+            ...
+        </group>
+
+    </group>
+    <group name="secondary">
+        ...
+    </group>
+    </Dataset>
+
+### DataDDX Organization
+
+NB: There's also a page just on the DDX, including links to information
+about chunking: [DataDDX](DataDDX "wikilink")
+
+A DataDDX response is the way DAP4 returns data to a client. Each
+DataDDX response is returned over the wire as a multipart MIME document
+where the first part contains the DDX describing the data requested and
+the second part contains the data values, encoded using XDR. Some
+aspects of this design have been borrowed from the W3C's "[SOAP Messages
+with Attachments](http://www.w3.org/TR/SOAP-attachments)" and the OGC's
+"WCS Version 1.1 Corrigendum 2" specifications. See also [The MIME
+Multipart/Related Content-type (rfc
+2387)](http://www.ietf.org/rfc/rfc2387.txt) and [MIME part
+one](http://www.ietf.or/rfc/rfc1521.txt).
+
+In DAP2 the 'data' or 'DataDDS' response is a MIME document with
+Content-Type 'application/octet-stream' which means essentially that the
+contents of the MIME document are binary and application specific, in
+this case specific to applications the understand DAP2. Within that
+dcoument, the DDS is used to provide the syntax needed to decode the
+binary information. Following the DDS is a separator and following that
+are data values written to the document using XDR.
+
+The use of XDR is solely to ensure that the data values can be read on
+both little- and big-endian machines and that floating-point values do
+not suffer from the many different representations commonly found. In
+additon, XDR is used to onclude information about the size of arrays,
+string ans URLs, the latter two of which are really special case arry
+types. Thus XDR provides a common encoding for the bits and bytes to be
+transferred. It does not. however, represent any of the more complex
+structural information such as the organization of relational data.
+
+The DDS sent with the DataDDS response is used to describe the
+organization of the data not covered by XDR. For example, if the
+response calls for values from three variables to be returned, the DDS
+in the DataDDS response will list those three variables and,
+furthermore, do so in the order that their values appear in the
+response. The variables described in the DDS response match *exactly* in
+number, type, shape and order with the data in the 'data part' of the
+response.
+
+The DataDDX follows the basic design of DAP2's DataDDS response closely.
+The DDX included describes the number, type, shape and order of each
+variable with values in the binary part of the response. However, while
+the DAP2 response used a simple *application/octet-stream* document,
+DAP4 uses a multipart MIME document. The design of this
+document/response can accommodate including including several different
+data requests in one document, a feature useful for implementations of
+DAP that do not use HTTP for transport.
+
+#### Transmitting Attributes in the DDX contained in the DataDDX Response
+
+The DDX contained in the DataDDX Response will not contain any
+*Attribute* nodes.
+
+Since the contents of the DataDDX are the result of access to the data
+subject to a constraint, various aspects of any of th variables in the
+response may have been changed. To make these changes the DAP must take
+into account the semantics of each of the variables' data types. It can
+do this because the semantics for the types are well defined and known a
+priori. However, this is not the case for attributes, where the
+semantics are intentionally not part of the DAP. The DAP is merely an
+'envelope' for the name-type-value tuples of the attributes.
+
+To understand why this restriction is placed on the DDX returned in the
+DataDDX response, lets examine a common example. Suppose an image has
+some extent and has attributes that name that extent. A geographical
+image might have attributes that provide the latitude and longitude of
+two opposite corners and a medial image might have attributes that
+provide the height and width in millimeters. Now suppose the image is
+constrained in one or more dimensions, how should the attribute values
+be treated? If they are left alone they are likely no longer correct but
+to modify them requires detailed information about how they map to the
+image and while this information might be know to a client that has an
+understanding of a particular subject area, expecting the server to
+handle them correctly would require it to know about every subject area
+for all of the data to be served.
+
+An alternative to 'universal knowledge' is to allow servers to return
+attributes that have 'well known' semantics and drop other attributes.
+While this is appealing at first, it presents a complex situation to
+clients because to make use of the attributes in the return DataDDX
+response they must know to test for them and if not present, fallback to
+some default behavior. In our opinion, it is easier to present clients
+with fewer 'optional behaviors', especially when the fallback is likely
+to compute the needed value anyway.
+
+#### Organization of the multipart MIME document
+
+Here's what the shell of the document looks like:
+
+       Content-Type: multipart/related; type="text/xml"; start="<<start id>>";  boundary="<<boundary>>"
+
+       --<<boundary>>
+       Content-Type: text/xml; charset=UTF-8
+       Content-Transfer-Encoding: binary
+       Content-Id: <<start id>>
+       Content-Description: ddx
+
+       <<DDX here. This includes a reference to <<data id>> >>
+
+       --<<boundary>>
+       Content-Type: application/octet-stream
+       Content-Transfer-Encoding: binary
+       Content-Id: <<data id>>
+       Content-Description: data
+
+       <<XDR encoded binary data>>
+
+       --<<boundary>>
+
+The example shows three sets of MIME headers separated by two
+*--\<<boundary>\>* lines; a third boundary line terminates the document.
+The first group of headers (in a real response, there would be other
+headers here like Date, XDAP, and others) provide information need to
+recognize the boundary separators and to find the first part of the
+document by matching the value of *start* to a Content-Id of one of the
+parts. The payload of that first part contains references to the related
+parts using the values of their Content-Id headers.
+
+The DDX will reference the data part using an XML element with the name
+*blob*. The blob element will have an attribute *href* that will contain
+the value of the data part's Content-Id headers (\<<data id>\> in the
+example above). Be sure to read the information about [Adding the *Data*
+element](DataDDX#Adding_the_Data_element "wikilink"). NB: The existing
+code for DAP3.2 does not use this. Instead it implements the <blob>
+element described here.
+
+
+Could this be an entry point to a really easy mechanism for asynchronous
+(delayed) responses?
+
+This might be implemented by altering the dap:blob element (or <Data>
+element). Currently we propose using an href attribute to hold the
+content ID for the MIME part that holds the data:
+
+<dap:blob href="cid:someUUID" />
+
+
+We might consider allowing an alternate representation:
+
+<dap:blob
+       xlink:href="http://the.server/location/where/you/can/get/the/binary/part"
+       xlink:type="simple"
+       available="TimeItWillBeAvailableInSomeISOFormat"
+   />
+
+
+That would indicate to the user that the content will be available
+asynchronously.
+
+--[ndp](User:Ndp "wikilink") 12:42, 30 March 2010 (PDT)
+
+##### Roberto's suggestion regarding HTTP headers
+
+This succinct suggestion for adding support to asynchronous responses
+came from Roberto De Almeida (roberto at dealmeida.net):
+
+> My suggestion would be to return a 202 Accepted
+> (http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.3)
+> response with a "Location:" header pointing to a unique URL. Accessing
+> the new URL should return either a 404 Not found if the response is
+> not ready; 200 OK if it is; and 410 Gone if it has been generated and
+> deleted after some time.
+
+Comment: jimg 18:47, 22 January 2009 (PST) This effectively factors the
+issue out of DAP; how asynchronous behavior will be handled is dependent
+on the transport protocol. I think that's essentially correct. For
+example, SOAP has an asynchronous mode and DAP over SOAP should use
+that, not some DAP-specific hack.
+
+##### Resolution
+
+As with the protocol resolution, I think that it's best to combine the
+two techniques. We should modify the <Data> (or <blob>) element so that
+it can indicate that the response has to be obtained from somewhere else
+and/or at a later time. But we should also leverage HTTP and use the
+202/404/410 response codes and Location: header.
+
+#### Choosing values for the DataDDX Content-Ids and Boundaries
+
+We would like the software that builds these DataDDX responses to be
+compatible with as many different transport protocols as possible, so
+long as the cost to the implementation for which we know we must support
+is low. One thing that some transport protocols may do is combine
+several DataDDX responses into a single document and, while the
+specifics of that will vary between protocols, one choice we can make
+now that will facilitate that is to ensure that the values of the
+Content-Ids and \<<boundary>\>s are unique within and across systems.
+This will free software that combines DataDDX responses from having to
+process the DDX and Content-Id header to ensure that no name collisions
+are present. While using UUIDs, for example, makes the result values
+'ugly', it adds virtually nothing to the time needed to build or process
+the responses. Other schemes, that combine a URI with some
+system-generated token could also be employed. The important point is to
+ensure that these symbols are unique not only within a system, but
+across systems.
+
+#### Changes to the encoding of data
+
+There are some issues with the way data values are encoded in DAP2 that
+we can address now.
+
+1.  Arrays are prefixed with their sizes, the total number of elements,
+    *twice* in DAP 2 because of an initial misuse of the xdr library.
+    Now is the time to fix that and have just one copy of the Array size
+    in DAP 4.
+2.  Sequences are encoded in a way that's optimal but which requires
+    fairly complex Constraint expression evaluation. We can reduce the
+    likelihood that servers fail to implement the Selection
+    sub-expression evaluation by simplifying it a bit.
+3.  We can embed tags in the binary data to make it easier to read.
